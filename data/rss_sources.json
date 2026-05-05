@@ -1,0 +1,294 @@
+{
+  "comment": "RSS sources registry for Horizon. Each source can be enabled/disabled in config.json via rss[].url matching",
+  "sources": {
+    "news_press": {
+      "le_monde": {
+        "name": "Le Monde",
+        "url": "https://www.lemonde.fr/rss/une.xml",
+        "category": "news",
+        "language": "fr",
+        "priority": "high",
+        "description": "French newspaper - general news"
+      },
+      "guardian": {
+        "name": "The Guardian",
+        "url": "https://www.theguardian.com/world/rss",
+        "category": "news",
+        "language": "en",
+        "priority": "high",
+        "description": "UK newspaper - world news feed"
+      },
+      "aljazeera": {
+        "name": "Al Jazeera English",
+        "url": "https://www.aljazeera.com/xml/rss/all.xml",
+        "category": "news",
+        "language": "en",
+        "priority": "high",
+        "description": "Middle East & global news"
+      },
+      "rfi": {
+        "name": "RFI (Radio France Intl)",
+        "url": "https://www.rfi.fr/rfi/fr/flux-rss-general.xml",
+        "category": "news",
+        "language": "fr",
+        "priority": "high",
+        "description": "International news in French"
+      },
+      "courrier_intl": {
+        "name": "Courrier International",
+        "url": "https://www.courrierinternational.com/feed/all.rss",
+        "category": "news",
+        "language": "fr",
+        "priority": "medium",
+        "description": "International press review (French)"
+      },
+      "foreign_affairs": {
+        "name": "Foreign Affairs",
+        "url": "https://feeds.foreignaffairs.com/foreign-affairs/full-articles.xml",
+        "category": "geopolitics",
+        "language": "en",
+        "priority": "high",
+        "description": "US foreign policy & geopolitics"
+      },
+      "le_diplo": {
+        "name": "Le Monde Diplomatique",
+        "url": "https://www.monde-diplomatique.fr/rss/",
+        "category": "geopolitics",
+        "language": "fr",
+        "priority": "high",
+        "description": "Monthly geopolitical analysis (French)"
+      }
+    },
+    "science_research": {
+      "arxiv_ai": {
+        "name": "arXiv: Artificial Intelligence",
+        "url": "https://arxiv.org/rss/cs.AI",
+        "category": "science",
+        "language": "en",
+        "priority": "high",
+        "description": "AI research papers"
+      },
+      "arxiv_ml": {
+        "name": "arXiv: Machine Learning",
+        "url": "https://arxiv.org/rss/cs.LG",
+        "category": "science",
+        "language": "en",
+        "priority": "high",
+        "description": "ML research papers"
+      },
+      "nature": {
+        "name": "Nature",
+        "url": "https://www.nature.com/nature.rss",
+        "category": "science",
+        "language": "en",
+        "priority": "high",
+        "description": "Leading science journal"
+      },
+      "science_mag": {
+        "name": "Science Magazine",
+        "url": "https://www.science.org/rss/sciencenews.xml",
+        "category": "science",
+        "language": "en",
+        "priority": "high",
+        "description": "Scientific research highlights"
+      },
+      "pour_la_science": {
+        "name": "Pour la Science",
+        "url": "https://www.pourlascience.fr/feed",
+        "category": "science",
+        "language": "fr",
+        "priority": "medium",
+        "description": "Popular science (French)"
+      },
+      "jstor_daily": {
+        "name": "JSTOR Daily",
+        "url": "https://jstor.org/feed",
+        "category": "science",
+        "language": "en",
+        "priority": "medium",
+        "description": "Academic research made accessible"
+      },
+      "physorg": {
+        "name": "PhysOrg",
+        "url": "https://phys.org/rss-feed/",
+        "category": "science",
+        "language": "en",
+        "priority": "medium",
+        "description": "Physics & science vulgarization"
+      },
+      "quanta": {
+        "name": "Quanta Magazine",
+        "url": "https://www.quantamagazine.org/feed",
+        "category": "science",
+        "language": "en",
+        "priority": "high",
+        "description": "Mathematics & physics vulgarization"
+      }
+    },
+    "essays_culture": {
+      "aeon": {
+        "name": "Aeon Essays",
+        "url": "https://aeon.co/feed.rss",
+        "category": "essays",
+        "language": "en",
+        "priority": "high",
+        "description": "Long-form philosophical & cultural essays"
+      },
+      "arts_inculte": {
+        "name": "Arts Inculte",
+        "url": "https://www.artsinculte.fr/feed/",
+        "category": "culture",
+        "language": "fr",
+        "priority": "medium",
+        "description": "French literary review"
+      },
+      "cairn": {
+        "name": "Cairn.info",
+        "url": "https://www.cairn.info/feed.php",
+        "category": "essays",
+        "language": "fr",
+        "priority": "medium",
+        "description": "French academic journals (humanities)"
+      },
+      "pitchfork": {
+        "name": "Pitchfork Music",
+        "url": "https://pitchfork.com/feed/rss/reviews/",
+        "category": "culture",
+        "language": "en",
+        "priority": "low",
+        "description": "Music criticism & reviews"
+      },
+      "telerama": {
+        "name": "Télérama",
+        "url": "https://www.telerama.fr/feed.xml",
+        "category": "culture",
+        "language": "fr",
+        "priority": "medium",
+        "description": "French cinema & TV reviews"
+      }
+    },
+    "reference": {
+      "wikipedia_tfa": {
+        "name": "Wikipedia: Today's Featured Article",
+        "url": "https://en.wikipedia.org/w/index.php?title=Wikipedia:Today%27s_featured_article/December_2024&action=raw",
+        "category": "reference",
+        "language": "en",
+        "priority": "low",
+        "description": "Daily Wikipedia featured article"
+      },
+      "sep": {
+        "name": "Stanford Encyclopedia of Philosophy",
+        "url": "https://plato.stanford.edu/feeds/articles.xml",
+        "category": "reference",
+        "language": "en",
+        "priority": "high",
+        "description": "Peer-reviewed philosophy articles"
+      },
+      "the_conversation": {
+        "name": "The Conversation",
+        "url": "https://theconversation.com/rss",
+        "category": "reference",
+        "language": "en",
+        "priority": "high",
+        "description": "Academics explaining their research"
+      },
+      "herodote": {
+        "name": "Herodote.net",
+        "url": "https://www.herodote.net/feed.xml",
+        "category": "reference",
+        "language": "fr",
+        "priority": "medium",
+        "description": "French history reference site"
+      }
+    },
+    "reddit_subreddits": {
+      "r_todayilearned": {
+        "name": "r/todayilearned",
+        "url": "https://www.reddit.com/r/todayilearned/new/.rss?limit=10",
+        "category": "reference",
+        "language": "en",
+        "priority": "medium",
+        "description": "Today I Learned - educational facts"
+      },
+      "r_philosophy": {
+        "name": "r/philosophy",
+        "url": "https://www.reddit.com/r/philosophy/new/.rss?limit=10",
+        "category": "essays",
+        "language": "en",
+        "priority": "medium",
+        "description": "Philosophical discussion"
+      },
+      "r_sciences_fr": {
+        "name": "r/sciences (French)",
+        "url": "https://www.reddit.com/r/sciences/new/.rss?limit=10",
+        "category": "science",
+        "language": "fr",
+        "priority": "medium",
+        "description": "French science community"
+      },
+      "r_history": {
+        "name": "r/history",
+        "url": "https://www.reddit.com/r/history/new/.rss?limit=10",
+        "category": "reference",
+        "language": "en",
+        "priority": "low",
+        "description": "History discussion & links"
+      }
+    },
+    "talks_media": {
+      "ted": {
+        "name": "TED Talks",
+        "url": "https://feeds.ted.com/talks_new.rss",
+        "category": "talks",
+        "language": "en",
+        "priority": "high",
+        "description": "Ideas worth spreading"
+      },
+      "99pi": {
+        "name": "99% Invisible",
+        "url": "https://feeds.99percentinvisible.org/99percentinvisible",
+        "category": "podcast",
+        "language": "en",
+        "priority": "medium",
+        "description": "Design & architecture podcast (RSS with show notes)"
+      },
+      "freakonomics": {
+        "name": "Freakonomics Radio",
+        "url": "https://feeds.freakonomics.com/freakonomics-radio",
+        "category": "podcast",
+        "language": "en",
+        "priority": "medium",
+        "description": "Economics & society podcast"
+      },
+      "goodreads_books": {
+        "name": "Goodreads: Popular Books",
+        "url": "https://www.goodreads.com/feed.xml?channel=user_list/1/all",
+        "category": "reference",
+        "language": "en",
+        "priority": "low",
+        "description": "Book releases & discussions"
+      }
+    }
+  },
+  "notes": {
+    "setup": "To use these sources, add entries to config.json's 'rss' array with the URL and optional category",
+    "example_config": {
+      "rss": [
+        {
+          "name": "Le Monde",
+          "url": "https://www.lemonde.fr/rss/une.xml",
+          "category": "news",
+          "enabled": true
+        },
+        {
+          "name": "arXiv AI",
+          "url": "https://arxiv.org/rss/cs.AI",
+          "category": "science",
+          "enabled": true
+        }
+      ]
+    },
+    "podcast_note": "Podcast RSS feeds (99% Invisible, Freakonomics) provide show notes. For full transcription, optionally integrate Whisper (https://github.com/openai/whisper) to transcribe audio files.",
+    "reddit_note": "Reddit RSS feeds can be generated for any subreddit: https://www.reddit.com/r/{subreddit}/new/.rss"
+  }
+}

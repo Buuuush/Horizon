@@ -3,12 +3,13 @@
 import asyncio
 from collections import defaultdict
 from datetime import datetime, timedelta, timezone
-from typing import List, Dict, Optional
+from typing import List, Dict, Optional, Callable, Any
 from urllib.parse import urlparse
 import httpx
 from rich.console import Console
+import json
 
-from .models import Config, ContentItem
+from .models import Config, ContentItem, Profile
 from .storage.manager import StorageManager
 from .services.email import EmailManager
 from .services.webhook import WebhookNotifier
@@ -22,28 +23,67 @@ from .ai.client import create_ai_client
 from .ai.analyzer import ContentAnalyzer
 from .ai.summarizer import DailySummarizer
 from .ai.enricher import ContentEnricher
+from .ai.cache_manager import CacheManager
 from .ai.tokens import get_usage_snapshot
 
 
 class HorizonOrchestrator:
     """Orchestrates the complete workflow for content aggregation and analysis."""
 
-    def __init__(self, config: Config, storage: StorageManager):
+    def __init__(
+        self,
+        config: Config,
+        storage: StorageManager,
+        profile: Optional[Profile] = None,
+        broadcast_callback: Optional[Callable[[Dict[str, Any]], Any]] = None,
+    ):
         """Initialize orchestrator.
 
         Args:
             config: Application configuration
             storage: Storage manager
+            profile: Optional active profile for scoring (if None, uses active or default)
+            broadcast_callback: Optional async callback to broadcast progress messages to WebSocket clients
         """
         self.config = config
         self.storage = storage
+        self.profile = profile or storage.get_active_profile()
+        self.cache_manager = CacheManager(storage)
+        self.broadcast_callback = broadcast_callback
         self.console = Console()
-        self.email_manager = EmailManager(config.email, console=self.console) if config.email else None
+        # Safely access optional config subsections (tests may pass MagicMock without attributes)
+        email_cfg = getattr(config, "email", None)
+        self.email_manager = (
+            EmailManager(email_cfg, console=self.console) if email_cfg and getattr(email_cfg, "enabled", False) else None
+        )
+
+        webhook_cfg = getattr(config, "webhook", None)
         self.webhook_notifier = (
-            WebhookNotifier(config.webhook, console=self.console)
-            if config.webhook and config.webhook.enabled
+            WebhookNotifier(webhook_cfg, console=self.console)
+            if webhook_cfg and getattr(webhook_cfg, "enabled", False)
             else None
         )
+        
+        if self.profile:
+            self.console.print(f"📊 Profil actif: {self.profile.name} (seuil: {self.profile.ai_score_threshold})")
+        else:
+            self.console.print("[yellow]⚠️  Aucun profil sélectionné - utilisation des paramètres par défaut[/yellow]")
+
+    async def _broadcast(self, message: Dict[str, Any]) -> None:
+        """Broadcast a progress message to WebSocket clients if callback is available.
+        
+        Args:
+            message: Message dict to broadcast
+        """
+        if self.broadcast_callback:
+            try:
+                if asyncio.iscoroutinefunction(self.broadcast_callback):
+                    await self.broadcast_callback(message)
+                else:
+                    self.broadcast_callback(message)
+            except Exception as e:
+                # Silently ignore broadcast errors - don't block pipeline on WebSocket issues
+                self.console.print(f"[dim]ℹ️  WebSocket broadcast failed: {e}[/dim]", style="dim")
 
     async def run(self, force_hours: int = None, summary_format: str = "html", theme: Optional[str] = None) -> None:
         """Execute the complete workflow.
@@ -66,6 +106,15 @@ class HorizonOrchestrator:
             # 2. Fetch content from all sources
             all_items = await self.fetch_all_sources(since)
             self.console.print(f"📥 {len(all_items)} éléments récupérés de toutes les sources\n")
+            
+            # Broadcast scraping complete
+            await self._broadcast({
+                "type": "progress",
+                "stage": "scraping",
+                "current": len(all_items),
+                "total": len(all_items),
+                "message": f"Scraped {len(all_items)} items from all sources",
+            })
 
             if not all_items:
                 self.console.print("[yellow]Aucun nouveau contenu trouvé. Sortie.[/yellow]")
@@ -109,6 +158,15 @@ class HorizonOrchestrator:
             # 4. Analyze with AI
             analyzed_items = await self._analyze_content(merged_items)
             self.console.print(f"🤖 {len(analyzed_items)} éléments analysés avec l'IA\n")
+            
+            # Broadcast analysis progress
+            await self._broadcast({
+                "type": "progress",
+                "stage": "analyzing",
+                "current": len(analyzed_items),
+                "total": len(merged_items),
+                "message": f"Analyzed {len(analyzed_items)} items with AI",
+            })
 
             # If a theme was requested, also filter based on AI-generated tags
             # and AI summary/title (taxonomy-aware matching).
@@ -136,7 +194,8 @@ class HorizonOrchestrator:
                     return
 
             # 5. Filter by score threshold
-            threshold = self.config.filtering.ai_score_threshold
+            # Use profile threshold if available, otherwise use config default
+            threshold = self.profile.ai_score_threshold if self.profile else self.config.filtering.ai_score_threshold
             important_items = [
                 item for item in analyzed_items
                 if item.ai_score and item.ai_score >= threshold
@@ -146,6 +205,18 @@ class HorizonOrchestrator:
             self.console.print(
                 f"⭐️ {len(important_items)} éléments notés ≥ {threshold}\n"
             )
+            
+            # Broadcast scored items
+            for item in important_items:
+                await self._broadcast({
+                    "type": "item_scored",
+                    "item_id": item.id,
+                    "title": item.title or "",
+                    "source": item.source_type.value,
+                    "score": item.ai_score or 0.0,
+                    "url": item.url or "",
+                    "summary": item.ai_summary or None,
+                })
 
             # 5.5 Semantic deduplication: drop items covering the same topic
             deduped_items = await self.merge_topic_duplicates(important_items)
@@ -202,6 +273,16 @@ class HorizonOrchestrator:
                     extension=output_ext,
                 )
                 self.console.print(f"💾 Résumé bilingue (FR/EN) enregistré dans : {summary_path}\n")
+                
+                # Broadcast summary complete
+                await self._broadcast({
+                    "type": "summary_complete",
+                    "profile_name": self.profile.name if self.profile else "default",
+                    "language": "bilingual",
+                    "path": str(summary_path),
+                    "timestamp": datetime.now(timezone.utc).isoformat(),
+                    "items_count": len(important_items),
+                })
 
                 # Copy to docs/ for GitHub Pages
                 try:
@@ -254,6 +335,16 @@ class HorizonOrchestrator:
                         extension=output_ext,
                     )
                     self.console.print(f"💾 Résumé {lang.upper()} enregistré dans : {summary_path}\n")
+                    
+                    # Broadcast summary complete for this language
+                    await self._broadcast({
+                        "type": "summary_complete",
+                        "profile_name": self.profile.name if self.profile else "default",
+                        "language": lang,
+                        "path": str(summary_path),
+                        "timestamp": datetime.now(timezone.utc).isoformat(),
+                        "items_count": len(important_items),
+                    })
 
                     # Copy to docs/ for GitHub Pages
                     try:
@@ -640,7 +731,7 @@ class HorizonOrchestrator:
         self.console.print("🤖 Analyse du contenu avec l'IA...")
 
         ai_client = create_ai_client(self.config.ai)
-        analyzer = ContentAnalyzer(ai_client)
+        analyzer = ContentAnalyzer(ai_client, profile=self.profile)
 
         return await analyzer.analyze_batch(items)
 

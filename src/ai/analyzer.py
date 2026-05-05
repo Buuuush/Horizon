@@ -8,9 +8,9 @@ from tenacity import RetryError, retry, stop_after_attempt, wait_exponential
 from rich.progress import Progress, SpinnerColumn, BarColumn, TextColumn, MofNCompleteColumn
 
 from .client import AIClient
-from .prompts import CONTENT_ANALYSIS_SYSTEM, CONTENT_ANALYSIS_USER
+from .prompts import CONTENT_ANALYSIS_SYSTEM, CONTENT_ANALYSIS_USER, SCORING_PROMPTS_BY_SOURCE
 from .utils import parse_json_response
-from ..models import ContentItem
+from ..models import ContentItem, Profile
 
 DEFAULT_THROTTLE_SEC = 0.0
 
@@ -18,8 +18,9 @@ DEFAULT_THROTTLE_SEC = 0.0
 class ContentAnalyzer:
     """Analyzes content items using AI to determine importance."""
 
-    def __init__(self, ai_client: AIClient):
+    def __init__(self, ai_client: AIClient, profile: Optional[Profile] = None):
         self.client = ai_client
+        self.profile = profile
 
     @staticmethod
     def _parse_json_response(response: str) -> Optional[dict]:
@@ -157,6 +158,15 @@ class ContentAnalyzer:
 
         discussion_section = "\n".join(discussion_parts) if discussion_parts else ""
 
+        # Determine which system prompt to use based on profile or source
+        system_prompt = CONTENT_ANALYSIS_SYSTEM
+        if self.profile and item.source_type.value in self.profile.per_source_prompts:
+            # Use custom prompt from profile
+            system_prompt = self.profile.per_source_prompts[item.source_type.value]
+        elif item.source_type.value in SCORING_PROMPTS_BY_SOURCE:
+            # Use built-in per-source prompt
+            system_prompt = SCORING_PROMPTS_BY_SOURCE[item.source_type.value]
+
         # Generate user prompt
         user_prompt = CONTENT_ANALYSIS_USER.format(
             title=item.title,
@@ -169,7 +179,7 @@ class ContentAnalyzer:
 
         # Get AI completion
         response = await self.client.complete(
-            system=CONTENT_ANALYSIS_SYSTEM,
+            system=system_prompt,
             user=user_prompt,
         )
 

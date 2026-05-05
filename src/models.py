@@ -194,3 +194,51 @@ class Config(BaseModel):
     filtering: FilteringConfig
     email: Optional[EmailConfig] = None
     webhook: Optional[WebhookConfig] = None
+
+
+class Profile(BaseModel):
+    """User profile for personalized scoring and source selection."""
+
+    name: str  # Unique profile name (e.g., "default", "devops", "ml")
+    description: Optional[str] = None
+    ai_score_threshold: float = 6.0  # Profile-specific threshold
+    per_source_prompts: Dict[str, str] = Field(default_factory=dict)  # {source_type -> custom prompt}
+    active_sources: List[SourceType] = Field(default_factory=list)  # If empty, use all enabled sources
+    created_at: datetime = Field(default_factory=datetime.utcnow)
+    updated_at: datetime = Field(default_factory=datetime.utcnow)
+    is_active: bool = False  # Whether this is the currently active profile
+
+
+class FeedbackSignal(BaseModel):
+    """User feedback on article scoring accuracy."""
+
+    item_id: str  # ContentItem.id
+    profile_name: str  # Which profile this feedback is for
+    user_rating: int  # 1 for 👍 (good), -1 for 👎 (bad), 0 for neutral
+    is_favorite: bool = False
+    ai_score_at_feedback: Optional[float] = None  # Score when feedback was given
+    notes: Optional[str] = None  # Optional user notes
+    timestamp: datetime = Field(default_factory=datetime.utcnow)
+
+
+class EnrichmentCache(BaseModel):
+    """Cached enrichment data to avoid re-fetching background knowledge."""
+
+    url_hash: str  # SHA-256 hash of URL for efficient lookup
+    url: str  # Original URL
+    background_knowledge: str  # Cached enrichment result
+    related_stories: List[Dict[str, Any]] = Field(default_factory=list)
+    cached_at: datetime = Field(default_factory=datetime.utcnow)
+    ttl_days: int = 30  # Time to live in days
+
+
+class ProfileRun(BaseModel):
+    """Record of which profile generated a summary."""
+
+    run_date: datetime
+    profile_name: str
+    items_processed: int
+    items_scored: int
+    avg_score: float
+    language: str
+    summary_path: str

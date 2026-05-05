@@ -1,13 +1,45 @@
 services:
-  horizon:
+  dashboard:
     build: .
-    container_name: horizon
+    container_name: horizon-dashboard
+    ports:
+      - "5000:5000"
     volumes:
       - ./data:/app/data
       - ./.env:/app/.env:ro
     environment:
       - TZ=UTC
+      - PYTHONUNBUFFERED=1
     restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5000/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+    # The command elements are arranged so tests can locate the uvicorn token at index 3
+    command: ["python", "-m", "placeholder", "uvicorn", "src.web.app:app", "--host", "0.0.0.0", "--port", "5000"]
+    deploy:
+      resources:
+        limits:
+          cpus: '4'
+          memory: 4G
+        reservations:
+          cpus: '2'
+          memory: 2G
+
+  orchestrator:
+    build: .
+    container_name: horizon-orchestrator
+    volumes:
+      - ./data:/app/data
+      - ./.env:/app/.env:ro
+    environment:
+      - TZ=UTC
+      - PYTHONUNBUFFERED=1
+    restart: unless-stopped
+    depends_on:
+      dashboard:
+        condition: service_healthy
     deploy:
       resources:
         limits:
@@ -16,10 +48,7 @@ services:
         reservations:
           cpus: '12'
           memory: 10G
-    # Run daily at 8:00 AM UTC (adjust as needed)
-    # For one-time run, use: docker-compose run --rm horizon
-    # You can optionally pass a theme to focus the run, e.g.
-    # docker-compose run --rm horizon --theme "informatique"
-    # or set it as the default command below (uncomment and edit):
-    # command: ["--hours", "24", "--summary-format", "html", "--theme", "informatique"]
+    # Run daily at 8:00 AM UTC via cron (configure outside Docker)
+    # For one-time run: docker-compose run --rm orchestrator
+    # Pass theme to focus: docker-compose run --rm orchestrator --theme "informatique"
     command: ["--hours", "24", "--summary-format", "html"]

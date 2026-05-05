@@ -3,8 +3,10 @@
 import json
 import shutil
 from pathlib import Path
+from typing import List, Optional, Dict, Any
 
-from ..models import Config
+from ..models import Config, Profile, FeedbackSignal, EnrichmentCache
+from .sqlite_manager import SQLiteManager
 
 
 class StorageManager:
@@ -17,6 +19,9 @@ class StorageManager:
 
         self.data_dir.mkdir(parents=True, exist_ok=True)
         self.summaries_dir.mkdir(parents=True, exist_ok=True)
+
+        # Initialize SQLite backend for profiles, feedback, and caching
+        self.db = SQLiteManager(data_dir)
 
     def load_config(self) -> Config:
         if not self.config_path.exists():
@@ -95,3 +100,84 @@ class StorageManager:
         subscribers_path = self.data_dir / "subscribers.json"
         with open(subscribers_path, "w", encoding="utf-8") as f:
             json.dump(subscribers, f, indent=2)
+
+    # ===== Profile Management (SQLite backend) =====
+
+    def get_all_profiles(self) -> List[Profile]:
+        """Get all profiles."""
+        return self.db.get_all_profiles()
+
+    def get_profile(self, name: str) -> Optional[Profile]:
+        """Get a specific profile by name."""
+        return self.db.get_profile(name)
+
+    def get_active_profile(self) -> Optional[Profile]:
+        """Get the currently active profile."""
+        return self.db.get_active_profile()
+
+    def save_profile(self, profile: Profile) -> None:
+        """Save or update a profile."""
+        self.db.save_profile(profile)
+
+    def set_active_profile(self, name: str) -> None:
+        """Set the active profile by name."""
+        self.db.set_active_profile(name)
+
+    def delete_profile(self, name: str) -> None:
+        """Delete a profile by name."""
+        self.db.delete_profile(name)
+
+    # ===== Feedback Management (SQLite backend) =====
+
+    def save_feedback(self, feedback: FeedbackSignal) -> None:
+        """Save user feedback on an article."""
+        self.db.save_feedback(feedback)
+
+    def get_feedback_for_item(self, item_id: str, profile_name: str) -> Optional[FeedbackSignal]:
+        """Get feedback for a specific item in a profile."""
+        return self.db.get_feedback_for_item(item_id, profile_name)
+
+    def get_feedback_stats(self, profile_name: str) -> Dict[str, Any]:
+        """Get feedback statistics for a profile."""
+        return self.db.get_feedback_stats(profile_name)
+
+    def get_misscored_items(self, profile_name: str) -> List[Dict[str, Any]]:
+        """Get items that were misscored (feedback contradicts AI score)."""
+        return self.db.get_misscored_items(profile_name)
+
+    # ===== Enrichment Cache Management (SQLite backend) =====
+
+    def get_enrichment_cache(self, url: str) -> Optional[EnrichmentCache]:
+        """Get cached enrichment for a URL, if still valid."""
+        return self.db.get_enrichment_cache(url)
+
+    def save_enrichment_cache(self, cache: EnrichmentCache) -> None:
+        """Save enrichment cache for a URL."""
+        self.db.save_enrichment_cache(cache)
+
+    def delete_enrichment_cache(self, url: str) -> None:
+        """Delete enrichment cache for a URL."""
+        self.db.delete_enrichment_cache(url)
+
+    def clear_expired_cache(self) -> int:
+        """Delete all expired cache entries. Returns count deleted."""
+        return self.db.clear_expired_cache()
+
+    # ===== Profile Run Tracking (SQLite backend) =====
+
+    def save_profile_run(
+        self,
+        run_date,  # datetime
+        profile_name: str,
+        items_processed: int,
+        items_scored: int,
+        avg_score: float,
+        language: str,
+        summary_path: str,
+    ) -> None:
+        """Record metadata about a profile run."""
+        self.db.save_profile_run(run_date, profile_name, items_processed, items_scored, avg_score, language, summary_path)
+
+    def get_profile_runs(self, profile_name: str, limit: int = 30) -> List[Dict[str, Any]]:
+        """Get recent runs for a profile."""
+        return self.db.get_profile_runs(profile_name, limit)

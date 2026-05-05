@@ -7,6 +7,7 @@ from dataclasses import dataclass
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any
+import asyncio
 
 from .errors import HorizonMcpError
 from .horizon_adapter import (
@@ -330,7 +331,12 @@ class HorizonPipelineService:
         if topic_dedup and important_items:
             storage = make_storage(ctx.runtime, ctx.config_path)
             orchestrator = make_orchestrator(ctx.runtime, ctx.config, storage)
-            important_items = await orchestrator.merge_topic_duplicates(important_items)
+            # Support orchestrators that return either awaitable or plain list
+            maybe = orchestrator.merge_topic_duplicates(important_items)
+            if asyncio.iscoroutine(maybe):
+                important_items = await maybe
+            else:
+                important_items = maybe
 
         self.run_store.save_items(run_id, "filtered", items_to_dicts(important_items))
         meta = self.run_store.update_meta(

@@ -82,6 +82,10 @@ But Horizon is not just another summarizer. AI is great at reducing noise, but n
 - **🔔 Push to Chat or Automations** — Send templated results to Feishu/Lark, DingTalk, Slack, Discord, or custom webhook endpoints
 - **🧙 Start From Your Interests** — Use the setup wizard to generate a personalized source configuration
 - **⚙️ Tune the Radar** — Customize sources, thresholds, models, languages, and delivery channels from one JSON config
+- **📊 Personalized Profiles** — Create multiple scoring profiles (ML research, News, DevOps, etc.) with custom per-source scoring prompts and thresholds
+- **💡 Feedback Learning** — Rate articles to improve accuracy; system learns which scoring was misscored and suggests profile adjustments
+- **🎯 Interactive Dashboard** — Web UI to manage profiles, browse summaries, rate articles, mark favorites, and track accuracy metrics
+- **⭐ Enrichment Caching** — Cache enrichment results with configurable TTL to avoid re-fetching and save API calls
 
 ## How It Works
 
@@ -241,7 +245,32 @@ Minimal manual configuration:
 
 For the full reference, see the [Configuration Guide](docs/configuration.md).
 
-### 3. Run
+### 3. Create & Manage Profiles (Optional)
+
+Profiles let you customize scoring for different interests:
+
+```bash
+# Launch interactive profile manager
+uv run horizon --manage-profiles
+
+# Create profiles for ML research, News, DevOps, etc.
+# Each profile has its own:
+#   - Threshold (default 6.0)
+#   - Per-source scoring prompts
+#   - Active sources filter
+#   - Feedback history & learning
+
+# Run with specific profile
+uv run horizon --profile ml-research
+uv run horizon --profile news --hours 24
+
+# View accuracy stats
+uv run horizon --show-feedback-stats ml-research
+```
+
+See [Profiles Guide](docs/profiles.md) for detailed usage.
+
+### 4. Run
 
 #### Local Installation
 
@@ -259,7 +288,27 @@ docker-compose run --rm horizon --hours 48  # Fetch from last 48 hours
 
 The generated report will be saved to `data/summaries/`.
 
-### 4. Automate (Optional)
+### 5. View Dashboard (Optional)
+
+Horizon includes an interactive web dashboard:
+
+```bash
+# Run dashboard on http://localhost:5000
+uv run uvicorn src.web.app:app --host 0.0.0.0 --port 5000
+
+# Features:
+#   - View today's summary
+#   - Browse past summaries
+#   - Manage profiles
+#   - Rate articles (👍/👎)
+#   - Mark favorites ⭐
+#   - Track accuracy stats
+#   - Get improvement recommendations
+```
+
+See [Dashboard Guide](docs/dashboard.md) for features and API reference.
+
+### 6. Automate (Optional)
 
 Horizon works great as a **GitHub Actions** cron job. See [`.github/workflows/daily-summary.yml`](.github/workflows/daily-summary.yml) for a ready-to-use workflow that generates and deploys your daily briefing to GitHub Pages automatically.
 

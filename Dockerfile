@@ -13,6 +13,7 @@ COPY src ./src
 COPY data ./data
 COPY .env.example .env.example
 COPY README.md ./
+
 # Install dependencies
 RUN uv sync --frozen --no-dev
 
@@ -24,6 +25,9 @@ ENV PYTHONUNBUFFERED=1
 ENV PYTHONUTF8=1
 ENV LANG=C.UTF-8
 
-# Run the application
-ENTRYPOINT ["uv", "run", "horizon"]
-CMD []
+# Expose dashboard port
+EXPOSE 5000
+
+# Default entrypoint (can be overridden by docker-compose)
+ENTRYPOINT ["uv", "run"]
+CMD ["horizon"]

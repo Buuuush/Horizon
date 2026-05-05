@@ -49,6 +49,8 @@ def main():
     print_banner()
 
     parser = argparse.ArgumentParser(description="Horizon - Système d'agrégation d'informations piloté par l'IA")
+    
+    # Scraping arguments
     parser.add_argument("--hours", type=int, help="Force fetch from last N hours")
     parser.add_argument(
       "--summary-format",
@@ -61,6 +63,30 @@ def main():
       type=str,
       help="Optional theme filter (e.g. 'culture generale', 'informatique').",
     )
+    
+    # Profile management arguments
+    parser.add_argument(
+      "--profile",
+      type=str,
+      help="Select active profile for scoring (default: uses current active profile)",
+    )
+    parser.add_argument(
+      "--manage-profiles",
+      action="store_true",
+      help="Launch interactive profile manager (create, edit, delete profiles)",
+    )
+    parser.add_argument(
+      "--clear-cache",
+      action="store_true",
+      help="Clear expired enrichment cache and exit",
+    )
+    parser.add_argument(
+      "--show-feedback-stats",
+      type=str,
+      metavar="PROFILE",
+      help="Show feedback statistics and recommendations for a profile",
+    )
+    
     args = parser.parse_args()
 
     try:
@@ -88,8 +114,69 @@ def main():
             console.print(f"[bold red]❌ Erreur de chargement de la configuration : {e}[/bold red]")
             sys.exit(1)
 
-        # Create and run orchestrator
-        orchestrator = HorizonOrchestrator(config, storage)
+        # Handle profile management commands
+        if args.manage_profiles:
+            from .setup.profile_manager import ProfileManager
+            pm = ProfileManager(storage)
+            pm.interactive_menu()
+            return
+        
+        if args.clear_cache:
+            from .ai.cache_manager import CacheManager
+            cm = CacheManager(storage)
+            cm.clear_expired_cache()
+            console.print("[green]✓ Enrichment cache cleared[/green]")
+            return
+        
+        if args.show_feedback_stats:
+            from .ai.feedback_analyzer import FeedbackAnalyzer
+            fa = FeedbackAnalyzer(storage)
+            profile_name = args.show_feedback_stats
+            
+            summary = fa.get_feedback_summary(profile_name)
+            console.print(f"\n[bold cyan]📊 Feedback Stats for Profile: {profile_name}[/bold cyan]")
+            console.print(f"  Total: {summary['total_feedback']}")
+            console.print(f"  Accuracy: {summary['accuracy_rate']}")
+            console.print(f"  Misscored: {summary['misscored_items']}")
+            console.print(f"  Favorites: {summary['favorites']}")
+            
+            roadmap = fa.get_improvement_roadmap(profile_name)
+            if roadmap:
+                console.print(f"\n[bold]💡 Recommendations:[/bold]")
+                for rec in roadmap:
+                    console.print(f"  [{rec['priority']}] {rec['title']}")
+                    console.print(f"      → {rec['action']}")
+            return
+        
+        # Select profile for scoring
+        profile = None
+        if args.profile:
+            profile = storage.get_profile(args.profile)
+            if not profile:
+                console.print(f"[red]❌ Profile '{args.profile}' not found[/red]")
+                sys.exit(1)
+            storage.set_active_profile(args.profile)
+            console.print(f"[green]✓ Profile activated: {args.profile}[/green]")
+        
+        # Try to get the WebSocket manager for broadcasting if web app is running
+        # This will only work if the dashboard has been started in another process
+        broadcast_callback = None
+        try:
+            # Check if web app module is already imported
+            if 'src.web.app' in sys.modules:
+                from .web.app import manager
+                broadcast_callback = manager.broadcast
+        except Exception:
+            # No WebSocket broadcasting available - this is OK, just run without it
+            pass
+        
+        # Create and run orchestrator with selected profile
+        orchestrator = HorizonOrchestrator(
+            config,
+            storage,
+            profile=profile,
+            broadcast_callback=broadcast_callback,
+        )
         asyncio.run(
           orchestrator.run(
             force_hours=args.hours,

@@ -221,7 +221,11 @@ class DailySummarizer:
 
         parts = []
         for i, item in enumerate(items):
-            parts.append(self._format_item_html(item, labels, language, i + 1))
+            # For French, prefer a concise markdown-like section style in the body
+            if language == "fr":
+                parts.append(self._format_item_fr_markdown(item, labels, language, i + 1))
+            else:
+                parts.append(self._format_item_html(item, labels, language, i + 1))
 
         if language == "fr":
             lead = f"{len(items)} sujets essentiels sélectionnés parmi {total_fetched} contenus collectés."
@@ -375,6 +379,53 @@ class DailySummarizer:
         lines.append("---")
 
         return "\n".join(lines) + "\n\n"
+
+    def _format_item_fr_markdown(self, item: ContentItem, labels: dict, language: str, index: int) -> str:
+        """Return a markdown-like French section for the item.
+
+        Example:
+
+        ### 1. Titre
+
+        Paragraphe explicatif...
+
+        ---
+        """
+        _title = item.metadata.get(f"title_{language}") or item.title
+        title = str(_title).replace("[", "(").replace("]", ")")
+
+        # Prefer detailed French metadata if available
+        summary = (
+            item.metadata.get(f"detailed_summary_{language}")
+            or item.metadata.get("detailed_summary")
+            or item.ai_summary
+            or ""
+        )
+        background = item.metadata.get(f"background_{language}") or item.metadata.get("background") or ""
+        key_details = item.metadata.get(f"key_details_{language}") or item.metadata.get("key_details") or ""
+
+        # Build a single paragraph combining summary, key details and background
+        parts = []
+        if summary:
+            parts.append(summary.strip())
+        if key_details:
+            parts.append(key_details.strip())
+        if background:
+            parts.append(background.strip())
+
+        paragraph = " ".join(parts).strip()
+        if not paragraph:
+            paragraph = "Aucune information détaillée disponible pour cet item."
+
+        # Ensure sentences end properly
+        if not paragraph.endswith((".", "!", "?")):
+            paragraph += "."
+
+        md = []
+        md.append(f'<div class="fr-item">')
+        md.append(f'<pre>### {index}. {self._escape_html(title)}\n\n{self._escape_html(paragraph)}\n\n---</pre>')
+        md.append('</div>')
+        return "\n".join(md)
 
     def _generate_empty_summary(self, date: str, total_fetched: int, labels: dict) -> str:
         """Generate summary when no high-scoring items were found."""

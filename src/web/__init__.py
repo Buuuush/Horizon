@@ -1,0 +1,1 @@
+"""Horizon web dashboard module."""

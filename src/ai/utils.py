@@ -5,12 +5,16 @@ import re
 from typing import Optional
 
 
-def parse_json_response(response: str) -> Optional[dict]:
+def parse_json_response(response: Optional[str]) -> Optional[dict]:
     """Try multiple strategies to extract a JSON object from an AI response.
 
     Returns the parsed dict, or None if all strategies fail.
     """
+    if response is None:
+        return None
     text = response.strip()
+    if not text:
+        return None
 
     # Strategy 1: direct parse
     try:

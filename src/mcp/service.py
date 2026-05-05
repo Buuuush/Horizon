@@ -416,7 +416,9 @@ class HorizonPipelineService:
         total_fetched = self._total_fetched(run_id, fallback=len(items))
         date_str = datetime.now(timezone.utc).strftime("%Y-%m-%d")
 
-        summarizer = ctx.runtime.DailySummarizer()
+        from ..ai.client import create_ai_client
+        ai_client = create_ai_client(ctx.config.ai)
+        summarizer = ctx.runtime.DailySummarizer(ai_client=ai_client)
         summary = await summarizer.generate_summary(
             items,
             date_str,

@@ -12,7 +12,7 @@ COPY pyproject.toml uv.lock ./
 COPY src ./src
 COPY data ./data
 COPY .env.example .env.example
-
+COPY README.md ./
 # Install dependencies
 RUN uv sync --frozen --no-dev
 
@@ -21,6 +21,8 @@ VOLUME ["/app/data"]
 
 # Set environment variables
 ENV PYTHONUNBUFFERED=1
+ENV PYTHONUTF8=1
+ENV LANG=C.UTF-8
 
 # Run the application
 ENTRYPOINT ["uv", "run", "horizon"]

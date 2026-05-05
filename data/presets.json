@@ -271,6 +271,13 @@
           "description_zh": "Quanta Magazine — 通俗科学报道",
           "tags": ["science", "journalism"],
           "config": { "name": "Quanta Magazine", "url": "https://api.quantamagazine.org/feed/", "category": "science" }
+        },
+        {
+          "type": "rss",
+          "description": "Futura Sciences — French science and space news",
+          "description_zh": "Futura Sciences — 法语科学与太空新闻",
+          "tags": ["science", "french", "journalism"],
+          "config": { "name": "Futura Sciences", "url": "https://www.futura-sciences.com/rss/actualites.xml", "category": "science-fr" }
         }
       ]
     }

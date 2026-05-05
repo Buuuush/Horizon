@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   horizon:
     build: .
@@ -10,6 +8,18 @@ services:
     environment:
       - TZ=UTC
     restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          cpus: '16'
+          memory: 16G
+        reservations:
+          cpus: '12'
+          memory: 10G
     # Run daily at 8:00 AM UTC (adjust as needed)
     # For one-time run, use: docker-compose run --rm horizon
-    command: ["--hours", "24"]
+    # You can optionally pass a theme to focus the run, e.g.
+    # docker-compose run --rm horizon --theme "informatique"
+    # or set it as the default command below (uncomment and edit):
+    # command: ["--hours", "24", "--summary-format", "html", "--theme", "informatique"]
+    command: ["--hours", "24", "--summary-format", "html"]

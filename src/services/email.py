@@ -145,13 +145,25 @@ class EmailManager:
         if not self.config.enabled or not subscribers:
             return
 
-        html_content = (
-            markdown.markdown(summary_md)
-            if markdown
-            else f"<pre>{summary_md}</pre>"
-        )
+        # Detect if content is already HTML (bilingual summary with onglets)
+        # or if it's markdown that needs conversion
+        summary_trimmed = str(summary_md).lstrip()
+        is_html = summary_trimmed.lower().startswith("<!doctype") or summary_trimmed.lower().startswith("<html")
 
-        html_body = f"""
+        if is_html:
+            # Already complete HTML (bilingual with tabs), use as-is
+            html_body = summary_md
+            text_content = "See HTML version for formatted content with language tabs."
+        else:
+            # Markdown content, convert to HTML and wrap
+            html_content = (
+                markdown.markdown(summary_md)
+                if markdown
+                else f"<pre>{summary_md}</pre>"
+            )
+            text_content = summary_md
+
+            html_body = f"""
         <!DOCTYPE html>
         <html>
         <head>
@@ -187,7 +199,7 @@ class EmailManager:
                     msg["From"] = f"{self.config.sender_name} <{self.config.email_address}>"
                     msg["To"] = subscriber
 
-                    text_part = MIMEText(summary_md, "plain")
+                    text_part = MIMEText(text_content, "plain")
                     html_part = MIMEText(html_body, "html")
 
                     msg.attach(text_part)

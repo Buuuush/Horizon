@@ -103,6 +103,13 @@ class AnthropicClient(AIClient):
 class OpenAIClient(AIClient):
     """Client for OpenAI models."""
 
+    def _supports_response_format(self) -> bool:
+        """Return whether the current endpoint is expected to support JSON response formatting."""
+        base_url = (self.config.base_url or "").lower()
+        if not base_url:
+            return True
+        return "api.openai.com" in base_url
+
     def __init__(self, config: AIConfig):
         """Initialize OpenAI client.
 
@@ -144,17 +151,27 @@ class OpenAIClient(AIClient):
         """
         temperature = self.temperature if temperature is None else temperature
         max_tokens = self.max_tokens if max_tokens is None else max_tokens
-
-        response = await self.client.chat.completions.create(
-            model=self.model,
-            messages=[
-                {"role": "system", "content": system},
-                {"role": "user", "content": user}
-            ],
-            temperature=temperature,
-            max_tokens=max_tokens,
-            response_format={"type": "json_object"}
-        )
+        if self._supports_response_format():
+            response = await self.client.chat.completions.create(
+                model=self.model,
+                messages=[
+                    {"role": "system", "content": system},
+                    {"role": "user", "content": user}
+                ],
+                temperature=temperature,
+                max_tokens=max_tokens,
+                response_format={"type": "json_object"}
+            )
+        else:
+            response = await self.client.chat.completions.create(
+                model=self.model,
+                messages=[
+                    {"role": "system", "content": system},
+                    {"role": "user", "content": user}
+                ],
+                temperature=temperature,
+                max_tokens=max_tokens,
+            )
         usage = getattr(response, "usage", None)
         if usage is not None:
             record_usage(
@@ -240,6 +257,10 @@ class MiniMaxClient(AIClient):
 class AliClient(AIClient):
     """Client for Alibaba DashScope (OpenAI-compatible API)."""
 
+    def _supports_response_format(self) -> bool:
+        """DashScope compatibility varies by model, so default to prompt-only JSON."""
+        return False
+
     def __init__(self, config: AIConfig):
         """Initialize DashScope client.
 
@@ -282,16 +303,27 @@ class AliClient(AIClient):
         temperature = self.temperature if temperature is None else temperature
         max_tokens = self.max_tokens if max_tokens is None else max_tokens
 
-        response = await self.client.chat.completions.create(
-            model=self.model,
-            messages=[
-                {"role": "system", "content": system},
-                {"role": "user", "content": user}
-            ],
-            temperature=temperature,
-            max_tokens=max_tokens,
-            response_format={"type": "json_object"}
-        )
+        if self._supports_response_format():
+            response = await self.client.chat.completions.create(
+                model=self.model,
+                messages=[
+                    {"role": "system", "content": system},
+                    {"role": "user", "content": user}
+                ],
+                temperature=temperature,
+                max_tokens=max_tokens,
+                response_format={"type": "json_object"}
+            )
+        else:
+            response = await self.client.chat.completions.create(
+                model=self.model,
+                messages=[
+                    {"role": "system", "content": system},
+                    {"role": "user", "content": user}
+                ],
+                temperature=temperature,
+                max_tokens=max_tokens,
+            )
         return response.choices[0].message.content
 
 

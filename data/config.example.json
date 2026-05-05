@@ -46,6 +46,12 @@
         "category": "ai-tools"
       },
       {
+        "name": "Futura Sciences",
+        "url": "https://www.futura-sciences.com/rss/actualites.xml",
+        "enabled": true,
+        "category": "science-fr"
+      },
+      {
         "name": "LWN.net (subscriber full-text)",
         "url": "https://lwn.net/headlines/full_text?key=${LWN_KEY}",
         "enabled": false,

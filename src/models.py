@@ -56,7 +56,7 @@ class AIConfig(BaseModel):
     temperature: float = 0.3
     max_tokens: int = 4096
     throttle_sec: float = 0.0
-    languages: List[str] = Field(default_factory=lambda: ["en"])
+    languages: List[str] = Field(default_factory=lambda: ["en", "fr"])
 
 
 class GitHubSourceConfig(BaseModel):

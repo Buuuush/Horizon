@@ -80,7 +80,9 @@ async def _run_test(webhook_config, lang: str, dry_run: bool, delivery_override:
     """Execute the webhook test."""
     today = datetime.now(timezone.utc).strftime("%Y-%m-%d")
     items = _make_test_items()
-    summarizer = DailySummarizer()
+    from ..ai.client import create_ai_client
+    ai_client = create_ai_client(config.ai)
+    summarizer = DailySummarizer(ai_client)
     summary = await summarizer.generate_summary(items, today, len(items), language=lang)
 
     effective_config = webhook_config

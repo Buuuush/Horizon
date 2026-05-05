@@ -1,0 +1,570 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Horizon — 2026-05-05</title>
+  <style>
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600&family=Manrope:wght@500;700&display=swap');
+
+:root {
+    --bg: #f8f5f3;
+    --paper: #ffffff;
+    --surface: #fffbf8;
+    --accent: #9b3d2a;
+    --accent-2: color-mix(in srgb, var(--accent) 55%, #b73fd6);
+    --accent-3: color-mix(in srgb, var(--accent) 40%, #f59e0b);
+    --accent-soft: #f9e2dc;
+    --muted: #6e5b54;
+    --text: #2f211d;
+    --ring: color-mix(in srgb, var(--accent) 32%, transparent);
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+    color: var(--text);
+    background:
+        radial-gradient(1300px 420px at -10% -20%, var(--accent-soft), transparent 60%),
+        radial-gradient(760px 300px at 88% -12%, color-mix(in srgb, var(--accent-2) 24%, transparent), transparent 66%),
+        radial-gradient(640px 240px at 30% 0%, color-mix(in srgb, var(--accent-3) 18%, transparent), transparent 70%),
+        var(--bg);
+    font-family: 'Source Serif 4', Georgia, serif;
+    line-height: 1.78;
+}
+
+.container { max-width: 1100px; margin: 1.5rem auto; padding: 1rem; }
+
+.summary-header {
+    background: var(--paper);
+    border: 1px solid color-mix(in srgb, var(--accent) 16%, transparent);
+    border-radius: 24px;
+    padding: 1.5rem 1.6rem 1.1rem;
+    box-shadow: 0 18px 48px rgba(19, 33, 68, 0.08);
+    margin-bottom: 1rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.summary-header::after {
+    content: "";
+    position: absolute;
+    inset: auto -60px -80px auto;
+    width: 220px;
+    height: 220px;
+    border-radius: 999px;
+    background: radial-gradient(circle, color-mix(in srgb, var(--accent-2) 28%, transparent), transparent 70%);
+    pointer-events: none;
+}
+
+.summary-header h1 {
+    margin: 0;
+    font-family: 'Fraunces', 'DM Serif Display', 'Iowan Old Style', 'Palatino Linotype', serif;
+    letter-spacing: .01em;
+    font-size: clamp(1.8rem, 3.6vw, 2.8rem);
+    line-height: 1.15;
+}
+
+.lead { margin: .55rem 0 1.1rem; color: var(--muted); font-size: 1.04rem; max-width: 78ch; }
+
+.toc-title {
+    margin: 0 0 .45rem;
+    font-family: 'Manrope', 'Segoe UI', sans-serif;
+    font-size: .85rem;
+    text-transform: uppercase;
+    letter-spacing: .11em;
+    color: var(--muted);
+}
+
+.toc ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: .55rem;
+}
+
+.toc li {
+    background: linear-gradient(160deg, var(--surface), color-mix(in srgb, var(--accent-soft) 48%, #ffffff));
+    border: 1px solid color-mix(in srgb, var(--accent) 16%, transparent);
+    border-radius: 10px;
+    padding: .55rem .65rem;
+    transition: transform .18s ease, box-shadow .18s ease;
+}
+
+.toc li:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 8px 20px color-mix(in srgb, var(--accent) 15%, transparent);
+}
+
+.toc a { text-decoration: none; color: var(--text); }
+
+.items { display: grid; gap: .95rem; }
+
+.items article {
+    background: var(--paper);
+    border: 1px solid color-mix(in srgb, var(--accent) 15%, transparent);
+    border-radius: 20px;
+    padding: 1.15rem 1.2rem;
+    box-shadow: 0 10px 32px rgba(0, 0, 0, 0.05);
+}
+
+.item-title {
+    font-family: 'Fraunces', 'DM Serif Display', 'Iowan Old Style', 'Palatino Linotype', serif;
+    font-size: clamp(1.2rem, 2.2vw, 1.55rem);
+    margin: 0 0 .55rem;
+    line-height: 1.22;
+}
+
+.item-title a { color: inherit; text-decoration: none; }
+.item-title a:hover { color: var(--accent); }
+
+.item-title a:focus-visible,
+.toc a:focus-visible,
+summary:focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
+    border-radius: 6px;
+}
+
+.meta { color: var(--muted); font-family: 'Manrope', 'Segoe UI', sans-serif; font-size: .9rem; margin-bottom: .7rem; }
+.score { color: var(--accent); margin-left: .45rem; font-weight: 700; font-family: 'Manrope', 'Segoe UI', sans-serif; }
+
+.lang-blocks { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .75rem; }
+
+.lang {
+    background: linear-gradient(170deg, var(--surface), color-mix(in srgb, var(--accent-soft) 30%, #ffffff));
+    border: 1px solid color-mix(in srgb, var(--accent) 12%, transparent);
+    border-radius: 12px;
+    padding: .75rem;
+}
+
+.lang h3 {
+    margin: 0 0 .35rem;
+    font-family: 'Manrope', 'Segoe UI', sans-serif;
+    font-size: .8rem;
+    color: var(--muted);
+    letter-spacing: .08em;
+    text-transform: uppercase;
+}
+
+.content { font-size: 1.03rem; line-height: 1.8; }
+
+.tags { margin-top: .75rem; color: var(--muted); font-family: 'Manrope', 'Segoe UI', sans-serif; font-size: .9rem; }
+code { background: color-mix(in srgb, var(--accent-soft) 65%, #ffffff); border-radius: 8px; padding: .12rem .4rem; }
+
+details { margin-top: .65rem; }
+details summary { cursor: pointer; color: var(--accent); font-family: 'Manrope', 'Segoe UI', sans-serif; }
+
+@media (max-width: 860px) {
+    .container { margin: .7rem auto; padding: .65rem; }
+    .lang-blocks { grid-template-columns: 1fr; }
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --bg: #0f1420;
+        --paper: #161d2c;
+        --surface: #1b2435;
+        --accent: #7cb1ff;
+        --accent-2: #c28cff;
+        --accent-3: #ffc36c;
+        --accent-soft: #1a2740;
+        --muted: #a6b4cd;
+        --text: #edf2ff;
+        --ring: rgba(124, 177, 255, 0.55);
+    }
+
+    body {
+        background:
+            radial-gradient(1200px 420px at -10% -20%, #1a2740, transparent 60%),
+            radial-gradient(760px 300px at 88% -12%, rgba(194, 140, 255, 0.2), transparent 66%),
+            radial-gradient(640px 240px at 30% 0%, rgba(255, 195, 108, 0.14), transparent 70%),
+            var(--bg);
+    }
+
+    .summary-header,
+    .items article {
+        border-color: rgba(124, 177, 255, 0.24);
+        box-shadow: 0 18px 44px rgba(0, 0, 0, 0.32);
+    }
+
+    .toc li,
+    .lang {
+        border-color: rgba(124, 177, 255, 0.22);
+        background: linear-gradient(170deg, #1b2435, #1f2a3f);
+    }
+
+    code {
+        background: rgba(124, 177, 255, 0.16);
+    }
+}
+</style>
+</head>
+<body>
+  <div class="container">
+    
+<section class="summary-header">
+  <h1>Horizon Daily — 2026-05-05</h1>
+  <p class="lead">25 essential stories selected from 247 collected items.</p>
+  <nav class="toc" aria-label="Contents">
+    <p class="toc-title">Contents</p>
+    <ul><li><a href="#item-1">A new gut microbe structure has been linked to cattle methane emissions.</a> <span class="score">⭐ 9.965/10</span></li>
+<li><a href="#item-2">OpenAI president defends motives in for-profit restructuring as he reveals $30bn stake.</a> <span class="score">⭐ 9.755/10</span></li>
+<li><a href="#item-3">The Supreme Court gets thrown back into the abortion wars.</a> <span class="score">⭐ 9.72/10</span></li>
+<li><a href="#item-4">Two people were killed and several were hurt after a car ploughed into crowds in the German city of Leipzig.</a> <span class="score">⭐ 9.65/10</span></li>
+<li><a href="#item-5">Russian official admits economic despair and war untenability.</a> <span class="score">⭐ 9.6325/10</span></li>
+<li><a href="#item-6">Brazil&#39;s President Lula will travel to the United States for a meeting with Trump.</a> <span class="score">⭐ 9.5275/10</span></li>
+<li><a href="#item-7">Hormuz tensions push the ceasefire to the brink as Trump threatens Iran.</a> <span class="score">⭐ 9.4925/10</span></li>
+<li><a href="#item-8">Trump sends warships to break Iran’s Strait of Hormuz blockade.</a> <span class="score">⭐ 9.387500000000001/10</span></li>
+<li><a href="#item-9">Armenia hosts European leaders in Russia&#39;s backyard amid shifting security dynamics.</a> <span class="score">⭐ 9.0175/10</span></li>
+<li><a href="#item-10">Merz undermines a year‑long plan to engage Trump.</a> <span class="score">⭐ 9.0175/10</span></li>
+<li><a href="#item-11">Indonesia&#39;s central bank intervenes as the rupiah hits a record low.</a> <span class="score">⭐ 8.912500000000001/10</span></li>
+<li><a href="#item-12">Narendra Modi’s BJP wins election in West Bengal for the first time</a> <span class="score">⭐ 8.895000000000001/10</span></li>
+<li><a href="#item-13">Influential study on ChatGPT in education has been retracted.</a> <span class="score">⭐ 8.8775/10</span></li>
+<li><a href="#item-14">Armenia shifts toward Europe as Macron highlights break from Russia.</a> <span class="score">⭐ 8.86/10</span></li>
+<li><a href="#item-15">California seeks millions in penalties from State Farm over alleged claims violations after wildfires</a> <span class="score">⭐ 8.86/10</span></li>
+<li><a href="#item-16">World condemns Iran after UAE attacks</a> <span class="score">⭐ 8.842500000000001/10</span></li>
+<li><a href="#item-17">US supreme court expedites Voting Rights Act ruling so Louisiana can redraw its maps for midterms</a> <span class="score">⭐ 8.825/10</span></li>
+<li><a href="#item-18">Flooding in Chicago Is Getting Worse. Here’s Why.</a> <span class="score">⭐ 8.790000000000001/10</span></li>
+<li><a href="#item-19">Security forces maintain a strong presence in Mexico’s Sinaloa state amid cartel violence.</a> <span class="score">⭐ 8.79/10</span></li>
+<li><a href="#item-20">Reeves clashes with Bessent over Iran war criticism.</a> <span class="score">⭐ 8.79/10</span></li>
+<li><a href="#item-21">Iran draws a red line, sending oil prices and inflation to record highs</a> <span class="score">⭐ 8.7725/10</span></li>
+<li><a href="#item-22">British crew member needs urgent care amid hantavirus outbreak on cruise ship</a> <span class="score">⭐ 8.755/10</span></li>
+<li><a href="#item-23">Tackling methane emissions is key for climate change and energy security, IEA says</a> <span class="score">⭐ 8.72/10</span></li>
+<li><a href="#item-24">What is hantavirus and how does it spread?</a> <span class="score">⭐ 8.7025/10</span></li>
+<li><a href="#item-25">Supermassive black holes launch the most powerful cosmic jets</a> <span class="score">⭐ 8.6675/10</span></li></ul>
+  </nav>
+</section>
+<main class="items">
+<article id="item-1">
+  <header>
+    <h2 class="item-title"><a href="https://www.smithsonianmag.com/smart-news/why-do-cows-burp-up-so-much-planet-warming-methane-a-newly-discovered-structure-in-their-gut-microbes-could-be-a-culprit-180988664/">A new gut microbe structure has been linked to cattle methane emissions.</a> <span class="score">⭐ 9.965/10</span></h2>
+    <div class="meta">rss · Smithsonian Magazine · May 4, 16:02</div>
+  </header>
+    <div class="lang-blocks">
+        <section class="lang"><h3>EN</h3><div class="content">Researchers identified a new organelle called the hydrogenobody within gut microbes of cattle, sheep and goats, suggesting it drives methane production. The finding could explain why these animals emit large amounts of methane. Understanding this structure could help reduce methane emissions from livestock, a major contributor to climate change. It offers a target for mitigation strategies in agriculture. The hydrogenobody is located in a specialized stomach chamber of the microbes and participates in a cobalamin biosynthetic pathway. Evidence from the study suggests its role in methane production, though its exact function remains to be fully characterized.</div></section>
+        <section class="lang"><h3>FR</h3><div class="content">Les chercheurs ont identifié un nouvel organite appelé l&#39;hydrogénobory dans les micro-organismes du système digestif du bétail, du mouton et de la chèvre, suggérant qu&#39;il provoque la production de méthane. Cette découverte pourrait expliquer les fortes émissions de méthane de ces animaux. Comprendre cette structure pourrait aider à réduire les émissions de méthane du bétail, un contributeur majeur au changement climatique. Elle offre une cible pour les stratégies de mitigation en agriculture. L&#39;hydrogénobory se trouve dans une chambre d&#39;estomac spécialisée des micro-organismes et participe au chemin biosynthétique de la cobalamine. Les preuves de l&#39;étude suggèrent son rôle dans la production de méthane, mais sa fonction exacte reste à caractériser pleinement.</div></section>
+    </div>
+  <div class="tags"><code>#climate change</code>, <code>#methane emissions</code>, <code>#livestock</code>, <code>#gut microbiome</code>, <code>#agriculture</code></div>
+  <details><summary>References</summary><ul><li><a href="https://en.wikipedia.org/wiki/Hydrogenobyrinic_acid_a,c-diamide_synthase_(glutamine-hydrolysing)">Hydrogenobyrinic acid a,c-diamide synthase (glutamine-hydrolysing)</a></li><li><a href="https://news.google.com/stories/CAAqNggKIjBDQklTSGpvSmMzUnZjbmt0TXpZd1NoRUtEd2o3LU9LRUVSSGZBSDVqendtNUxDZ0FQAQ?hl=en-NZ&amp;gl=NZ&amp;ceid=NZ:en">Google News - Study identifies &quot; hydrogenobody &quot; organelle in cattle...</a></li></ul></details>
+</article>
+
+<article id="item-2">
+  <header>
+    <h2 class="item-title"><a href="https://www.ft.com/content/5c24fa13-ae43-4d5a-9b68-b6ebae227dce">OpenAI president defends motives in for-profit restructuring as he reveals $30bn stake.</a> <span class="score">⭐ 9.755/10</span></h2>
+    <div class="meta">rss · Financial Times · May 4, 21:17</div>
+  </header>
+    <div class="lang-blocks">
+        <section class="lang"><h3>EN</h3><div class="content">OpenAI&#39;s president defended the company&#39;s for‑profit restructuring and disclosed a $30 billion stake, while Elon Musk filed a lawsuit claiming the nonprofit mission was betrayed. This legal clash highlights the tension between OpenAI&#39;s nonprofit origins and its commercial ambitions, potentially influencing how AI firms balance mission and profit. The nonprofit retains a 26% stake in the new public benefit corporation, and Microsoft&#39;s earlier $13 billion investment shows the substantial financial backing behind the restructuring.</div></section>
+        <section class="lang"><h3>FR</h3><div class="content">Le président d&#39;OpenAI a défendu la restructuration à but lucratif et a révélé une participation de 30 milliards de dollars, tandis qu&#39;Elon Musk a intenté une poursuite alléguant la trahison de la mission caritative. Ce conflit juridique souligne la tension entre les origines à but non lucratif d&#39;OpenAI et ses ambitions commerciales, pouvant influencer la manière dont les entreprises d&#39;IA concilient mission et profit. Le nonprofit conserve une participation de 26 % dans la nouvelle société à but lucratif publique, et l&#39;investissement antérieur de 13 milliards de dollars de Microsoft illustre le soutien financier important derrière la restructuration.</div></section>
+    </div>
+  <div class="tags"><code>#Artificial Intelligence</code>, <code>#Corporate Governance</code>, <code>#Legal Dispute</code>, <code>#OpenAI</code>, <code>#Elon Musk</code></div>
+  <details><summary>References</summary><ul><li><a href="https://en.wikipedia.org/wiki/OpenAI">OpenAI - Wikipedia</a></li><li><a href="https://openai.com/our-structure/">Our structure | OpenAI</a></li></ul></details>
+</article>
+
+<article id="item-3">
+  <header>
+    <h2 class="item-title"><a href="https://www.vox.com/politics/487721/supreme-court-danco-genbiopro-mifepristone-louisiana-abortion">The Supreme Court gets thrown back into the abortion wars.</a> <span class="score">⭐ 9.72/10</span></h2>
+    <div class="meta">rss · Vox · May 4, 17:30</div>
+  </header>
+    <div class="lang-blocks">
+        <section class="lang"><h3>EN</h3><div class="content">The Supreme Court was asked to intervene after the Fifth Circuit attempted to halt access to the abortion drug mifepristone. The court left the door open for future challenges, putting the drug in legal limbo. This legal battle highlights the ongoing national conflict over reproductive rights and could determine the future availability of a key medication used in many abortions. It may affect millions of people seeking safe abortion care across the United States. The Fifth Circuit&#39;s order was issued on Friday evening and specifically targeted the FDA&#39;s approval of mifepristone, though the Supreme Court&#39;s stay only temporarily blocks the lower court&#39;s action. The decision does not change the drug&#39;s availability immediately but signals potential future restrictions.</div></section>
+        <section class="lang"><h3>FR</h3><div class="content">La Cour suprême a été sollicitée pour intervenir après que la Cour d&#39;appel du Fifth Circuit ait tenté d&#39;interdire l&#39;accès au médicament avortement mifepristone. La décision laisse la porte ouverte à de futures contestations, maintenant le médicament dans un limbo juridique. Cette bataille juridique souligne le conflit national persistant sur les droits reproductifs et pourrait déterminer l&#39;avenir de l&#39;accès à ce médicament clé utilisé dans de nombreuses avortements. Elle pourrait toucher des millions de personnes cherchant des soins d&#39;avortement sûrs à travers les États-Unis. L&#39;ordonnance de la Cour d&#39;appel du Fifth Circuit, rendue vendredi soir, visait spécifiquement l&#39;approbation de la FDA du mifepristone, mais le sursis de la Cour suprême ne bloque que l&#39;action de la cour inférieure et ne change pas immédiatement la disponibilité du médicament, tout en indiquant de possibles restrictions futures.</div></section>
+    </div>
+  <div class="tags"><code>#Abortion</code>, <code>#Supreme Court</code>, <code>#Legal Policy</code>, <code>#Reproductive Rights</code>, <code>#Political News</code></div>
+  <details><summary>References</summary><ul><li><a href="https://www.bbc.com/news/world-us-canada-64981719">What is the abortion pill mifepristone and is it safe?</a></li><li><a href="https://publichealth.jhu.edu/2025/what-is-mifepristone-aka-the-abortion-pill">What Is Mifepristone , aka “The Abortion Pill”? | Johns Hopkins</a></li><li><a href="https://www.heyjane.com/articles/what-is-mifepristone">What is mifepristone ? How it works for medication abortion | Hey Jane</a></li></ul></details>
+</article>
+
+<article id="item-4">
+  <header>
+    <h2 class="item-title"><a href="https://www.theguardian.com/world/2026/may/04/car-runs-into-crowd-in-german-city-of-leipzig-with-fatalities-reported">Two people were killed and several were hurt after a car ploughed into crowds in the German city of Leipzig.</a> <span class="score">⭐ 9.65/10</span></h2>
+    <div class="meta">rss · The Guardian World · May 4, 17:45</div>
+  </header>
+    <div class="lang-blocks">
+        <section class="lang"><h3>EN</h3><div class="content">A driver in an SUV ploughed into a crowd in Leipzig, killing at least two people and injuring several others. Police have arrested the suspect, but the motive remains unknown. This violent incident underscores the growing threat of vehicle-ramming attacks in public spaces, raising concerns about public safety and the ability of authorities to prevent such random acts. The attack occurred in a pedestrian zone in central Leipzig, the suspect was apprehended by police, and investigators have found no clear motive yet.</div></section>
+        <section class="lang"><h3>FR</h3><div class="content">Un conducteur de SUV a percuté une foule à Leipzig, tuant au moins deux personnes et blessant plusieurs autres. La police a arrêté le suspect, mais le mobile reste inconnu. Cet incident souligne la menace croissante des attaques par véhicule dans les espaces publics, suscitant des inquiétudes quant à la sécurité citoyenne et à la capacité des autorités à prévenir ces actes aléatoires. L&#39;attaque s&#39;est déroulée dans une zone piétonne du centre de Leipzig, le suspect a été appréhendé par la police et les enquêteurs n&#39;ont pas encore identifié de mobile.</div></section>
+    </div>
+  <div class="tags"><code>#violence</code>, <code>#crime</code>, <code>#Germany</code>, <code>#Leipzig</code>, <code>#public safety</code></div>
+  <details><summary>References</summary><ul><li><a href="https://en.wikipedia.org/wiki/Vehicle-ramming_attack">Vehicle-ramming attack</a></li><li><a href="https://www.aol.com/news/why-many-car-ramming-attacks-090013901.html">Why Car- Rammings Are on the Rise—and So Hard to Prevent - AOL</a></li></ul></details>
+</article>
+
+<article id="item-5">
+  <header>
+    <h2 class="item-title"><a href="https://fortune.com/2026/05/03/russia-economic-despair-vladimir-putin-approval-rating-ukraine-war/">Russian official admits economic despair and war untenability.</a> <span class="score">⭐ 9.6325/10</span></h2>
+    <div class="meta">reddit · r/worldnews · fortune · May 4, 15:11 · <a href="https://www.reddit.com/r/worldnews/comments/1t3kjl6/as_economic_despair_mounts_russian_official/">Discussion</a></div>
+  </header>
+    <div class="lang-blocks">
+        <section class="lang"><h3>EN</h3><div class="content">A Russian official publicly acknowledges severe economic despair and says the war in Ukraine is untenable, stating the country cannot even capture a single region. This admission signals a potential shift in Russian war strategy amid worsening economic conditions, which could affect geopolitical dynamics and internal political stability. The official&#39;s comment that Russia cannot even take one region highlights the military stalemate, while community comments stress the high casualty estimates and suggest Russia should withdraw to save lives.</div></section>
+        <section class="lang"><h3>FR</h3><div class="content">Un fonctionnaire russe a publiquement reconnu un grave désespoir économique et affirme que la guerre en Ukraine est intenable, déclarant que le pays ne peut même pas prendre une seule région. Cette déclaration indique un possible changement de stratégie russe en Ukraine face à la détérioration économique, ce qui pourrait influencer la dynamique géopolitique et la stabilité politique interne. Le commentaire selon lequel la Russie ne peut même pas prendre une seule région souligne l’impasse militaire, tandis que les commentaires de la communauté soulignent les estimations de pertes élevées et suggèrent que la Russie devrait se retirer pour sauver des vies.</div></section>
+    </div>
+  <div class="tags"><code>#geopolitics</code>, <code>#Russia-Ukraine conflict</code>, <code>#economics</code>, <code>#war</code>, <code>#political dissent</code></div>
+  <details><summary>References</summary><ul><li><a href="https://www.digitaljournal.com/tech-science/after-boom-russian-economy-faces-uncertainties-again/article/32251">After Boom, Russian Economy Faces Uncertainties Again - Digital</a></li><li><a href="https://discussion.fool.com/t/russian-company-meltdown/123466">Russian company meltdown - Macro Economic Trends and Risks -</a></li></ul></details>
+</article>
+
+<article id="item-6">
+  <header>
+    <h2 class="item-title"><a href="https://www.aljazeera.com/news/2026/5/4/brazils-lula-to-travel-to-us-to-meet-with-trump-later-this-week?traffic_source=rss">Brazil&#39;s President Lula will travel to the United States for a meeting with Trump.</a> <span class="score">⭐ 9.5275/10</span></h2>
+    <div class="meta">rss · Al Jazeera · May 4, 21:21</div>
+  </header>
+    <div class="lang-blocks">
+        <section class="lang"><h3>EN</h3><div class="content">Brazilian President Luiz Inácio Lula da Silva will travel to the United States this week to meet with former President Donald Trump in the White House. The meeting is expected to take place later this week. The diplomatic encounter signals a thaw in Brazil‑US relations and could influence trade, climate cooperation, and regional geopolitics. It also highlights Lula&#39;s effort to re‑engage with the United States after his return to power. The meeting will occur at the White House, marking the first time a sitting Brazilian president has visited the US during Trump’s term. Lula’s recent legal troubles and his third‑term agenda add uncertainty to the agenda of the talks.</div></section>
+        <section class="lang"><h3>FR</h3><div class="content">Le président brésilien Luiz Inácio Lula da Silva se rendra aux États-Unis cette semaine pour rencontrer l&#39;ancien président Donald Trump à la Maison-Blanche. La rencontre est prévue plus tard dans la semaine. Cette rencontre diplomatique indique un réchauffement des relations entre le Brésil et les États-Unis et pourrait impacter le commerce, la coopération climatique et la géopolitique régionale. Elle montre également l’effort de Lula de renouer avec les États-Unis après son retour au pouvoir. La rencontre se tiendra à la Maison-Blanche, constituant la première visite d’un président brésilien en fonction pendant le mandat de Trump. Les récents ennuis juridiques de Lula et les objectifs de son troisième mandat introduisent une incertitude quant à l’ordre du jour des discussions.</div></section>
+    </div>
+  <div class="tags"><code>#Diplomacy</code>, <code>#International Relations</code>, <code>#Politics</code>, <code>#Brazil</code>, <code>#United States</code></div>
+  <details><summary>References</summary><ul><li><a href="https://en.wikipedia.org/wiki/Luiz_Inácio_Lula_da_Silva">Luiz Inácio Lula da Silva</a></li><li><a href="https://www.britannica.com/biography/Luiz-Inacio-Lula-da-Silva">Luiz Inacio Lula da Silva | Biography, Facts, &amp; Involvement</a></li></ul></details>
+</article>
+
+<article id="item-7">
+  <header>
+    <h2 class="item-title"><a href="https://www.aljazeera.com/news/2026/5/4/hormuz-tensions-push-ceasefire-to-the-brink-as-trump-threatens-iran?traffic_source=rss">Hormuz tensions push the ceasefire to the brink as Trump threatens Iran.</a> <span class="score">⭐ 9.4925/10</span></h2>
+    <div class="meta">rss · Al Jazeera · May 4, 21:08</div>
+  </header>
+    <div class="lang-blocks">
+        <section class="lang"><h3>EN</h3><div class="content">The U.S. military urged ships to transit the Hormuz Strait while Iran asserted full control of the waterway, and President Trump issued a threatening stance that jeopardized a potential ceasefire. This standoff heightens the risk of a direct military clash, threatens global oil shipments, and strains already fragile U.S.–Iran diplomatic relations. The Strait of Hormuz handles about 20% of global LNG and 25% of seaborne oil, making any closure a severe supply risk, and Iran has previously threatened to mine the strait.</div></section>
+        <section class="lang"><h3>FR</h3><div class="content">L&#39;armée américaine a exhorté les navires à transiter le détroit de Hormuz alors que l&#39;Iran a affirmé contrôler pleinement la voie maritime, et le président Trump a adopté une posture menaçante qui met en péril un éventuel cessez-le-feu. Ce face-à-face accroît le risque d’un affrontement militaire direct, menace les livraisons mondiales de pétrole et tend les relations diplomatiques déjà fragiles entre les États-Unis et l’Iran. Le détroit de Hormuz assure environ 20 % du gaz naturel liquéfié mondial et 25 % du pétrole maritime, de sorte qu’une fermeture entraînerait de graves pénuries, et l’Iran a déjà menacé de le minier.</div></section>
+    </div>
+  <div class="tags"><code>#Geopolitics</code>, <code>#Middle East</code>, <code>#Military</code>, <code>#International Relations</code>, <code>#Tensions</code></div>
+  <details><summary>References</summary><ul><li><a href="https://en.wikipedia.org/wiki/Hormuz_Strait">Hormuz Strait</a></li><li><a href="https://en.wikipedia.org/wiki/Strait_of_Hormuz">Strait of Hormuz - Wikipedia</a></li><li><a href="https://grokipedia.com/page/Strait_of_Hormuz">Strait of Hormuz</a></li></ul></details>
+</article>
+
+<article id="item-8">
+  <header>
+    <h2 class="item-title"><a href="https://www.theguardian.com/world/2026/may/04/shipping-bosses-nervous-trump-plan-to-guide-vessels-strait-of-hormuz-iran">Trump sends warships to break Iran’s Strait of Hormuz blockade.</a> <span class="score">⭐ 9.387500000000001/10</span></h2>
+    <div class="meta">rss · The Guardian World · May 4, 19:26</div>
+  </header>
+    <div class="lang-blocks">
+        <section class="lang"><h3>EN</h3><div class="content">The United States announced &#39;Project Freedom&#39; on Sunday night and deployed warships to open a passage through the Strait of Hormuz for vessels trapped in the Gulf. This move was taken after Iran sought to reassert its blockade. This escalation dramatically raises the risk of a major regional conflict and threatens global energy supplies that rely on the strait. It could trigger a broader war involving Iran, the United States, and regional allies. The operation began on Monday after Trump’s announcement, and the strait handles about 20% of global LNG and 25% of seaborne oil trade annually, making any disruption highly consequential. The strait is the sole maritime route for several Gulf nations, so a blockade would cause severe supply shortages.</div></section>
+        <section class="lang"><h3>FR</h3><div class="content">Les États-Unis ont annoncé &#39;Project Freedom&#39; dimanche soir et déployé des cuirassés pour ouvrir un passage dans le détroit d&#39;Hormuz aux navires coincés dans le Golfe, alors que l&#39;Iran cherchait à réaffirmer son blocus. Cette escalade augmente fortement le risque d’un conflit régional majeur et menace les approvisionnements énergétiques mondiaux dépendants du détroit. Elle pourrait déclencher une guerre plus large impliquant l’Iran, les États-Unis et leurs alliés régionaux. L&#39;opération a débuté lundi après l&#39;annonce de Trump, et le détroit gère environ 20 % du GNL mondial et 25 % du pétrole maritime chaque année, rendant toute perturbation très préjudiciable. Le détroit est la seule voie maritime pour plusieurs pays du Golfe, donc un blocus provoquerait de graves pénuries d&#39;approvisionnement.</div></section>
+    </div>
+  <div class="tags"><code>#Geopolitics</code>, <code>#Middle East</code>, <code>#Military</code>, <code>#Iran</code>, <code>#United States</code></div>
+  <details><summary>References</summary><ul><li><a href="https://en.wikipedia.org/wiki/Strait_of_Hormuz">Strait of Hormuz</a></li><li><a href="https://www.britannica.com/place/Strait-of-Hormuz">Strait of Hormuz | Map, Importance, Conflict and Closure,</a></li></ul></details>
+</article>
+
+<article id="item-9">
+  <header>
+    <h2 class="item-title"><a href="https://www.france24.com/en/tv-shows/the-debate/20260504-poking-the-bear-armenia-welcomes-european-leaders-in-russia-s-backyard">Armenia hosts European leaders in Russia&#39;s backyard amid shifting security dynamics.</a> <span class="score">⭐ 9.0175/10</span></h2>
+    <div class="meta">rss · France 24 · May 4, 18:15</div>
+  </header>
+    <div class="lang-blocks">
+        <section class="lang"><h3>EN</h3><div class="content">European leaders convened in Yerevan for the eighth European Political Community summit, marking the first time EU heads gathered in Armenia. The meeting highlights changing security dynamics as the United States reduces troops in Germany and tensions with Russia rise. This gathering places EU and NATO leaders in a sensitive Russian backyard, highlighting a strategic realignment as the United States reduces its presence in Germany and tensions with Moscow rise. It could influence future NATO posture and deepen EU cooperation on security issues. The eighth European Political Community summit was held on 4 May 2026 in Yerevan, Armenia, under the theme &#39;Building the Future: Unity and Stability in Europe&#39;, and brought together leaders from 44 European countries, including the UK, Norway, Ukraine and other regional actors. It follows the first-ever gathering of EU heads of state in the country.</div></section>
+        <section class="lang"><h3>FR</h3><div class="content">Les dirigeants européens se sont réunis à Erevan pour le huitième sommet de la Communauté politique européenne, marquant la première fois que les chefs d&#39;État de l&#39;UE se rassemblent en Arménie. Cette rencontre souligne l&#39;évolution des dynamiques de sécurité alors que les États-Unis réduisent leurs troupes en Allemagne et que les tensions avec la Russie augmentent. Cette rencontre place les dirigeants de l&#39;UE et de l&#39;OTAN dans un arrière‑cour russe sensible, soulignant un réalignement stratégique alors que les États‑Unis réduisent leur présence en Allemagne et que les tensions avec Moscou augmentent. Elle pourrait influencer la posture future de l&#39;OTAN et renforcer la coopération européenne en matière de sécurité. Le huitième sommet de la Communauté politique européenne s&#39;est tenu le 4 mai 2026 à Erevan, Arménie, sous le thème « Construire l&#39;avenir : Unité et stabilité en Europe », rassemblant des dirigeants de 44 pays européens, dont le Royaume-Uni, la Norvège, l&#39;Ukraine et d&#39;autres acteurs régionaux. Il suit la première réunion jamais tenue par les chefs d&#39;État de l&#39;UE dans ce pays.</div></section>
+    </div>
+  <div class="tags"><code>#geopolitics</code>, <code>#EU</code>, <code>#Armenia</code>, <code>#Russia</code>, <code>#NATO</code></div>
+  <details><summary>References</summary><ul><li><a href="https://en.wikipedia.org/wiki/European_Political_Community">European Political Community</a></li><li><a href="https://newsroom.consilium.europa.eu/events/20260504-eu-meeting-of-the-european-political-community-may-2026">EU @ Meeting of the European Political Community - May 2026</a></li></ul></details>
+</article>
+
+<article id="item-10">
+  <header>
+    <h2 class="item-title"><a href="https://www.ft.com/content/2dd4b92c-4764-4bc5-a3a6-1418e0ccec58">Merz undermines a year‑long plan to engage Trump.</a> <span class="score">⭐ 9.0175/10</span></h2>
+    <div class="meta">rss · Financial Times · May 5, 04:00</div>
+  </header>
+    <div class="lang-blocks">
+        <section class="lang"><h3>EN</h3><div class="content">Friedrich Merz, the newly elected German chancellor, appears to have derailed a year‑long diplomatic initiative aimed at establishing rapport with U.S. President Donald Trump, jeopardizing a key plan. This development threatens the stability of U.S.–Europe relations and could complicate coordination on security, trade, and climate issues. It also highlights the challenges of managing a volatile U.S. president through traditional diplomatic channels. Friedrich Merz, a political newcomer who assumed the chancellorship on 6 May 2025, is accused of undermining a year‑long diplomatic initiative to build rapport with President Trump, a move that could strain transatlantic cooperation.</div></section>
+        <section class="lang"><h3>FR</h3><div class="content">Friedrich Merz, le nouveau chancelier allemand, semble avoir torpillé un effort de un an visant à établir un rapport avec le président américain Donald Trump, mettant en péril un plan diplomatique crucial. Cette évolution menace la stabilité des relations entre les États‑Unis et l’Europe et complique la coordination sur la sécurité, le commerce et le climat. Elle souligne également les difficultés de gérer un président américain volatile via les canaux diplomatiques traditionnels. Friedrich Merz, un nouveau venu politique devenu chancelier le 6 mai 2025, est accusé d&#39;avoir sapé un effort diplomatique de un an visant à établir un contact avec le président Trump, ce qui pourrait tendre les relations transatlantiques.</div></section>
+    </div>
+  <div class="tags"><code>#Politics</code>, <code>#International Relations</code>, <code>#Germany</code>, <code>#United States</code>, <code>#Trump</code></div>
+  <details><summary>References</summary><ul><li><a href="https://www.famousfix.com/topic/friedrich-merz">Friedrich Merz Photos, News and Videos, Trivia and Quotes -</a></li><li><a href="https://www.reuters.com/world/europe/friedrich-merz-veteran-politician-tipped-be-germanys-next-chancellor-2024-12-11/">Who is Friedrich Merz, German election winner tipped to be</a></li></ul></details>
+</article>
+
+<article id="item-11">
+  <header>
+    <h2 class="item-title"><a href="https://www.bloomberg.com/news/articles/2026-05-05/idr-usd-indonesia-intervenes-in-markets-as-rupiah-sets-new-record-low">Indonesia&#39;s central bank intervenes as the rupiah hits a record low.</a> <span class="score">⭐ 8.912500000000001/10</span></h2>
+    <div class="meta">rss · Bloomberg Markets · May 5, 04:04</div>
+  </header>
+    <div class="lang-blocks">
+        <section class="lang"><h3>EN</h3><div class="content">Indonesia’s central bank intervened in the foreign‑exchange market. The rupiah fell to a new record low against the US dollar. This intervention signals concern over currency stability and may influence inflation and trade balances in Indonesia. It also reflects broader pressures on emerging‑market currencies. The central bank’s action was taken as the rupiah reached a historic low, highlighting its vulnerability to external shocks and inflation pressures. The intervention aims to stabilize the exchange rate and support confidence in the currency.</div></section>
+        <section class="lang"><h3>FR</h3><div class="content">La banque centrale indonésienne a intervenu sur le marché des changes. Le rupiah a chuté à un niveau record face au dollar américain. Cette intervention montre une inquiétude concernant la stabilité monétaire et peut affecter l’inflation et les balances commerciales en Indonésie. Elle reflète également les pressions plus larges sur les monnaies des marchés émergents. L’action de la banque centrale intervient alors que le rupiah a atteint un niveau historique, soulignant sa vulnérabilité aux chocs externes et aux pressions inflationnistes. L’intervention vise à stabiliser le taux de change et à soutenir la confiance dans la monnaie.</div></section>
+    </div>
+  <div class="tags"><code>#Currency</code>, <code>#Economics</code>, <code>#Emerging Markets</code>, <code>#Central Banking</code>, <code>#Indonesia</code></div>
+  <details><summary>References</summary><ul><li><a href="https://en.wikipedia.org/wiki/Indonesian_rupiah">Indonesian rupiah - Wikipedia</a></li><li><a href="https://www.britannica.com/money/rupiah">Rupiah | Indonesian Economy, Exchange Rates &amp; Banknotes ...</a></li><li><a href="https://corporatefinanceinstitute.com/resources/foreign-exchange/indonesian-rupiah-idr/">Indonesian Rupiah (IDR) - Ovderview, History, Coins and Banknotes IDR - Indonesian Rupiah rates, news, and tools | Xe Understanding the Indonesian Currency Symbol: IDR and Beyond Indonesian rupiahs to US dollars Exchange Rate. Convert IDR ... 1 Indonesian Rupiah (IDR) to United States Dollars (USD) today</a></li></ul></details>
+</article>
+
+<article id="item-12">
+  <header>
+    <h2 class="item-title"><a href="https://www.theguardian.com/world/2026/may/04/modis-bjp-party-win-election-west-bengal-first-time">Narendra Modi’s BJP wins election in West Bengal for the first time</a> <span class="score">⭐ 8.895000000000001/10</span></h2>
+    <div class="meta">rss · The Guardian World · May 4, 17:34</div>
+  </header>
+    <div class="lang-blocks">
+        <section class="lang"><h3>EN</h3><div class="content">Narendra Modi&#39;s BJP secured a historic victory in West Bengal, ending the state&#39;s longstanding opposition stronghold and reshaping India&#39;s political landscape.</div></section>
+        <section class="lang"><h3>FR</h3><div class="content"><em>Non disponible.</em></div></section>
+    </div>
+  <div class="tags"><code>#Indian politics</code>, <code>#Elections</code>, <code>#BJP</code>, <code>#West Bengal</code>, <code>#Modi</code></div>
+  
+</article>
+
+<article id="item-13">
+  <header>
+    <h2 class="item-title"><a href="https://arstechnica.com/ai/2026/05/influential-study-touting-chatgpt-in-education-retracted-over-red-flags/">Influential study on ChatGPT in education has been retracted.</a> <span class="score">⭐ 8.8775/10</span></h2>
+    <div class="meta">rss · Ars Technica · May 4, 19:03</div>
+  </header>
+    <div class="lang-blocks">
+        <section class="lang"><h3>EN</h3><div class="content">The study was retracted after undisclosed red flags were discovered, despite having been cited hundreds of times. The high‑profile retraction raises concerns about research integrity and undermines public trust in AI‑driven educational tools. The paper, which claimed ChatGPT could improve student learning, was cited over 300 times before being withdrawn.</div></section>
+        <section class="lang"><h3>FR</h3><div class="content">L&#39;étude a été retirée après la découverte de signaux d&#39;alerte non déclarés, malgré des centaines de citations. Ce retrait à grande visibilité soulève des inquiétudes quant à l&#39;intégrité de la recherche et érode la confiance du public dans les outils éducatifs basés sur l&#39;IA. Le papier, affirmant que ChatGPT pouvait améliorer l&#39;apprentissage des étudiants, avait été cité plus de 300 fois avant d&#39;être retiré.</div></section>
+    </div>
+  <div class="tags"><code>#AI</code>, <code>#Education</code>, <code>#Retraction</code>, <code>#Science</code>, <code>#Technology</code></div>
+  <details><summary>References</summary><ul><li><a href="https://en.wikipedia.org/wiki/ChatGPT">ChatGPT</a></li><li><a href="https://medium.com/@essencenoelle94/10-reasons-why-you-should-be-using-chatgpt-03e4ab87668d">10 Reasons Why You Should Be Using ChatGPT | Medium</a></li></ul></details>
+</article>
+
+<article id="item-14">
+  <header>
+    <h2 class="item-title"><a href="https://www.france24.com/en/europe/20260504-armenia-turns-towards-europe-as-macron-highlights-shift-from-russia">Armenia shifts toward Europe as Macron highlights break from Russia.</a> <span class="score">⭐ 8.86/10</span></h2>
+    <div class="meta">rss · France 24 · May 4, 23:19</div>
+  </header>
+    <div class="lang-blocks">
+        <section class="lang"><h3>EN</h3><div class="content">During a visit to Yerevan, President Emmanuel Macron announced that Armenia is moving toward Europe, signaling a strategic shift away from Russia. This signals a major geopolitical realignment in the South Caucasus, affecting EU‑Russia relations and regional security. Macron&#39;s remarks came amid EU regional summits in Armenia and follow Yerevan&#39;s diversification of foreign policy after the Nagorno‑Karabakh war, as noted in recent analyses.</div></section>
+        <section class="lang"><h3>FR</h3><div class="content">Lors d&#39;une visite à Yerevan, le président Emmanuel Macron a annoncé que l&#39;Arménie se tourne vers l&#39;Europe, marquant un virage stratégique loin de la Russie. Cela indique un réel réalignement géopolitique dans le Caucase du Sud, impactant les relations entre l&#39;UE et la Russie et la sécurité régionale. Les remarques de Macron ont eu lieu pendant des sommets régionaux de l&#39;UE en Arménie et suivent la diversification de la politique étrangère d&#39;Yerevan après la guerre du Haut-Karabakh, comme le soulignent les analyses récentes.</div></section>
+    </div>
+  <div class="tags"><code>#geopolitics</code>, <code>#Europe</code>, <code>#Russia</code>, <code>#Armenia</code>, <code>#diplomacy</code></div>
+  <details><summary>References</summary><ul><li><a href="https://apri.institute/wp-content/uploads/2025/06/Armenias-Foreign-Policy-after-the-Second-Nagorno-Karabakh-War-digital.pdf">Armenia’s Foreign Policy after the Second Nagorno-Karabakh War</a></li><li><a href="https://www.theguardian.com/world/2026/may/04/eu-closer-ties-armenia-counter-russian-interference">EU forging closer ties with Armenia as it sends experts to ...</a></li><li><a href="https://europeanrelations.com/briefing/first-eu-armenia-summit-yerevan-anchors-its-western-realignment/">First EU-Armenia Summit: Yerevan Anchors Its Western Realignment</a></li></ul></details>
+</article>
+
+<article id="item-15">
+  <header>
+    <h2 class="item-title"><a href="https://www.theguardian.com/us-news/2026/may/04/california-state-farm-insurance-violations-wildfires">California seeks millions in penalties from State Farm over alleged claims violations after wildfires</a> <span class="score">⭐ 8.86/10</span></h2>
+    <div class="meta">rss · The Guardian World · May 4, 22:46</div>
+  </header>
+    <div class="lang-blocks">
+        <section class="lang"><h3>EN</h3><div class="content">The state&#39;s top insurance regulator says State Farm violated the law in handling claims from the 2025 Los Angeles wildfires. It is seeking up to $4 million in penalties and possible license suspension. This regulatory action underscores the state&#39;s commitment to consumer protection after major disasters and may set a precedent for how insurers handle wildfire claims, affecting millions of California homeowners. State Farm violated the law hundreds of times in a sample of 220 claim cases. The maximum penalty is about $4 million if the violations are willful, and regulators may suspend its license for up to a year, preventing it from issuing new home policies in California.</div></section>
+        <section class="lang"><h3>FR</h3><div class="content">Le commissaire de l&#39;assurance de Californie indique que State Farm a violé la loi en traitant les sinistres des incendies de Los Angeles en 2025. Il demande jusqu&#39;à 4 millions de dollars de pénalités et une suspension possible du permis. Cette action réglementaire souligne l&#39;engagement de l&#39;État en faveur de la protection des consommateurs après les catastrophes majeures et pourrait établir un précédent pour la gestion des sinistres d&#39;incendie, touchant des millions de propriétaires de maisons en Californie. State Farm a violé la loi des centaines de fois dans un échantillon de 220 dossiers de sinistres. La pénalité maximale est d&#39;environ 4 millions de dollars si les violations sont jugées intentionnelles, et les régulateurs peuvent suspendre son permis jusqu&#39;à une année, interdisant l&#39;émission de nouvelles polices d&#39;habitation en Californie.</div></section>
+    </div>
+  <div class="tags"><code>#Insurance</code>, <code>#Regulation</code>, <code>#Wildfires</code>, <code>#Consumer Protection</code>, <code>#California</code></div>
+  <details><summary>References</summary><ul><li><a href="https://brainly.com/question/53930009">[FREE] Who is the public official in charge of the Insurance Department?</a></li><li><a href="https://calmatters.org/california-voter-guide-2026/insurance-commissioner/">Who&#39;s running for insurance commissioner in CA&#39;s 2026 election?</a></li></ul></details>
+</article>
+
+<article id="item-16">
+  <header>
+    <h2 class="item-title"><a href="https://www.aljazeera.com/news/2026/5/5/dangerous-escalation-world-condemns-iran-after-attacks-on-uae?traffic_source=rss">World condemns Iran after UAE attacks</a> <span class="score">⭐ 8.842500000000001/10</span></h2>
+    <div class="meta">rss · Al Jazeera · May 5, 03:38</div>
+  </header>
+    <div class="lang-blocks">
+        <section class="lang"><h3>EN</h3><div class="content">Saudi Arabia, Qatar, Kuwait and Bahrain denounced Iran&#39;s attacks on the UAE, while Germany, the UK and Canada urged Iran to return to diplomatic talks. This widespread condemnation highlights the severity of the geopolitical escalation and signals international pressure for de-escalation through diplomacy. The attacks targeted the UAE, a key Gulf ally, and involved multiple Middle Eastern and European states, indicating a broader regional crisis.</div></section>
+        <section class="lang"><h3>FR</h3><div class="content">L&#39;Arabie saoudite, le Qatar, le Koweït et Bahreïn ont condamné les attaques de l&#39;Iran sur l&#39;UAE, tandis que l&#39;Allemagne, le Royaume-Uni et le Canada ont exhorté l&#39;Iran à reprendre les négociations diplomatiques. Cette condamnation massive souligne la gravité de l&#39;escalade géopolitique et signale une pression internationale pour une désescalade par le biais de la diplomatie. Les attaques ont visé l&#39;UAE, allié clé du Golfe, et ont impliqué plusieurs États du Moyen-Orient et d&#39;Europe, indiquant une crise régionale plus large.</div></section>
+    </div>
+  <div class="tags"><code>#Iran</code>, <code>#UAE</code>, <code>#Geopolitics</code>, <code>#International Relations</code>, <code>#Middle East</code></div>
+  <details><summary>References</summary><ul><li><a href="https://en.wikipedia.org/wiki/Foreign_relations_of_the_United_Arab_Emirates">Foreign relations of the United Arab Emirates - Wikipedia</a></li><li><a href="https://www.mofa.gov.ae/EN">UAE Ministry of Foreign Affairs - MOFA</a></li><li><a href="https://www.al-monitor.com/originals/2026/04/factbox-uaes-foreign-policy-spotlight-after-opec-exit">Factbox-UAE&#39;s foreign policy in the spotlight after OPEC exit</a></li></ul></details>
+</article>
+
+<article id="item-17">
+  <header>
+    <h2 class="item-title"><a href="https://www.theguardian.com/us-news/2026/may/04/supreme-court-expedites-voting-rights-act-ruling">US supreme court expedites Voting Rights Act ruling so Louisiana can redraw its maps for midterms</a> <span class="score">⭐ 8.825/10</span></h2>
+    <div class="meta">rss · The Guardian World · May 5, 01:19</div>
+  </header>
+    <div class="lang-blocks">
+        <section class="lang"><h3>EN</h3><div class="content">The U.S. Supreme Court accelerated its ruling on a key Voting Rights Act provision, allowing Louisiana to redraw its congressional maps before the 2026 midterms.</div></section>
+        <section class="lang"><h3>FR</h3><div class="content"><em>Non disponible.</em></div></section>
+    </div>
+  <div class="tags"><code>#Voting Rights</code>, <code>#Supreme Court</code>, <code>#Elections</code>, <code>#Politics</code>, <code>#Redistricting</code></div>
+  
+</article>
+
+<article id="item-18">
+  <header>
+    <h2 class="item-title"><a href="https://insideclimatenews.org/news/04052026/chicago-flooding-climate-change/">Flooding in Chicago Is Getting Worse. Here’s Why.</a> <span class="score">⭐ 8.790000000000001/10</span></h2>
+    <div class="meta">rss · Inside Climate News · May 4, 08:50</div>
+  </header>
+    <div class="lang-blocks">
+        <section class="lang"><h3>EN</h3><div class="content">A Chicago Sun-Times article highlights worsening flooding in Chicago due to climate change, citing a 2023 University of Illinois study predicting increased severity over the next 25 years, with community discussion highlighting local impacts and policy responses.</div></section>
+        <section class="lang"><h3>FR</h3><div class="content"><em>Non disponible.</em></div></section>
+    </div>
+  <div class="tags"><code>#climate change</code>, <code>#flooding</code>, <code>#urban planning</code>, <code>#climate adaptation</code>, <code>#Illinois</code></div>
+  
+</article>
+
+<article id="item-19">
+  <header>
+    <h2 class="item-title"><a href="https://www.aljazeera.com/video/newsfeed/2026/5/5/strong-security-presence-in-mexicos-sinaloa-state-amid-cartel-violence?traffic_source=rss">Security forces maintain a strong presence in Mexico’s Sinaloa state amid cartel violence.</a> <span class="score">⭐ 8.79/10</span></h2>
+    <div class="meta">rss · Al Jazeera · May 5, 03:10</div>
+  </header>
+    <div class="lang-blocks">
+        <section class="lang"><h3>EN</h3><div class="content">Security forces have intensified their presence across parts of Sinaloa state amid ongoing cartel violence. The heightened security response aims to curb cartel-related violence and protect public safety in a region heavily affected by organized crime. Security forces have intensified their presence across parts of Sinaloa, following the indictment of Governor Ruben Rocha Moya on U.S. drug trafficking charges, which led to his temporary suspension.</div></section>
+        <section class="lang"><h3>FR</h3><div class="content">Les forces de sécurité ont intensifié leur présence dans certaines parties de l&#39;État de Sinaloa face à la violence des cartels. Cette réponse sécuritaire renforcée vise à réduire la violence liée aux cartels et à protéger la sécurité publique dans une région fortement touchée par le crime organisé. Les forces de sécurité ont intensifié leur présence dans certaines parties du Sinaloa, après l&#39;inculpation du gouverneur Ruben Rocha Moya aux États-Unis pour trafic de drogue, ce qui a entraîné sa suspension temporaire.</div></section>
+    </div>
+  <div class="tags"><code>#Security</code>, <code>#Cartel Violence</code>, <code>#Mexico</code>, <code>#Sinaloa</code>, <code>#Law Enforcement</code></div>
+  <details><summary>References</summary><ul><li><a href="https://en.wikipedia.org/wiki/Sinaloa">Sinaloa - Wikipedia</a></li><li><a href="https://www.msn.com/en-us/crime/general/governor-of-mexico-s-sinaloa-state-steps-down-after-us-drug-indictment/ar-AA22fNsC">Governor of Mexico’s Sinaloa state steps down after ... - MSN</a></li></ul></details>
+</article>
+
+<article id="item-20">
+  <header>
+    <h2 class="item-title"><a href="https://www.ft.com/content/85f851c6-3cc2-44ee-b527-5a1136f851e7">Reeves clashes with Bessent over Iran war criticism.</a> <span class="score">⭐ 8.79/10</span></h2>
+    <div class="meta">rss · Financial Times · May 5, 04:00</div>
+  </header>
+    <div class="lang-blocks">
+        <section class="lang"><h3>EN</h3><div class="content">UK Chancellor Rachel Reeves clashed with US Treasury Secretary Janet Bessent over criticism of the Iran war, revealing divergent positions among allies. This dispute highlights growing discord among key allies, which could affect coordinated sanctions and diplomatic strategy regarding Iran. Reeves, in her first speech as Chancellor, announced measures including increased National Insurance contributions and austerity, while Bessent criticized the UK&#39;s stance on the Iran conflict.</div></section>
+        <section class="lang"><h3>FR</h3><div class="content">La chancelière britannique Rachel Reeves a clivé avec la secrétaire du Trésor américaine Janet Bessent sur la critique de la guerre en Iran, révélant des positions divergentes parmi les alliés. Cette dispute révèle une fracture croissante parmi les alliés clés, pouvant impacter les sanctions coordonnées et la stratégie diplomatique vis‑à‑vis de l’Iran. Reeves, lors de son premier discours en tant que chancelière, a annoncé des mesures incluant l’augmentation des cotisations de sécurité sociale et une politique d’austérité, tandis que Bessent a critiqué la position du Royaume‑Uni sur le conflit en Iran.</div></section>
+    </div>
+  <div class="tags"><code>#Geopolitics</code>, <code>#Iran</code>, <code>#UK</code>, <code>#US</code></div>
+  <details><summary>References</summary><ul><li><a href="https://en.wikipedia.org/wiki/Chancellorship_of_Rachel_Reeves">Chancellorship of Rachel Reeves - Wikipedia</a></li><li><a href="https://www.gov.uk/government/speeches/chancellor-rachel-reeves-is-taking-immediate-action-to-fix-the-foundations-of-our-economy">Chancellor Rachel Reeves is taking immediate action to fix the</a></li></ul></details>
+</article>
+
+<article id="item-21">
+  <header>
+    <h2 class="item-title"><a href="https://www.bloomberg.com/opinion/newsletters/2026-05-05/iran-draws-a-line-and-puts-markets-on-notice">Iran draws a red line, sending oil prices and inflation to record highs</a> <span class="score">⭐ 8.7725/10</span></h2>
+    <div class="meta">rss · Bloomberg Markets · May 5, 04:08</div>
+  </header>
+    <div class="lang-blocks">
+        <section class="lang"><h3>EN</h3><div class="content">A Gulf clash triggered a surge in Brent crude prices and inflation expectations to historic highs, warning markets of heightened risk. The escalation follows Iran&#39;s declaration of a red line amid heightened regional tensions. This geopolitical shock could destabilize global energy markets and exacerbate inflation pressures worldwide, affecting consumers and investors. It signals a potential escalation of Middle East conflicts with broader economic repercussions. Brent crude reached unprecedented levels while inflation expectations hit record highs, prompting market alerts. The clash stems from Iran&#39;s red line doctrine, which it uses to deter attacks on its interests and U.S. vessels in the Strait of Hormuz.</div></section>
+        <section class="lang"><h3>FR</h3><div class="content">Un conflit dans le Golfe a provoqué une hausse record du pétrole Brent et des attentes d&#39;inflation, alertant les marchés du risque accru. Cela suit la déclaration iranienne d&#39;une ligne rouge face à des tensions régionales accrues. Ce choc géopolitique pourrait destabiliser les marchés énergétiques mondiaux et aggraver la pression inflationniste, touchant consommateurs et investisseurs. Il indique une possible escalade des conflits du Moyen-Orient avec des répercussions économiques plus larges. Le pétrole Brent a atteint des niveaux sans précédent alors que les attentes d&#39;inflation ont grimpé à des records, alertant les marchés. Le conflit provient de la doctrine de la ligne rouge de l&#39;Iran, utilisée pour dissuader les attaques contre ses intérêts et les navires américains dans le détroit d&#39;Ormuz.</div></section>
+    </div>
+  <div class="tags"><code>#Geopolitics</code>, <code>#Oil markets</code>, <code>#Inflation</code>, <code>#Middle East</code></div>
+  <details><summary>References</summary><ul><li><a href="https://editorialge.com/iran-anticipatory-defense-doctrine-analysis/">The Red Line Decree: Iran’s Anticipatory Defense Doctrine ...</a></li><li><a href="https://www.firstpost.com/world/trump-draws-red-line-says-iranian-forces-will-be-blown-off-the-face-of-the-earth-if-they-target-us-ships-14007585.html">Trump draws red line, says Iranian forces will be ‘blown off ...</a></li></ul></details>
+</article>
+
+<article id="item-22">
+  <header>
+    <h2 class="item-title"><a href="https://www.theguardian.com/science/2026/may/04/cruise-ship-suspected-hantavirus-outbreak-blocked-docking-cape-verde">British crew member needs urgent care amid hantavirus outbreak on cruise ship</a> <span class="score">⭐ 8.755/10</span></h2>
+    <div class="meta">rss · The Guardian World · May 5, 01:52</div>
+  </header>
+    <div class="lang-blocks">
+        <section class="lang"><h3>EN</h3><div class="content">A British crew member required urgent medical attention, and a UK passenger remained critically ill after a suspected hantavirus outbreak on the MV Hondius cruise ship. The incident has resulted in three deaths and led to urgent evacuations and a WHO investigation. This outbreak highlights the risk of zoonotic diseases on crowded vessels and underscores the need for robust health monitoring and rapid response by international agencies. Seven cases were confirmed or suspected, three people died, two others were critically ill, and the ship carrying 149 passengers and crew from 23 nations was halted at Cape Verde while medics arranged urgent evacuations.</div></section>
+        <section class="lang"><h3>FR</h3><div class="content">Un membre d&#39;équipage britannique a reçu des soins médicaux urgents, et un passager du Royaume-Uni est resté dans un état critique mais stable après une épidémie suspectée de hantavirus sur le navire de croisière MV Hondius, qui a fait trois décès et entraîné des évacuations d&#39;urgence ainsi qu&#39;une enquête de l&#39;OMS. Cette épidémie souligne le risque de maladies zoonotiques sur les navires bondés et la nécessité d’une surveillance sanitaire rigoureuse et d’une réponse rapide des agences internationales. Sept cas ont été confirmés ou suspectés, trois personnes sont mortes, deux autres sont en état critique, et le navire transportant 149 passagers et membres d&#39;équipage de 23 pays a été arrêté à Cape Verde alors que les médecins organisaient des évacuations d&#39;urgence.</div></section>
+    </div>
+  <div class="tags"><code>#hantavirus</code>, <code>#cruise ship</code>, <code>#public health</code>, <code>#outbreak</code>, <code>#WHO</code></div>
+  <details><summary>References</summary><ul><li><a href="https://en.wikipedia.org/wiki/Hantavirus_infection">Hantavirus infection</a></li><li><a href="https://wwwnc.cdc.gov/eid/article/17/2/10-0663_article">Hantavirus Infection in Istanbul, Turkey - Volume 17, Number</a></li></ul></details>
+</article>
+
+<article id="item-23">
+  <header>
+    <h2 class="item-title"><a href="https://www.aljazeera.com/news/2026/5/4/tackling-methane-emissions-key-for-climate-change-and-energy-security-iea?traffic_source=rss">Tackling methane emissions is key for climate change and energy security, IEA says</a> <span class="score">⭐ 8.72/10</span></h2>
+    <div class="meta">rss · Al Jazeera · May 4, 18:34</div>
+  </header>
+    <div class="lang-blocks">
+        <section class="lang"><h3>EN</h3><div class="content">The IEA report states that reducing methane emissions can mitigate the impact of the Iran crisis on global energy supply and improve climate outcomes. This underscores the dual benefit of cutting methane—enhancing energy security amid geopolitical tensions and contributing to climate change mitigation. The report highlights that methane, a potent greenhouse gas, can disrupt energy supplies and that the IEA stresses its importance for both climate policy and energy resilience.</div></section>
+        <section class="lang"><h3>FR</h3><div class="content">Le rapport de l&#39;IEA indique que la réduction des émissions de méthane peut atténuer l&#39;impact de la crise iranienne sur l&#39;offre énergétique mondiale et améliorer les résultats climatiques. Cela souligne les deux avantages de la réduction du méthane : renforcer la sécurité énergétique face aux tensions géopolitiques et contribuer à la lutte contre le changement climatique. Le rapport indique que le méthane, gaz à effet de serre puissant, peut perturber les approvisionnements énergétiques et que l&#39;IEA souligne son importance pour la politique climatique et la résilience énergétique.</div></section>
+    </div>
+  <div class="tags"><code>#climate change</code>, <code>#energy security</code>, <code>#methane emissions</code>, <code>#IEA</code>, <code>#geopolitics</code></div>
+  <details><summary>References</summary><ul><li><a href="https://en.wikipedia.org/wiki/International_Energy_Agency">International Energy Agency - Wikipedia</a></li><li><a href="https://www.iea.org/">IEA – International Energy Agency</a></li><li><a href="https://www.energy.gov/ia/international-energy-agency-iea">International Energy Agency (IEA) - Department of Energy</a></li></ul></details>
+</article>
+
+<article id="item-24">
+  <header>
+    <h2 class="item-title"><a href="https://www.france24.com/en/tv-shows/down-to-earth/20260504-what-is-hantavirus-and-how-does-it-spread">What is hantavirus and how does it spread?</a> <span class="score">⭐ 8.7025/10</span></h2>
+    <div class="meta">rss · France 24 · May 4, 15:36</div>
+  </header>
+    <div class="lang-blocks">
+        <section class="lang"><h3>EN</h3><div class="content">Three people died and three became ill after a suspected hantavirus outbreak on a Netherlands cruise ship, which the article explains is transmitted by infected rodents and rarely spreads human‑to‑human. This report underscores the danger of hantavirus exposure during travel and the need for awareness and preventive measures. The outbreak involved three fatalities and three illnesses on a Dutch cruise ship, with transmission occurring through rodent excreta and, rarely, human‑to‑human contact.</div></section>
+        <section class="lang"><h3>FR</h3><div class="content">Trois personnes sont mortes et trois autres sont tombées malades après un suspected épisode de hantavirus sur un bateau de croisière néerlandais, que l&#39;article explique se transmettre par des rongeurs infectés et rarement d&#39;homme à homme. Ce report souligne le danger d&#39;exposition au hantavirus lors de voyages et la nécessité de sensibiliser le public et de prendre des mesures préventives. L’épidémie a fait trois décès et trois maladies sur un bateau de croisière néerlandais, la transmission se faisant par les excréments de rongeurs et, rarement, par contact humain‑à‑humain.</div></section>
+    </div>
+  <div class="tags"><code>#health</code>, <code>#disease</code>, <code>#outbreak</code>, <code>#hantavirus</code>, <code>#travel</code></div>
+  <details><summary>References</summary><ul><li><a href="https://en.wikipedia.org/wiki/Hantavirus">Hantavirus</a></li><li><a href="https://www.cdc.gov/hantavirus/about/index.html">About Hantavirus | Hantavirus | CDC</a></li></ul></details>
+</article>
+
+<article id="item-25">
+  <header>
+    <h2 class="item-title"><a href="https://bigthink.com/starts-with-a-bang/supermassive-black-holes-launch-powerful-jets/">Supermassive black holes launch the most powerful cosmic jets</a> <span class="score">⭐ 8.6675/10</span></h2>
+    <div class="meta">rss · Big Think · May 4, 06:00</div>
+  </header>
+    <div class="lang-blocks">
+        <section class="lang"><h3>EN</h3><div class="content">The article describes how supermassive black holes launch the most powerful cosmic jets, which are best observed in X‑ray and radio wavelengths and influence galaxy evolution.</div></section>
+        <section class="lang"><h3>FR</h3><div class="content"><em>Non disponible.</em></div></section>
+    </div>
+  <div class="tags"><code>#Astrophysics</code>, <code>#Black Holes</code>, <code>#Cosmic Jets</code>, <code>#Science Communication</code></div>
+  
+</article>
+</main>
+
+  </div>
+</body>
+</html>

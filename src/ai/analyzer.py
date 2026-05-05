@@ -4,7 +4,7 @@ import asyncio
 import json
 import re
 from typing import List, Optional
-from tenacity import retry, stop_after_attempt, wait_exponential
+from tenacity import RetryError, retry, stop_after_attempt, wait_exponential
 from rich.progress import Progress, SpinnerColumn, BarColumn, TextColumn, MofNCompleteColumn
 
 from .client import AIClient
@@ -36,8 +36,54 @@ class ContentAnalyzer:
         return max(throttle_sec, 0.0)
 
     async def analyze_batch(self, items: List[ContentItem]) -> List[ContentItem]:
+        if not items:
+            return []
+
         throttle_sec = self._get_throttle_sec()
-        analyzed_items = []
+        # Limit to 3 concurrent analysis to avoid API rate limiting
+        semaphore = asyncio.Semaphore(3)
+
+        async def analyze_with_semaphore(item):
+            async with semaphore:
+                try:
+                    await self._analyze_item(item)
+                    return item
+                except Exception as e:
+                    root = e
+                    if isinstance(root, RetryError):
+                        root = root.last_attempt.exception()
+                    while getattr(root, "__cause__", None) is not None:
+                        root = root.__cause__
+                    status_code = getattr(root, "status_code", None)
+                    message = str(root)
+                    if status_code is not None:
+                        print(f"Erreur lors de l'analyse de l'élément {item.id} : {type(root).__name__} (statut {status_code}) {message}")
+                    else:
+                        print(f"Erreur lors de l'analyse de l'élément {item.id} : {type(root).__name__} {message}")
+                    item.ai_score = 0.0
+                    item.ai_reason = "Analyse échouée"
+                    item.ai_summary = item.title
+                    return item
+
+        # When throttling is configured, analyze sequentially and sleep between items
+        # to avoid bursty API traffic and satisfy deterministic behavior.
+        if throttle_sec > 0:
+            analyzed_items = []
+            with Progress(
+                SpinnerColumn(),
+                TextColumn("[progress.description]{task.description}"),
+                BarColumn(),
+                MofNCompleteColumn(),
+                transient=True,
+            ) as progress:
+                task = progress.add_task("Analyse", total=len(items))
+                for idx, item in enumerate(items):
+                    analyzed = await analyze_with_semaphore(item)
+                    analyzed_items.append(analyzed)
+                    progress.advance(task)
+                    if idx < len(items) - 1:
+                        await asyncio.sleep(throttle_sec)
+            return analyzed_items
 
         with Progress(
             SpinnerColumn(),
@@ -46,21 +92,14 @@ class ContentAnalyzer:
             MofNCompleteColumn(),
             transient=True,
         ) as progress:
-            task = progress.add_task("Analyzing", total=len(items))
+            task = progress.add_task("Analyse", total=len(items))
 
-            for index, item in enumerate(items):
-                try:
-                    await self._analyze_item(item)
-                    analyzed_items.append(item)
-                except Exception as e:
-                    print(f"Error analyzing item {item.id}: {e}")
-                    item.ai_score = 0.0
-                    item.ai_reason = "Analysis failed"
-                    item.ai_summary = item.title
-                    analyzed_items.append(item)
+            async def track_and_analyze(item):
+                result = await analyze_with_semaphore(item)
                 progress.advance(task)
-                if throttle_sec > 0 and index < len(items) - 1:
-                    await asyncio.sleep(throttle_sec)
+                return result
+
+            analyzed_items = await asyncio.gather(*[track_and_analyze(item) for item in items])
 
         return analyzed_items
 
@@ -137,15 +176,43 @@ class ContentAnalyzer:
         # Parse JSON response with robust fallback
         result = self._parse_json_response(response)
         if result is None:
-            print(f"Warning: could not parse analysis response for {item.id}, using defaults")
+            print(f"Avertissement : impossible d'analyser la réponse d'analyse pour {item.id}, valeurs par défaut utilisées")
             item.ai_score = 0.0
-            item.ai_reason = "Analysis response parse failed"
+            item.ai_reason = "Échec de l'analyse de la réponse"
             item.ai_summary = item.title
             item.ai_tags = []
             return
 
         # Update item with analysis results
-        item.ai_score = float(result.get("score", 0))
+        base_score = float(result.get("score", 0))
+        source_reliability = float(result.get("source_reliability", 0))
+        explanatory_value = float(result.get("explanatory_value", 0))
+        novelty = float(result.get("novelty", 0))
+        potential_impact = float(result.get("potential_impact", 0))
+        uncertainty = float(result.get("uncertainty", 5))
+
+        # Blend importance with explicit quality dimensions.
+        # Uncertainty is inverted so lower uncertainty increases quality.
+        quality_score = (
+            0.25 * source_reliability
+            + 0.20 * explanatory_value
+            + 0.20 * novelty
+            + 0.25 * potential_impact
+            + 0.10 * (10.0 - uncertainty)
+        )
+        final_score = max(0.0, min(10.0, 0.65 * base_score + 0.35 * quality_score))
+
+        item.ai_score = final_score
         item.ai_reason = result.get("reason", "")
         item.ai_summary = result.get("summary", item.title)
         item.ai_tags = result.get("tags", [])
+        item.metadata["ai_quality"] = {
+            "base_score": base_score,
+            "source_reliability": source_reliability,
+            "explanatory_value": explanatory_value,
+            "novelty": novelty,
+            "potential_impact": potential_impact,
+            "uncertainty": uncertainty,
+            "quality_score": quality_score,
+            "final_score": final_score,
+        }

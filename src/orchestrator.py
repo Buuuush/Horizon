@@ -3,7 +3,7 @@
 import asyncio
 from collections import defaultdict
 from datetime import datetime, timedelta, timezone
-from typing import List, Dict
+from typing import List, Dict, Optional
 from urllib.parse import urlparse
 import httpx
 from rich.console import Console
@@ -45,43 +45,95 @@ class HorizonOrchestrator:
             else None
         )
 
-    async def run(self, force_hours: int = None) -> None:
+    async def run(self, force_hours: int = None, summary_format: str = "html", theme: Optional[str] = None) -> None:
         """Execute the complete workflow.
 
         Args:
             force_hours: Optional override for time window in hours
         """
-        self.console.print("[bold cyan]🌅 Horizon - Starting aggregation...[/bold cyan]\n")
+        self.console.print("[bold cyan]🌅 Horizon - Démarrage de l'agrégation...[/bold cyan]\n")
 
         # Check email subscriptions if configured
         if self.email_manager and self.config.email and self.config.email.enabled:
-            self.console.print("📧 Checking for new email subscriptions...")
+            self.console.print("📧 Vérification des nouveaux abonnements par e-mail...")
             self.email_manager.check_subscriptions(self.storage)
 
         try:
             # 1. Determine time window
             since = self._determine_time_window(force_hours)
-            self.console.print(f"📅 Fetching content since: {since.strftime('%Y-%m-%d %H:%M:%S')}\n")
+            self.console.print(f"📅 Récupération du contenu depuis : {since.strftime('%Y-%m-%d %H:%M:%S')}\n")
 
             # 2. Fetch content from all sources
             all_items = await self.fetch_all_sources(since)
-            self.console.print(f"📥 Fetched {len(all_items)} items from all sources\n")
+            self.console.print(f"📥 {len(all_items)} éléments récupérés de toutes les sources\n")
 
             if not all_items:
-                self.console.print("[yellow]No new content found. Exiting.[/yellow]")
+                self.console.print("[yellow]Aucun nouveau contenu trouvé. Sortie.[/yellow]")
                 return
 
             # 3. Merge cross-source duplicates (same URL from different sources)
             merged_items = self.merge_cross_source_duplicates(all_items)
             if len(merged_items) < len(all_items):
                 self.console.print(
-                    f"🔗 Merged {len(all_items) - len(merged_items)} cross-source duplicates "
-                    f"→ {len(merged_items)} unique items\n"
+                    f"🔗 {len(all_items) - len(merged_items)} doublons entre sources fusionnés "
+                    f"→ {len(merged_items)} éléments uniques\n"
                 )
+
+            # Optional theme filtering: keep items whose RSS-configured category,
+            # feed name, tags or title match the requested theme string.
+            if theme:
+                t = theme.strip().lower()
+                filtered = []
+                for item in merged_items:
+                    meta = item.metadata or {}
+                    feed_cat = str(meta.get("category", "") or "").lower()
+                    feed_name = str(meta.get("feed_name", "") or "").lower()
+                    tags = [t_.lower() for t_ in (meta.get("tags") or []) if isinstance(t_, str)]
+                    title = (item.title or "").lower()
+
+                    match = False
+                    if t in feed_cat or t in feed_name or t in title:
+                        match = True
+                    if any(t in tag for tag in tags):
+                        match = True
+
+                    if match:
+                        filtered.append(item)
+
+                self.console.print(f"🔎 Filtrage par thème '{theme}' → {len(filtered)} éléments retenus\n")
+                merged_items = filtered
+                if not merged_items:
+                    self.console.print(f"[yellow]Aucun élément trouvé pour le thème '{theme}'. Sortie.[/yellow]")
+                    return
 
             # 4. Analyze with AI
             analyzed_items = await self._analyze_content(merged_items)
-            self.console.print(f"🤖 Analyzed {len(analyzed_items)} items with AI\n")
+            self.console.print(f"🤖 {len(analyzed_items)} éléments analysés avec l'IA\n")
+
+            # If a theme was requested, also filter based on AI-generated tags
+            # and AI summary/title (taxonomy-aware matching).
+            if theme:
+                t = theme.strip().lower()
+                ai_filtered = []
+                for item in analyzed_items:
+                    ai_tags = [tag.lower() for tag in (item.ai_tags or []) if isinstance(tag, str)]
+                    title = (item.title or "").lower()
+                    summary = (item.ai_summary or "").lower()
+
+                    match = False
+                    if any(t in tag for tag in ai_tags):
+                        match = True
+                    if t in title or t in summary:
+                        match = True
+
+                    if match:
+                        ai_filtered.append(item)
+
+                self.console.print(f"🔎 Filtrage par thème via IA '{theme}' → {len(ai_filtered)} éléments retenus\n")
+                analyzed_items = ai_filtered
+                if not analyzed_items:
+                    self.console.print(f"[yellow]Aucun élément trouvé pour le thème '{theme}' après analyse IA. Sortie.[/yellow]")
+                    return
 
             # 5. Filter by score threshold
             threshold = self.config.filtering.ai_score_threshold
@@ -92,15 +144,15 @@ class HorizonOrchestrator:
             important_items.sort(key=lambda x: x.ai_score or 0, reverse=True)
 
             self.console.print(
-                f"⭐️ {len(important_items)} items scored ≥ {threshold}\n"
+                f"⭐️ {len(important_items)} éléments notés ≥ {threshold}\n"
             )
 
             # 5.5 Semantic deduplication: drop items covering the same topic
             deduped_items = await self.merge_topic_duplicates(important_items)
             if len(deduped_items) < len(important_items):
                 self.console.print(
-                    f"🧹 Removed {len(important_items) - len(deduped_items)} topic duplicates "
-                    f"→ {len(deduped_items)} unique items\n"
+                    f"🧹 {len(important_items) - len(deduped_items)} doublons thématiques supprimés "
+                    f"→ {len(deduped_items)} éléments uniques\n"
                 )
             important_items = deduped_items
 
@@ -119,76 +171,134 @@ class HorizonOrchestrator:
             # 6. Search related stories + enrich with background knowledge (2nd AI pass)
             await self._enrich_important_items(important_items)
 
-            # 7. Generate and save daily summaries for each configured language
-            today = datetime.now(timezone.utc).strftime("%Y-%m-%d")
-            for lang in self.config.ai.languages:
-                summarizer = DailySummarizer()
-                summary = await summarizer.generate_summary(important_items, today, len(all_items), language=lang)
+            # 6.5 Re-rank after evidence-based enrichment adjustments and keep top items only.
+            important_items.sort(key=lambda x: x.ai_score or 0, reverse=True)
+            max_items = 25
+            if len(important_items) > max_items:
+                dropped = len(important_items) - max_items
+                important_items = important_items[:max_items]
+                self.console.print(
+                    f"🎯 Qualité: limitation aux {max_items} meilleurs items "
+                    f"({dropped} éléments retirés)\n"
+                )
 
-                # Save to data/summaries/
-                summary_path = self.storage.save_daily_summary(today, summary, language=lang)
-                self.console.print(f"💾 Saved {lang.upper()} summary to: {summary_path}\n")
+            # 7. Generate and save bilingual daily summary with tabbed interface (FR/EN onglets)
+            today = datetime.now(timezone.utc).strftime("%Y-%m-%d")
+            ai_client = create_ai_client(self.config.ai)
+            output_ext = "html" if summary_format not in {"md"} else "md"
+
+            if output_ext == "html":
+                # Generate single bilingual HTML with onglets/tabs
+                summarizer = DailySummarizer(ai_client)
+                summary = await summarizer.generate_bilingual_summary(
+                    important_items, today, len(all_items), languages=self.config.ai.languages
+                )
+
+                # Save to data/summaries/ with language suffix for compatibility
+                summary_path = self.storage.save_daily_summary(
+                    today,
+                    summary,
+                    language="bilingual",
+                    extension=output_ext,
+                )
+                self.console.print(f"💾 Résumé bilingue (FR/EN) enregistré dans : {summary_path}\n")
 
                 # Copy to docs/ for GitHub Pages
                 try:
                     from pathlib import Path
 
-                    post_filename = f"{today}-summary-{lang}.md"
+                    post_filename = f"{today}-summary.{output_ext}"
                     posts_dir = Path("docs/_posts")
                     posts_dir.mkdir(parents=True, exist_ok=True)
 
                     dest_path = posts_dir / post_filename
 
-                    # Add Jekyll front matter
-                    front_matter = (
-                        "---\n"
-                        "layout: default\n"
-                        f"title: \"Horizon Summary: {today} ({lang.upper()})\"\n"
-                        f"date: {today}\n"
-                        f"lang: {lang}\n"
-                        "---\n\n"
-                    )
-
-                    # Strip leading H1 header to avoid duplication with Jekyll title
-                    summary_content = summary
-                    first_line = summary_content.strip().split("\n")[0]
-                    if first_line.startswith("# "):
-                        parts = summary_content.split("\n", 1)
-                        if len(parts) > 1:
-                            summary_content = parts[1].strip()
-
                     with open(dest_path, "w", encoding="utf-8") as f:
-                        f.write(front_matter + summary_content)
+                        f.write(summary)
 
-                    self.console.print(f"📄 Copied {lang.upper()} summary to GitHub Pages: {dest_path}\n")
+                    self.console.print(f"📄 Résumé bilingue copié vers GitHub Pages : {dest_path}\n")
                 except Exception as e:
-                    self.console.print(f"[yellow]⚠️  Failed to copy {lang.upper()} summary to docs/: {e}[/yellow]\n")
+                    self.console.print(f"[yellow]⚠️  Échec de la copie du résumé vers docs/ : {e}[/yellow]\n")
 
-                # Send email if configured
+                # Send email and webhook notifications for each language
                 if self.email_manager and self.config.email and self.config.email.enabled:
-                    self.console.print(f"📧 Sending {lang.upper()} email summary...")
-                    subscribers = self.storage.load_subscribers()
-                    subject = f"Horizon Summary ({lang.upper()}) - {today}"
-                    self.email_manager.send_daily_summary(summary, subject, subscribers)
+                    for lang in self.config.ai.languages:
+                        self.console.print(f"📧 Envoi du résumé par e-mail {lang.upper()}...")
+                        subscribers = self.storage.load_subscribers()
+                        subject = f"Horizon Summary ({lang.upper()}) - {today}"
+                        self.email_manager.send_daily_summary(summary, subject, subscribers)
 
-                # Send webhook notification if configured
                 if self.webhook_notifier:
-                    await self.webhook_notifier.send_daily_summary(
-                        summary=summary,
-                        important_items=important_items,
-                        all_items_count=len(all_items),
-                        date=today,
-                        lang=lang,
-                        summarizer=summarizer,
-                    )
+                    for lang in self.config.ai.languages:
+                        # Create a summarizer instance for webhook metadata
+                        summarizer_for_webhook = DailySummarizer(ai_client)
+                        await self.webhook_notifier.send_daily_summary(
+                            summary=summary,
+                            important_items=important_items,
+                            all_items_count=len(all_items),
+                            date=today,
+                            lang=lang,
+                            summarizer=summarizer_for_webhook,
+                        )
+            else:
+                # For Markdown format, generate one per language (legacy behavior)
+                for lang in self.config.ai.languages:
+                    summarizer = DailySummarizer(ai_client)
+                    summary = await summarizer.generate_summary(important_items, today, len(all_items), language=lang)
 
-            self.console.print("[bold green]✅ Horizon completed successfully![/bold green]")
+                    # Save to data/summaries/
+                    summary_path = self.storage.save_daily_summary(
+                        today,
+                        summary,
+                        language=lang,
+                        extension=output_ext,
+                    )
+                    self.console.print(f"💾 Résumé {lang.upper()} enregistré dans : {summary_path}\n")
+
+                    # Copy to docs/ for GitHub Pages
+                    try:
+                        from pathlib import Path
+
+                        post_filename = f"{today}-summary-{lang}.{output_ext}"
+                        posts_dir = Path("docs/_posts")
+                        posts_dir.mkdir(parents=True, exist_ok=True)
+
+                        dest_path = posts_dir / post_filename
+                        final_content = summary
+
+                        with open(dest_path, "w", encoding="utf-8") as f:
+                            f.write(final_content)
+
+                        self.console.print(f"📄 Résumé {lang.upper()} copié vers GitHub Pages : {dest_path}\n")
+                    except Exception as e:
+                        self.console.print(f"[yellow]⚠️  Échec de la copie du résumé {lang.upper()} vers docs/ : {e}[/yellow]\n")
+
+                    # Send email if configured
+                    if self.email_manager and self.config.email and self.config.email.enabled:
+                        self.console.print(f"📧 Envoi du résumé par e-mail {lang.upper()}...")
+                        subscribers = self.storage.load_subscribers()
+                        subject = f"Horizon Summary ({lang.upper()}) - {today}"
+                        self.email_manager.send_daily_summary(summary, subject, subscribers)
+
+                    # Send webhook notification if configured
+                    if self.webhook_notifier:
+                        await self.webhook_notifier.send_daily_summary(
+                            summary=summary,
+                            important_items=important_items,
+                            all_items_count=len(all_items),
+                            date=today,
+                            lang=lang,
+                            summarizer=summarizer,
+                        )
+
+
+            self.console.print("[bold green]✅ Horizon terminé avec succès ![/bold green]")
             usage = get_usage_snapshot()
             if usage.total_tokens > 0:
                 self.console.print(
-                    f"\n🧮 Token usage this run: "
-                    f"{usage.total_tokens} tokens "
-                    f"(input: {usage.total_input_tokens}, output: {usage.total_output_tokens})"
+                    f"\n🧮 Utilisation des jetons pour cette exécution : "
+                    f"{usage.total_tokens} jetons "
+                    f"(entrée : {usage.total_input_tokens}, sortie : {usage.total_output_tokens})"
                 )
                 for provider, u in sorted(usage.per_provider.items()):
                     if u.total <= 0:
@@ -199,7 +309,7 @@ class HorizonOrchestrator:
                     )
 
         except Exception as e:
-            self.console.print(f"[bold red]❌ Error: {e}[/bold red]")
+            self.console.print(f"[bold red]❌ Erreur : {e}[/bold red]")
 
             # Send webhook failure notification if configured
             if self.webhook_notifier:
@@ -229,7 +339,11 @@ class HorizonOrchestrator:
         Returns:
             List[ContentItem]: All fetched items
         """
-        async with httpx.AsyncClient(timeout=30.0) as client:
+        # Use a realistic User-Agent to reduce 403 from some feeds/servers.
+        headers = {
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) Horizon/0.1 (+https://github.com/horizon)"
+        }
+        async with httpx.AsyncClient(timeout=30.0, headers=headers) as client:
             tasks = []
 
             # GitHub sources
@@ -269,7 +383,7 @@ class HorizonOrchestrator:
             all_items = []
             for result in results:
                 if isinstance(result, Exception):
-                    self.console.print(f"[red]Error fetching source: {result}[/red]")
+                    self.console.print(f"[red]Erreur lors de la récupération de la source : {result}[/red]")
                 elif isinstance(result, list):
                     all_items.extend(result)
 
@@ -286,9 +400,9 @@ class HorizonOrchestrator:
         Returns:
             List[ContentItem]: Fetched items
         """
-        self.console.print(f"🔍 Fetching from {name}...")
+        self.console.print(f"🔍 Récupération de {name}...")
         items = await scraper.fetch(since)
-        self.console.print(f"   Found {len(items)} items from {name}")
+        self.console.print(f"   {len(items)} éléments trouvés depuis {name}")
 
         # Show per-sub-source breakdown when there are multiple sub-sources
         sub_counts: Dict[str, int] = defaultdict(int)
@@ -404,12 +518,12 @@ class HorizonOrchestrator:
             )
             result = parse_json_response(response)
             if result is None:
-                self.console.print("[yellow]  dedup: could not parse AI response, skipping[/yellow]")
+                self.console.print("[yellow]  dédup : impossible d'analyser la réponse de l'IA, ignoré[/yellow]")
                 return items
 
             duplicate_groups = result.get("duplicates", [])
         except Exception as e:
-            self.console.print(f"[yellow]  dedup: AI call failed ({e}), skipping[/yellow]")
+            self.console.print(f"[yellow]  dédup : l'appel IA a échoué ({e}), ignoré[/yellow]")
             return items
 
         if not duplicate_groups:
@@ -436,8 +550,8 @@ class HorizonOrchestrator:
                         label = dup.source_type.value
                         primary.content = (primary.content or "") + f"\n\n--- From {label} ---\n{dup.content}"
                 self.console.print(
-                    f"   [dim]dedup: keep [{primary_idx}] {primary.title}[/dim]\n"
-                    f"   [dim]       drop [{dup_idx}] {dup.title}[/dim]"
+                    f"   [dim]dédup : conserver [{primary_idx}] {primary.title}[/dim]\n"
+                    f"   [dim]        supprimer [{dup_idx}] {dup.title}[/dim]"
                 )
                 drop_indices.add(dup_idx)
 
@@ -464,10 +578,13 @@ class HorizonOrchestrator:
             return
 
         self.console.print(
-            f"💬 Fetching reply text for {len(twitter_items)} Twitter items..."
+            f"💬 Récupération du texte des réponses pour {len(twitter_items)} éléments Twitter..."
         )
 
-        async with httpx.AsyncClient(timeout=30.0) as client:
+        headers = {
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) Horizon/0.1 (+https://github.com/horizon)"
+        }
+        async with httpx.AsyncClient(timeout=30.0, headers=headers) as client:
             scraper = TwitterScraper(tw_cfg, client)
             expanded = []
             for item in twitter_items:
@@ -476,18 +593,18 @@ class HorizonOrchestrator:
                     if TwitterScraper.append_discussion_content(item, reply_lines):
                         expanded.append(item)
                         self.console.print(
-                            f"   💬 {len(reply_lines)} replies added to: {item.title[:60]}"
+                            f"   💬 {len(reply_lines)} réponses ajoutées à : {item.title[:60]}"
                         )
                 except Exception as exc:
                     self.console.print(
-                        f"   [yellow]⚠️  Reply fetch failed for {item.id}: {exc}[/yellow]"
+                        f"   [yellow]⚠️  Échec de la récupération des réponses pour {item.id} : {exc}[/yellow]"
                     )
 
         if not expanded:
             return
 
         self.console.print(
-            f"   Re-analyzing {len(expanded)} Twitter items with reply context...\n"
+            f"   Réanalyse de {len(expanded)} éléments Twitter avec le contexte des réponses...\n"
         )
         ai_client = create_ai_client(self.config.ai)
         analyzer = ContentAnalyzer(ai_client)
@@ -505,11 +622,11 @@ class HorizonOrchestrator:
         if not items:
             return
 
-        self.console.print("📚 Enriching with background knowledge...")
+        self.console.print("📚 Enrichissement avec des connaissances de base...")
         ai_client = create_ai_client(self.config.ai)
         enricher = ContentEnricher(ai_client)
         await enricher.enrich_batch(items)
-        self.console.print(f"   Enriched {len(items)} items\n")
+        self.console.print(f"   {len(items)} éléments enrichis\n")
 
     async def _analyze_content(self, items: List[ContentItem]) -> List[ContentItem]:
         """Analyze content items with AI.
@@ -520,7 +637,7 @@ class HorizonOrchestrator:
         Returns:
             List[ContentItem]: Analyzed items
         """
-        self.console.print("🤖 Analyzing content with AI...")
+        self.console.print("🤖 Analyse du contenu avec l'IA...")
 
         ai_client = create_ai_client(self.config.ai)
         analyzer = ContentAnalyzer(ai_client)
@@ -545,8 +662,39 @@ class HorizonOrchestrator:
         Returns:
             str: Markdown summary
         """
-        self.console.print("📝 Generating daily summary...")
+        self.console.print("📝 Génération du résumé quotidien...")
 
-        summarizer = DailySummarizer()
+        ai_client = create_ai_client(self.config.ai)
+        summarizer = DailySummarizer(ai_client)
 
         return await summarizer.generate_summary(items, date, total_fetched, language=language)
+
+    def _wrap_html_document(self, html_fragment: str, language: str, date: str) -> str:
+        """Wrap HTML fragment in a complete HTML document with proper doctype and head.
+
+        Args:
+            html_fragment: The HTML content generated by the summarizer
+            language: Language code (en, fr, etc.)
+            date: Date string for the page
+
+        Returns:
+            str: Complete HTML document
+        """
+        lang_code = language if language in ["en", "fr"] else "en"
+        title = f"Horizon Daily - {date}" if lang_code == "en" else f"Horizon Quotidien - {date}"
+
+        return f"""<!DOCTYPE html>
+<html lang="{lang_code}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{title}</title>
+    <meta name="description" content="Daily news briefing curated by AI">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Iowan+Old+Style&display=swap" rel="stylesheet">
+</head>
+<body>
+{html_fragment}
+</body>
+</html>"""

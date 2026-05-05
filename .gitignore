@@ -56,5 +56,3 @@ logs/*.log
 
 # todo
 todo.txt
-
-.env

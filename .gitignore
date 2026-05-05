@@ -38,8 +38,9 @@ ENV/
 
 # Data files (keep structure, ignore content)
 data/seen.json
-data/summaries/*.md
+data/summaries/*.html
 data/subscribers.json
+data/config.json
 
 docs/_posts/*.md
 
@@ -55,3 +56,5 @@ logs/*.log
 
 # todo
 todo.txt
+
+.env

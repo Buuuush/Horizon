@@ -29,10 +29,21 @@ jobs:
 
       - name: Prepare configuration
         run: |
-          if [ ! -f ../../data/config.json ]; then
+          mkdir -p data
+          pwd
+          ls -la data/ || echo "data directory empty"
+          if [ ! -f data/config.json ]; then
             echo "ℹ️  data/config.json missing, creating it from data/config.example.json"
-            cp data/config.example.json data/config.json
+            if [ -f data/config.example.json ]; then
+              cp data/config.example.json data/config.json
+              echo "✅ Config file created successfully"
+            else
+              echo "❌ config.example.json not found!"
+              ls -la
+            fi
           fi
+          echo "Verifying config file:"
+          ls -lah data/config.json 2>&1 || echo "Config file not found"
 
       - name: Run Horizon
         env:
@@ -44,6 +55,7 @@ jobs:
           LWN_KEY: ${{ secrets.LWN_KEY }}
           NVIDIA_API_KEY: ${{ secrets.NVIDIA_API_KEY }}
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
         run: uv run horizon --hours 48
 
       - name: Set current date as environment variable

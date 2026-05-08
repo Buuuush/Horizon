@@ -1,0 +1,474 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Horizon — 2026-05-08</title>
+  <style>
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600&family=Manrope:wght@500;700&display=swap');
+
+:root {
+    --bg: #f8f5f3;
+    --paper: #ffffff;
+    --surface: #fffbf8;
+    --accent: #9b3d2a;
+    --accent-2: color-mix(in srgb, var(--accent) 55%, #b73fd6);
+    --accent-3: color-mix(in srgb, var(--accent) 40%, #f59e0b);
+    --accent-soft: #f9e2dc;
+    --muted: #6e5b54;
+    --text: #2f211d;
+    --ring: color-mix(in srgb, var(--accent) 32%, transparent);
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+    color: var(--text);
+    background:
+        radial-gradient(1300px 420px at -10% -20%, var(--accent-soft), transparent 60%),
+        radial-gradient(760px 300px at 88% -12%, color-mix(in srgb, var(--accent-2) 24%, transparent), transparent 66%),
+        radial-gradient(640px 240px at 30% 0%, color-mix(in srgb, var(--accent-3) 18%, transparent), transparent 70%),
+        var(--bg);
+    font-family: 'Source Serif 4', Georgia, serif;
+    line-height: 1.78;
+}
+
+.container { max-width: 1100px; margin: 1.5rem auto; padding: 1rem; }
+
+.tab-switcher {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+    border-bottom: 2px solid color-mix(in srgb, var(--accent) 20%, transparent);
+}
+
+.tab-button {
+    background: transparent;
+    border: none;
+    color: var(--muted);
+    font-family: 'Manrope', 'Segoe UI', sans-serif;
+    font-size: 1rem;
+    font-weight: 600;
+    padding: 0.75rem 1.2rem;
+    cursor: pointer;
+    transition: color 0.18s ease, border-color 0.18s ease;
+    border-bottom: 3px solid transparent;
+}
+
+.tab-button:hover {
+    color: var(--text);
+}
+
+.tab-button.active {
+    color: var(--accent);
+    border-bottom-color: var(--accent);
+}
+
+.tab-content {
+    display: none;
+    animation: fadeIn 0.2s ease-in;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.summary-header {
+    background: var(--paper);
+    border: 1px solid color-mix(in srgb, var(--accent) 16%, transparent);
+    border-radius: 24px;
+    padding: 1.5rem 1.6rem 1.1rem;
+    box-shadow: 0 18px 48px rgba(19, 33, 68, 0.08);
+    margin-bottom: 1rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.summary-header::after {
+    content: "";
+    position: absolute;
+    inset: auto -60px -80px auto;
+    width: 220px;
+    height: 220px;
+    border-radius: 999px;
+    background: radial-gradient(circle, color-mix(in srgb, var(--accent-2) 28%, transparent), transparent 70%);
+    pointer-events: none;
+}
+
+.summary-header h1 {
+    margin: 0;
+    font-family: 'Fraunces', 'DM Serif Display', 'Iowan Old Style', 'Palatino Linotype', serif;
+    letter-spacing: .01em;
+    font-size: clamp(1.8rem, 3.6vw, 2.8rem);
+    line-height: 1.15;
+}
+
+.lead { margin: .55rem 0 1.1rem; color: var(--muted); font-size: 1.04rem; max-width: 78ch; }
+
+.toc-title {
+    margin: 0 0 .45rem;
+    font-family: 'Manrope', 'Segoe UI', sans-serif;
+    font-size: .85rem;
+    text-transform: uppercase;
+    letter-spacing: .11em;
+    color: var(--muted);
+}
+
+.toc ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: .55rem;
+}
+
+.toc li {
+    background: linear-gradient(160deg, var(--surface), color-mix(in srgb, var(--accent-soft) 48%, #ffffff));
+    border: 1px solid color-mix(in srgb, var(--accent) 16%, transparent);
+    border-radius: 10px;
+    padding: .55rem .65rem;
+    transition: transform .18s ease, box-shadow .18s ease;
+}
+
+.toc li:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 8px 20px color-mix(in srgb, var(--accent) 15%, transparent);
+}
+
+.toc a { text-decoration: none; color: var(--text); }
+
+.items { display: grid; gap: .95rem; }
+
+.items article {
+    background: var(--paper);
+    border: 1px solid color-mix(in srgb, var(--accent) 15%, transparent);
+    border-radius: 20px;
+    padding: 1.15rem 1.2rem;
+    box-shadow: 0 10px 32px rgba(0, 0, 0, 0.05);
+}
+
+.item-title {
+    font-family: 'Fraunces', 'DM Serif Display', 'Iowan Old Style', 'Palatino Linotype', serif;
+    font-size: clamp(1.2rem, 2.2vw, 1.55rem);
+    margin: 0 0 .55rem;
+    line-height: 1.22;
+}
+
+.item-title a { color: inherit; text-decoration: none; }
+.item-title a:hover { color: var(--accent); }
+
+.item-title a:focus-visible,
+.toc a:focus-visible,
+summary:focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
+    border-radius: 6px;
+}
+
+.meta { color: var(--muted); font-family: 'Manrope', 'Segoe UI', sans-serif; font-size: .9rem; margin-bottom: .7rem; }
+.score { color: var(--accent); margin-left: .45rem; font-weight: 700; font-family: 'Manrope', 'Segoe UI', sans-serif; }
+
+.content { font-size: 1.03rem; line-height: 1.8; }
+
+.tags { margin-top: .75rem; color: var(--muted); font-family: 'Manrope', 'Segoe UI', sans-serif; font-size: .9rem; }
+code { background: color-mix(in srgb, var(--accent-soft) 65%, #ffffff); border-radius: 8px; padding: .12rem .4rem; }
+
+details { margin-top: .65rem; }
+details summary { cursor: pointer; color: var(--accent); font-family: 'Manrope', 'Segoe UI', sans-serif; }
+
+@media (max-width: 860px) {
+    .container { margin: .7rem auto; padding: .65rem; }
+    .tab-switcher { flex-wrap: wrap; }
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --bg: #0f1420;
+        --paper: #161d2c;
+        --surface: #1b2435;
+        --accent: #7cb1ff;
+        --accent-2: #c28cff;
+        --accent-3: #ffc36c;
+        --accent-soft: #1a2740;
+        --muted: #a6b4cd;
+        --text: #edf2ff;
+        --ring: rgba(124, 177, 255, 0.55);
+    }
+
+    body {
+        background:
+            radial-gradient(1200px 420px at -10% -20%, #1a2740, transparent 60%),
+            radial-gradient(760px 300px at 88% -12%, rgba(194, 140, 255, 0.2), transparent 66%),
+            radial-gradient(640px 240px at 30% 0%, rgba(255, 195, 108, 0.14), transparent 70%),
+            var(--bg);
+    }
+
+    .summary-header,
+    .items article {
+        border-color: rgba(124, 177, 255, 0.24);
+        box-shadow: 0 18px 44px rgba(0, 0, 0, 0.32);
+    }
+
+    .tab-switcher {
+        border-bottom-color: rgba(124, 177, 255, 0.2);
+    }
+
+    code {
+        background: rgba(124, 177, 255, 0.16);
+    }
+}
+</style>
+  <script>
+    function switchTab(button) {
+      const lang = button.getAttribute('data-lang');
+      const allButtons = document.querySelectorAll('.tab-button');
+      const allContents = document.querySelectorAll('.tab-content');
+      
+      allButtons.forEach(b => b.classList.remove('active'));
+      allContents.forEach(c => c.classList.remove('active'));
+      
+      button.classList.add('active');
+      document.querySelector(`.tab-content[data-lang="${lang}"]`).classList.add('active');
+    }
+  </script>
+</head>
+<body>
+  <div class="container">
+    <div class="tab-switcher">
+      <button class="tab-button active" onclick="switchTab(this)" data-lang="fr">Français</button><button class="tab-button " onclick="switchTab(this)" data-lang="en">English</button>
+    </div>
+    <div class="tab-content active" data-lang="fr"><section class="summary-header">
+  <h1>Horizon Quotidien — 2026-05-08</h1>
+  <p class="lead">10 sujets essentiels sélectionnés parmi 263 contenus collectés.</p>
+  <nav class="toc" aria-label="Sommaire">
+    <p class="toc-title">Sommaire</p>
+    <ul><li><a href="#item-1">Natural Language Autoencoders : transformer les pensées de Claude en texte.</a> <span class="score">⭐ 9.58/10</span></li>
+<li><a href="#item-2">La FDA a approuvé un dispositif de stimulation cérébrale à domicile pour la dépression.</a> <span class="score">⭐ 9.2275/10</span></li>
+<li><a href="#item-3">AlphaEvolve, un agent de codage alimenté par Gemini, montre son impact à grande échelle.</a> <span class="score">⭐ 8.79/10</span></li>
+<li><a href="#item-4">Deux anciens fonctionnaires britanniques ont été condamnés pour espionnage au profit de la Chine.</a> <span class="score">⭐ 8.295000000000002/10</span></li>
+<li><a href="#item-5">Les obligations du Trésor ont grimpé après des données d&#39;emploi mitigées, indiquant que la Fed restera prudente</a> <span class="score">⭐ 8.190000000000001/10</span></li>
+<li><a href="#item-6">Dirtyfrag: Universal Linux LPE</a> <span class="score">⭐ 7.79/10</span></li>
+<li><a href="#item-7">An Introduction to Meshtastic</a> <span class="score">⭐ 7.545/10</span></li>
+<li><a href="#item-8">La Cour suprême de Virginie a invalidé le plan de redistricting démocrate.</a> <span class="score">⭐ 7.5249999999999995/10</span></li>
+<li><a href="#item-9">Russie réduit son défilé de la victoire après l&#39;effondrement du cessez-le-feu</a> <span class="score">⭐ 7.437500000000001/10</span></li>
+<li><a href="#item-10">Canvas est down alors que ShinyHunters menace de divulguer les données des écoles</a> <span class="score">⭐ 7.332500000000001/10</span></li></ul>
+  </nav>
+</section>
+<main class="items"><div class="fr-item">
+<pre>### 1. Natural Language Autoencoders : transformer les pensées de Claude en texte.
+
+Anthropic a introduit les Natural Language Autoencoders qui traduisent les schémas d’activation des LLM en texte lisible et a publié des modèles open‐weight pour plusieurs LLMs. Cela avance l’interprétabilité en rendant les états internes des LLM directement compréhensibles, ce qui pourrait améliorer la sécurité, le débogage et la confiance dans les systèmes d’IA. Les modèles publiés couvrent Qwen 2.5 (7 B), Gemma 3 (12 B et 27 B) et Llama 3.3 (70 B), et la méthode utilise un verbalizer fine‐tuné pour mapper les vecteurs d’activation à du langage naturel. Les Natural Language Autoencoders (NLAs) sont une méthode non supervisée qui utilise un couple de modèles de langage fins ajustés pour mapper les vecteurs d’activation des LLM vers du texte lisible par l’homme et inversement, comme le décrit la recherche d’Anthropic et le blog Transformer Circuits.
+
+---</pre>
+</div><div class="fr-item">
+<pre>### 2. La FDA a approuvé un dispositif de stimulation cérébrale à domicile pour la dépression.
+
+La FDA a approuvé un casque Bluetooth connecté à une application smartphone qui délivre une stimulation magnétique transcrânienne pour la dépression. Cela pourrait élargir l’accès au traitement de la dépression en permettant aux patients de l’utiliser à domicile, réduisant ainsi les coûts et augmentant la commodité. Le dispositif utilise une bobine magnétique placée sur le cuir chevelu pour induire des courants électriques dans des régions cérébrales ciblées, et son efficacité repose sur la stimulation magnétique transcrânienne, qui présente des bénéfices modestes avec une qualité de preuves variable. La stimulation magnétique transcrânienne (TMS) est une thérapie non invasive qui utilise des champs magnétiques pour stimuler des zones cérébrales spécifiques, et elle est utilisée cliniquement pour le trouble dépressif majeur avec des résultats mitigés. La FDA a approuvé plusieurs dispositifs TMS pour une utilisation en cabinet, mais il s&#39;agit du premier dispositif portable à domicile connecté à une application smartphone. La technologie vise à rendre le traitement plus accessible tout en maintenant la sécurité, même si son efficacité à long terme reste à étudier.
+
+---</pre>
+</div><div class="fr-item">
+<pre>### 3. AlphaEvolve, un agent de codage alimenté par Gemini, montre son impact à grande échelle.
+
+DeepMind a annoncé AlphaEvolve, un agent de codage alimenté par Gemini, qui montre un impact d’échelle sur les domaines d’ingénierie et a suscité un débat sur son utilité versus le battage médiatique. Le système utilise des techniques évolutives pour découvrir et optimiser des algorithmes. Cette sortie montre la capacité de DeepMind à appliquer les grands modèles de langage à des défis scientifiques et d’ingénierie réels, pouvant accélérer la découverte d’algorithmes et réduire le temps de développement pour les développeurs. Elle soulève également des questions sur l’équilibre entre utilité réelle et battage médiatique dans les outils d’IA. AlphaEvolve utilise des techniques de codage évolutif guidées par des grands modèles de langage pour améliorer et optimiser itérativement des algorithmes, ciblant des problèmes informatiques bien définis comme la multiplication de matrices. L’annonce a suscité des réactions mitigées, avec des utilisateurs qui doutent de son applicabilité et d’autres affirmant des gains de temps spectaculaires. AlphaEvolve est un agent de codage autonome et évolutif développé par DeepMind, basé sur la famille de modèles de langage Gemini pour la découverte et l’optimisation générales d’algorithmes. Il étend les recherches antérieures sur l’utilisation des LLMs pour la génération de code en ajoutant une boucle de rétroaction où l’agent crée, modifie et évalue itérativement du code. Ce travail s’inscrit dans l’effort plus large de DeepMind d’appliquer l’IA aux calculs scientifiques, à l’image d’AlphaFold et des prototypes récents d’agents de codage.
+
+---</pre>
+</div><div class="fr-item">
+<pre>### 4. Deux anciens fonctionnaires britanniques ont été condamnés pour espionnage au profit de la Chine.
+
+Chi Leung Wai et Chung Biu Yuen ont été reconnus coupables au Old Bailey d&#39;avoir assisté un service de renseignement étranger. Il s&#39;agit de la première condamnation britannique pour espionnage au profit de la Chine. Ces condamnations soulignent les inquiétudes croissantes concernant les activités d&#39;espionnage chinoise au Royaume-Uni. Elles pourraient influencer les politiques de sécurité nationale à l&#39;avenir. Les deux hommes, un ancien officier de la Border Force britannique et un fonctionnaire commercial hongkongais, ont été condamnés pour avoir assisté un service de renseignement étranger et surveillé des dissidents via une opération de police ombrée.
+
+---</pre>
+</div><div class="fr-item">
+<pre>### 5. Les obligations du Trésor ont grimpé après des données d&#39;emploi mitigées, indiquant que la Fed restera prudente
+
+Les obligations du Trésor ont grimpé après des données d&#39;emploi américaines mitigées, renforçant l&#39;attente d&#39;une politique monétaire stable de la Fed avant le rapport sur les emplois. Cette hausse indique la confiance du marché dans une politique monétaire stable de la Fed, pouvant stabiliser les coûts d&#39;emprunt et guider les stratégies d&#39;investissement. Elle reflète aussi l&#39;incertitude persistante du marché du travail alors que la Fed observe les prochains chiffres d&#39;emploi. Les obligations du Trésor ont progressé après des données d&#39;emploi américaines mitigées, combinant une embauche solide et une croissance salariale plus faible, consolidant les paris sur une position prudente de la Fed. Le prochain rapport sur les emplois devrait être déterminant pour les futures décisions de politique monétaire. Les obligations du Trésor sont des titres de dette émis par le gouvernement américain et servent d&#39;indicateur clé pour les taux d&#39;intérêt dans l&#39;économie. La Réserve fédérale s&#39;appuie sur les données du marché du travail, comme les emplois non agricoles et le taux de chômage, pour orienter sa politique monétaire. Les rapports d&#39;emploi récents mitigés ont créé une incertitude, incitant les investisseurs à anticiper une approche prudente de la Fed avant le dévoilement officiel des chiffres d&#39;emploi.
+
+---</pre>
+</div><div class="fr-item">
+<pre>### 6. Dirtyfrag: Universal Linux LPE
+
+Dirtyfrag is a universal Linux local privilege escalation vulnerability that leverages a page‐cache write issue similar to Copy Fail, with community comments debating its root cause and implications for AI‐assisted research.
+
+---</pre>
+</div><div class="fr-item">
+<pre>### 7. An Introduction to Meshtastic
+
+An introductory article on Meshtastic, a LoRa-based mesh text messaging system, with community comments highlighting its appeal and related projects.
+
+---</pre>
+</div><div class="fr-item">
+<pre>### 8. La Cour suprême de Virginie a invalidé le plan de redistricting démocrate.
+
+La Cour suprême de Virginie a invalidé le plan de redistricting démocrate, offrant une victoire clé aux Républicains avant les élections de mi-mandat. Cette décision pourrait remodeler la carte congressionnelle de la Virginie et influencer le résultat des élections de mi-mandat, affectant l&#39;équilibre politique national. La cour a déclaré que le plan de redistricting démocrate violait la constitution de l&#39;État, et la décision a été rendue quelques semaines avant les élections de novembre. La Cour suprême de Virginie est l&#39;autorité judiciaire la plus élevée de l&#39;État, et ses décisions sur le redécoupage ont des répercussions majeures sur l&#39;équité électorale et le contrôle partisan. La décision intervient dans un contexte de forte attention nationale sur l&#39;intégrité électorale avant les élections de mi-mandat de 2026.
+
+---</pre>
+</div><div class="fr-item">
+<pre>### 9. Russie réduit son défilé de la victoire après l&#39;effondrement du cessez-le-feu
+
+La Russie a réduit son défilé de la victoire après l&#39;effondrement du cessez-le-feu, marquant la première réduction depuis près de 20 ans. La réduction du défilé de la victoire souligne la crise croissante en Ukraine et montre un manque de confiance dans le cessez-le-feu, soulignant l&#39;escalade du conflit et son impact sur les célébrations nationales. La Russie a réduit son défilé de la victoire après l&#39;effondrement du cessez-le-feu, marquant la première réduction depuis près de 20 ans.
+
+---</pre>
+</div><div class="fr-item">
+<pre>### 10. Canvas est down alors que ShinyHunters menace de divulguer les données des écoles
+
+Canvas LMS a subi une panne nationale pendant les examens finaux après une attaque par ransomware du groupe ShinyHunters, qui a menacé de divulguer les données des écoles. La panne affecte des millions d&#39;étudiants pendant une période d&#39;examens cruciale, révélant d&#39;importantes vulnérabilités de sécurité dans un système de gestion de cours largement utilisé et suscitant des appels à une plus grande responsabilité des établissements. La panne a commencé à 17h17 HE, avec des e‐mails de suivi envoyés à 18h24 et 18h57 offrant peu de précisions, et les utilisateurs ont souligné que même des établissements comme MIT, récemment passés à Canvas, sont touchés. Canvas est un système de gestion de cours largement utilisé par des milliers d&#39;établissements d&#39;enseignement supérieur dans le monde. La plateforme gère la diffusion des cours, les devoirs et les notes, en particulier pendant les périodes d&#39;examens intensifs. Les récentes attaques par ransomware contre les établissements éducatifs ont accru les inquiétudes quant à la sécurité de l&#39;infrastructure numérique de l&#39;éducation. La survenue de cette panne pendant les examens finaux aggrave la perturbation pour les étudiants et le personnel.
+
+---</pre>
+</div></main></div><div class="tab-content " data-lang="en"><section class="summary-header">
+  <h1>Horizon Daily — 2026-05-08</h1>
+  <p class="lead">10 essential stories selected from 263 collected items.</p>
+  <nav class="toc" aria-label="Contents">
+    <p class="toc-title">Contents</p>
+    <ul><li><a href="#item-1">Natural Language Autoencoders: Turning Claude&#39;s Thoughts into Text.</a> <span class="score">⭐ 9.58/10</span></li>
+<li><a href="#item-2">The FDA has approved an at-home brain stimulation device for depression.</a> <span class="score">⭐ 9.2275/10</span></li>
+<li><a href="#item-3">AlphaEvolve: a Gemini-powered coding agent showing scaling impact across fields.</a> <span class="score">⭐ 8.79/10</span></li>
+<li><a href="#item-4">Two former UK officials have been convicted of spying for China.</a> <span class="score">⭐ 8.295000000000002/10</span></li>
+<li><a href="#item-5">Treasuries rose as mixed jobs data signaled that the Fed will stay steady</a> <span class="score">⭐ 8.190000000000001/10</span></li>
+<li><a href="#item-6">Dirtyfrag: Universal Linux LPE</a> <span class="score">⭐ 7.79/10</span></li>
+<li><a href="#item-7">An Introduction to Meshtastic</a> <span class="score">⭐ 7.545/10</span></li>
+<li><a href="#item-8">The Virginia Supreme Court invalidated the Democrats&#39; redistricting plan.</a> <span class="score">⭐ 7.5249999999999995/10</span></li>
+<li><a href="#item-9">Russia scales down Victory Day parade after ceasefire collapse</a> <span class="score">⭐ 7.437500000000001/10</span></li>
+<li><a href="#item-10">Canvas is down as ShinyHunters threatens to leak schools’ data</a> <span class="score">⭐ 7.332500000000001/10</span></li></ul>
+  </nav>
+</section>
+<main class="items">
+<article id="item-1">
+  <header>
+    <h2 class="item-title"><a href="https://www.anthropic.com/research/natural-language-autoencoders">Natural Language Autoencoders: Turning Claude&#39;s Thoughts into Text.</a> <span class="score">⭐ 9.58/10</span></h2>
+    <div class="meta">hackernews · instagraham · May 7, 17:54 · <a href="https://news.ycombinator.com/item?id=48052537">Discussion</a></div>
+  </header>
+    <div class="lang-blocks">
+        <section class="lang"><h3>EN</h3><div class="content">Anthropic introduced Natural Language Autoencoders that translate LLM activation patterns into human‐readable text and released open‐weight models for several LLMs. This advances interpretability by making LLM internal states directly understandable, which could improve safety, debugging, and trust in AI systems. The released models cover Qwen 2.5 (7 B), Gemma 3 (12 B and 27 B) and Llama 3.3 (70 B), and the method uses a fine‐tuned verbalizer to map activation vectors to natural language.</div></section>
+        <section class="lang"><h3>FR</h3><div class="content">Anthropic a introduit les Natural Language Autoencoders qui traduisent les schémas d’activation des LLM en texte lisible et a publié des modèles open‐weight pour plusieurs LLMs. Cela avance l’interprétabilité en rendant les états internes des LLM directement compréhensibles, ce qui pourrait améliorer la sécurité, le débogage et la confiance dans les systèmes d’IA. Les modèles publiés couvrent Qwen 2.5 (7 B), Gemma 3 (12 B et 27 B) et Llama 3.3 (70 B), et la méthode utilise un verbalizer fine‐tuné pour mapper les vecteurs d’activation à du langage naturel.</div></section>
+    </div>
+  <div class="tags"><code>#Natural Language Autoencoders</code>, <code>#LLM interpretability</code>, <code>#AI research</code>, <code>#Open source models</code>, <code>#Transformer circuits</code></div>
+  <details><summary>References</summary><ul><li><a href="https://www.anthropic.com/research/natural-language-autoencoders">Natural Language Autoencoders \ Anthropic</a></li><li><a href="https://transformer-circuits.pub/2026/nla/">Natural Language Autoencoders Produce Unsupervised...</a></li><li><a href="https://github.com/kitft/natural_language_autoencoders">GitHub - kitft/natural_language_autoencoders · GitHub</a></li></ul></details>
+</article>
+
+<article id="item-2">
+  <header>
+    <h2 class="item-title"><a href="https://www.smithsonianmag.com/smart-news/fda-approved-at-home-brain-stimulation-device-aims-to-treat-depression-by-changing-patients-brain-excitability-180988654/">The FDA has approved an at-home brain stimulation device for depression.</a> <span class="score">⭐ 9.2275/10</span></h2>
+    <div class="meta">rss · Smithsonian Magazine · May 7, 16:39</div>
+  </header>
+    <div class="lang-blocks">
+        <section class="lang"><h3>EN</h3><div class="content">The FDA has approved a Bluetooth-enabled headset that connects to a smartphone app to deliver transcranial magnetic stimulation for depression. This could expand access to depression treatment by allowing patients to receive therapy at home, potentially reducing costs and increasing convenience. The device uses a magnetic coil placed on the scalp to induce electric currents in targeted brain regions, and its efficacy is based on transcranial magnetic stimulation, which has shown modest benefits with variable evidence quality.</div></section>
+        <section class="lang"><h3>FR</h3><div class="content">La FDA a approuvé un casque Bluetooth connecté à une application smartphone qui délivre une stimulation magnétique transcrânienne pour la dépression. Cela pourrait élargir l’accès au traitement de la dépression en permettant aux patients de l’utiliser à domicile, réduisant ainsi les coûts et augmentant la commodité. Le dispositif utilise une bobine magnétique placée sur le cuir chevelu pour induire des courants électriques dans des régions cérébrales ciblées, et son efficacité repose sur la stimulation magnétique transcrânienne, qui présente des bénéfices modestes avec une qualité de preuves variable.</div></section>
+    </div>
+  <div class="tags"><code>#Mental Health</code>, <code>#Neurotechnology</code>, <code>#FDA</code>, <code>#Depression</code>, <code>#At-home therapy</code></div>
+  <details><summary>References</summary><ul><li><a href="https://en.wikipedia.org/wiki/Transcranial_magnetic_stimulation">Transcranial magnetic stimulation</a></li><li><a href="https://www.mayoclinic.org/tests-procedures/transcranial-magnetic-stimulation/about/pac-20384625">Transcranial magnetic stimulation - Mayo Clinic</a></li></ul></details>
+</article>
+
+<article id="item-3">
+  <header>
+    <h2 class="item-title"><a href="https://deepmind.google/blog/alphaevolve-impact/">AlphaEvolve: a Gemini-powered coding agent showing scaling impact across fields.</a> <span class="score">⭐ 8.79/10</span></h2>
+    <div class="meta">hackernews · berlianta · May 7, 15:02 · <a href="https://news.ycombinator.com/item?id=48050278">Discussion</a></div>
+  </header>
+    <div class="lang-blocks">
+        <section class="lang"><h3>EN</h3><div class="content">DeepMind announced AlphaEvolve, a Gemini-powered coding agent that demonstrates scaling impact across engineering fields and has sparked debate about its usefulness versus hype. The system uses evolutionary techniques to discover and optimize algorithms. This release highlights DeepMind&#39;s ability to apply large language models to real-world scientific and engineering challenges, potentially accelerating algorithm discovery and reducing development time for developers. It also raises questions about the balance between genuine utility and hype in AI tools. AlphaEvolve employs evolutionary coding techniques guided by large language models to iteratively improve and optimize algorithms, targeting well-defined computational problems such as matrix multiplication. The announcement has generated mixed reactions, with some users doubting its applicability while others claim dramatic time savings.</div></section>
+        <section class="lang"><h3>FR</h3><div class="content">DeepMind a annoncé AlphaEvolve, un agent de codage alimenté par Gemini, qui montre un impact d’échelle sur les domaines d’ingénierie et a suscité un débat sur son utilité versus le battage médiatique. Le système utilise des techniques évolutives pour découvrir et optimiser des algorithmes. Cette sortie montre la capacité de DeepMind à appliquer les grands modèles de langage à des défis scientifiques et d’ingénierie réels, pouvant accélérer la découverte d’algorithmes et réduire le temps de développement pour les développeurs. Elle soulève également des questions sur l’équilibre entre utilité réelle et battage médiatique dans les outils d’IA. AlphaEvolve utilise des techniques de codage évolutif guidées par des grands modèles de langage pour améliorer et optimiser itérativement des algorithmes, ciblant des problèmes informatiques bien définis comme la multiplication de matrices. L’annonce a suscité des réactions mitigées, avec des utilisateurs qui doutent de son applicabilité et d’autres affirmant des gains de temps spectaculaires.</div></section>
+    </div>
+  <div class="tags"><code>#AI</code>, <code>#Coding</code>, <code>#DeepMind</code>, <code>#Developer Tools</code></div>
+  <details><summary>References</summary><ul><li><a href="https://arxiv.org/abs/2506.13131">AlphaEvolve: A coding agent for scientific and algorithmic discovery</a></li><li><a href="https://deepmind.google/blog/alphaevolve-a-gemini-powered-coding-agent-for-designing-advanced-algorithms/">AlphaEvolve: A Gemini-powered coding agent... — Google DeepMind</a></li><li><a href="https://artgor.medium.com/paper-review-alphaevolve-a-coding-agent-for-scientific-and-algorithmic-discovery-5732a876c2e2">Paper Review: AlphaEvolve: A coding agent for scientific... | Medium</a></li></ul></details>
+</article>
+
+<article id="item-4">
+  <header>
+    <h2 class="item-title"><a href="https://www.theguardian.com/uk-news/2026/may/07/two-men-guilty-spying-for-china-uk-wai-yuen">Two former UK officials have been convicted of spying for China.</a> <span class="score">⭐ 8.295000000000002/10</span></h2>
+    <div class="meta">rss · The Guardian World · May 7, 16:43</div>
+  </header>
+    <div class="lang-blocks">
+        <section class="lang"><h3>EN</h3><div class="content">Chi Leung Wai and Chung Biu Yuen were convicted at the Old Bailey of assisting a foreign intelligence service. This is the first time individuals in Britain have been found guilty of spying for China. The convictions highlight growing concerns over Chinese espionage activities in the UK. They may influence future national security policies and diplomatic relations. The two men, a former UK Border Force officer and a Hong Kong trade official, were convicted of assisting a foreign intelligence service and surveilling dissidents through a shadow policing operation.</div></section>
+        <section class="lang"><h3>FR</h3><div class="content">Chi Leung Wai et Chung Biu Yuen ont été reconnus coupables au Old Bailey d&#39;avoir assisté un service de renseignement étranger. Il s&#39;agit de la première condamnation britannique pour espionnage au profit de la Chine. Ces condamnations soulignent les inquiétudes croissantes concernant les activités d&#39;espionnage chinoise au Royaume-Uni. Elles pourraient influencer les politiques de sécurité nationale à l&#39;avenir. Les deux hommes, un ancien officier de la Border Force britannique et un fonctionnaire commercial hongkongais, ont été condamnés pour avoir assisté un service de renseignement étranger et surveillé des dissidents via une opération de police ombrée.</div></section>
+    </div>
+  <div class="tags"><code>#espionage</code>, <code>#China</code>, <code>#UK</code>, <code>#national security</code>, <code>#politics</code></div>
+  
+</article>
+
+<article id="item-5">
+  <header>
+    <h2 class="item-title"><a href="https://www.bloomberg.com/news/articles/2026-05-08/treasuries-gain-ahead-of-us-payrolls-with-jobs-growth-expected">Treasuries rose as mixed jobs data signaled that the Fed will stay steady</a> <span class="score">⭐ 8.190000000000001/10</span></h2>
+    <div class="meta">rss · Bloomberg Markets · May 8, 10:53</div>
+  </header>
+    <div class="lang-blocks">
+        <section class="lang"><h3>EN</h3><div class="content">Treasuries rose after a mixed batch of US employment data reinforced expectations that the Federal Reserve will keep monetary policy steady ahead of the payrolls report. The move signals market confidence that the Fed will not tighten policy abruptly, which could stabilize borrowing costs and influence investor strategies. It also reflects ongoing uncertainty in the labor market as the Fed watches upcoming payroll data. Treasuries gained as mixed US jobs data showed both strong hiring and weaker wage growth, cementing bets on a steady Fed stance. The upcoming payrolls report is expected to be a key determinant for future monetary policy decisions.</div></section>
+        <section class="lang"><h3>FR</h3><div class="content">Les obligations du Trésor ont grimpé après des données d&#39;emploi américaines mitigées, renforçant l&#39;attente d&#39;une politique monétaire stable de la Fed avant le rapport sur les emplois. Cette hausse indique la confiance du marché dans une politique monétaire stable de la Fed, pouvant stabiliser les coûts d&#39;emprunt et guider les stratégies d&#39;investissement. Elle reflète aussi l&#39;incertitude persistante du marché du travail alors que la Fed observe les prochains chiffres d&#39;emploi. Les obligations du Trésor ont progressé après des données d&#39;emploi américaines mitigées, combinant une embauche solide et une croissance salariale plus faible, consolidant les paris sur une position prudente de la Fed. Le prochain rapport sur les emplois devrait être déterminant pour les futures décisions de politique monétaire.</div></section>
+    </div>
+  <div class="tags"><code>#Treasuries</code>, <code>#Federal Reserve</code>, <code>#US Jobs Data</code>, <code>#Monetary Policy</code>, <code>#Financial Markets</code></div>
+  
+</article>
+
+<article id="item-6">
+  <header>
+    <h2 class="item-title"><a href="https://www.openwall.com/lists/oss-security/2026/05/07/8">Dirtyfrag: Universal Linux LPE</a> <span class="score">⭐ 7.79/10</span></h2>
+    <div class="meta">hackernews · flipped · May 7, 19:21 · <a href="https://news.ycombinator.com/item?id=48053623">Discussion</a></div>
+  </header>
+    <div class="lang-blocks">
+        <section class="lang"><h3>EN</h3><div class="content">Dirtyfrag is a universal Linux local privilege escalation vulnerability that leverages a page‐cache write issue similar to Copy Fail, with community comments debating its root cause and implications for AI‐assisted research.</div></section>
+        <section class="lang"><h3>FR</h3><div class="content"><em>Non disponible.</em></div></section>
+    </div>
+  <div class="tags"><code>#Linux kernel</code>, <code>#Local Privilege Escalation</code>, <code>#Security vulnerability</code>, <code>#Exploitation</code>, <code>#Vulnerability research</code></div>
+  
+</article>
+
+<article id="item-7">
+  <header>
+    <h2 class="item-title"><a href="https://meshtastic.org/docs/introduction/">An Introduction to Meshtastic</a> <span class="score">⭐ 7.545/10</span></h2>
+    <div class="meta">hackernews · ColinWright · May 8, 11:22 · <a href="https://news.ycombinator.com/item?id=48061566">Discussion</a></div>
+  </header>
+    <div class="lang-blocks">
+        <section class="lang"><h3>EN</h3><div class="content">An introductory article on Meshtastic, a LoRa-based mesh text messaging system, with community comments highlighting its appeal and related projects.</div></section>
+        <section class="lang"><h3>FR</h3><div class="content"><em>Non disponible.</em></div></section>
+    </div>
+  <div class="tags"><code>#LoRa</code>, <code>#Mesh Networks</code>, <code>#Decentralized Communication</code>, <code>#IoT</code>, <code>#Open Source</code></div>
+  
+</article>
+
+<article id="item-8">
+  <header>
+    <h2 class="item-title"><a href="https://www.aljazeera.com/news/2026/5/8/virginia-supreme-court-strikes-down-democrats-redistricting-plan-in-us?traffic_source=rss">The Virginia Supreme Court invalidated the Democrats&#39; redistricting plan.</a> <span class="score">⭐ 7.5249999999999995/10</span></h2>
+    <div class="meta">rss · Al Jazeera · May 8, 15:08</div>
+  </header>
+    <div class="lang-blocks">
+        <section class="lang"><h3>EN</h3><div class="content">The Virginia Supreme Court struck down the Democrats&#39; redistricting plan, handing Republicans a key win before the midterm elections. This decision could reshape Virginia&#39;s congressional map and influence the outcome of the upcoming midterm elections, affecting national political balance. The court ruled that the Democratic-drawn map violated the state constitution, and the decision was issued just weeks before the November elections.</div></section>
+        <section class="lang"><h3>FR</h3><div class="content">La Cour suprême de Virginie a invalidé le plan de redistricting démocrate, offrant une victoire clé aux Républicains avant les élections de mi-mandat. Cette décision pourrait remodeler la carte congressionnelle de la Virginie et influencer le résultat des élections de mi-mandat, affectant l&#39;équilibre politique national. La cour a déclaré que le plan de redistricting démocrate violait la constitution de l&#39;État, et la décision a été rendue quelques semaines avant les élections de novembre.</div></section>
+    </div>
+  <div class="tags"><code>#redistricting</code>, <code>#Virginia</code>, <code>#US politics</code>, <code>#midterm elections</code>, <code>#court ruling</code></div>
+  
+</article>
+
+<article id="item-9">
+  <header>
+    <h2 class="item-title"><a href="https://www.france24.com/en/video/20260508-russia-forced-to-scale-down-its-victory-parade-for-the-first-time-in-almost-20-years">Russia scales down Victory Day parade after ceasefire collapse</a> <span class="score">⭐ 7.437500000000001/10</span></h2>
+    <div class="meta">rss · France 24 · May 8, 12:44</div>
+  </header>
+    <div class="lang-blocks">
+        <section class="lang"><h3>EN</h3><div class="content">Russia scaled down its Victory Day parade after the ceasefire collapsed and intense fighting resumed, marking the first reduction in nearly 20 years. The scaling down of the parade underscores the deepening crisis in Ukraine and signals a loss of confidence in the ceasefire, highlighting the conflict&#39;s escalation and its impact on national celebrations. Russia reduced its Victory Day parade after the ceasefire collapsed and intense fighting resumed, marking the first reduction in nearly 20 years.</div></section>
+        <section class="lang"><h3>FR</h3><div class="content">La Russie a réduit son défilé de la victoire après l&#39;effondrement du cessez-le-feu, marquant la première réduction depuis près de 20 ans. La réduction du défilé de la victoire souligne la crise croissante en Ukraine et montre un manque de confiance dans le cessez-le-feu, soulignant l&#39;escalade du conflit et son impact sur les célébrations nationales. La Russie a réduit son défilé de la victoire après l&#39;effondrement du cessez-le-feu, marquant la première réduction depuis près de 20 ans.</div></section>
+    </div>
+  <div class="tags"><code>#Russia</code>, <code>#Ukraine</code>, <code>#World War II</code>, <code>#military conflict</code>, <code>#victory parade</code></div>
+  
+</article>
+
+<article id="item-10">
+  <header>
+    <h2 class="item-title"><a href="https://www.theverge.com/tech/926458/canvas-shinyhunters-breach">Canvas is down as ShinyHunters threatens to leak schools’ data</a> <span class="score">⭐ 7.332500000000001/10</span></h2>
+    <div class="meta">hackernews · stefanpie · May 7, 22:22 · <a href="https://news.ycombinator.com/item?id=48055913">Discussion</a></div>
+  </header>
+    <div class="lang-blocks">
+        <section class="lang"><h3>EN</h3><div class="content">Canvas LMS experienced a nationwide outage during final exams after a ransomware attack by the group ShinyHunters, which threatened to leak schools&#39; data. The outage disrupts millions of students during a critical exam period, highlighting serious security vulnerabilities in a widely adopted learning management system and prompting calls for greater institutional accountability. The outage began at 5:17 pm EDT, with follow‐up emails sent at 6:24 and 6:57 that offered limited information, while users noted that even institutions like MIT, which recently migrated to Canvas, are affected.</div></section>
+        <section class="lang"><h3>FR</h3><div class="content">Canvas LMS a subi une panne nationale pendant les examens finaux après une attaque par ransomware du groupe ShinyHunters, qui a menacé de divulguer les données des écoles. La panne affecte des millions d&#39;étudiants pendant une période d&#39;examens cruciale, révélant d&#39;importantes vulnérabilités de sécurité dans un système de gestion de cours largement utilisé et suscitant des appels à une plus grande responsabilité des établissements. La panne a commencé à 17h17 HE, avec des e‐mails de suivi envoyés à 18h24 et 18h57 offrant peu de précisions, et les utilisateurs ont souligné que même des établissements comme MIT, récemment passés à Canvas, sont touchés.</div></section>
+    </div>
+  <div class="tags"><code>#education technology</code>, <code>#cybersecurity</code>, <code>#LMS outage</code>, <code>#ransomware</code>, <code>#education infrastructure</code></div>
+  
+</article>
+</main></div>
+  </div>
+</body>
+</html>

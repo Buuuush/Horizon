@@ -3,6 +3,7 @@
 import asyncio
 import json
 import re
+import sys
 from typing import List, Optional
 from tenacity import RetryError, retry, stop_after_attempt, wait_exponential
 from rich.progress import Progress, SpinnerColumn, BarColumn, TextColumn, MofNCompleteColumn
@@ -182,6 +183,19 @@ class ContentAnalyzer:
             system=system_prompt,
             user=user_prompt,
         )
+
+        # Debug: log raw response to data/ volume (persists between containers)
+        debug_log_path = "data/ai_debug.log"
+        try:
+            with open(debug_log_path, "a", encoding="utf-8") as f:
+                f.write(f"\n[{item.id}] Response length: {len(response or '')}\n")
+                if response:
+                    preview = (response or '')[:400]
+                    f.write(f"Preview: {preview}\n")
+                else:
+                    f.write("Response was empty/None\n")
+        except Exception as e:
+            pass  # Silently ignore debug logging errors
 
         # Parse JSON response with robust fallback
         result = self._parse_json_response(response)

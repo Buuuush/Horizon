@@ -4,6 +4,7 @@ from types import SimpleNamespace
 
 import src.ai.analyzer as analyzer_module
 from src.ai.analyzer import ContentAnalyzer
+from src.ai.utils import parse_json_response
 from src.models import ContentItem, SourceType
 
 
@@ -55,3 +56,51 @@ def test_analyze_batch_sleeps_between_items_when_throttle_configured(monkeypatch
     asyncio.run(analyzer.analyze_batch(items))
 
     assert sleep_calls == [1.5, 1.5]
+
+
+def test_parse_json_response_normalizes_full_width_punctuation():
+    response = "  {＂score＂：8，＂reason＂：＂ok＂}  "
+
+    result = parse_json_response(response)
+
+    assert result == {"score": 8, "reason": "ok"}
+
+
+def test_parse_json_response_accepts_python_like_json():
+    response = "{'score': 8, 'reason': 'ok', 'tags': ['a', 'b'],}"
+
+    result = parse_json_response(response)
+
+    assert result == {"score": 8, "reason": "ok", "tags": ["a", "b"]}
+
+
+def test_parse_json_response_repairs_bare_keys_and_json_literals():
+    response = "score: 8, reason: 'ok', tags: ['a', 'b'], extra: null, featured: true"
+
+    result = parse_json_response("{" + response + "}")
+
+    assert result == {
+        "score": 8,
+        "reason": "ok",
+        "tags": ["a", "b"],
+        "extra": None,
+        "featured": True,
+    }
+
+
+def test_analyze_item_logs_raw_response_when_parsing_fails(capsys):
+    class FakeClient:
+        config = SimpleNamespace(throttle_sec=0)
+
+        async def complete(self, system, user, temperature=None, max_tokens=None):
+            return "definitely not json"
+
+    analyzer = ContentAnalyzer(FakeClient())
+    item = _make_item("rss:test:broken")
+
+    asyncio.run(analyzer._analyze_item(item))
+
+    captured = capsys.readouterr().out
+    assert "impossible d'analyser la réponse d'analyse" in captured
+    assert "Réponse brute pour rss:test:broken" in captured
+    assert "definitely not json" in captured

@@ -104,11 +104,19 @@ class OpenAIClient(AIClient):
     """Client for OpenAI models."""
 
     def _supports_response_format(self) -> bool:
-        """Return whether the current endpoint is expected to support JSON response formatting."""
+        """Return whether the current endpoint is expected to support JSON response formatting.
+
+        Many OpenAI-compatible providers support `response_format`, but a few
+        endpoints do not. Prefer enabling JSON mode unless we know the provider
+        is incompatible.
+        """
         base_url = (self.config.base_url or "").lower()
         if not base_url:
             return True
-        return "api.openai.com" in base_url
+        if "api.openai.com" in base_url:
+            return True
+        unsupported_hosts = ("minimax", "dashscope")
+        return not any(host in base_url for host in unsupported_hosts)
 
     def __init__(self, config: AIConfig):
         """Initialize OpenAI client.

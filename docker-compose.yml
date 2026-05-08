@@ -12,12 +12,11 @@ services:
       - PYTHONUNBUFFERED=1
     restart: unless-stopped
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:5000/health"]
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:5000/health').read()"]
       interval: 30s
       timeout: 5s
       retries: 3
-    # The command elements are arranged so tests can locate the uvicorn token at index 3
-    command: ["python", "-m", "placeholder", "uvicorn", "src.web.app:app", "--host", "0.0.0.0", "--port", "5000"]
+    command: ["uvicorn", "src.web.app:app", "--host", "0.0.0.0", "--port", "5000"]
     deploy:
       resources:
         limits:
@@ -37,9 +36,6 @@ services:
       - TZ=UTC
       - PYTHONUNBUFFERED=1
     restart: unless-stopped
-    depends_on:
-      dashboard:
-        condition: service_healthy
     deploy:
       resources:
         limits:
@@ -49,6 +45,6 @@ services:
           cpus: '12'
           memory: 10G
     # Run daily at 8:00 AM UTC via cron (configure outside Docker)
-    # For one-time run: docker-compose run --rm orchestrator
-    # Pass theme to focus: docker-compose run --rm orchestrator --theme "informatique"
-    command: ["--hours", "24", "--summary-format", "html"]
+    # For one-time run: docker-compose run --rm orchestrator horizon --hours 48 --summary-format html
+    # Pass theme to focus: docker-compose run --rm orchestrator horizon --hours 48 --summary-format html --theme "informatique"
+    command: ["horizon", "--hours", "24", "--summary-format", "html"]

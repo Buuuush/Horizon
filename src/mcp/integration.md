@@ -65,7 +65,7 @@ Supported formats:
   "OPENAI_API_KEY": "sk-xxxx",
   "ANTHROPIC_API_KEY": "sk-ant-xxxx",
   "GOOGLE_API_KEY": "xxxx",
-  "GITHUB_TOKEN": "ghp_xxxx"
+  "GH_TOKEN": "ghp_xxxx"
 }
 ```
 
@@ -75,7 +75,7 @@ Supported formats:
     "OPENAI_API_KEY": "sk-xxxx",
     "ANTHROPIC_API_KEY": "sk-ant-xxxx",
     "GOOGLE_API_KEY": "xxxx",
-    "GITHUB_TOKEN": "ghp_xxxx"
+    "GH_TOKEN": "ghp_xxxx"
   }
 }
 ```

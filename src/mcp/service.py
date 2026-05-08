@@ -181,8 +181,8 @@ class HorizonPipelineService:
                 if not os.getenv(key):
                     missing_env.append(key)
 
-            if ctx.config.sources.github and not os.getenv("GITHUB_TOKEN"):
-                warnings.append("GITHUB_TOKEN is not set; GitHub fetching may hit strict rate limits.")
+            if ctx.config.sources.github and not os.getenv("GH_TOKEN") and not os.getenv("GITHUB_TOKEN"):
+                warnings.append("GH_TOKEN or GITHUB_TOKEN is not set; GitHub fetching may hit strict rate limits.")
 
             if getattr(ctx.config, "email", None) and ctx.config.email and ctx.config.email.enabled:
                 pwd_key = ctx.config.email.password_env

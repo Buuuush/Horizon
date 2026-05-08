@@ -66,7 +66,7 @@ Two source types are supported:
 }
 ```
 
-**Authentication**: Set `GITHUB_TOKEN` in your environment for higher rate limits (5000 req/hr vs 60 without).
+**Authentication**: Set `GH_TOKEN` in your environment for higher rate limits (5000 req/hr vs 60 without).
 
 ## RSS
 

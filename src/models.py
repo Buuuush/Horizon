@@ -202,6 +202,8 @@ class Profile(BaseModel):
     name: str  # Unique profile name (e.g., "default", "devops", "ml")
     description: Optional[str] = None
     ai_score_threshold: float = 6.0  # Profile-specific threshold
+    max_items_per_source_type: Optional[int] = None  # Cap items from the same source family
+    max_items_per_sub_source: Optional[int] = None  # Cap items from the same feed/subreddit/channel
     per_source_prompts: Dict[str, str] = Field(default_factory=dict)  # {source_type -> custom prompt}
     active_sources: List[SourceType] = Field(default_factory=list)  # If empty, use all enabled sources
     created_at: datetime = Field(default_factory=datetime.utcnow)

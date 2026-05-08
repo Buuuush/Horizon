@@ -231,6 +231,8 @@ Content is scored 0-10:
 - `ai_score_threshold`: Only include content scoring >= this value
 - `time_window_hours`: Fetch content from last N hours
 
+Horizon also applies a lightweight diversity pass after scoring so a single feed, subreddit, or channel does not crowd out the rest of the briefing.
+
 ## Environment Variable Substitution
 
 RSS feed URLs support `${VAR_NAME}` syntax for secrets. The variable is expanded at runtime from environment variables (or `.env` file):

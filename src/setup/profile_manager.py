@@ -19,6 +19,8 @@ class ProfileManager:
         description: Optional[str] = None,
         base_profile: Optional[str] = None,
         ai_score_threshold: Optional[float] = None,
+        max_items_per_source_type: Optional[int] = None,
+        max_items_per_sub_source: Optional[int] = None,
     ) -> Profile:
         """
         Create a new profile, optionally based on an existing one.
@@ -46,6 +48,16 @@ class ProfileManager:
                 name=name,
                 description=description or f"Clone of {base_profile}",
                 ai_score_threshold=ai_score_threshold or base.ai_score_threshold,
+                max_items_per_source_type=(
+                    max_items_per_source_type
+                    if max_items_per_source_type is not None
+                    else base.max_items_per_source_type
+                ),
+                max_items_per_sub_source=(
+                    max_items_per_sub_source
+                    if max_items_per_sub_source is not None
+                    else base.max_items_per_sub_source
+                ),
                 per_source_prompts=base.per_source_prompts.copy(),
                 active_sources=base.active_sources.copy(),
                 created_at=datetime.utcnow(),
@@ -57,6 +69,8 @@ class ProfileManager:
                 name=name,
                 description=description,
                 ai_score_threshold=ai_score_threshold or 6.0,
+                max_items_per_source_type=max_items_per_source_type,
+                max_items_per_sub_source=max_items_per_sub_source,
                 per_source_prompts={},
                 active_sources=[],
                 created_at=datetime.utcnow(),
@@ -80,6 +94,8 @@ class ProfileManager:
         name: str,
         description: Optional[str] = None,
         ai_score_threshold: Optional[float] = None,
+        max_items_per_source_type: Optional[int] = None,
+        max_items_per_sub_source: Optional[int] = None,
         per_source_prompts: Optional[dict] = None,
         active_sources: Optional[List[SourceType]] = None,
     ) -> Profile:
@@ -93,6 +109,10 @@ class ProfileManager:
             profile.description = description
         if ai_score_threshold is not None:
             profile.ai_score_threshold = ai_score_threshold
+        if max_items_per_source_type is not None:
+            profile.max_items_per_source_type = max_items_per_source_type
+        if max_items_per_sub_source is not None:
+            profile.max_items_per_sub_source = max_items_per_sub_source
         if per_source_prompts is not None:
             profile.per_source_prompts = per_source_prompts
         if active_sources is not None:
@@ -163,6 +183,8 @@ class ProfileManager:
         print(f"\nProfile: {profile.name} {active_marker}")
         print(f"  Description: {profile.description or '(none)'}")
         print(f"  Score Threshold: {profile.ai_score_threshold}")
+        print(f"  Max per Source Type: {profile.max_items_per_source_type if profile.max_items_per_source_type is not None else '(auto)'}")
+        print(f"  Max per Sub-Source: {profile.max_items_per_sub_source if profile.max_items_per_sub_source is not None else '(auto)'}")
         print(f"  Active Sources: {', '.join(s.value for s in profile.active_sources) if profile.active_sources else '(all enabled)'}")
         print(f"  Custom Prompts: {len(profile.per_source_prompts)} source(s) customized")
         print(f"  Created: {profile.created_at.strftime('%Y-%m-%d %H:%M')}")
@@ -209,7 +231,16 @@ class ProfileManager:
             if choice == "1":
                 name = input("Profile name: ").strip()
                 desc = input("Description (optional): ").strip()
-                self.create_profile(name, description=desc or None)
+                threshold = self._prompt_optional_float("Score threshold (optional): ")
+                max_per_source_type = self._prompt_optional_int("Max items per source type (optional): ")
+                max_per_sub_source = self._prompt_optional_int("Max items per sub-source (optional): ")
+                self.create_profile(
+                    name,
+                    description=desc or None,
+                    ai_score_threshold=threshold,
+                    max_items_per_source_type=max_per_source_type,
+                    max_items_per_sub_source=max_per_sub_source,
+                )
                 print(f"✓ Profile '{name}' created")
             
             elif choice == "2":
@@ -220,12 +251,23 @@ class ProfileManager:
                     continue
                 
                 threshold = input(f"New score threshold (current: {profile.ai_score_threshold}): ").strip()
-                if threshold:
-                    try:
-                        self.edit_profile(name, ai_score_threshold=float(threshold))
-                        print("✓ Profile updated")
-                    except ValueError:
-                        print("✗ Invalid threshold value")
+                max_per_source_type = input(
+                    "Max items per source type (blank to keep current, 'auto' to clear): "
+                ).strip()
+                max_per_sub_source = input(
+                    "Max items per sub-source (blank to keep current, 'auto' to clear): "
+                ).strip()
+
+                try:
+                    self.edit_profile(
+                        name,
+                        ai_score_threshold=float(threshold) if threshold else None,
+                        max_items_per_source_type=self._parse_optional_int(max_per_source_type),
+                        max_items_per_sub_source=self._parse_optional_int(max_per_sub_source),
+                    )
+                    print("✓ Profile updated")
+                except ValueError:
+                    print("✗ Invalid value")
             
             elif choice == "3":
                 from_name = input("Source profile name: ").strip()
@@ -259,6 +301,28 @@ class ProfileManager:
             elif choice == "7":
                 print("Exiting profile manager...")
                 break
-            
+
             else:
                 print("✗ Invalid option")
+
+    @staticmethod
+    def _parse_optional_int(value: str) -> Optional[int]:
+        """Parse an optional integer from user input."""
+        normalized = value.strip().lower()
+        if not normalized or normalized == "auto":
+            return None
+        return int(normalized)
+
+    @staticmethod
+    def _prompt_optional_int(prompt: str) -> Optional[int]:
+        """Prompt for an optional integer value."""
+        value = input(prompt).strip()
+        return ProfileManager._parse_optional_int(value)
+
+    @staticmethod
+    def _prompt_optional_float(prompt: str) -> Optional[float]:
+        """Prompt for an optional float value."""
+        value = input(prompt).strip()
+        if not value:
+            return None
+        return float(value)

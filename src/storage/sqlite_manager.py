@@ -45,6 +45,8 @@ class SQLiteManager:
                     name TEXT PRIMARY KEY,
                     description TEXT,
                     ai_score_threshold REAL DEFAULT 6.0,
+                    max_items_per_source_type INTEGER,
+                    max_items_per_sub_source INTEGER,
                     per_source_prompts TEXT DEFAULT '{}',
                     active_sources TEXT DEFAULT '[]',
                     created_at TEXT,
@@ -52,6 +54,15 @@ class SQLiteManager:
                     is_active BOOLEAN DEFAULT 0
                 )
             """)
+
+            cursor.execute("PRAGMA table_info(profiles)")
+            existing_columns = {row["name"] for row in cursor.fetchall()}
+            for column_name, column_type in (
+                ("max_items_per_source_type", "INTEGER"),
+                ("max_items_per_sub_source", "INTEGER"),
+            ):
+                if column_name not in existing_columns:
+                    cursor.execute(f"ALTER TABLE profiles ADD COLUMN {column_name} {column_type}")
 
             # Feedback signals table
             cursor.execute("""
@@ -116,6 +127,8 @@ class SQLiteManager:
                 name=row["name"],
                 description=row["description"],
                 ai_score_threshold=row["ai_score_threshold"],
+                max_items_per_source_type=row["max_items_per_source_type"],
+                max_items_per_sub_source=row["max_items_per_sub_source"],
                 per_source_prompts=json.loads(row["per_source_prompts"]),
                 active_sources=[SourceType(s) for s in json.loads(row["active_sources"])],
                 created_at=datetime.fromisoformat(row["created_at"]),
@@ -140,6 +153,8 @@ class SQLiteManager:
             name=row["name"],
             description=row["description"],
             ai_score_threshold=row["ai_score_threshold"],
+            max_items_per_source_type=row["max_items_per_source_type"],
+            max_items_per_sub_source=row["max_items_per_sub_source"],
             per_source_prompts=json.loads(row["per_source_prompts"]),
             active_sources=[SourceType(s) for s in json.loads(row["active_sources"])],
             created_at=datetime.fromisoformat(row["created_at"]),
@@ -161,6 +176,8 @@ class SQLiteManager:
             name=row["name"],
             description=row["description"],
             ai_score_threshold=row["ai_score_threshold"],
+            max_items_per_source_type=row["max_items_per_source_type"],
+            max_items_per_sub_source=row["max_items_per_sub_source"],
             per_source_prompts=json.loads(row["per_source_prompts"]),
             active_sources=[SourceType(s) for s in json.loads(row["active_sources"])],
             created_at=datetime.fromisoformat(row["created_at"]),
@@ -175,13 +192,15 @@ class SQLiteManager:
             cursor.execute(
                 """
                 INSERT OR REPLACE INTO profiles
-                (name, description, ai_score_threshold, per_source_prompts, active_sources, created_at, updated_at, is_active)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+                (name, description, ai_score_threshold, max_items_per_source_type, max_items_per_sub_source, per_source_prompts, active_sources, created_at, updated_at, is_active)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                 """,
                 (
                     profile.name,
                     profile.description,
                     profile.ai_score_threshold,
+                    profile.max_items_per_source_type,
+                    profile.max_items_per_sub_source,
                     json.dumps(profile.per_source_prompts),
                     json.dumps([s.value for s in profile.active_sources]),
                     profile.created_at.isoformat(),

@@ -313,7 +313,8 @@ Main configuration file with sources, models, filters:
     "twitter": { "users": [ /* Twitter users */ ] }
   },
   "filtering": {
-    "ai_score_threshold": 6.0
+    "ai_score_threshold": 7.0,
+    "time_window_hours": 24
   },
   "outputs": {
     "email": { /* Email config */ },

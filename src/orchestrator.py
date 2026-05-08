@@ -227,6 +227,15 @@ class HorizonOrchestrator:
                 )
             important_items = deduped_items
 
+            # Keep the briefing diverse when one source family dominates the ranking.
+            balanced_items = self._balance_source_diversity(important_items)
+            if len(balanced_items) < len(important_items):
+                self.console.print(
+                    f"⚖️  Équilibrage des sources: {len(important_items) - len(balanced_items)} éléments retirés "
+                    f"pour préserver la diversité\n"
+                )
+            important_items = balanced_items
+
             # 5.6 Optional second-stage Twitter reply expansion + targeted re-analysis
             await self._expand_twitter_discussion(important_items)
 
@@ -518,6 +527,50 @@ class HorizonOrchestrator:
         if meta.get("repo"):
             return meta["repo"]
         return item.author or "unknown"
+
+    def _balance_source_diversity(self, items: List[ContentItem]) -> List[ContentItem]:
+        """Limit how many items from the same source family make it into the final briefing.
+
+        The goal is to keep a diverse reading list when one source or feed is
+        over-represented after scoring. This is intentionally lightweight and
+        uses existing metadata only.
+        """
+        if len(items) <= 1:
+            return items
+
+        source_type_count = len({item.source_type.value for item in items})
+        sub_source_count = len({self._sub_source_label(item) for item in items})
+
+        max_per_source_type = len(items)
+        if self.profile and self.profile.max_items_per_source_type is not None:
+            max_per_source_type = self.profile.max_items_per_source_type
+        elif source_type_count > 1:
+            max_per_source_type = max(2, min(5, (len(items) + 2) // 3))
+
+        max_per_sub_source = len(items)
+        if self.profile and self.profile.max_items_per_sub_source is not None:
+            max_per_sub_source = self.profile.max_items_per_sub_source
+        elif sub_source_count > 1:
+            max_per_sub_source = 1
+
+        source_type_counts: Dict[str, int] = defaultdict(int)
+        sub_source_counts: Dict[str, int] = defaultdict(int)
+        balanced: List[ContentItem] = []
+
+        for item in items:
+            source_type_key = item.source_type.value
+            sub_source_key = f"{source_type_key}/{self._sub_source_label(item)}"
+
+            if source_type_counts[source_type_key] >= max_per_source_type:
+                continue
+            if sub_source_counts[sub_source_key] >= max_per_sub_source:
+                continue
+
+            balanced.append(item)
+            source_type_counts[source_type_key] += 1
+            sub_source_counts[sub_source_key] += 1
+
+        return balanced
 
     def merge_cross_source_duplicates(self, items: List[ContentItem]) -> List[ContentItem]:
         """Merge items that point to the same URL from different sources.

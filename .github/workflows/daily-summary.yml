@@ -30,20 +30,14 @@ jobs:
       - name: Prepare configuration
         run: |
           mkdir -p data
-          pwd
-          ls -la data/ || echo "data directory empty"
+          echo "📁 Contenu de data/ :"
+          ls -lah data/
           if [ ! -f data/config.json ]; then
-            echo "ℹ️  data/config.json missing, creating it from data/config.example.json"
-            if [ -f data/config.example.json ]; then
-              cp data/config.example.json data/config.json
-              echo "✅ Config file created successfully"
-            else
-              echo "❌ config.example.json not found!"
-              ls -la
-            fi
+            cp data/config.example.json data/config.json
+            echo "✅ Config créé depuis l'exemple"
           fi
-          echo "Verifying config file:"
-          ls -lah data/config.json 2>&1 || echo "Config file not found"
+          echo "📁 Vérification finale :"
+          ls -lah data/config.json
 
       - name: Run Horizon
         env:

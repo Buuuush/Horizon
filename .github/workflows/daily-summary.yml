@@ -29,7 +29,7 @@ jobs:
 
       - name: Prepare configuration
         run: |
-          if [ ! -f data/config.json ]; then
+          if [ ! -f ../../data/config.json ]; then
             echo "ℹ️  data/config.json missing, creating it from data/config.example.json"
             cp data/config.example.json data/config.json
           fi

@@ -119,8 +119,8 @@ GET /api/favorites/{profile_name}?limit=50
 {
   "type": "summary_complete",
   "profile_name": "default",
-  "language": "en",
-  "path": "data/summaries/horizon-2026-05-05-en.html",
+  "language": "bilingual",
+  "path": "data/summaries/horizon-2026-05-05-bilingual.html",
   "timestamp": "2026-05-05T14:30:00"
 }
 ```

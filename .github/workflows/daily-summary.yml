@@ -87,3 +87,20 @@ jobs:
             "https://neocities.org/api/upload"
           
           echo "✅ Upload complete"
+      - name: REmove HTML file
+        if: success()
+        run: |
+          DATE=$(date +'%Y-%m-%d')
+          HTML_FILE="data/summaries/horizon-${DATE}-bilingual.html"
+          if [ -f "$HTML_FILE" ]; then
+            rm "$HTML_FILE"
+            echo "🗑️  Removed local HTML file: $HTML_FILE"
+          elif [ -f "data/summaries/horizon-${DATE}-en.html" ]; then
+            rm "data/summaries/horizon-${DATE}-en.html"
+            echo "🗑️  Removed local HTML file: data/summaries/horizon-${DATE}-en.html"
+          elif [ -f "data/summaries/horizon-${DATE}-fr.html" ]; then
+            rm "data/summaries/horizon-${DATE}-fr.html"
+            echo "🗑️  Removed local HTML file: data/summaries/horizon-${DATE}-fr.html"
+          else
+            echo "⚠️  HTML file not found for cleanup: $HTML_FILE"
+          fi

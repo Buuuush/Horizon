@@ -221,9 +221,8 @@ class DailySummarizer:
 
         parts = []
         for i, item in enumerate(items):
-            # For French, prefer a concise markdown-like section style in the body
             if language == "fr":
-                parts.append(self._format_item_fr_markdown(item, labels, language, i + 1))
+                parts.append(self._format_item_fr_html(item, labels, i + 1))
             else:
                 parts.append(self._format_item_html(item, labels, language, i + 1))
 
@@ -380,52 +379,99 @@ class DailySummarizer:
 
         return "\n".join(lines) + "\n\n"
 
-    def _format_item_fr_markdown(self, item: ContentItem, labels: dict, language: str, index: int) -> str:
-        """Return a markdown-like French section for the item.
+    def _format_item_fr_html(self, item: ContentItem, labels: dict, index: int) -> str:
+        """Format a single ContentItem as a French-only HTML card.
 
-        Example:
-
-        ### 1. Titre
-
-        Paragraphe explicatif...
-
-        ---
+        This avoids leaking English fallback content into the French tab.
         """
-        _title = item.metadata.get(f"title_{language}") or item.title
-        title = str(_title).replace("[", "(").replace("]", ")")
+        meta = item.metadata
 
-        # Prefer detailed French metadata if available
-        summary = (
-            item.metadata.get(f"detailed_summary_{language}")
-            or item.metadata.get("detailed_summary")
-            or item.ai_summary
-            or ""
-        )
-        background = item.metadata.get(f"background_{language}") or item.metadata.get("background") or ""
-        key_details = item.metadata.get(f"key_details_{language}") or item.metadata.get("key_details") or ""
+        title_raw = meta.get("title_fr") or item.title
+        title = self._escape_html(str(title_raw).replace("[", "(").replace("]", ")"))
+        url = self._escape_html(str(item.url))
+        score = item.ai_score or "?"
 
-        # Build a single paragraph combining summary, key details and background
-        parts = []
-        if summary:
-            parts.append(summary.strip())
+        whats_new = (meta.get("whats_new_fr") or "").strip()
+        why_it_matters = (meta.get("why_it_matters_fr") or "").strip()
+        key_details = (meta.get("key_details_fr") or "").strip()
+        background = (meta.get("background_fr") or "").strip()
+        detailed_summary = (meta.get("detailed_summary_fr") or "").strip()
+        evidence_note = (meta.get("evidence_note_fr") or "").strip()
+
+        body_blocks = []
+        if whats_new:
+            body_blocks.append(("Ce qui est nouveau", whats_new))
+        if why_it_matters:
+            body_blocks.append(("Pourquoi c'est important", why_it_matters))
         if key_details:
-            parts.append(key_details.strip())
+            body_blocks.append(("Points clés", key_details))
         if background:
-            parts.append(background.strip())
+            body_blocks.append((labels["background"], background))
 
-        paragraph = " ".join(parts).strip()
-        if not paragraph:
-            paragraph = "Aucune information détaillée disponible pour cet item."
+        if not body_blocks and detailed_summary:
+            body_blocks.append(("Résumé", detailed_summary))
 
-        # Ensure sentences end properly
-        if not paragraph.endswith((".", "!", "?")):
-            paragraph += "."
+        if not body_blocks:
+            body_blocks.append(("Résumé", "Non disponible en français pour le moment."))
 
-        md = []
-        md.append(f'<div class="fr-item">')
-        md.append(f'<pre>### {index}. {self._escape_html(title)}\n\n{self._escape_html(paragraph)}\n\n---</pre>')
-        md.append('</div>')
-        return "\n".join(md)
+        content_sections_list = []
+        for section_title, section_text in body_blocks:
+            section_html = self._escape_html(section_text).replace("\n", "<br />")
+            content_sections_list.append(
+                f'<section class="content-section"><h3>{self._escape_html(section_title)}</h3><div class="content">{section_html}</div></section>'
+            )
+        content_sections = "".join(content_sections_list)
+
+        source_parts = [self._escape_html(item.source_type.value)]
+        if meta.get("subreddit"):
+            source_parts.append(self._escape_html(f"r/{meta['subreddit']}"))
+        if meta.get("feed_name"):
+            source_parts.append(self._escape_html(meta["feed_name"]))
+        else:
+            source_parts.append(self._escape_html(item.author or "unknown"))
+        if item.published_at:
+            day = item.published_at.strftime("%d").lstrip("0")
+            source_parts.append(self._escape_html(item.published_at.strftime(f"%b {day}, %H:%M")))
+        source_line = " \u00b7 ".join(source_parts)
+
+        discussion_url = meta.get("discussion_url")
+        if discussion_url and str(discussion_url) != str(item.url):
+            source_line += f' · <a href="{self._escape_html(str(discussion_url))}">{self._escape_html(labels["discussion"])}</a>'
+
+        tags_html = ""
+        if item.ai_tags:
+            tags_html = ", ".join([f"<code>#{self._escape_html(t)}</code>" for t in item.ai_tags])
+
+        references = meta.get("sources") or []
+        refs_html = ""
+        if references:
+            items_html = "".join(
+                f'<li><a href="{self._escape_html(s["url"])}">{self._escape_html(s["title"])}</a></li>'
+                for s in references
+            )
+            refs_html = f"<details><summary>{self._escape_html(labels['references'])}</summary><ul>{items_html}</ul></details>"
+
+        evidence_html = ""
+        if evidence_note:
+            evidence_html = (
+                f'<p class="evidence-note"><strong>Fiabilité</strong> : '
+                f"{self._escape_html(evidence_note)}</p>"
+            )
+
+        html = f"""
+<article id="item-{index}">
+  <header>
+    <h2 class="item-title"><a href="{url}">{title}</a> <span class="score">⭐ {score}/10</span></h2>
+    <div class="meta">{source_line}</div>
+  </header>
+  <div class="lang-blocks fr-only">{content_sections}</div>
+  {evidence_html}
+  <div class="tags">{tags_html}</div>
+  {refs_html}
+</article>
+"""
+
+        return html
 
     def _generate_empty_summary(self, date: str, total_fetched: int, labels: dict) -> str:
         """Generate summary when no high-scoring items were found."""
@@ -694,6 +740,33 @@ summary:focus-visible {{
 
 .content {{ font-size: 1.03rem; line-height: 1.8; }}
 
+.fr-only {{
+    display: grid;
+    gap: .72rem;
+}}
+
+.content-section {{
+    background: linear-gradient(170deg, var(--surface), color-mix(in srgb, var(--accent-soft) 24%, #ffffff));
+    border: 1px solid color-mix(in srgb, var(--accent) 12%, transparent);
+    border-radius: 12px;
+    padding: .78rem .85rem;
+}}
+
+.content-section h3 {{
+    margin: 0 0 .35rem;
+    font-family: {theme['ui']};
+    font-size: .82rem;
+    color: var(--muted);
+    letter-spacing: .07em;
+    text-transform: uppercase;
+}}
+
+.evidence-note {{
+    margin: .7rem 0 0;
+    color: var(--muted);
+    font-size: .94rem;
+}}
+
 .tags {{ margin-top: .75rem; color: var(--muted); font-family: {theme['ui']}; font-size: .9rem; }}
 code {{ background: color-mix(in srgb, var(--accent-soft) 65%, #ffffff); border-radius: 8px; padding: .12rem .4rem; }}
 
@@ -894,6 +967,33 @@ summary:focus-visible {{
 }}
 
 .content {{ font-size: 1.03rem; line-height: 1.8; }}
+
+.fr-only {{
+    display: grid;
+    gap: .72rem;
+}}
+
+.content-section {{
+    background: linear-gradient(170deg, var(--surface), color-mix(in srgb, var(--accent-soft) 24%, #ffffff));
+    border: 1px solid color-mix(in srgb, var(--accent) 12%, transparent);
+    border-radius: 12px;
+    padding: .78rem .85rem;
+}}
+
+.content-section h3 {{
+    margin: 0 0 .35rem;
+    font-family: {theme['ui']};
+    font-size: .82rem;
+    color: var(--muted);
+    letter-spacing: .07em;
+    text-transform: uppercase;
+}}
+
+.evidence-note {{
+    margin: .7rem 0 0;
+    color: var(--muted);
+    font-size: .94rem;
+}}
 
 .tags {{ margin-top: .75rem; color: var(--muted); font-family: {theme['ui']}; font-size: .9rem; }}
 code {{ background: color-mix(in srgb, var(--accent-soft) 65%, #ffffff); border-radius: 8px; padding: .12rem .4rem; }}

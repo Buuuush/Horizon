@@ -1,0 +1,474 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Horizon — 2026-05-10</title>
+  <style>
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600&family=Manrope:wght@500;700&display=swap');
+
+:root {
+    --bg: #f8f5f3;
+    --paper: #ffffff;
+    --surface: #fffbf8;
+    --accent: #9b3d2a;
+    --accent-2: color-mix(in srgb, var(--accent) 55%, #b73fd6);
+    --accent-3: color-mix(in srgb, var(--accent) 40%, #f59e0b);
+    --accent-soft: #f9e2dc;
+    --muted: #6e5b54;
+    --text: #2f211d;
+    --ring: color-mix(in srgb, var(--accent) 32%, transparent);
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+    color: var(--text);
+    background:
+        radial-gradient(1300px 420px at -10% -20%, var(--accent-soft), transparent 60%),
+        radial-gradient(760px 300px at 88% -12%, color-mix(in srgb, var(--accent-2) 24%, transparent), transparent 66%),
+        radial-gradient(640px 240px at 30% 0%, color-mix(in srgb, var(--accent-3) 18%, transparent), transparent 70%),
+        var(--bg);
+    font-family: 'Source Serif 4', Georgia, serif;
+    line-height: 1.78;
+}
+
+.container { max-width: 1100px; margin: 1.5rem auto; padding: 1rem; }
+
+.tab-switcher {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+    border-bottom: 2px solid color-mix(in srgb, var(--accent) 20%, transparent);
+}
+
+.tab-button {
+    background: transparent;
+    border: none;
+    color: var(--muted);
+    font-family: 'Manrope', 'Segoe UI', sans-serif;
+    font-size: 1rem;
+    font-weight: 600;
+    padding: 0.75rem 1.2rem;
+    cursor: pointer;
+    transition: color 0.18s ease, border-color 0.18s ease;
+    border-bottom: 3px solid transparent;
+}
+
+.tab-button:hover {
+    color: var(--text);
+}
+
+.tab-button.active {
+    color: var(--accent);
+    border-bottom-color: var(--accent);
+}
+
+.tab-content {
+    display: none;
+    animation: fadeIn 0.2s ease-in;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.summary-header {
+    background: var(--paper);
+    border: 1px solid color-mix(in srgb, var(--accent) 16%, transparent);
+    border-radius: 24px;
+    padding: 1.5rem 1.6rem 1.1rem;
+    box-shadow: 0 18px 48px rgba(19, 33, 68, 0.08);
+    margin-bottom: 1rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.summary-header::after {
+    content: "";
+    position: absolute;
+    inset: auto -60px -80px auto;
+    width: 220px;
+    height: 220px;
+    border-radius: 999px;
+    background: radial-gradient(circle, color-mix(in srgb, var(--accent-2) 28%, transparent), transparent 70%);
+    pointer-events: none;
+}
+
+.summary-header h1 {
+    margin: 0;
+    font-family: 'Fraunces', 'DM Serif Display', 'Iowan Old Style', 'Palatino Linotype', serif;
+    letter-spacing: .01em;
+    font-size: clamp(1.8rem, 3.6vw, 2.8rem);
+    line-height: 1.15;
+}
+
+.lead { margin: .55rem 0 1.1rem; color: var(--muted); font-size: 1.04rem; max-width: 78ch; }
+
+.toc-title {
+    margin: 0 0 .45rem;
+    font-family: 'Manrope', 'Segoe UI', sans-serif;
+    font-size: .85rem;
+    text-transform: uppercase;
+    letter-spacing: .11em;
+    color: var(--muted);
+}
+
+.toc ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: .55rem;
+}
+
+.toc li {
+    background: linear-gradient(160deg, var(--surface), color-mix(in srgb, var(--accent-soft) 48%, #ffffff));
+    border: 1px solid color-mix(in srgb, var(--accent) 16%, transparent);
+    border-radius: 10px;
+    padding: .55rem .65rem;
+    transition: transform .18s ease, box-shadow .18s ease;
+}
+
+.toc li:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 8px 20px color-mix(in srgb, var(--accent) 15%, transparent);
+}
+
+.toc a { text-decoration: none; color: var(--text); }
+
+.items { display: grid; gap: .95rem; }
+
+.items article {
+    background: var(--paper);
+    border: 1px solid color-mix(in srgb, var(--accent) 15%, transparent);
+    border-radius: 20px;
+    padding: 1.15rem 1.2rem;
+    box-shadow: 0 10px 32px rgba(0, 0, 0, 0.05);
+}
+
+.item-title {
+    font-family: 'Fraunces', 'DM Serif Display', 'Iowan Old Style', 'Palatino Linotype', serif;
+    font-size: clamp(1.2rem, 2.2vw, 1.55rem);
+    margin: 0 0 .55rem;
+    line-height: 1.22;
+}
+
+.item-title a { color: inherit; text-decoration: none; }
+.item-title a:hover { color: var(--accent); }
+
+.item-title a:focus-visible,
+.toc a:focus-visible,
+summary:focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
+    border-radius: 6px;
+}
+
+.meta { color: var(--muted); font-family: 'Manrope', 'Segoe UI', sans-serif; font-size: .9rem; margin-bottom: .7rem; }
+.score { color: var(--accent); margin-left: .45rem; font-weight: 700; font-family: 'Manrope', 'Segoe UI', sans-serif; }
+
+.content { font-size: 1.03rem; line-height: 1.8; }
+
+.tags { margin-top: .75rem; color: var(--muted); font-family: 'Manrope', 'Segoe UI', sans-serif; font-size: .9rem; }
+code { background: color-mix(in srgb, var(--accent-soft) 65%, #ffffff); border-radius: 8px; padding: .12rem .4rem; }
+
+details { margin-top: .65rem; }
+details summary { cursor: pointer; color: var(--accent); font-family: 'Manrope', 'Segoe UI', sans-serif; }
+
+@media (max-width: 860px) {
+    .container { margin: .7rem auto; padding: .65rem; }
+    .tab-switcher { flex-wrap: wrap; }
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --bg: #0f1420;
+        --paper: #161d2c;
+        --surface: #1b2435;
+        --accent: #7cb1ff;
+        --accent-2: #c28cff;
+        --accent-3: #ffc36c;
+        --accent-soft: #1a2740;
+        --muted: #a6b4cd;
+        --text: #edf2ff;
+        --ring: rgba(124, 177, 255, 0.55);
+    }
+
+    body {
+        background:
+            radial-gradient(1200px 420px at -10% -20%, #1a2740, transparent 60%),
+            radial-gradient(760px 300px at 88% -12%, rgba(194, 140, 255, 0.2), transparent 66%),
+            radial-gradient(640px 240px at 30% 0%, rgba(255, 195, 108, 0.14), transparent 70%),
+            var(--bg);
+    }
+
+    .summary-header,
+    .items article {
+        border-color: rgba(124, 177, 255, 0.24);
+        box-shadow: 0 18px 44px rgba(0, 0, 0, 0.32);
+    }
+
+    .tab-switcher {
+        border-bottom-color: rgba(124, 177, 255, 0.2);
+    }
+
+    code {
+        background: rgba(124, 177, 255, 0.16);
+    }
+}
+</style>
+  <script>
+    function switchTab(button) {
+      const lang = button.getAttribute('data-lang');
+      const allButtons = document.querySelectorAll('.tab-button');
+      const allContents = document.querySelectorAll('.tab-content');
+      
+      allButtons.forEach(b => b.classList.remove('active'));
+      allContents.forEach(c => c.classList.remove('active'));
+      
+      button.classList.add('active');
+      document.querySelector(`.tab-content[data-lang="${lang}"]`).classList.add('active');
+    }
+  </script>
+</head>
+<body>
+  <div class="container">
+    <div class="tab-switcher">
+      <button class="tab-button active" onclick="switchTab(this)" data-lang="fr">Français</button><button class="tab-button " onclick="switchTab(this)" data-lang="en">English</button>
+    </div>
+    <div class="tab-content active" data-lang="fr"><section class="summary-header">
+  <h1>Horizon Quotidien — 2026-05-10</h1>
+  <p class="lead">10 sujets essentiels sélectionnés parmi 226 contenus collectés.</p>
+  <nav class="toc" aria-label="Sommaire">
+    <p class="toc-title">Sommaire</p>
+    <ul><li><a href="#item-1">L&#39;Allemagne lance un nouvel effort d&#39;achat de missiles Tomahawk après un différend avec Trump.</a> <span class="score">⭐ 9.895000000000001/10</span></li>
+<li><a href="#item-2">Le Qatar a envoyé son premier chargement de GNL par Hormuz depuis le début de la guerre.</a> <span class="score">⭐ 9.825/10</span></li>
+<li><a href="#item-3">Israeli settlers force Palestinian family to exhume and rebury their father</a> <span class="score">⭐ 8.895000000000001/10</span></li>
+<li><a href="#item-4">Péter Magyar sworn in as Hungary’s prime minister ending 16-year Orbán era</a> <span class="score">⭐ 8.825/10</span></li>
+<li><a href="#item-5">Immersion à Saint-Pétersbourg dans le Régiment immortel, marche mémorielle devenue un outil de la propagande du Kremlin</a> <span class="score">⭐ 8.790000000000001/10</span></li>
+<li><a href="#item-6">Zed Editor lance le Theme-Builder pour personnaliser l&#39;apparence</a> <span class="score">⭐ 7.9125/10</span></li>
+<li><a href="#item-7">Show HN: I made a Clojure-like language in Go, boots in 7ms</a> <span class="score">⭐ 7.7375/10</span></li>
+<li><a href="#item-8">Show HN: Building a web server in assembly to give my life (a lack of) meaning</a> <span class="score">⭐ 7.65/10</span></li>
+<li><a href="#item-9">Local privilege escalation via execve()</a> <span class="score">⭐ 6.859999999999999/10</span></li>
+<li><a href="#item-10">Internet Archive Suisse lance un projet de préservation numérique distribué.</a> <span class="score">⭐ 6.385000000000001/10</span></li></ul>
+  </nav>
+</section>
+<main class="items"><div class="fr-item">
+<pre>### 1. L&#39;Allemagne lance un nouvel effort d&#39;achat de missiles Tomahawk après un différend avec Trump.
+
+Le ministre de la défense allemand a annoncé un voyage à Washington pour poursuivre l&#39;achat de missiles Tomahawk après un différend avec le président américain. Ce geste indique un durcissement du différend entre l&#39;Allemagne et les États-Unis et pourrait remodeler les stratégies d&#39;approvisionnement en défense en Europe. Le ministre de la défense se rendra à Washington pour négocier l&#39;achat de missiles Tomahawk, généralement lancés depuis des destroyers de la classe Arleigh Burke comme le USS Paul Ignatius, et sont actuellement fabriqués uniquement par Raytheon pour les versions mer non nucléaires. Le missile Tomahawk est un missile de croisière à longue portée et sous‐sonique développé par les États-Unis et employé par plusieurs marines pour des missions d&#39;attaque terrestre depuis des navires et sous‐marins. Il a été produit par divers entrepreneurs, avec Raytheon comme unique fabricant de variantes maritimes non nucléaires depuis 2016.
+
+---</pre>
+</div><div class="fr-item">
+<pre>### 2. Le Qatar a envoyé son premier chargement de GNL par Hormuz depuis le début de la guerre.
+
+Le Qatar a envoyé son premier tanker de GNL à travers le détroit d&#39;Hormuz depuis le début de la guerre Iranienne, marquant le redémarrage des exportations. Cette reprise indique un possible allégement des tensions régionales et le rétablissement d&#39;une source d&#39;énergie cruciale, affectant les marchés mondiaux de GNL et les revenus du Qatar. Ce transport suit une suspension des exportations due aux attaques iraniennes qui ont perturbé les routes maritimes régionales, et le tanker transporte du GNL refroidi à environ -162°C. Le gaz naturel liquéfié (GNL) est du gaz naturel refroidi à environ -162°C pour devenir liquide, réduisant son volume d&#39;environ 1/600e de son état gazeux. Les principaux producteurs sont les États-Unis, l&#39;Australie et le Qatar, tandis que les principaux importateurs sont la Chine, le Japon et la Corée du Sud. La guerre de 2026 en Iran a perturbé le détroit d&#39;Hormuz, entraînant une suspension des exportations de GNL du Qatar et créant des goulets d&#39;étranglement dans la chaîne d&#39;approvisionnement.
+
+---</pre>
+</div><div class="fr-item">
+<pre>### 3. Israeli settlers force Palestinian family to exhume and rebury their father
+
+Israeli settlers forced a Palestinian family to exhume and rebury their father in the occupied West Bank, drawing condemnation from the UN as emblematic of Palestinian dehumanization.
+
+---</pre>
+</div><div class="fr-item">
+<pre>### 4. Péter Magyar sworn in as Hungary’s prime minister ending 16-year Orbán era
+
+Péter Magyar was sworn in as Hungary’s prime minister, ending Viktor Orbán’s 16‐year rule after his party’s landslide election victory.
+
+---</pre>
+</div><div class="fr-item">
+<pre>### 5. Immersion à Saint-Pétersbourg dans le Régiment immortel, marche mémorielle devenue un outil de la propagande du Kremlin
+
+The article describes how the 9-May memorial march in St. Petersburg, featuring the &#39;Immortal Regiment&#39; march, has become a tool for Kremlin propaganda.
+
+---</pre>
+</div><div class="fr-item">
+<pre>### 6. Zed Editor lance le Theme-Builder pour personnaliser l&#39;apparence
+
+Zed Editor a lancé un Theme-Builder permettant aux développeurs de personnaliser l’apparence de l’éditeur. Les membres de la communauté ont salué sa valeur pratique pour le flux de travail et la satisfaction des développeurs. Cet outil résout un vrai problème de flux de travail en permettant une personnalisation facile, ce qui peut augmenter la satisfaction et la productivité des développeurs. Il renforce la position de Zed comme éditeur convivial sur le marché concurrentiel des éditeurs de code. Le theme‐builder est apprécié pour sa facilité d’utilisation, mais les utilisateurs signalent un coloriage syntaxique incomplet pour des langages comme le C/C++, des options de hauteur de ligne limitées à deux réglages et l’absence de défilement fluide. De plus, le thème sombre par défaut offre un contraste faible, ce qui rend l’expérience terne pour certains. Zed est un éditeur de code open‐source disponible sous Linux, macOS et Windows, implémenté en langage Rust et créé par Nathan Sobo, co‐fondateur d’Atom. Il est développé par Zed Industries et vise à offrir un environnement rapide et collaboratif pour les développeurs et l’IA. Le projet mise sur la minimalité et les performances, se positionnant comme une alternative moderne à des éditeurs comme VS Code.
+
+---</pre>
+</div><div class="fr-item">
+<pre>### 7. Show HN: I made a Clojure-like language in Go, boots in 7ms
+
+The author presents Let‐go, a pure‐Go, 90% compatible Clojure‐like language that cold‐starts in ~7 ms and runs efficiently, sparking interest in the Hacker News community.
+
+---</pre>
+</div><div class="fr-item">
+<pre>### 8. Show HN: Building a web server in assembly to give my life (a lack of) meaning
+
+A developer presents a static file web server written entirely in ARM64 assembly for macOS, supporting full HTTP methods and features, with community comments reflecting on the value of low-level craftsmanship.
+
+---</pre>
+</div><div class="fr-item">
+<pre>### 9. Local privilege escalation via execve()
+
+A Hacker News post discussing a FreeBSD local privilege escalation vulnerability in execve() that has been patched, with brief community comments.
+
+---</pre>
+</div><div class="fr-item">
+<pre>### 10. Internet Archive Suisse lance un projet de préservation numérique distribué.
+
+Internet Archive Suisse a lancé un projet de préservation numérique distribué et aligné sur sa mission. Ce lancement a suscité un débat communautaire concernant la réplication pair‐à‐pair et la gestion des réclamations DMCA. Cet effort renforce l&#39;écosystème mondial d&#39;une bibliothèque numérique résiliente et souligne les défis pratiques pour les ingénieurs et les équipes juridiques. Il illustre également l&#39;importance d&#39;une architecture distribuée pour préserver le patrimoine culturel. Le projet s’inscrit parmi Internet Archive US, Canada et Europe, visant à créer un réseau décentralisé de bibliothèques indépendantes qui répliquent le contenu entre sites. Les membres de la communauté soulignent l’incertitude quant à son indépendance, à la gestion des demandes de retrait et au texte d’accroche de la section «À propos». Internet Archive est une bibliothèque numérique à but non lucratif fondée en 1996, disposant de plusieurs succursales régionales à travers le monde. La nouvelle initiative en Suisse s’inscrit dans un effort plus large visant à créer un réseau distribué et aligné sur la mission, s’appuyant sur les archives régionales existantes. La gouvernance inclut les membres du conseil Brewster et Caslon, et la structure juridique pour les demandes de retrait DMCA reste incertaine.
+
+---</pre>
+</div></main></div><div class="tab-content " data-lang="en"><section class="summary-header">
+  <h1>Horizon Daily — 2026-05-10</h1>
+  <p class="lead">10 essential stories selected from 226 collected items.</p>
+  <nav class="toc" aria-label="Contents">
+    <p class="toc-title">Contents</p>
+    <ul><li><a href="#item-1">Germany launches a fresh push to buy Tomahawks after a Trump row.</a> <span class="score">⭐ 9.895000000000001/10</span></li>
+<li><a href="#item-2">Qatar sent its first LNG shipment through Hormuz since the war started.</a> <span class="score">⭐ 9.825/10</span></li>
+<li><a href="#item-3">Israeli settlers force Palestinian family to exhume and rebury their father</a> <span class="score">⭐ 8.895000000000001/10</span></li>
+<li><a href="#item-4">Péter Magyar sworn in as Hungary’s prime minister ending 16-year Orbán era</a> <span class="score">⭐ 8.825/10</span></li>
+<li><a href="#item-5">Immersion à Saint-Pétersbourg dans le Régiment immortel, marche mémorielle devenue un outil de la propagande du Kremlin</a> <span class="score">⭐ 8.790000000000001/10</span></li>
+<li><a href="#item-6">Zed Editor Launches Theme-Builder for Custom Appearance</a> <span class="score">⭐ 7.9125/10</span></li>
+<li><a href="#item-7">Show HN: I made a Clojure-like language in Go, boots in 7ms</a> <span class="score">⭐ 7.7375/10</span></li>
+<li><a href="#item-8">Show HN: Building a web server in assembly to give my life (a lack of) meaning</a> <span class="score">⭐ 7.65/10</span></li>
+<li><a href="#item-9">Local privilege escalation via execve()</a> <span class="score">⭐ 6.859999999999999/10</span></li>
+<li><a href="#item-10">Internet Archive Switzerland launches distributed digital preservation project.</a> <span class="score">⭐ 6.385000000000001/10</span></li></ul>
+  </nav>
+</section>
+<main class="items">
+<article id="item-1">
+  <header>
+    <h2 class="item-title"><a href="https://www.ft.com/content/c64f6c88-36f8-4721-a201-4cd77992fa90">Germany launches a fresh push to buy Tomahawks after a Trump row.</a> <span class="score">⭐ 9.895000000000001/10</span></h2>
+    <div class="meta">rss · Financial Times · May 10, 04:00</div>
+  </header>
+    <div class="lang-blocks">
+        <section class="lang"><h3>EN</h3><div class="content">Germany&#39;s defence minister announced a trip to Washington to pursue the purchase of Tomahawk missiles after a dispute with the US president. This move signals a deepening rift between Germany and the United States and could reshape European defence procurement strategies. The defence minister will travel to Washington to negotiate the acquisition of Tomahawk cruise missiles, which are typically launched from Arleigh Burke‐class destroyers such as the USS Paul Ignatius, and are currently manufactured solely by Raytheon for non‐nuclear sea‐launched versions.</div></section>
+        <section class="lang"><h3>FR</h3><div class="content">Le ministre de la défense allemand a annoncé un voyage à Washington pour poursuivre l&#39;achat de missiles Tomahawk après un différend avec le président américain. Ce geste indique un durcissement du différend entre l&#39;Allemagne et les États-Unis et pourrait remodeler les stratégies d&#39;approvisionnement en défense en Europe. Le ministre de la défense se rendra à Washington pour négocier l&#39;achat de missiles Tomahawk, généralement lancés depuis des destroyers de la classe Arleigh Burke comme le USS Paul Ignatius, et sont actuellement fabriqués uniquement par Raytheon pour les versions mer non nucléaires.</div></section>
+    </div>
+  <div class="tags"><code>#Geopolitics</code>, <code>#Defense</code>, <code>#US-Europe Relations</code>, <code>#Politics</code></div>
+  <details><summary>References</summary><ul><li><a href="https://en.wikipedia.org/wiki/Tomahawk_missile">Tomahawk missile</a></li><li><a href="https://missilethreat.csis.org/missile/tomahawk/">Tomahawk | Missile Threat</a></li></ul></details>
+</article>
+
+<article id="item-2">
+  <header>
+    <h2 class="item-title"><a href="https://www.bloomberg.com/news/articles/2026-05-10/qatar-sends-first-lng-shipment-through-hormuz-since-war-started">Qatar sent its first LNG shipment through Hormuz since the war started.</a> <span class="score">⭐ 9.825/10</span></h2>
+    <div class="meta">rss · Bloomberg Markets · May 10, 04:23</div>
+  </header>
+    <div class="lang-blocks">
+        <section class="lang"><h3>EN</h3><div class="content">Qatar dispatched its first LNG tanker through the Strait of Hormuz since the Iran war began, resuming exports from the region. This resumption signals a potential easing of regional tensions and restores vital energy supplies, impacting global LNG markets and Qatar&#39;s revenue. The shipment follows a period of export suspension after Iran&#39;s attacks disrupted regional shipping routes, and the tanker carries LNG cooled to about -162°C.</div></section>
+        <section class="lang"><h3>FR</h3><div class="content">Le Qatar a envoyé son premier tanker de GNL à travers le détroit d&#39;Hormuz depuis le début de la guerre Iranienne, marquant le redémarrage des exportations. Cette reprise indique un possible allégement des tensions régionales et le rétablissement d&#39;une source d&#39;énergie cruciale, affectant les marchés mondiaux de GNL et les revenus du Qatar. Ce transport suit une suspension des exportations due aux attaques iraniennes qui ont perturbé les routes maritimes régionales, et le tanker transporte du GNL refroidi à environ -162°C.</div></section>
+    </div>
+  <div class="tags"><code>#LNG</code>, <code>#Qatar</code>, <code>#Strait of Hormuz</code>, <code>#Energy</code>, <code>#Geopolitics</code></div>
+  <details><summary>References</summary><ul><li><a href="https://en.wikipedia.org/wiki/Liquefied_natural_gas">Liquefied natural gas</a></li><li><a href="https://www.energy.gov/hgeo/liquefied-natural-gas-lng">Liquefied Natural Gas (LNG) | Department of Energy</a></li></ul></details>
+</article>
+
+<article id="item-3">
+  <header>
+    <h2 class="item-title"><a href="https://www.aljazeera.com/news/2026/5/9/israeli-settlers-force-palestinian-family-to-exhume-and-rebury-their-father?traffic_source=rss">Israeli settlers force Palestinian family to exhume and rebury their father</a> <span class="score">⭐ 8.895000000000001/10</span></h2>
+    <div class="meta">rss · Al Jazeera · May 9, 19:16</div>
+  </header>
+    <div class="lang-blocks">
+        <section class="lang"><h3>EN</h3><div class="content">Israeli settlers forced a Palestinian family to exhume and rebury their father in the occupied West Bank, drawing condemnation from the UN as emblematic of Palestinian dehumanization.</div></section>
+        <section class="lang"><h3>FR</h3><div class="content"><em>Non disponible.</em></div></section>
+    </div>
+  <div class="tags"><code>#Israeli-Palestinian conflict</code>, <code>#Human rights</code>, <code>#West Bank</code>, <code>#International law</code>, <code>#Settlements</code></div>
+  
+</article>
+
+<article id="item-4">
+  <header>
+    <h2 class="item-title"><a href="https://www.theguardian.com/world/2026/may/09/hungary-prime-minister-peter-magyar-sworn-in-viktor-oban">Péter Magyar sworn in as Hungary’s prime minister ending 16-year Orbán era</a> <span class="score">⭐ 8.825/10</span></h2>
+    <div class="meta">rss · The Guardian World · May 9, 17:48</div>
+  </header>
+    <div class="lang-blocks">
+        <section class="lang"><h3>EN</h3><div class="content">Péter Magyar was sworn in as Hungary’s prime minister, ending Viktor Orbán’s 16‐year rule after his party’s landslide election victory.</div></section>
+        <section class="lang"><h3>FR</h3><div class="content"><em>Non disponible.</em></div></section>
+    </div>
+  <div class="tags"><code>#Hungary</code>, <code>#Prime Minister</code>, <code>#Political Change</code>, <code>#Elections</code>, <code>#Europe</code></div>
+  
+</article>
+
+<article id="item-5">
+  <header>
+    <h2 class="item-title"><a href="https://www.lemonde.fr/international/article/2026/05/10/immersion-a-saint-petersbourg-dans-le-regiment-immortel-marche-memorielle-devenue-un-outil-de-la-propagande-du-kremlin_6687686_3210.html">Immersion à Saint-Pétersbourg dans le Régiment immortel, marche mémorielle devenue un outil de la propagande du Kremlin</a> <span class="score">⭐ 8.790000000000001/10</span></h2>
+    <div class="meta">rss · Le Monde · May 10, 05:38</div>
+  </header>
+    <div class="lang-blocks">
+        <section class="lang"><h3>EN</h3><div class="content">The article describes how the 9-May memorial march in St. Petersburg, featuring the &#39;Immortal Regiment&#39; march, has become a tool for Kremlin propaganda.</div></section>
+        <section class="lang"><h3>FR</h3><div class="content"><em>Non disponible.</em></div></section>
+    </div>
+  <div class="tags"><code>#Russia</code>, <code>#Propaganda</code>, <code>#Victory Day</code>, <code>#Russia-Ukraine War</code>, <code>#Propaganda</code></div>
+  
+</article>
+
+<article id="item-6">
+  <header>
+    <h2 class="item-title"><a href="https://zed.dev/theme-builder">Zed Editor Launches Theme-Builder for Custom Appearance</a> <span class="score">⭐ 7.9125/10</span></h2>
+    <div class="meta">hackernews · cuechan · May 9, 17:30 · <a href="https://news.ycombinator.com/item?id=48076651">Discussion</a></div>
+  </header>
+    <div class="lang-blocks">
+        <section class="lang"><h3>EN</h3><div class="content">Zed Editor has released a Theme-Builder that lets developers customize the editor’s appearance. Community members have praised its practical value for workflow and satisfaction. This tool addresses a real workflow problem by enabling easy theming, which can boost developer satisfaction and productivity. It strengthens Zed’s position as a user‐friendly editor in the competitive code‐editor market. The theme builder is praised for its ease of use, but users report incomplete syntax coloring for languages such as C/C++, limited line‐height options, and the absence of smooth scrolling. Additionally, the default dark theme provides low contrast, which some find dull.</div></section>
+        <section class="lang"><h3>FR</h3><div class="content">Zed Editor a lancé un Theme-Builder permettant aux développeurs de personnaliser l’apparence de l’éditeur. Les membres de la communauté ont salué sa valeur pratique pour le flux de travail et la satisfaction des développeurs. Cet outil résout un vrai problème de flux de travail en permettant une personnalisation facile, ce qui peut augmenter la satisfaction et la productivité des développeurs. Il renforce la position de Zed comme éditeur convivial sur le marché concurrentiel des éditeurs de code. Le theme‐builder est apprécié pour sa facilité d’utilisation, mais les utilisateurs signalent un coloriage syntaxique incomplet pour des langages comme le C/C++, des options de hauteur de ligne limitées à deux réglages et l’absence de défilement fluide. De plus, le thème sombre par défaut offre un contraste faible, ce qui rend l’expérience terne pour certains.</div></section>
+    </div>
+  <div class="tags"><code>#editor-customization</code>, <code>#developer-tools</code>, <code>#editor-tools</code>, <code>#theme-customization</code></div>
+  <details><summary>References</summary><ul><li><a href="https://en.wikipedia.org/wiki/Zed_(text_editor)">Zed (text editor) - Wikipedia</a></li><li><a href="https://zed.dev/">Zed — Your last next editor</a></li></ul></details>
+</article>
+
+<article id="item-7">
+  <header>
+    <h2 class="item-title"><a href="https://github.com/nooga/let-go">Show HN: I made a Clojure-like language in Go, boots in 7ms</a> <span class="score">⭐ 7.7375/10</span></h2>
+    <div class="meta">hackernews · marcingas · May 9, 17:52 · <a href="https://news.ycombinator.com/item?id=48076815">Discussion</a></div>
+  </header>
+    <div class="lang-blocks">
+        <section class="lang"><h3>EN</h3><div class="content">The author presents Let‐go, a pure‐Go, 90% compatible Clojure‐like language that cold‐starts in ~7 ms and runs efficiently, sparking interest in the Hacker News community.</div></section>
+        <section class="lang"><h3>FR</h3><div class="content"><em>Non disponible.</em></div></section>
+    </div>
+  <div class="tags"><code>#Clojure</code>, <code>#Go</code>, <code>#Language Design</code>, <code>#Performance</code>, <code>#Show HN</code></div>
+  
+</article>
+
+<article id="item-8">
+  <header>
+    <h2 class="item-title"><a href="https://github.com/imtomt/ymawky">Show HN: Building a web server in assembly to give my life (a lack of) meaning</a> <span class="score">⭐ 7.65/10</span></h2>
+    <div class="meta">hackernews · imtomt · May 10, 03:01 · <a href="https://news.ycombinator.com/item?id=48080587">Discussion</a></div>
+  </header>
+    <div class="lang-blocks">
+        <section class="lang"><h3>EN</h3><div class="content">A developer presents a static file web server written entirely in ARM64 assembly for macOS, supporting full HTTP methods and features, with community comments reflecting on the value of low-level craftsmanship.</div></section>
+        <section class="lang"><h3>FR</h3><div class="content"><em>Non disponible.</em></div></section>
+    </div>
+  <div class="tags"><code>#Assembly</code>, <code>#Web Server</code>, <code>#Show HN</code>, <code>#Low-level Programming</code>, <code>#Programming</code></div>
+  
+</article>
+
+<article id="item-9">
+  <header>
+    <h2 class="item-title"><a href="https://www.freebsd.org/security/advisories/FreeBSD-SA-26:13.exec.asc">Local privilege escalation via execve()</a> <span class="score">⭐ 6.859999999999999/10</span></h2>
+    <div class="meta">hackernews · Deeg9rie9usi · May 9, 20:31 · <a href="https://news.ycombinator.com/item?id=48077971">Discussion</a></div>
+  </header>
+    <div class="lang-blocks">
+        <section class="lang"><h3>EN</h3><div class="content">A Hacker News post discussing a FreeBSD local privilege escalation vulnerability in execve() that has been patched, with brief community comments.</div></section>
+        <section class="lang"><h3>FR</h3><div class="content"><em>Non disponible.</em></div></section>
+    </div>
+  <div class="tags"><code>#security</code>, <code>#vulnerability</code>, <code>#freebsd</code>, <code>#privilege-escalation</code>, <code>#execve</code></div>
+  
+</article>
+
+<article id="item-10">
+  <header>
+    <h2 class="item-title"><a href="https://blog.archive.org/2026/05/06/internet-archive-switzerland-expanding-a-global-mission-to-preserve-knowledge/">Internet Archive Switzerland launches distributed digital preservation project.</a> <span class="score">⭐ 6.385000000000001/10</span></h2>
+    <div class="meta">hackernews · hggh · May 9, 12:00 · <a href="https://news.ycombinator.com/item?id=48074265">Discussion</a></div>
+  </header>
+    <div class="lang-blocks">
+        <section class="lang"><h3>EN</h3><div class="content">Internet Archive Switzerland has launched a distributed, mission‐aligned digital preservation project. The launch has sparked community debate about peer‐to‐peer replication and DMCA handling. This effort strengthens a global, resilient digital library ecosystem and highlights practical challenges for engineers and legal teams. It also illustrates the importance of distributed architecture for preserving cultural heritage. The project joins Internet Archive US, Canada, and Europe, aiming to create a decentralized network of independent libraries that replicate content across sites. Community members note uncertainty about its independence, legal handling of takedown requests, and placeholder text in its About Us section.</div></section>
+        <section class="lang"><h3>FR</h3><div class="content">Internet Archive Suisse a lancé un projet de préservation numérique distribué et aligné sur sa mission. Ce lancement a suscité un débat communautaire concernant la réplication pair‐à‐pair et la gestion des réclamations DMCA. Cet effort renforce l&#39;écosystème mondial d&#39;une bibliothèque numérique résiliente et souligne les défis pratiques pour les ingénieurs et les équipes juridiques. Il illustre également l&#39;importance d&#39;une architecture distribuée pour préserver le patrimoine culturel. Le projet s’inscrit parmi Internet Archive US, Canada et Europe, visant à créer un réseau décentralisé de bibliothèques indépendantes qui répliquent le contenu entre sites. Les membres de la communauté soulignent l’incertitude quant à son indépendance, à la gestion des demandes de retrait et au texte d’accroche de la section «À propos».</div></section>
+    </div>
+  <div class="tags"><code>#digital preservation</code>, <code>#distributed systems</code>, <code>#open source</code>, <code>#internet archive</code>, <code>#community discussion</code></div>
+  
+</article>
+</main></div>
+  </div>
+</body>
+</html>

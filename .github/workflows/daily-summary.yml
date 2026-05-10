@@ -2,7 +2,6 @@ name: Daily Horizon Summary
 
 on:
   schedule:
-    - cron: '0 7 * * *'   # 8h heure de Paris (CET/UTC+1) - hiver
     - cron: '0 6 * * *'   # 8h heure de Paris (CEST/UTC+2) - été
   workflow_dispatch:      # Allow manual trigger
 
@@ -50,7 +49,7 @@ jobs:
           NVIDIA_API_KEY: ${{ secrets.NVIDIA_API_KEY }}
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
-        run: uv run horizon --hours 48
+        run: uv run horizon --hours 24
 
       - name: Set current date as environment variable
         run: echo "DATE=$(date +'%Y-%m-%d')" >> $GITHUB_ENV

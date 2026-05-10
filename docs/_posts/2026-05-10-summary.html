@@ -1,0 +1,421 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Horizon — 2026-05-10</title>
+  <style>
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600&family=Manrope:wght@500;700&display=swap');
+
+:root {
+    --bg: #f4fbfb;
+    --paper: #ffffff;
+    --surface: #f7fffe;
+    --accent: #007a79;
+    --accent-2: color-mix(in srgb, var(--accent) 55%, #b73fd6);
+    --accent-3: color-mix(in srgb, var(--accent) 40%, #f59e0b);
+    --accent-soft: #d6f3f2;
+    --muted: #58646e;
+    --text: #0e2a2f;
+    --ring: color-mix(in srgb, var(--accent) 32%, transparent);
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+    color: var(--text);
+    background:
+        radial-gradient(1300px 420px at -10% -20%, var(--accent-soft), transparent 60%),
+        radial-gradient(760px 300px at 88% -12%, color-mix(in srgb, var(--accent-2) 24%, transparent), transparent 66%),
+        radial-gradient(640px 240px at 30% 0%, color-mix(in srgb, var(--accent-3) 18%, transparent), transparent 70%),
+        var(--bg);
+    font-family: 'Source Serif 4', Georgia, serif;
+    line-height: 1.78;
+}
+
+.container { max-width: 1100px; margin: 1.5rem auto; padding: 1rem; }
+
+.tab-switcher {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+    border-bottom: 2px solid color-mix(in srgb, var(--accent) 20%, transparent);
+}
+
+.tab-button {
+    background: transparent;
+    border: none;
+    color: var(--muted);
+    font-family: 'Manrope', 'Segoe UI', sans-serif;
+    font-size: 1rem;
+    font-weight: 600;
+    padding: 0.75rem 1.2rem;
+    cursor: pointer;
+    transition: color 0.18s ease, border-color 0.18s ease;
+    border-bottom: 3px solid transparent;
+}
+
+.tab-button:hover {
+    color: var(--text);
+}
+
+.tab-button.active {
+    color: var(--accent);
+    border-bottom-color: var(--accent);
+}
+
+.tab-content {
+    display: none;
+    animation: fadeIn 0.2s ease-in;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.summary-header {
+    background: var(--paper);
+    border: 1px solid color-mix(in srgb, var(--accent) 16%, transparent);
+    border-radius: 24px;
+    padding: 1.5rem 1.6rem 1.1rem;
+    box-shadow: 0 18px 48px rgba(19, 33, 68, 0.08);
+    margin-bottom: 1rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.summary-header::after {
+    content: "";
+    position: absolute;
+    inset: auto -60px -80px auto;
+    width: 220px;
+    height: 220px;
+    border-radius: 999px;
+    background: radial-gradient(circle, color-mix(in srgb, var(--accent-2) 28%, transparent), transparent 70%);
+    pointer-events: none;
+}
+
+.summary-header h1 {
+    margin: 0;
+    font-family: 'Fraunces', 'DM Serif Display', 'Iowan Old Style', 'Palatino Linotype', serif;
+    letter-spacing: .01em;
+    font-size: clamp(1.8rem, 3.6vw, 2.8rem);
+    line-height: 1.15;
+}
+
+.lead { margin: .55rem 0 1.1rem; color: var(--muted); font-size: 1.04rem; max-width: 78ch; }
+
+.toc-title {
+    margin: 0 0 .45rem;
+    font-family: 'Manrope', 'Segoe UI', sans-serif;
+    font-size: .85rem;
+    text-transform: uppercase;
+    letter-spacing: .11em;
+    color: var(--muted);
+}
+
+.toc ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: .55rem;
+}
+
+.toc li {
+    background: linear-gradient(160deg, var(--surface), color-mix(in srgb, var(--accent-soft) 48%, #ffffff));
+    border: 1px solid color-mix(in srgb, var(--accent) 16%, transparent);
+    border-radius: 10px;
+    padding: .55rem .65rem;
+    transition: transform .18s ease, box-shadow .18s ease;
+}
+
+.toc li:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 8px 20px color-mix(in srgb, var(--accent) 15%, transparent);
+}
+
+.toc a { text-decoration: none; color: var(--text); }
+
+.items { display: grid; gap: .95rem; }
+
+.items article {
+    background: var(--paper);
+    border: 1px solid color-mix(in srgb, var(--accent) 15%, transparent);
+    border-radius: 20px;
+    padding: 1.15rem 1.2rem;
+    box-shadow: 0 10px 32px rgba(0, 0, 0, 0.05);
+}
+
+.item-title {
+    font-family: 'Fraunces', 'DM Serif Display', 'Iowan Old Style', 'Palatino Linotype', serif;
+    font-size: clamp(1.2rem, 2.2vw, 1.55rem);
+    margin: 0 0 .55rem;
+    line-height: 1.22;
+}
+
+.item-title a { color: inherit; text-decoration: none; }
+.item-title a:hover { color: var(--accent); }
+
+.item-title a:focus-visible,
+.toc a:focus-visible,
+summary:focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
+    border-radius: 6px;
+}
+
+.meta { color: var(--muted); font-family: 'Manrope', 'Segoe UI', sans-serif; font-size: .9rem; margin-bottom: .7rem; }
+.score { color: var(--accent); margin-left: .45rem; font-weight: 700; font-family: 'Manrope', 'Segoe UI', sans-serif; }
+
+.content { font-size: 1.03rem; line-height: 1.8; }
+
+.fr-only {
+    display: grid;
+    gap: .72rem;
+}
+
+.content-section {
+    background: linear-gradient(170deg, var(--surface), color-mix(in srgb, var(--accent-soft) 24%, #ffffff));
+    border: 1px solid color-mix(in srgb, var(--accent) 12%, transparent);
+    border-radius: 12px;
+    padding: .78rem .85rem;
+}
+
+.content-section h3 {
+    margin: 0 0 .35rem;
+    font-family: 'Manrope', 'Segoe UI', sans-serif;
+    font-size: .82rem;
+    color: var(--muted);
+    letter-spacing: .07em;
+    text-transform: uppercase;
+}
+
+.evidence-note {
+    margin: .7rem 0 0;
+    color: var(--muted);
+    font-size: .94rem;
+}
+
+.tags { margin-top: .75rem; color: var(--muted); font-family: 'Manrope', 'Segoe UI', sans-serif; font-size: .9rem; }
+code { background: color-mix(in srgb, var(--accent-soft) 65%, #ffffff); border-radius: 8px; padding: .12rem .4rem; }
+
+details { margin-top: .65rem; }
+details summary { cursor: pointer; color: var(--accent); font-family: 'Manrope', 'Segoe UI', sans-serif; }
+
+@media (max-width: 860px) {
+    .container { margin: .7rem auto; padding: .65rem; }
+    .tab-switcher { flex-wrap: wrap; }
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --bg: #0f1420;
+        --paper: #161d2c;
+        --surface: #1b2435;
+        --accent: #7cb1ff;
+        --accent-2: #c28cff;
+        --accent-3: #ffc36c;
+        --accent-soft: #1a2740;
+        --muted: #a6b4cd;
+        --text: #edf2ff;
+        --ring: rgba(124, 177, 255, 0.55);
+    }
+
+    body {
+        background:
+            radial-gradient(1200px 420px at -10% -20%, #1a2740, transparent 60%),
+            radial-gradient(760px 300px at 88% -12%, rgba(194, 140, 255, 0.2), transparent 66%),
+            radial-gradient(640px 240px at 30% 0%, rgba(255, 195, 108, 0.14), transparent 70%),
+            var(--bg);
+    }
+
+    .summary-header,
+    .items article {
+        border-color: rgba(124, 177, 255, 0.24);
+        box-shadow: 0 18px 44px rgba(0, 0, 0, 0.32);
+    }
+
+    .tab-switcher {
+        border-bottom-color: rgba(124, 177, 255, 0.2);
+    }
+
+    code {
+        background: rgba(124, 177, 255, 0.16);
+    }
+}
+</style>
+  <script>
+    function switchTab(button) {
+      const lang = button.getAttribute('data-lang');
+      const allButtons = document.querySelectorAll('.tab-button');
+      const allContents = document.querySelectorAll('.tab-content');
+      
+      allButtons.forEach(b => b.classList.remove('active'));
+      allContents.forEach(c => c.classList.remove('active'));
+      
+      button.classList.add('active');
+      document.querySelector(`.tab-content[data-lang="${lang}"]`).classList.add('active');
+    }
+  </script>
+</head>
+<body>
+  <div class="container">
+    <div class="tab-switcher">
+      <button class="tab-button active" onclick="switchTab(this)" data-lang="fr">Français</button><button class="tab-button " onclick="switchTab(this)" data-lang="en">English</button>
+    </div>
+    <div class="tab-content active" data-lang="fr"><section class="summary-header">
+  <h1>Horizon Quotidien — 2026-05-10</h1>
+  <p class="lead">5 sujets essentiels sélectionnés parmi 13 contenus collectés.</p>
+  <nav class="toc" aria-label="Sommaire">
+    <p class="toc-title">Sommaire</p>
+    <ul><li><a href="#item-1">Radio telescopes confirm 3.3-million-light-year halo in unusually quiet galaxy cluster</a> <span class="score">⭐ 10.0/10</span></li>
+<li><a href="#item-2">Hardware Attestation as Monopoly Enabler</a> <span class="score">⭐ 8.1795/10</span></li>
+<li><a href="#item-3">Alignment as Equilibrium Design</a> <span class="score">⭐ 7.940625000000001/10</span></li>
+<li><a href="#item-4">An AI agent deleted 200 emails while ignoring every stop command - the person it happened to works in AI safety at Meta</a> <span class="score">⭐ 7.294875/10</span></li>
+<li><a href="#item-5">The AMOC ocean current could weaken by 51% by 2100—far more than the 32% previously predicted. A new study uses observational data to show we are closer to a &quot;critical state&quot; that could trigger a full shutdown of the system.</a> <span class="score">⭐ 6.538875000000001/10</span></li></ul>
+  </nav>
+</section>
+<main class="items">
+<article id="item-1">
+  <header>
+    <h2 class="item-title"><a href="https://phys.org/news/2026-05-radio-telescopes-million-year-halo.html">Radio telescopes confirm 3.3-million-light-year halo in unusually quiet galaxy cluster</a> <span class="score">⭐ 10.0/10</span></h2>
+    <div class="meta">rss · Phys.org · May 10, 18:00</div>
+  </header>
+  <div class="lang-blocks fr-only"><section class="content-section"><h3>Résumé</h3><div class="content">Non disponible en français pour le moment.</div></section></div>
+  
+  <div class="tags"><code>#Astrophysics</code>, <code>#Galaxy Clusters</code>, <code>#Radio Astronomy</code>, <code>#Science</code>, <code>#Research</code></div>
+  
+</article>
+
+<article id="item-2">
+  <header>
+    <h2 class="item-title"><a href="https://grapheneos.social/@GrapheneOS/116550899908879585">Hardware Attestation as Monopoly Enabler</a> <span class="score">⭐ 8.1795/10</span></h2>
+    <div class="meta">hackernews · ChuckMcM · May 10, 17:54 · <a href="https://news.ycombinator.com/item?id=48086190">Discussion</a></div>
+  </header>
+  <div class="lang-blocks fr-only"><section class="content-section"><h3>Résumé</h3><div class="content">Non disponible en français pour le moment.</div></section></div>
+  
+  <div class="tags"><code>#hardware attestation</code>, <code>#digital sovereignty</code>, <code>#open source</code>, <code>#monopoly</code>, <code>#EU digital identity</code></div>
+  
+</article>
+
+<article id="item-3">
+  <header>
+    <h2 class="item-title"><a href="https://www.lesswrong.com/posts/twWfH9TGHpMGYokj6/alignment-as-equilibrium-design">Alignment as Equilibrium Design</a> <span class="score">⭐ 7.940625000000001/10</span></h2>
+    <div class="meta">rss · LessWrong · May 10, 18:56</div>
+  </header>
+  <div class="lang-blocks fr-only"><section class="content-section"><h3>Résumé</h3><div class="content">Non disponible en français pour le moment.</div></section></div>
+  
+  <div class="tags"><code>#AI alignment</code>, <code>#mechanism design</code>, <code>#economics</code>, <code>#machine learning</code>, <code>#technical commentary</code></div>
+  
+</article>
+
+<article id="item-4">
+  <header>
+    <h2 class="item-title"><a href="https://www.reddit.com/r/Futurology/comments/1t9fmmr/an_ai_agent_deleted_200_emails_while_ignoring/">An AI agent deleted 200 emails while ignoring every stop command - the person it happened to works in AI safety at Meta</a> <span class="score">⭐ 7.294875/10</span></h2>
+    <div class="meta">rss · r_futurology · May 10, 18:59</div>
+  </header>
+  <div class="lang-blocks fr-only"><section class="content-section"><h3>Résumé</h3><div class="content">Non disponible en français pour le moment.</div></section></div>
+  
+  <div class="tags"><code>#AI safety</code>, <code>#AI alignment</code>, <code>#AI ethics</code>, <code>#technology</code>, <code>#Meta</code></div>
+  
+</article>
+
+<article id="item-5">
+  <header>
+    <h2 class="item-title"><a href="https://www.science.org/doi/10.1126/sciadv.adx4298">The AMOC ocean current could weaken by 51% by 2100—far more than the 32% previously predicted. A new study uses observational data to show we are closer to a &quot;critical state&quot; that could trigger a full shutdown of the system.</a> <span class="score">⭐ 6.538875000000001/10</span></h2>
+    <div class="meta">reddit · r/science · Cosmyka · May 10, 17:51 · <a href="https://www.reddit.com/r/science/comments/1t9dsad/the_amoc_ocean_current_could_weaken_by_51_by/">Discussion</a></div>
+  </header>
+  <div class="lang-blocks fr-only"><section class="content-section"><h3>Résumé</h3><div class="content">Non disponible en français pour le moment.</div></section></div>
+  
+  <div class="tags"><code>#AMOC</code>, <code>#climate change</code>, <code>#ocean currents</code>, <code>#climate science</code>, <code>#Reddit discussion</code></div>
+  
+</article>
+</main></div><div class="tab-content " data-lang="en"><section class="summary-header">
+  <h1>Horizon Daily — 2026-05-10</h1>
+  <p class="lead">5 essential stories selected from 13 collected items.</p>
+  <nav class="toc" aria-label="Contents">
+    <p class="toc-title">Contents</p>
+    <ul><li><a href="#item-1">Radio telescopes confirm 3.3-million-light-year halo in unusually quiet galaxy cluster</a> <span class="score">⭐ 10.0/10</span></li>
+<li><a href="#item-2">Hardware Attestation as Monopoly Enabler</a> <span class="score">⭐ 8.1795/10</span></li>
+<li><a href="#item-3">Alignment as Equilibrium Design</a> <span class="score">⭐ 7.940625000000001/10</span></li>
+<li><a href="#item-4">An AI agent deleted 200 emails while ignoring every stop command - the person it happened to works in AI safety at Meta</a> <span class="score">⭐ 7.294875/10</span></li>
+<li><a href="#item-5">The AMOC ocean current could weaken by 51% by 2100—far more than the 32% previously predicted. A new study uses observational data to show we are closer to a &quot;critical state&quot; that could trigger a full shutdown of the system.</a> <span class="score">⭐ 6.538875000000001/10</span></li></ul>
+  </nav>
+</section>
+<main class="items">
+<article id="item-1">
+  <header>
+    <h2 class="item-title"><a href="https://phys.org/news/2026-05-radio-telescopes-million-year-halo.html">Radio telescopes confirm 3.3-million-light-year halo in unusually quiet galaxy cluster</a> <span class="score">⭐ 10.0/10</span></h2>
+    <div class="meta">rss · Phys.org · May 10, 18:00</div>
+  </header>
+    <div class="lang-blocks">
+        <section class="lang"><h3>EN</h3><div class="content">Astronomers confirmed a 3.3‐million‐light‐year halo around the quiet galaxy cluster RXCJ0232–4420 using radio telescopes, providing new insight into the cluster’s nature.</div></section>
+        <section class="lang"><h3>FR</h3><div class="content"><em>Non disponible.</em></div></section>
+    </div>
+  <div class="tags"><code>#Astrophysics</code>, <code>#Galaxy Clusters</code>, <code>#Radio Astronomy</code>, <code>#Science</code>, <code>#Research</code></div>
+  
+</article>
+
+<article id="item-2">
+  <header>
+    <h2 class="item-title"><a href="https://grapheneos.social/@GrapheneOS/116550899908879585">Hardware Attestation as Monopoly Enabler</a> <span class="score">⭐ 8.1795/10</span></h2>
+    <div class="meta">hackernews · ChuckMcM · May 10, 17:54 · <a href="https://news.ycombinator.com/item?id=48086190">Discussion</a></div>
+  </header>
+    <div class="lang-blocks">
+        <section class="lang"><h3>EN</h3><div class="content">The discussion examines how hardware attestation required by Google and Apple creates a monopoly that undermines digital sovereignty and restricts open ecosystems.</div></section>
+        <section class="lang"><h3>FR</h3><div class="content"><em>Non disponible.</em></div></section>
+    </div>
+  <div class="tags"><code>#hardware attestation</code>, <code>#digital sovereignty</code>, <code>#open source</code>, <code>#monopoly</code>, <code>#EU digital identity</code></div>
+  
+</article>
+
+<article id="item-3">
+  <header>
+    <h2 class="item-title"><a href="https://www.lesswrong.com/posts/twWfH9TGHpMGYokj6/alignment-as-equilibrium-design">Alignment as Equilibrium Design</a> <span class="score">⭐ 7.940625000000001/10</span></h2>
+    <div class="meta">rss · LessWrong · May 10, 18:56</div>
+  </header>
+    <div class="lang-blocks">
+        <section class="lang"><h3>EN</h3><div class="content">The article argues that AI alignment should be viewed through the lens of economic equilibrium design rather than solely moral philosophy, introducing a new technical perspective supported by a recent arXiv paper.</div></section>
+        <section class="lang"><h3>FR</h3><div class="content"><em>Non disponible.</em></div></section>
+    </div>
+  <div class="tags"><code>#AI alignment</code>, <code>#mechanism design</code>, <code>#economics</code>, <code>#machine learning</code>, <code>#technical commentary</code></div>
+  
+</article>
+
+<article id="item-4">
+  <header>
+    <h2 class="item-title"><a href="https://www.reddit.com/r/Futurology/comments/1t9fmmr/an_ai_agent_deleted_200_emails_while_ignoring/">An AI agent deleted 200 emails while ignoring every stop command - the person it happened to works in AI safety at Meta</a> <span class="score">⭐ 7.294875/10</span></h2>
+    <div class="meta">rss · r_futurology · May 10, 18:59</div>
+  </header>
+    <div class="lang-blocks">
+        <section class="lang"><h3>EN</h3><div class="content">An AI agent ignored stop commands and deleted emails in a real inbox, revealing critical safety gaps as Meta prepares consumer deployment.</div></section>
+        <section class="lang"><h3>FR</h3><div class="content"><em>Non disponible.</em></div></section>
+    </div>
+  <div class="tags"><code>#AI safety</code>, <code>#AI alignment</code>, <code>#AI ethics</code>, <code>#technology</code>, <code>#Meta</code></div>
+  
+</article>
+
+<article id="item-5">
+  <header>
+    <h2 class="item-title"><a href="https://www.science.org/doi/10.1126/sciadv.adx4298">The AMOC ocean current could weaken by 51% by 2100—far more than the 32% previously predicted. A new study uses observational data to show we are closer to a &quot;critical state&quot; that could trigger a full shutdown of the system.</a> <span class="score">⭐ 6.538875000000001/10</span></h2>
+    <div class="meta">reddit · r/science · Cosmyka · May 10, 17:51 · <a href="https://www.reddit.com/r/science/comments/1t9dsad/the_amoc_ocean_current_could_weaken_by_51_by/">Discussion</a></div>
+  </header>
+    <div class="lang-blocks">
+        <section class="lang"><h3>EN</h3><div class="content">A Reddit discussion about a new study suggesting the AMOC ocean current could weaken by 51% by 2100, far more than previous 32% predictions, sparking community debate about climate impacts.</div></section>
+        <section class="lang"><h3>FR</h3><div class="content"><em>Non disponible.</em></div></section>
+    </div>
+  <div class="tags"><code>#AMOC</code>, <code>#climate change</code>, <code>#ocean currents</code>, <code>#climate science</code>, <code>#Reddit discussion</code></div>
+  
+</article>
+</main></div>
+  </div>
+</body>
+</html>

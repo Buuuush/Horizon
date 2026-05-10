@@ -196,11 +196,33 @@ class HorizonOrchestrator:
             # 5. Filter by score threshold
             # Use profile threshold if available, otherwise use config default
             threshold = self.profile.ai_score_threshold if self.profile else self.config.filtering.ai_score_threshold
-            important_items = [
-                item for item in analyzed_items
-                if item.ai_score and item.ai_score >= threshold
-            ]
-            important_items.sort(key=lambda x: x.ai_score or 0, reverse=True)
+            # Apply trending flags before score filtering
+        for item in analyzed_items:
+            # Hacker News trending
+            if item.source_type.value == "hackernews":
+                score = item.metadata.get("score", 0)
+                if score > 2000:
+                    item.is_trending_hn = True
+                    item.trending_score += 100
+                    item.selection_method = "viral_hn"
+            # Reddit trending
+            if item.source_type.value == "reddit":
+                comments = item.metadata.get("descendants") or item.metadata.get("num_comments") or 0
+                if comments > 500:
+                    item.is_trending_reddit = True
+                    item.trending_score += 50
+                    if item.selection_method == "ai_only":
+                        item.selection_method = "viral_reddit"
+            # Default if no trending flags set
+            if not getattr(item, "is_trending_hn", False) and not getattr(item, "is_trending_reddit", False):
+                item.selection_method = "ai_only"
+
+        # Now filter by score threshold
+        important_items = [
+            item for item in analyzed_items
+            if item.ai_score and item.ai_score >= threshold
+        ]
+        important_items.sort(key=lambda x: x.ai_score or 0, reverse=True)
 
             self.console.print(
                 f"⭐️ {len(important_items)} éléments notés ≥ {threshold}\n"

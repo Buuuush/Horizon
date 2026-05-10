@@ -1,11 +1,13 @@
 """Storage manager for configuration and state persistence."""
 
 import json
+from datetime import datetime
 import shutil
 from pathlib import Path
 from typing import List, Optional, Dict, Any
 
 from ..models import Config, Profile, FeedbackSignal, EnrichmentCache
+from .archive_db import get_session, ArchivedArticle
 from .sqlite_manager import SQLiteManager
 
 
@@ -32,6 +34,52 @@ class StorageManager:
 
         with open(self.config_path, "r", encoding="utf-8") as f:
             data = json.load(f)
+
+        # If a registry of RSS sources exists in data/rss_sources.json, merge
+        # its entries into the loaded config so all profiles can use them.
+        rss_registry_path = self.data_dir / "rss_sources.json"
+        try:
+            if rss_registry_path.exists():
+                with open(rss_registry_path, "r", encoding="utf-8") as rf:
+                    rss_data = json.load(rf)
+
+                # Flatten nested 'sources' groups to a list of feeds
+                registry_feeds = []
+                for group in rss_data.get("sources", {}).values():
+                    if isinstance(group, dict):
+                        for _key, feed in group.items():
+                            if not isinstance(feed, dict):
+                                continue
+                            feed_entry = {
+                                "name": feed.get("name") or _key,
+                                "url": feed.get("url"),
+                                "enabled": feed.get("enabled", True),
+                                "category": feed.get("category"),
+                            }
+                            if feed_entry["url"]:
+                                registry_feeds.append(feed_entry)
+
+                # Ensure path exists in config data
+                data.setdefault("sources", {})
+                data_sources = data["sources"]
+                data_sources.setdefault("rss", [])
+
+                # Build set of existing URLs to avoid duplicates
+                existing_urls = set()
+                for existing in data_sources.get("rss", []):
+                    try:
+                        existing_urls.add(str(existing.get("url")))
+                    except Exception:
+                        continue
+
+                # Append registry feeds that are not already present
+                for feed in registry_feeds:
+                    if str(feed["url"]) not in existing_urls:
+                        data_sources["rss"].append(feed)
+                        existing_urls.add(str(feed["url"]))
+        except Exception:
+            # If registry parsing fails, ignore and proceed with loaded config
+            pass
 
         return Config.model_validate(data)
 
@@ -147,11 +195,82 @@ class StorageManager:
 
     # ===== Enrichment Cache Management (SQLite backend) =====
 
+    # ----- Archive Management -----
+    # Uses the SQLite archive DB defined in src/storage/archive_db.py
+    # Provides methods to insert articles and run search queries.
+
+
     def get_enrichment_cache(self, url: str) -> Optional[EnrichmentCache]:
         """Get cached enrichment for a URL, if still valid."""
         return self.db.get_enrichment_cache(url)
 
     def save_enrichment_cache(self, cache: EnrichmentCache) -> None:
+        """Save enrichment cache entry."""
+        self.db.save_enrichment_cache(cache)
+
+    # ----- Archive Management -----
+    def archive_item(self, item, profile_name: str) -> None:
+        """Archive a ContentItem into the SQLite archive.
+
+        ``item`` is expected to be a ``ContentItem`` model instance.
+        """
+        session = get_session()
+        article = ArchivedArticle(
+            id=item.id,
+            title=item.title,
+            url=str(item.url),
+            source_type=item.source_type.value,
+            source_name=getattr(item, "source_name", ""),
+            ai_score=item.ai_score,
+            tags=item.ai_tags,
+            summary=item.ai_summary[:500] if getattr(item, "ai_summary", None) else "",
+            whats_new=getattr(item, "metadata", {}).get("whats_new_en", "")[:500],
+            why_it_matters=getattr(item, "metadata", {}).get("why_it_matters_en", "")[:500],
+            background=getattr(item, "metadata", {}).get("background_en", "")[:500],
+            published_at=item.published_at,
+            fetched_at=item.fetched_at,
+            run_date=datetime.utcnow().strftime("%Y-%m-%d"),
+            profile_name=profile_name,
+        )
+        session.add(article)
+        session.commit()
+        session.close()
+
+    def search_articles(self, *, q: str = "", tag: str = "", source: str = "", score_min: float = 0, score_max: float = 10, date_start: str = "", date_end: str = "", limit: int = 20) -> List[Dict[str, Any]]:
+        """Search archived articles.
+
+        Returns a list of dicts with keys: id, title, url, score, source, tags, published.
+        """
+        session = get_session()
+        query = session.query(ArchivedArticle)
+        if q:
+            query = query.filter(
+                (ArchivedArticle.title.ilike(f"%{q}%")) |
+                (ArchivedArticle.summary.ilike(f"%{q}%"))
+            )
+        if tag:
+            query = query.filter(ArchivedArticle.tags.contains([tag]))
+        if source:
+            query = query.filter(ArchivedArticle.source_type == source)
+        query = query.filter(ArchivedArticle.ai_score >= score_min, ArchivedArticle.ai_score <= score_max)
+        if date_start:
+            query = query.filter(ArchivedArticle.published_at >= datetime.fromisoformat(date_start))
+        if date_end:
+            query = query.filter(ArchivedArticle.published_at <= datetime.fromisoformat(date_end))
+        results = query.order_by(ArchivedArticle.ai_score.desc()).limit(limit).all()
+        session.close()
+        return [
+            {
+                "id": r.id,
+                "title": r.title,
+                "url": r.url,
+                "score": r.ai_score,
+                "source": r.source_name,
+                "tags": r.tags,
+                "published": r.published_at.isoformat() if r.published_at else None,
+            }
+            for r in results
+        ]
         """Save enrichment cache for a URL."""
         self.db.save_enrichment_cache(cache)
 

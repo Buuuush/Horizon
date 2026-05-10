@@ -108,6 +108,14 @@ class RSSScraper(BaseScraper):
                         "tags": [tag.term for tag in entry.get("tags", [])],
                     }
                 )
+                # Apply editorial quality filter to avoid noisy breaking/live posts
+                try:
+                    if self._is_low_quality(item):
+                        continue
+                except Exception:
+                    # On any error in heuristics, keep the item rather than lose content
+                    pass
+
                 items.append(item)
 
         except httpx.HTTPError as e:
@@ -163,3 +171,41 @@ class RSSScraper(BaseScraper):
             return entry.content[0].get("value", "")
 
         return ""
+
+    def _is_low_quality(self, item: ContentItem) -> bool:
+        """Filter generic or repetitive RSS noise based on title/content heuristics.
+
+        Returns True if the item should be skipped.
+        """
+        bad_keywords = [
+            "breaking news",
+            "live updates",
+            "as it happened",
+            "watch live",
+            "photo gallery",
+            "top stories",
+            "liveblog",
+            "live blog",
+            "updates",
+        ]
+
+        title = (item.title or "").lower()
+        content = (item.content or "").lower()
+
+        # Title-based heuristics
+        if any(k in title for k in bad_keywords):
+            return True
+
+        # Short titles that look like link-dump / listicles
+        if len(title.split()) <= 3 and len(title) < 40:
+            # allow short but meaningful titles that contain ':' or '?' (questions/labels)
+            if ":" not in title and "?" not in title:
+                return True
+
+        # Very short or empty content
+        if not content or len(content.strip()) < 80:
+            # if the feed entry has no substantial content and the title is generic, skip
+            if any(k in title for k in ["photo", "gallery", "video", "watch"]):
+                return True
+
+        return False

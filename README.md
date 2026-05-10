@@ -1,376 +1,500 @@
-<div align="center">
+# Guide Utilisateur : Utiliser Horizon
 
-# 🌅 Horizon
+## 🚀 Démarrage Rapide
 
-**Enjoy the News itself. Leave others to Horizon**
-
-[![License](https://img.shields.io/badge/license-MIT-green.svg?style=flat-square)](LICENSE)
-[![uv](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/uv/main/assets/badge/v0.json&style=flat-square)](https://github.com/astral-sh/uv)
-[![Daily Summary](https://github.com/Thysrael/Horizon/actions/workflows/deploy-docs.yml/badge.svg?style=flat-square)](https://thysrael.github.io/Horizon/)
-[![GitHub commit activity](https://img.shields.io/github/commit-activity/m/Thysrael/Horizon?style=flat-square)](https://github.com/Thysrael/Horizon/commits/main)
-[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](http://makeapullrequest.com)
-![Sources Welcome](https://img.shields.io/badge/📡_sources-welcome-f97316?style=flat-square)
-<a href="https://hellogithub.com/repository/Thysrael/Horizon" target="_blank"><img src="https://api.hellogithub.com/v1/widgets/recommend.svg?rid=7a4b606e28e4477998d35851cf4fdddf&claim_uid=rtjnLkYT7ziQJUG&theme=small" alt="Featured｜HelloGitHub" /></a>
-<br>
-
-![Claude](https://img.shields.io/badge/Claude-f0daba?style=flat-square&logo=anthropic&logoColor=black)
-![GPT](https://img.shields.io/badge/GPT-412991?style=flat-square)
-![Gemini](https://img.shields.io/badge/Gemini-8E75B2?style=flat-square&logo=google&logoColor=white)
-![DeepSeek](https://img.shields.io/badge/DeepSeek-0A6DC2?style=flat-square)
-![Doubao](https://img.shields.io/badge/Doubao-00D6C2?style=flat-square)
-![MiniMax](https://img.shields.io/badge/MiniMax-FF6F00?style=flat-square)
-![OpenClaw](https://img.shields.io/badge/OpenClaw-C83232?style=flat-square)
-
-📡 Your own AI-powered news radar. Generates daily briefings in English & Chinese. | 构建你专属的 AI 新闻雷达
-
-[📖 Live Demo](https://thysrael.github.io/Horizon/) · [📋 Configuration Guide](https://thysrael.github.io/Horizon/configuration) · [简体中文](README_zh.md)
-
-</div>
-
-## Screenshots
-
-<table>
-<tr>
-<td width="50%">
-<p align="center"><strong>Ranked Daily Briefing</strong></p>
-<img src="docs/assets/overview_en.png" alt="Daily Overview" />
-</td>
-<td width="50%">
-<p align="center"><strong>Context, Summary & Discussion</strong></p>
-<img src="docs/assets/one_news_en.png" alt="News Detail" />
-</td>
-</tr>
-</table>
-
-<details>
-<summary><strong>More Screenshots</strong></summary>
-<br>
-<table>
-<tr>
-<td width="33.33%">
-<p align="center"><strong>Terminal Output</strong></p>
-<img src="docs/assets/terminal_log.png" alt="Terminal Output" />
-</td>
-<td width="33.33%">
-<p align="center"><strong>Feishu Notification</strong></p>
-<img src="docs/assets/feishu_en.png" alt="Feishu Notification" />
-</td>
-<td width="33.33%">
-<p align="center"><strong>Email Delivery</strong></p>
-<img src="docs/assets/email.png" alt="Email Delivery" />
-</td>
-</tr>
-</table>
-</details>
-
-## Why Horizon?
-
-Good news is scattered; bad news is endless. Horizon gives you a personal first pass over Hacker News, Reddit, Telegram, RSS, and GitHub: it fetches, deduplicates, scores, filters, and enriches stories with background context and community discussion.
-
-But Horizon is not just another summarizer. AI is great at reducing noise, but news still needs human taste: the sources you trust, the comments that change how you read a story, and the hidden gems only people can share. Horizon keeps that human layer in the loop with customizable sources, thresholds, models, languages, delivery channels, comment summaries, and a community source hub.
-
-## Features
-
-- **📡 Watch Your Own Sources** — Track Hacker News, RSS, Reddit, Telegram, Twitter/X, and GitHub releases or user activity in one pipeline
-- **🤖 Turn Noise Into a Reading List** — Score each item from 0-10 with Claude, GPT, Gemini, DeepSeek, Doubao, MiniMax, or any OpenAI-compatible API
-- **🔗 Merge Repeated Stories** — Deduplicate the same story across platforms before it reaches your briefing
-- **🔍 Understand the Background** — Add web-researched context for unfamiliar concepts, companies, projects, and technical terms
-- **💬 Read the Conversation** — Collect and summarize community comments from Hacker News, Reddit, and other supported sources
-- **🌐 Publish in Two Languages** — Generate English and Chinese daily briefings from the same source set
-- **📝 Ship a Daily Site** — Publish generated Markdown as a GitHub Pages daily briefing site
-- **📧 Deliver by Email** — Run a self-hosted SMTP/IMAP newsletter with automatic subscribe and unsubscribe handling
-- **🔔 Push to Chat or Automations** — Send templated results to Feishu/Lark, DingTalk, Slack, Discord, or custom webhook endpoints
-- **🧙 Start From Your Interests** — Use the setup wizard to generate a personalized source configuration
-- **⚙️ Tune the Radar** — Customize sources, thresholds, models, languages, and delivery channels from one JSON config
-- **📊 Personalized Profiles** — Create multiple scoring profiles (ML research, News, DevOps, etc.) with custom per-source scoring prompts and thresholds
-- **💡 Feedback Learning** — Rate articles to improve accuracy; system learns which scoring was misscored and suggests profile adjustments
-- **🎯 Interactive Dashboard** — Web UI to manage profiles, browse summaries, rate articles, mark favorites, and track accuracy metrics
-- **⭐ Enrichment Caching** — Cache enrichment results with configurable TTL to avoid re-fetching and save API calls
-
-## How It Works
-
-```mermaid
-%%{init: {
-  "theme": "base",
-  "themeVariables": {
-    "fontFamily": "ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif",
-    "fontSize": "18px",
-    "primaryTextColor": "#2d2a3e",
-    "primaryBorderColor": "#e0dbd3",
-    "lineColor": "#7c7891",
-    "tertiaryColor": "#faf8f5",
-    "clusterBkg": "#f3f0eb",
-    "clusterBorder": "#e0dbd3"
-  }
-}}%%
-flowchart LR
-    classDef config fill:#fbbf24,stroke:#d4a017,color:#2d2a3e,stroke-width:1.5px;
-    classDef source fill:#ede7fb,stroke:#6d4aaa,color:#2d2a3e,stroke-width:1.5px;
-    classDef process fill:#ffe8db,stroke:#e0652e,color:#2d2a3e,stroke-width:1.5px;
-    classDef output fill:#f9d7e5,stroke:#be185d,color:#2d2a3e,stroke-width:1.5px;
-
-    config["⚙️ Config<br/>sources, thresholds, models, outputs"]
-
-    subgraph sources["Configured Sources"]
-        rss["📡 RSS"]
-        hn["📰 Hacker News"]
-        reddit["💬 Reddit"]
-        telegram["✈️ Telegram"]
-        twitter["🐦 Twitter / X"]
-        github["🐙 GitHub"]
-    end
-
-    fetch["📥 Fetch"]
-    dedup["🧹 Deduplicate"]
-    score["🤖 AI Score & Filter"]
-    enrich["🔎 Enrich"]
-    summary["📝 Summarize"]
-
-    subgraph outputs["Outputs"]
-        direction TB
-        site["🌐 Pages"]
-        email["📧 Email"]
-        webhook["🔔 Webhooks"]
-        mcp["🧩 MCP"]
-    end
-
-    config --> fetch
-    rss --> fetch
-    hn --> fetch
-    reddit --> fetch
-    telegram --> fetch
-    twitter --> fetch
-    github --> fetch
-
-    fetch --> dedup --> score --> enrich --> summary
-    config --> score
-    config --> summary
-    config --> outputs
-
-    summary --> site
-    summary --> email
-    summary --> webhook
-    summary --> mcp
-
-    class config config
-    class rss,hn,reddit,telegram,twitter,github source
-    class fetch,dedup,score,enrich,summary process
-    class site,email,webhook,mcp output
-```
-
-1. **Define** — Configure sources, thresholds, models, languages, and delivery from one JSON config.
-2. **Fetch** — Pull latest content from all configured sources concurrently.
-3. **Deduplicate** — Merge items pointing to the same story or URL across platforms.
-4. **Score & Filter** — Use AI to rank items and keep only those above your threshold.
-5. **Enrich** — Search the web for background context and collect community discussion for important items.
-6. **Summarize** — Generate a structured Markdown briefing with summaries, tags, and references.
-7. **Deliver** — Publish the result to GitHub Pages, email, webhooks such as Feishu, MCP, or local files.
-
-## Quick Start
-
-### 1. Install
-
-**Option A: Local Installation**
+### Installation (5 min)
 
 ```bash
-git clone https://github.com/Thysrael/Horizon.git
+# Clone le repo
+git clone https://github.com/your-org/horizon.git
 cd horizon
 
-# Install with uv (recommended)
-uv sync
+# Crée l'environnement Python
+python3.11 -m venv .venv
+source .venv/bin/activate  # Linux/Mac
+# ou
+.venv\Scripts\activate  # Windows
 
-# Install test/development extras when needed
-uv sync --extra dev
-
-# Or with pip
+# Installe les dépendances
 pip install -e .
+pip install -e ".[dev]"  # Pour tester
+
+# Configure les API keys
+export NVIDIA_API_KEY="your_nvidia_key"
+export OPENAI_API_KEY="your_openai_key"  # Si tu switches provider
 ```
 
-`dev` is currently defined as an optional extra in `pyproject.toml`, so use `uv sync --extra dev` for pytest and other development dependencies.
-
-**Option B: Docker**
+### Édite la Configuration
 
 ```bash
-git clone https://github.com/Thysrael/Horizon.git
-cd horizon
-
-# Configure environment
-cp .env.example .env
+# Copie l'exemple
 cp data/config.example.json data/config.json
-# Edit .env and data/config.json with your API keys and preferences
 
-# Run with Docker Compose
-docker-compose run --rm horizon
-
-# Or run with custom time window
-docker-compose run --rm horizon --hours 48
+# Édite avec ton éditeur préféré
+nano data/config.json
+# Ou ouvre dans VS Code
 ```
 
-### 2. Configure
+**Config minimale** :
 
-**Option A: Interactive wizard (recommended)**
-
-```bash
-uv run horizon-wizard
-```
-
-The wizard asks about your interests (e.g. "LLM inference", "嵌入式", "web security") and auto-generates `data/config.json`.
-
-**Option B: Manual configuration**
-
-```bash
-cp .env.example .env          # Add your API keys
-cp data/config.example.json data/config.json  # Customize your sources
-```
-
-Minimal manual configuration:
-
-```jsonc
+```json
 {
   "ai": {
     "provider": "openai",
     "model": "gpt-4",
-    "api_key_env": "OPENAI_API_KEY"
+    "api_key_env": "OPENAI_API_KEY",
+    "temperature": 0.3
   },
   "sources": {
     "rss": [
-      { "name": "Simon Willison", "url": "https://simonwillison.net/atom/everything/" }
-    ]
+      {
+        "name": "Quanta Magazine",
+        "url": "https://api.quantamagazine.org/feed/",
+        "enabled": true
+      }
+    ],
+    "hackernews": {
+      "enabled": true,
+      "fetch_top_stories": 30
+    },
+    "reddit": {
+      "enabled": true,
+      "subreddits": [
+        {
+          "subreddit": "MachineLearning",
+          "enabled": true,
+          "sort": "hot"
+        }
+      ]
+    }
   },
   "filtering": {
-    "ai_score_threshold": 6.0
+    "ai_score_threshold": 7.0
   }
 }
 ```
 
-For the full reference, see the [Configuration Guide](docs/configuration.md).
-
-### 3. Create & Manage Profiles (Optional)
-
-Profiles let you customize scoring for different interests:
+### Exécute le Pipeline
 
 ```bash
-# Launch interactive profile manager
-uv run horizon --manage-profiles
+# Run complet (collecte → scoring → enrichment → HTML)
+horizon --hours 24 --summary-format html
 
-# Create profiles for ML research, News, DevOps, etc.
-# Each profile has its own:
-#   - Threshold (default 6.0)
-#   - Per-source scoring prompts
-#   - Active sources filter
-#   - Feedback history & learning
+# Ou seulement 12 dernières heures
+horizon --hours 12
 
-# Run with specific profile
-uv run horizon --profile ml-research
-uv run horizon --profile news --hours 24
+# Filtrer par thème
+horizon --theme "climate"
 
-# View accuracy stats
-uv run horizon --show-feedback-stats ml-research
+# Résultat dans
+cat data/summaries/2026-05-10-bilingual.html
+# Ouvre dans le navigateur
 ```
 
-See [Profiles Guide](docs/profiles.md) for detailed usage.
+---
 
-### 4. Run
+## 📖 Guide Détaillé
 
-#### Local Installation
+### 1. Comprendre les Sources
+
+**Sources activées par défaut** :
+- **Quanta Magazine** — Math, physics, deep science explainers
+- **MIT Technology Review** — Tech & society
+- **Aeon** — Philosophy, culture, long-form thinking
+- **Hacker News** — Tech community picks (threshold: 100+ points)
+- **Reddit MachineLearning, Science** — Community discussions
+- **Ars Technica** — Tech in depth
+- **Carbon Brief** — Climate science
+- **Smithsonian** — History & culture
+
+**À customiser** :
+```json
+"sources": {
+  "rss": [
+    {
+      "name": "Noema",
+      "url": "https://www.noemamag.com/feed/",
+      "enabled": true,
+      "category": "geopolitics"
+    }
+  ]
+}
+```
+
+**Ajouter RSS feed** : 
+1. Copie l'URL du feed (cherche `feed.xml` ou `.rss`)
+2. Ajoute à config.json
+
+**Disable source** : Set `"enabled": false`
+
+### 2. Comprendre le Scoring IA
+
+**Chaque article est noté 0-10** basé sur :
+
+| Dimension | Meaning | Exemple Good | Exemple Bad |
+|-----------|---------|--------------|-------------|
+| **score** | Importance globale | 9 = Breakthrough scientist | 2 = Routine update |
+| **source_reliability** | Crédibilité source | 9 = MIT Tech Review | 4 = Random blog |
+| **explanatory_value** | Aide-t-il comprendre? | 9 = Deep explainer | 2 = "5 reasons" listicle |
+| **novelty** | Réellement nouveau? | 10 = First coverage | 1 = 10ème article même sujet |
+| **potential_impact** | Effets en cascade? | 9 = Climate policy change | 2 = Gadget release |
+| **uncertainty** | Risk de bullshit? | 1 = Peer-reviewed study | 9 = Rumor from Twitter |
+
+**Seuil = 7.0/10 par défaut** = filtrer ~70% du bruit.
+
+**Veux articles plus strict?** : Augmente à 7.5-8.0  
+**Veux voir plus niche?** : Baisse à 6.5
+
+```json
+"filtering": {
+  "ai_score_threshold": 7.5
+}
+```
+
+### 3. Anti-Mainstream Par Défaut
+
+**Hosts pénalisés** (réduction score) :
+- Bloomberg, Reuters, FT : -25%
+- BBC, Al Jazeera, NYTimes : -20%
+
+**Raison** : Ces médias "mainstream" domineraient scoring sans pénalité, mais pour utilisateur Horizon, c'est moins utile que Quanta/Aeon/spécialisés.
+
+**Tags boostés** (augmentation score) :
+- Science, history, climate : +25%
+- Culture, infrastructure, energy : +20%
+
+**Tags pénalisés** (réduction score) :
+- Politics, geopolitics, breaking : -20%
+
+**Customize :** Pas d'UI encore, faut éditer code (`src/ai/analyzer.py` lignes ~350-400).
+
+### 4. Enrichissement : Quoi à Attendre
+
+Chaque article sélectionné reçoit **enrichissement IA** :
+
+```
+Article original (RSS title + content):
+"New Claude Model Beats Benchmarks"
+
+APRÈS enrichissement:
+
+✅ Title: "Anthropic's Claude AI Now Tops Industry Benchmarks"
+
+✅ What's new: 
+"Anthropic released Claude 4.5 with reasoning capabilities, 
+achieving 91.4% on MMLU vs 89.2% previous. First model 
+to pass novel reasoning tests."
+
+✅ Why it matters:
+"Indicates AI generalization improving. Affects trajectory of 
+AI safety research and competitive landscape."
+
+✅ Key details:
+"Results on MMLU, GPQA, ArenaHard benchmarks. Ran 5 trillion 
+tokens in training. Cost $150M."
+
+✅ Background:
+"MMLU = Massive Multitask Language Understanding, standard AI 
+benchmark since 2020. Reasoning = ability to work through complex 
+problem step-by-step, not just pattern-match."
+
+✅ Community discussion:
+"HN upvotes mixed — excitement on inference speed improvements, 
+concerns on benchmark-gaming vs real-world usefulness."
+
+✅ Sources: [3 URLs from web search supporting background]
+```
+
+---
+
+## 📊 Output: Understanding the HTML
+
+### Structure
+
+```html
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Horizon Daily — 2026-05-10</title>
+  <style>/* Responsive design, dark mode, fonts */</ style>
+</head>
+<body>
+  <div class="container">
+    <!-- Tab switcher: FR / EN -->
+    <div class="tab-switcher">
+      <button data-lang="fr">Français</button>
+      <button data-lang="en">English</button>
+    </div>
+    
+    <!-- French content -->
+    <div class="tab-content active" data-lang="fr">
+      <header class="summary-header">
+        <h1>Horizon Quotidien — 2026-05-10</h1>
+        <p class="lead">25 sujets essentiels sélectionnés parmi 147 contenus collectés.</p>
+        <nav class="toc">
+          <!-- Table of contents with links -->
+        </nav>
+      </header>
+      
+      <main class="items">
+        <!-- 25 articles, each with structure below -->
+      </main>
+    </div>
+    
+    <!-- English content (same articles) -->
+    <div class="tab-content" data-lang="en">
+      <!-- Same structure, English text -->
+    </div>
+  </div>
+</body>
+</html>
+```
+
+### Article Structure
+
+```html
+<article id="item-1">
+  <header>
+    <h2><a href="https://...">Title</a> <span>⭐ 8.2/10</span></h2>
+    <div class="meta">
+      rss · MIT Technology Review · May 10, 14:00
+      · <a href="...">Discussion</a>
+    </div>
+  </header>
+  
+  <div class="lang-blocks">
+    <section class="content-section">
+      <h3>Ce qui est nouveau</h3>
+      <div>Text explaining what happened...</div>
+    </section>
+    
+    <section class="content-section">
+      <h3>Pourquoi c'est important</h3>
+      <div>Text on implications...</div>
+    </section>
+    
+    <section class="content-section">
+      <h3>Contexte</h3>
+      <div>Background for non-experts...</div>
+    </section>
+  </div>
+  
+  <div class="tags">
+    #science #AI #breakthrough
+  </div>
+  
+  <details>
+    <summary>Références</summary>
+    <ul>
+      <li><a href="...">Source 1 from web search</a></li>
+      <li><a href="...">Source 2 from web search</a></li>
+    </ul>
+  </details>
+</article>
+```
+
+### What the Score Means
+
+| Score | Meaning |
+|-------|---------|
+| **9-10** | Groundbreaking — must read |
+| **8-9** | High value — important update |
+| **7-8** | Worth reading — solid news |
+| **6-7** | Interesting niche — if interested |
+
+**All shown articles are 7.0+** = filtered to quality.
+
+---
+
+## 🔧 Advanced Usage
+
+### Run Daily (Cron)
 
 ```bash
-uv run horizon           # Run with default 24h window
-uv run horizon --hours 48  # Fetch from last 48 hours
+# Add to crontab
+0 8 * * * cd /path/to/horizon && .venv/bin/horizon --hours 24
+
+# Generates HTML daily at 8 AM
+# Outputs to data/summaries/2026-05-{day}-bilingual.html
 ```
 
-#### With Docker
+### Copy to GitHub Pages (Auto-Publish)
 
 ```bash
-docker-compose run --rm horizon           # Run with default 24h window
-docker-compose run --rm horizon --hours 48  # Fetch from last 48 hours
+# Already set up! After `horizon` runs:
+# 1. HTML generated to data/summaries/
+# 2. Copied to docs/_posts/
+# 3. Deploy GitHub Pages → docs/ folder
+# 4. Your summary live at https://your-site.github.io/
+
+# Jekyll renders docs/_posts/*.html as blog posts
 ```
 
-The generated report will be saved to `data/summaries/`.
+### Use MCP Server (Claude Integration)
 
-### 5. View Dashboard (Optional)
+```python
+# If running MCP server:
+python -m src.mcp.server
 
-Horizon includes an interactive web dashboard:
+# Then in Claude:
+# @use horizon
+# > List recent runs and their scores
+# > Get articles about climate from last run
+# > Filter high-score items (8+) by tag "science"
+```
 
+### Webhook Notification
+
+```json
+"webhook": {
+  "enabled": true,
+  "url_env": "HORIZON_WEBHOOK_URL",
+  "platform": "slack",
+  "delivery": "summary",
+  "languages": ["en"]
+}
+```
+
+Then set:
 ```bash
-# Run dashboard on http://localhost:5000
-uv run uvicorn src.web.app:app --host 0.0.0.0 --port 5000
-
-# Features:
-#   - View today's summary
-#   - Browse past summaries
-#   - Manage profiles
-#   - Rate articles (👍/👎)
-#   - Mark favorites ⭐
-#   - Track accuracy stats
-#   - Get improvement recommendations
+export HORIZON_WEBHOOK_URL="https://hooks.slack.com/..."
 ```
 
-See [Dashboard Guide](docs/dashboard.md) for features and API reference.
+Post to Slack daily with article summaries.
 
-### 6. Automate (Optional)
+---
 
-Horizon works great as a **GitHub Actions** cron job. See [`.github/workflows/daily-summary.yml`](.github/workflows/daily-summary.yml) for a ready-to-use workflow that generates and deploys your daily briefing to GitHub Pages automatically.
+## 🐛 Troubleshooting
 
-## Supported Sources
+### "No articles selected"
+**Cause** : Threshold too high, or sources disabled.
 
-| Source | What it fetches | Comments |
-|--------|----------------|----------|
-| **Hacker News** | Top stories by score | Yes (top N comments) |
-| **RSS / Atom** | Any RSS or Atom feed | — |
-| **Reddit** | Subreddits + user posts | Yes (top N comments) |
-| **Telegram** | Public channel messages | — |
-| **Twitter / X** | Tweets from specific users | Yes (top N replies) |
-| **GitHub** | User events & repo releases | — |
+**Fix** :
+```bash
+# Lower threshold
+# Or check config.json sources are enabled
+# Or run with lower hours window
+horizon --hours 48
+```
 
-## Where Your Briefing Goes
+### "AI API rate limited"
+**Cause** : Too many articles analyzed too fast.
 
-Horizon can publish or deliver the generated briefing in several ways:
+**Fix** : Increase throttle_sec in config
+```json
+"ai": {
+  "throttle_sec": 5
+}
+```
 
-| Channel | What it does |
-|---------|--------------|
-| **GitHub Pages Daily Site** | Copies generated Markdown into `docs/` so GitHub Pages can publish a daily-updated briefing site |
-| **Email Subscription** | Sends the daily briefing to subscribers and handles subscribe/unsubscribe requests through SMTP/IMAP |
-| **Webhook Notification** | Pushes success or failure results to Feishu/Lark, DingTalk, Slack, Discord, or any custom webhook endpoint |
-| **MCP Server** | Exposes Horizon pipeline steps as tools so AI assistants can fetch, score, filter, enrich, summarize, and run the full workflow |
+### "Web search finds nothing"
+**Cause** : DuckDuckGo blocked or network issue.
 
-For setup details, see the [Configuration Guide](docs/configuration.md). For MCP tool references and client setup, see [`src/mcp/README.md`](src/mcp/README.md) and [`src/mcp/integration.md`](src/mcp/integration.md).
+**Fix** : Background will just be empty, article still included. Manual search added to references section.
 
-## Documentation
+### "HTML looks ugly on mobile"
+**Fix** : Responsive design is built-in. Hard refresh browser cache.
 
-| Guide | Description |
-|-------|-------------|
-| [Configuration](docs/configuration.md) | AI providers, sources, filtering, email, webhook, GitHub Pages, and MCP setup |
-| [Scoring](docs/scoring.md) | How Horizon evaluates and ranks news items |
-| [Scrapers](docs/scrapers.md) | Source scraper details and extension notes |
-| [MCP Tools](src/mcp/README.md) | Tool reference for MCP-compatible clients |
+### "I want to disable a source"
+**Fix** :
+```json
+"sources": {
+  "rss": [
+    {
+      "name": "Quanta",
+      "enabled": false  // Disable this feed
+    }
+  ]
+}
+```
 
-## Project Status
+---
 
-Horizon already supports the full daily briefing loop: multi-source collection, AI scoring, deduplication, enrichment, comment summaries, bilingual generation, GitHub Pages publishing, email delivery, webhook delivery, Docker deployment, MCP integration, and the setup wizard.
+## 📚 What To Do With Output
 
-Planned improvements:
+### Option 1: Read in Browser
+```bash
+open data/summaries/2026-05-10-bilingual.html
+# Or just drag-drop to browser
+```
 
-- More source types, such as Twitter/X and Discord
-- Custom scoring prompts per source
-- Publish releases on GitHub
-- Publish the package to PyPI for `pip install`
+### Option 2: Email Yourself
+```bash
+# Set up email in config.json, enable subscribers
+# Send to your email each morning
+```
 
-## Contributing
+### Option 3: GitHub Pages
+```bash
+# Committed to docs/_posts/
+# Auto-published as blog posts
+# Share link with others
+```
 
-Contributions are welcome! Feel free to open issues or submit pull requests.
+### Option 4: Integrate Elsewhere
+```bash
+# Copy HTML anywhere — static file, no deps
+# Or parse data/api.json (if enabled) for custom rendering
+```
 
-### Share Sources
+---
 
-Want to share valuable source discoveries with the Horizon community? Please submit them through **[horizon1123.top](https://horizon1123.top)**.
+## 💬 FAQ
 
-Great candidates: niche RSS discoveries, active subreddit trends, notable GitHub updates, or Telegram channel highlights in your area of expertise.
+**Q: Can I add my own RSS feed?**  
+A: Yes! Add to `sources.rss` in config.json.
 
-## Acknowledgements
+**Q: Can I change the scoring formula?**  
+A: Currently no UI. Edit `src/ai/analyzer.py` lines ~350-400 (PENALIZED_TAGS, DEFAULT_TOPIC_BOOSTS).
 
-- Special thanks to [LINUX.DO](https://linux.do/) for providing a promotion platform.
-- Special thanks to [HelloGitHub](https://hellogithub.com/) for valuable guidance and suggestions.
+**Q: Will my preferences be remembered?**  
+A: Not yet (v0.1.0). Coming in v0.2 with profile manager UI.
 
-## License
+**Q: Can I see articles I liked before?**  
+A: Not yet. Archive feature coming in v0.2.
 
-[MIT](LICENSE)
+**Q: Can I use this for a team?**  
+A: Currently single-user. Multi-user coming in v0.4.
+
+**Q: How much does it cost?**  
+A: Only API costs (NVIDIA/OpenAI). NVIDIA is ~$0.10/run, OpenAI ~$0.30/run. Open source tool itself = free.
+
+**Q: Can I run this offline?**  
+A: Sources yes (RSS local), but enrichment needs internet (web search + AI API).
+
+---
+
+## 🎯 Best Practices
+
+### 1. Calibrate Your Threshold
+- **Too high (8.0+)** = miss interesting stuff, only "obvious" news
+- **Too low (6.0)** = too noisy, see fluff
+- **Sweet spot** = 7.0-7.5 for most users
+
+### 2. Curate Sources
+- **Add** feeds you love (Noema, Axios, local journalism)
+- **Remove** feeds too noisy (generic news)
+- **Organize by topic** (climate feeds separate from tech)
+
+### 3. Regular Reading
+- Best as **daily ritual** (8 AM briefing)
+- **Spend 20-30 min reading** (3-4 articles in depth)
+- Too many daily = diluted attention, skip
+
+### 4. Give Feedback (When Feature Arrives)
+- Rate 👍/👎 articles
+- Notes on why liked/disliked
+- Helps IA improve recommendations
+
+---
+
+## 📞 Support & Community
+
+- **Issues** : GitHub issues on repo
+- **Discussions** : GitHub Discussions for ideas
+
+---
+
+**Happy reading! 🎉**
+
+*Next article worth your time is coming tomorrow morning.*

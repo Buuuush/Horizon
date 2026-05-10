@@ -188,6 +188,108 @@ manager = ConnectionManager()
 
 # ===== API Routes =====
 
+# ---- Search ----
+
+@app.get("/api/search")
+async def search_articles(
+    q: str = "",
+    tag: str = "",
+    source: str = "",
+    score_min: float = 0,
+    score_max: float = 10,
+    date_start: str = "",
+    date_end: str = "",
+    limit: int = 20,
+):
+    """Search archived articles.
+
+    Parameters correspond to the fields in the archive DB.
+    """
+    _ensure_storage()
+    results = storage.search_articles(
+        q=q,
+        tag=tag,
+        source=source,
+        score_min=score_min,
+        score_max=score_max,
+        date_start=date_start,
+        date_end=date_end,
+        limit=limit,
+    )
+    return {"results": results}
+
+
+# ---- Profiles ----
+
+@app.post("/api/profiles")
+async def create_profile(profile: ProfileResponse):
+    """Create a new profile with minimal fields (name)."""
+    _ensure_storage()
+    if storage.get_profile(profile.name):
+        raise HTTPException(status_code=400, detail="Profile already exists")
+    # Use defaults from Profile model
+    new_profile = Profile(
+        name=profile.name,
+        description=profile.description or "",
+        ai_score_threshold=profile.ai_score_threshold,
+        per_source_prompts=profile.per_source_prompts or {},
+        active_sources=profile.active_sources or [],
+        created_at=datetime.utcnow().isoformat(),
+        updated_at=datetime.utcnow().isoformat(),
+        is_active=False,
+    )
+    storage.save_profile(new_profile)
+    return {"status": "ok", "message": f"Profile '{profile.name}' created"}
+
+@app.put("/api/profiles/{profile_name}")
+async def edit_profile(profile_name: str, updates: ProfileResponse):
+    """Edit an existing profile (partial update)."""
+    _ensure_storage()
+    existing = storage.get_profile(profile_name)
+    if not existing:
+        raise HTTPException(status_code=404, detail="Profile not found")
+    # Apply updates (ignore name change)
+    existing.description = updates.description or existing.description
+    existing.ai_score_threshold = updates.ai_score_threshold or existing.ai_score_threshold
+    existing.per_source_prompts = updates.per_source_prompts or existing.per_source_prompts
+    existing.active_sources = updates.active_sources or existing.active_sources
+    existing.updated_at = datetime.utcnow().isoformat()
+    storage.save_profile(existing)
+    return {"status": "ok", "message": f"Profile '{profile_name}' updated"}
+
+@app.post("/api/profiles/{profile_name}/activate")
+async def activate_profile(profile_name: str):
+    """Set a profile as active for the current session."""
+    _ensure_storage()
+    profile = storage.get_profile(profile_name)
+    if not profile:
+        raise HTTPException(status_code=404, detail="Profile not found")
+    storage.set_active_profile(profile_name)
+    return {"status": "ok", "message": f"Profile '{profile_name}' activated"}
+
+# ---- Profiles ----
+
+@app.post("/api/profiles")
+async def create_profile(profile: ProfileResponse):
+    """Create a new profile with minimal fields (name)."""
+    _ensure_storage()
+    if storage.get_profile(profile.name):
+        raise HTTPException(status_code=400, detail="Profile already exists")
+    # Use defaults from Profile model
+    new_profile = Profile(
+        name=profile.name,
+        description=profile.description or "",
+        ai_score_threshold=profile.ai_score_threshold,
+        per_source_prompts=profile.per_source_prompts or {},
+        active_sources=profile.active_sources or [],
+        created_at=datetime.utcnow().isoformat(),
+        updated_at=datetime.utcnow().isoformat(),
+        is_active=False,
+    )
+    storage.save_profile(new_profile)
+    return {"status": "ok", "message": f"Profile '{profile.name}' created"}
+
+
 def _ensure_storage():
     """Check if storage is initialized. Raise HTTPException if not."""
     if not storage:

@@ -34,6 +34,11 @@ class ContentItem(BaseModel):
     ai_reason: Optional[str] = None
     ai_summary: Optional[str] = None
     ai_tags: List[str] = Field(default_factory=list)
+    # Trending indicators
+    is_trending_hn: bool = False
+    is_trending_reddit: bool = False
+    trending_score: int = 0
+    selection_method: str = "ai_only"  # "viral_hn", "viral_reddit", "balanced"
 
 
 class AIProvider(str, Enum):
@@ -183,6 +188,8 @@ class FilteringConfig(BaseModel):
 
     ai_score_threshold: float = 7.0
     time_window_hours: int = 24
+    # Whether to apply an editorial anti-mainstream bonus during filtering
+    anti_mainstream_bonus: bool = False
 
 
 class Config(BaseModel):
@@ -209,6 +216,10 @@ class Profile(BaseModel):
     created_at: datetime = Field(default_factory=datetime.utcnow)
     updated_at: datetime = Field(default_factory=datetime.utcnow)
     is_active: bool = False  # Whether this is the currently active profile
+    # Optional per-profile topic boosts (tag -> relative boost fraction, e.g. 0.15 for +15%)
+    topic_boosts: Dict[str, float] = Field(default_factory=dict)
+    # Optional per-profile host penalties (host -> penalty fraction, e.g. 0.15 for -15%)
+    penalized_hosts: Dict[str, float] = Field(default_factory=dict)
 
 
 class FeedbackSignal(BaseModel):

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Archive Search – Horizon</title>
+    <link rel="stylesheet" href="/static/css/dashboard.css">
+</head>
+<body>
+<div class="app-container">
+    <header class="app-header">
+        <h1>🔎 Horizon Archive Search</h1>
+    </header>
+    <section class="search-section">
+        <form id="search-form" style="display:flex;gap:0.5rem;flex-wrap:wrap;align-items:center;">
+            <input type="text" id="q" placeholder="Mots‑clé…" style="flex:2;"/>
+            <select id="tag">
+                <option value="">Toutes les balises</option>
+                <option value="science">Science</option>
+                <option value="history">History</option>
+                <option value="climate">Climate</option>
+            </select>
+            <select id="source">
+                <option value="">Toutes les sources</option>
+                <option value="rss">RSS</option>
+                <option value="hn">Hacker News</option>
+                <option value="reddit">Reddit</option>
+            </select>
+            <input type="date" id="date_start"/>
+            <input type="date" id="date_end"/>
+            <button type="submit" class="btn btn-primary">Rechercher</button>
+        </form>
+        <div id="results" style="margin-top:1rem;">
+            <!-- Résultats injectés ici -->
+        </div>
+    </section>
+</div>
+<script src="/static/js/search.js"></script>
+</body>
+</html>

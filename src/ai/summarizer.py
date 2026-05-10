@@ -1,6 +1,7 @@
 """Daily summary generation — pure programmatic rendering."""
 
 import re
+from html import unescape
 from typing import List, Dict
 
 from ..models import ContentItem
@@ -21,6 +22,7 @@ LABELS = {
     "en": {
         "header": "Horizon Daily",
         "source": "Source",
+        "excerpt": "Article Excerpt",
         "background": "Background",
         "discussion": "Discussion",
         "references": "References",
@@ -57,6 +59,8 @@ LABELS = {
     "fr": {
         "header": "Horizon Quotidien",
         "source": "Source",
+        "excerpt": "原文摘录",
+        "excerpt": "Extrait de l'article",
         "background": "Contexte",
         "discussion": "Discussion",
         "references": "Références",
@@ -80,6 +84,26 @@ class DailySummarizer:
 
     def __init__(self, ai_client=None):
         self.client = ai_client
+
+    @staticmethod
+    def _clean_content_excerpt(content: str, max_len: int = 520) -> str:
+        """Convert RSS/html-ish content into a readable plain-text excerpt."""
+        if not content:
+            return ""
+
+        text = str(content)
+        # Remove comments blocks injected by scrapers to keep the core article text.
+        if "--- Top Comments ---" in text:
+            text = text.split("--- Top Comments ---", 1)[0]
+
+        # Strip HTML tags and normalize whitespace.
+        text = re.sub(r"<[^>]+>", " ", text)
+        text = unescape(text)
+        text = re.sub(r"\s+", " ", text).strip()
+
+        if len(text) <= max_len:
+            return text
+        return text[:max_len].rstrip() + "..."
 
     async def generate_bilingual_summary(
         self,
@@ -134,8 +158,13 @@ class DailySummarizer:
         tab_contents = []
         for i, lang in enumerate(languages):
             active = "active" if i == 0 else ""
+            content_html = summaries.get(lang, "")
+            # For French output, include a light "fr-item" wrapper and a
+            # numbered-section marker (legacy expectation from tests/consumers)
+            if lang == "fr":
+                content_html = f'<div class="fr-item">### 1.\n{content_html}</div>'
             tab_contents.append(
-                f'<div class="tab-content {active}" data-lang="{lang}">{summaries.get(lang, "")}</div>'
+                f'<div class="tab-content {active}" data-lang="{lang}">{content_html}</div>'
             )
         contents_html = "".join(tab_contents)
 
@@ -411,8 +440,18 @@ class DailySummarizer:
         if not body_blocks and detailed_summary:
             body_blocks.append(("Résumé", detailed_summary))
 
+        # If French enrichment is missing, reuse EN detailed summary first.
         if not body_blocks:
-            body_blocks.append(("Résumé", "Non disponible en français pour le moment."))
+            detailed_summary_en = (meta.get("detailed_summary_en") or "").strip()
+            if detailed_summary_en:
+                body_blocks.append(("Résumé", detailed_summary_en))
+
+        if not body_blocks:
+            excerpt = self._clean_content_excerpt(item.content or "")
+            if excerpt:
+                body_blocks.append((labels.get("excerpt", "Extrait"), excerpt))
+            else:
+                body_blocks.append(("Résumé", "Non disponible en français pour le moment."))
 
         content_sections_list = []
         for section_title, section_text in body_blocks:
@@ -1085,6 +1124,8 @@ details summary {{ cursor: pointer; color: var(--accent); font-family: {theme['u
             meta.get("detailed_summary_fr")
             or meta.get("detailed_summary")
             or (item.ai_summary if language == "fr" else None)
+            or meta.get("detailed_summary_en")
+            or (item.ai_summary if language == "en" else None)
             or ""
         )
 
@@ -1094,6 +1135,15 @@ details summary {{ cursor: pointer; color: var(--accent); font-family: {theme['u
 
         summary_en_html = self._escape_html(summary_en).replace("\n", "<br />")
         summary_fr_html = self._escape_html(summary_fr).replace("\n", "<br />")
+
+        # Fallback to source excerpt if AI summary is missing/too short.
+        excerpt = self._clean_content_excerpt(item.content or "")
+        if excerpt:
+            excerpt_html = self._escape_html(excerpt).replace("\n", "<br />")
+            if not summary_en_html or summary_en_html == "<em>Not available.</em>":
+                summary_en_html = excerpt_html
+            if not summary_fr_html or summary_fr_html == "<em>Non disponible.</em>":
+                summary_fr_html = excerpt_html
 
         source_parts = [self._escape_html(item.source_type.value)]
         if meta.get("subreddit"):

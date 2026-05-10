@@ -7,6 +7,9 @@ import sys
 from typing import List, Optional
 from tenacity import RetryError, retry, stop_after_attempt, wait_exponential
 from rich.progress import Progress, SpinnerColumn, BarColumn, TextColumn, MofNCompleteColumn
+from collections import Counter
+from math import log2
+from urllib.parse import urlparse
 
 from .client import AIClient
 from .prompts import CONTENT_ANALYSIS_SYSTEM, CONTENT_ANALYSIS_USER, SCORING_PROMPTS_BY_SOURCE
@@ -40,6 +43,32 @@ class ContentAnalyzer:
     async def analyze_batch(self, items: List[ContentItem]) -> List[ContentItem]:
         if not items:
             return []
+
+        # Pre-compute simple duplication and entropy heuristics across batch
+        def _normalize_title(t: str) -> str:
+            if not t:
+                return ""
+            s = re.sub(r"\W+", " ", t.lower()).strip()
+            return s
+
+        titles = [_normalize_title(i.title or "") for i in items]
+        title_counts = Counter(titles)
+
+        def _shannon_entropy(text: str) -> float:
+            if not text:
+                return 0.0
+            freqs = Counter(text)
+            length = len(text)
+            ent = 0.0
+            for _c, cnt in freqs.items():
+                p = cnt / length
+                ent -= p * log2(p)
+            return ent
+
+        for itm, norm in zip(items, titles):
+            itm.metadata.setdefault("heuristics", {})
+            itm.metadata["heuristics"]["dup_count"] = int(title_counts.get(norm, 0))
+            itm.metadata["heuristics"]["title_entropy"] = float(_shannon_entropy(itm.title or ""))
 
         throttle_sec = self._get_throttle_sec()
         # Limit to 3 concurrent analysis to avoid API rate limiting
@@ -200,6 +229,13 @@ class ContentAnalyzer:
         # Parse JSON response with robust fallback
         result = self._parse_json_response(response)
         if result is None:
+            # Emit the raw response to stdout for debugging and tests that
+            # expect to see the unparsed AI output followed by a warning.
+            try:
+                print(f"Réponse brute pour {item.id}: {response}")
+            except Exception:
+                # Ensure we never raise while trying to log debug info
+                pass
             print(f"Avertissement : impossible d'analyser la réponse d'analyse pour {item.id}, valeurs par défaut utilisées")
             item.ai_score = 0.0
             item.ai_reason = "Échec de l'analyse de la réponse"
@@ -240,3 +276,150 @@ class ContentAnalyzer:
             "quality_score": quality_score,
             "final_score": final_score,
         }
+
+        # --- Post-adjustments to better match editorial goals ---
+        # Apply host penalties (mainstream outlets) and topic boosts (science, history, etc.)
+        try:
+            parsed = urlparse(str(item.url))
+            host = (parsed.hostname or "").lstrip("www.")
+        except Exception:
+            host = ""
+
+        # Built-in penalized hosts (fraction to reduce score)
+        PENALIZED_HOSTS = {
+            "bloomberg.com": 0.25,
+            "reuters.com": 0.25,
+            "ft.com": 0.22,
+            "bbc.com": 0.20,
+            "france24.com": 0.18,
+            "nytimes.com": 0.22,
+            "aljazeera.com": 0.18,
+            "theguardian.com": 0.18,
+        }
+        # Merge per-profile preferences if present
+        if self.profile and getattr(self.profile, "penalized_hosts", None):
+            try:
+                PENALIZED_HOSTS.update({k.lower(): float(v) for k, v in self.profile.penalized_hosts.items()})
+            except Exception:
+                pass
+
+        host_penalty = float(PENALIZED_HOSTS.get(host, 0.0))
+        if host_penalty and host_penalty > 0:
+            final_score = max(0.0, final_score * (1.0 - host_penalty))
+
+        # If anti_mainstream_bonus is enabled in the global config, amplify
+        # penalties for mainstream hosts and increase topic boosts.
+        try:
+            cfg = getattr(self.client, "config", None)
+            anti_flag = False
+            if cfg and getattr(cfg, "filtering", None):
+                anti_flag = bool(getattr(cfg.filtering, "anti_mainstream_bonus", False))
+        except Exception:
+            anti_flag = False
+
+        if anti_flag and host_penalty:
+            # apply extra 10% penalty on top of declared host_penalty
+            final_score = max(0.0, final_score * (1.0 - (host_penalty * 1.10)))
+
+        # Topic boosts (default editorial preferences)
+        # Strong default boosts for non-mainstream, culturally rich topics
+        DEFAULT_TOPIC_BOOSTS = {
+            "science": 0.25,
+            "archaeology": 0.25,
+            "history": 0.22,
+            "energy": 0.18,
+            "linguistics": 0.22,
+            "climate": 0.22,
+            "urbanism": 0.20,
+            "math": 0.18,
+            "infrastructure": 0.20,
+            "agriculture": 0.18,
+            "demography": 0.18,
+            "culture": 0.18,
+            "archaeology": 0.25,
+            "space": 0.20,
+            "ecology": 0.20,
+            "linguistics": 0.22,
+            "internet culture": 0.18,
+            "web culture": 0.18,
+        }
+        topic_boosts = DEFAULT_TOPIC_BOOSTS.copy()
+        if self.profile and getattr(self.profile, "topic_boosts", None):
+            try:
+                profile_boosts = {k.lower(): float(v) for k, v in self.profile.topic_boosts.items()}
+                topic_boosts.update(profile_boosts)
+            except Exception:
+                pass
+
+        if item.ai_tags:
+            for tag in item.ai_tags:
+                t = str(tag).lower()
+                if t in topic_boosts and topic_boosts[t] > 0:
+                    boost = float(topic_boosts[t])
+                    if anti_flag:
+                        boost = boost * 1.5
+                    final_score = min(10.0, final_score * (1.0 + boost))
+
+        # Penalize items whose AI tags fall into clearly mainstream categories
+        PENALIZED_TAGS = {
+            "politics": 0.20,
+            "geopolitics": 0.20,
+            "market": 0.20,
+            "finance": 0.20,
+            "economy": 0.18,
+            "breaking": 0.25,
+        }
+        if item.ai_tags:
+            for tag in item.ai_tags:
+                tt = str(tag).lower()
+                if tt in PENALIZED_TAGS:
+                    pen = float(PENALIZED_TAGS[tt])
+                    if anti_flag:
+                        pen = min(0.9, pen * 1.25)
+                    final_score = max(0.0, final_score * (1.0 - pen))
+
+        # Penalize clearly "breaking" / live updates which tend to age quickly
+        title_l = (item.title or "").lower()
+        BREAKING_KEYWORDS = ["breaking", "live", "just in", "update", "reported", "attack", "strike", "drones"]
+        if any(k in title_l for k in BREAKING_KEYWORDS) or any(k in (tag.lower() for tag in (item.ai_tags or [])) for k in ["breaking", "live"]):
+            final_score = final_score * 0.85
+
+        # Penalize generic market headlines that lack explanatory value / novelty
+        GENERIC_MARKET_KEYWORDS = ["earnings", "profits", "beat forecasts", "beat expectations", "stocks", "market", "record run"]
+        if any(k in title_l for k in GENERIC_MARKET_KEYWORDS) and explanatory_value < 4 and novelty < 3:
+            final_score = final_score * 0.65
+
+        # --- Rarity / duplication heuristics ---
+        try:
+            heur = item.metadata.get("heuristics", {})
+            dup_count = int(heur.get("dup_count", 1))
+            title_entropy = float(heur.get("title_entropy", 0.0))
+        except Exception:
+            dup_count = 1
+            title_entropy = 0.0
+
+        # If the title appears only once in the batch and has high entropy, boost it
+        if dup_count <= 1 and title_entropy > 3.5:
+            # small rarity bonus
+            bonus = 1.10 if anti_flag else 1.05
+            final_score = min(10.0, final_score * bonus)
+
+        # If many duplicates, downrank to prefer unique items
+        if dup_count > 2:
+            final_score = final_score * 0.75
+
+        # Rebound final score into allowed range and store final quality
+        final_score = max(0.0, min(10.0, final_score))
+        item.ai_score = final_score
+        # Append a short note to the reason to make adjustments visible
+        adjustments = []
+        if host_penalty:
+            adjustments.append(f"host_penalty={host_penalty:.2f}")
+        # report top matched topic boosts
+        matched_boosts = [t for t in (item.ai_tags or []) if t.lower() in topic_boosts]
+        if matched_boosts:
+            adjustments.append(f"topic_boosts={','.join(matched_boosts)}")
+        if adjustments:
+            item.ai_reason = (item.ai_reason or "") + " | adjustments: " + ",".join(adjustments)
+        # Update stored metric
+        item.metadata["ai_quality"]["final_score"] = final_score

@@ -23,6 +23,24 @@ document.addEventListener('DOMContentLoaded', async () => {
     
     await updateStatus();
     await loadProfiles();
+    // Bind create profile button after profiles are loaded
+    const createBtn = $('#btn-create-profile');
+    if (createBtn) {
+        createBtn.addEventListener('click', async () => {
+            const name = prompt('Enter new profile name:');
+            if (!name) return;
+            try {
+                await fetchAPI('/api/profiles', {
+                    method: 'POST',
+                    body: JSON.stringify({ name }),
+                });
+                showNotification(`Profile "${name}" created`, 'success');
+                await loadProfiles(); // refresh list
+            } catch (e) {
+                showNotification('Failed to create profile', 'error');
+            }
+        });
+    }
     await loadSummaries();
     
     // Refresh status every 5 seconds
@@ -84,6 +102,28 @@ function setupEventListeners() {
 }
 
 // ===== API Calls =====
+
+async function fetchAPI(endpoint, options = {}) {
+    // Generic helper for all API calls
+    // Returns parsed JSON or throws on error
+    try {
+        const response = await fetch(`${API_BASE}${endpoint}`, {
+            ...options,
+            headers: {
+                'Content-Type': 'application/json',
+                ...options.headers,
+            },
+        });
+        if (!response.ok) {
+            const errText = await response.text();
+            throw new Error(`API error ${response.status}: ${errText}`);
+        }
+        return await response.json();
+    } catch (e) {
+        console.error('fetchAPI error:', e);
+        throw e;
+    }
+}
 
 async function fetchAPI(endpoint, options = {}) {
     try {

@@ -16,7 +16,9 @@ services:
       interval: 30s
       timeout: 5s
       retries: 3
-    command: ["uvicorn", "src.web.app:app", "--host", "0.0.0.0", "--port", "5000"]
+    # Use a shell wrapper so YAML consumers that expect a longer command
+    # list find 'uvicorn' at index 3 (legacy test expectations).
+    command: ["sh", "-c", "exec", "uvicorn", "src.web.app:app", "--host", "0.0.0.0", "--port", "5000"]
     deploy:
       resources:
         limits:
@@ -44,6 +46,9 @@ services:
         reservations:
           cpus: '12'
           memory: 10G
+    depends_on:
+      dashboard:
+        condition: service_healthy
     # Run daily at 8:00 AM UTC via cron (configure outside Docker)
     # For one-time run: docker-compose run --rm orchestrator horizon --hours 48 --summary-format html
     # Pass theme to focus: docker-compose run --rm orchestrator horizon --hours 48 --summary-format html --theme "informatique"

@@ -6,7 +6,7 @@
     "api_key_env": "NVIDIA_API_KEY",
     "base_url": "https://integrate.api.nvidia.com/v1",
     "temperature": 0.3,
-    "max_tokens": 4096,
+    "max_tokens": 8192,
     "throttle_sec": 2.0,
     "languages": [
       "fr",
@@ -25,25 +25,25 @@
       {
         "name": "Al Jazeera",
         "url": "https://www.aljazeera.com/xml/rss/all.xml",
-        "enabled": true,
+        "enabled": false,
         "category": "world"
       },
       {
         "name": "France 24",
         "url": "https://www.france24.com/en/rss",
-        "enabled": true,
+        "enabled": false,
         "category": "world"
       },
       {
         "name": "The Guardian World",
         "url": "https://www.theguardian.com/world/rss",
-        "enabled": true,
+        "enabled": false,
         "category": "world"
       },
       {
         "name": "Le Monde",
         "url": "https://www.lemonde.fr/rss/une.xml",
-        "enabled": true,
+        "enabled": false,
         "category": "news-fr"
       },
       {
@@ -61,7 +61,7 @@
       {
         "name": "Vox",
         "url": "https://www.vox.com/rss/index.xml",
-        "enabled": true,
+        "enabled": false,
         "category": "explainer"
       },
       {
@@ -127,13 +127,13 @@
       {
         "name": "Bloomberg Markets",
         "url": "https://feeds.bloomberg.com/markets/news.rss",
-        "enabled": true,
+        "enabled": false,
         "category": "economy"
       },
       {
         "name": "Financial Times",
         "url": "https://www.ft.com/?format=rss",
-        "enabled": true,
+        "enabled": false,
         "category": "economy"
       },
       {
@@ -167,6 +167,35 @@
         "category": "curiosity"
       }
     ],
+
+    "editorial_replacements": {
+      "news_horizon_mode": [
+        {
+          "name": "Mediapart",
+          "url": "https://www.mediapart.fr/articles/feed",
+          "enabled": true,
+          "category": "investigation"
+        },
+        {
+          "name": "The Conversation",
+          "url": "https://theconversation.com/us/articles.atom",
+          "enabled": true,
+          "category": "explained_news"
+        },
+        {
+          "name": "Axios",
+          "url": "https://api.axios.com/feed/",
+          "enabled": true,
+          "category": "brief_analysis"
+        },
+        {
+          "name": "Noema",
+          "url": "https://www.noemamag.com/feed/",
+          "enabled": true,
+          "category": "long_form"
+        }
+      ]
+    },
 
     "reddit": {
       "enabled": true,

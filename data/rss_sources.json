@@ -2,271 +2,200 @@
   "comment": "RSS sources registry for Horizon. Each source can be enabled/disabled in config.json via rss[].url matching",
   "sources": {
     "news_press": {
-      "le_monde": {
-        "name": "Le Monde",
-        "url": "https://www.lemonde.fr/rss/une.xml",
+      "mediapart": {
+        "name": "Mediapart",
+        "url": "https://www.mediapart.fr/articles/feed",
         "category": "news",
         "language": "fr",
         "priority": "high",
-        "description": "French newspaper - general news"
+        "description": "Investigation journalism (France)"
       },
-      "guardian": {
-        "name": "The Guardian",
-        "url": "https://www.theguardian.com/world/rss",
-        "category": "news",
+      "bloomberg_technology": {
+        "name": "Bloomberg Technology",
+        "url": "https://feeds.bloomberg.com/technology/news.rss",
+        "category": "tech_news",
         "language": "en",
-        "priority": "high",
-        "description": "UK newspaper - world news feed"
-      },
-      "aljazeera": {
-        "name": "Al Jazeera English",
-        "url": "https://www.aljazeera.com/xml/rss/all.xml",
-        "category": "news",
-        "language": "en",
-        "priority": "high",
-        "description": "Middle East & global news"
-      },
-      "rfi": {
-        "name": "RFI (Radio France Intl)",
-        "url": "https://www.rfi.fr/rfi/fr/flux-rss-general.xml",
-        "category": "news",
-        "language": "fr",
-        "priority": "high",
-        "description": "International news in French"
-      },
-      "courrier_intl": {
-        "name": "Courrier International",
-        "url": "https://www.courrierinternational.com/feed/all.rss",
-        "category": "news",
-        "language": "fr",
         "priority": "medium",
-        "description": "International press review (French)"
+        "description": "Tech + economy (moins général que Bloomberg Markets)"
       },
-      "foreign_affairs": {
-        "name": "Foreign Affairs",
-        "url": "https://feeds.foreignaffairs.com/foreign-affairs/full-articles.xml",
-        "category": "geopolitics",
+      "axios": {
+        "name": "Axios",
+        "url": "https://api.axios.com/feed/",
+        "category": "news",
+        "language": "en",
+        "priority": "medium",
+        "description": "Concise US political + tech analysis"
+      },
+      "noema_magazine": {
+        "name": "Noema Magazine",
+        "url": "https://www.noemamag.com/feed/",
+        "category": "essays",
         "language": "en",
         "priority": "high",
-        "description": "US foreign policy & geopolitics"
-      },
-      "le_diplo": {
-        "name": "Le Monde Diplomatique",
-        "url": "https://www.monde-diplomatique.fr/rss/",
-        "category": "geopolitics",
-        "language": "fr",
-        "priority": "high",
-        "description": "Monthly geopolitical analysis (French)"
+        "description": "Geopolitics + philosophy + long analysis"
       }
     },
     "science_research": {
-      "arxiv_ai": {
-        "name": "arXiv: Artificial Intelligence",
-        "url": "https://arxiv.org/rss/cs.AI",
-        "category": "science",
+      "lesswrong": {
+        "name": "LessWrong",
+        "url": "https://www.lesswrong.com/feed.xml",
+        "category": "rationality",
         "language": "en",
         "priority": "high",
-        "description": "AI research papers"
+        "description": "Cognition, AI alignment, rational thinking"
       },
-      "arxiv_ml": {
-        "name": "arXiv: Machine Learning",
-        "url": "https://arxiv.org/rss/cs.LG",
-        "category": "science",
-        "language": "en",
-        "priority": "high",
-        "description": "ML research papers"
-      },
-      "nature": {
-        "name": "Nature",
-        "url": "https://www.nature.com/nature.rss",
-        "category": "science",
-        "language": "en",
-        "priority": "high",
-        "description": "Leading science journal"
-      },
-      "science_mag": {
-        "name": "Science Magazine",
-        "url": "https://www.science.org/rss/sciencenews.xml",
-        "category": "science",
-        "language": "en",
-        "priority": "high",
-        "description": "Scientific research highlights"
-      },
-      "pour_la_science": {
-        "name": "Pour la Science",
-        "url": "https://www.pourlascience.fr/feed",
-        "category": "science",
-        "language": "fr",
-        "priority": "medium",
-        "description": "Popular science (French)"
-      },
-      "jstor_daily": {
-        "name": "JSTOR Daily",
-        "url": "https://jstor.org/feed",
-        "category": "science",
-        "language": "en",
-        "priority": "medium",
-        "description": "Academic research made accessible"
-      },
-      "physorg": {
-        "name": "PhysOrg",
-        "url": "https://phys.org/rss-feed/",
-        "category": "science",
-        "language": "en",
-        "priority": "medium",
-        "description": "Physics & science vulgarization"
-      },
-      "quanta": {
+      "quantamagazine": {
         "name": "Quanta Magazine",
         "url": "https://www.quantamagazine.org/feed",
         "category": "science",
         "language": "en",
         "priority": "high",
-        "description": "Mathematics & physics vulgarization"
+        "description": "Maths, physics explained clearly"
+      },
+      "the_transmitter": {
+        "name": "The Transmitter (Neuroscience)",
+        "url": "https://www.thetransmitter.org/feed/",
+        "category": "neuroscience",
+        "language": "en",
+        "priority": "high",
+        "description": "Neuroscience research + explanations"
+      },
+      "atomic_blog": {
+        "name": "Atomic Habits Blog / James Clear",
+        "url": "https://jamesclear.com/feed",
+        "category": "psychology",
+        "language": "en",
+        "priority": "medium",
+        "description": "Behavioral science & habits"
+      },
+      "phys_org": {
+        "name": "Phys.org",
+        "url": "https://phys.org/rss-feed/",
+        "category": "science",
+        "language": "en",
+        "priority": "medium",
+        "description": "Applied science news"
       }
     },
     "essays_culture": {
       "aeon": {
-        "name": "Aeon Essays",
+        "name": "Aeon",
         "url": "https://aeon.co/feed.rss",
-        "category": "essays",
+        "category": "philosophy",
         "language": "en",
+        "priority": "high"
+      },
+      "noema": {
+        "name": "Noema",
+        "url": "https://www.noemamag.com/feed/",
+        "category": "ideas",
+        "language": "en",
+        "priority": "high"
+      },
+      "ploum_net": {
+        "name": "Ploum (blog)",
+        "url": "https://ploum.net/feed/",
+        "category": "tech_philosophy",
+        "language": "fr",
         "priority": "high",
-        "description": "Long-form philosophical & cultural essays"
+        "description": "French tech + society reflection"
       },
-      "arts_inculte": {
-        "name": "Arts Inculte",
-        "url": "https://www.artsinculte.fr/feed/",
-        "category": "culture",
-        "language": "fr",
-        "priority": "medium",
-        "description": "French literary review"
-      },
-      "cairn": {
-        "name": "Cairn.info",
-        "url": "https://www.cairn.info/feed.php",
-        "category": "essays",
-        "language": "fr",
-        "priority": "medium",
-        "description": "French academic journals (humanities)"
-      },
-      "pitchfork": {
-        "name": "Pitchfork Music",
-        "url": "https://pitchfork.com/feed/rss/reviews/",
-        "category": "culture",
+      "marginal_revolution": {
+        "name": "Marginal Revolution",
+        "url": "https://feeds.feedburner.com/marginalrevolution",
+        "category": "economics",
         "language": "en",
-        "priority": "low",
-        "description": "Music criticism & reviews"
+        "priority": "high"
       },
-      "telerama": {
-        "name": "Télérama",
-        "url": "https://www.telerama.fr/feed.xml",
-        "category": "culture",
-        "language": "fr",
-        "priority": "medium",
-        "description": "French cinema & TV reviews"
+      "strange_loops": {
+        "name": "Strange Loops",
+        "url": "https://www.strangeloopcanon.com/feed",
+        "category": "ideas",
+        "language": "en",
+        "priority": "medium"
       }
     },
     "reference": {
-      "wikipedia_tfa": {
-        "name": "Wikipedia: Today's Featured Article",
-        "url": "https://en.wikipedia.org/w/index.php?title=Wikipedia:Today%27s_featured_article/December_2024&action=raw",
-        "category": "reference",
-        "language": "en",
-        "priority": "low",
-        "description": "Daily Wikipedia featured article"
-      },
-      "sep": {
+      "stanford_philosophy": {
         "name": "Stanford Encyclopedia of Philosophy",
         "url": "https://plato.stanford.edu/feeds/articles.xml",
-        "category": "reference",
+        "category": "philosophy",
         "language": "en",
-        "priority": "high",
-        "description": "Peer-reviewed philosophy articles"
+        "priority": "high"
       },
-      "the_conversation": {
-        "name": "The Conversation",
-        "url": "https://theconversation.com/rss",
-        "category": "reference",
+      "internet_archive_blog": {
+        "name": "Internet Archive Blog",
+        "url": "https://blog.archive.org/feed/",
+        "category": "internet_history",
         "language": "en",
-        "priority": "high",
-        "description": "Academics explaining their research"
+        "priority": "medium"
       },
-      "herodote": {
-        "name": "Herodote.net",
-        "url": "https://www.herodote.net/feed.xml",
-        "category": "reference",
-        "language": "fr",
-        "priority": "medium",
-        "description": "French history reference site"
+      "our_world_in_data": {
+        "name": "Our World in Data",
+        "url": "https://ourworldindata.org/atom.xml",
+        "category": "data",
+        "language": "en",
+        "priority": "high"
       }
     },
     "reddit_subreddits": {
-      "r_todayilearned": {
-        "name": "r/todayilearned",
-        "url": "https://www.reddit.com/r/todayilearned/new/.rss?limit=10",
-        "category": "reference",
-        "language": "en",
-        "priority": "medium",
-        "description": "Today I Learned - educational facts"
+      "r_futurology": {
+        "url": "https://www.reddit.com/r/Futurology/new/.rss?limit=10",
+        "priority": "high"
       },
-      "r_philosophy": {
-        "name": "r/philosophy",
-        "url": "https://www.reddit.com/r/philosophy/new/.rss?limit=10",
-        "category": "essays",
-        "language": "en",
-        "priority": "medium",
-        "description": "Philosophical discussion"
+      "r_machinelearning": {
+        "url": "https://www.reddit.com/r/MachineLearning/new/.rss?limit=10",
+        "priority": "high"
       },
-      "r_sciences_fr": {
-        "name": "r/sciences (French)",
-        "url": "https://www.reddit.com/r/sciences/new/.rss?limit=10",
-        "category": "science",
-        "language": "fr",
-        "priority": "medium",
-        "description": "French science community"
+      "r_askscience": {
+        "url": "https://www.reddit.com/r/askscience/new/.rss?limit=10",
+        "priority": "high"
       },
-      "r_history": {
-        "name": "r/history",
-        "url": "https://www.reddit.com/r/history/new/.rss?limit=10",
-        "category": "reference",
-        "language": "en",
-        "priority": "low",
-        "description": "History discussion & links"
+      "r_datascience": {
+        "url": "https://www.reddit.com/r/datascience/new/.rss?limit=10",
+        "priority": "medium"
       }
     },
     "talks_media": {
       "ted": {
         "name": "TED Talks",
         "url": "https://feeds.ted.com/talks_new.rss",
-        "category": "talks",
+        "category": "ideas",
         "language": "en",
-        "priority": "high",
-        "description": "Ideas worth spreading"
+        "priority": "medium",
+        "description": "Curated talks (useful but mainstream filter applied)"
       },
       "99pi": {
         "name": "99% Invisible",
         "url": "https://feeds.99percentinvisible.org/99percentinvisible",
-        "category": "podcast",
+        "category": "design",
         "language": "en",
-        "priority": "medium",
-        "description": "Design & architecture podcast (RSS with show notes)"
+        "priority": "high",
+        "description": "Hidden design, architecture, infrastructure"
       },
       "freakonomics": {
         "name": "Freakonomics Radio",
         "url": "https://feeds.freakonomics.com/freakonomics-radio",
-        "category": "podcast",
+        "category": "behavioral_economics",
         "language": "en",
         "priority": "medium",
-        "description": "Economics & society podcast"
+        "description": "Human behavior & incentives"
       },
-      "goodreads_books": {
-        "name": "Goodreads: Popular Books",
-        "url": "https://www.goodreads.com/feed.xml?channel=user_list/1/all",
-        "category": "reference",
+      "curious_mind": {
+        "name": "The Knowledge Project",
+        "url": "https://fs.blog/feed/",
+        "category": "thinking",
         "language": "en",
-        "priority": "low",
-        "description": "Book releases & discussions"
+        "priority": "high",
+        "description": "Decision making, mental models, deep thinking"
+      },
+      "a16z_podcast": {
+        "name": "a16z Podcast",
+        "url": "https://feeds.simplecast.com/GZSf6J5M",
+        "category": "tech_economy",
+        "language": "en",
+        "priority": "medium",
+        "description": "Tech, startups, systems thinking"
       }
     }
   },

@@ -31,6 +31,11 @@
         "owner": "astral-sh",
         "repo": "uv",
         "enabled": true
+      },
+      {
+        "type": "user_events",
+        "username": "numerique-gouv",
+        "enabled": true
       }
     ],
     "hackernews": {
@@ -92,7 +97,7 @@
   },
   "filtering": {
     "ai_score_threshold": 7.0,
-    "time_window_hours": 24
+    "time_window_hours": 336
   },
   "webhook": {
     "enabled": false,

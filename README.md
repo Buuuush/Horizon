@@ -78,7 +78,7 @@ nano data/config.json
 
 ```bash
 # Run complet (collecte → scoring → enrichment → HTML)
-horizon --hours 24 --summary-format html
+horizon --hours 336 --theme "informatique" --summary-format html
 
 # Ou seulement 12 dernières heures
 horizon --hours 12
@@ -312,7 +312,7 @@ concerns on benchmark-gaming vs real-world usefulness."
 
 ```bash
 # Add to crontab
-0 8 * * * cd /path/to/horizon && .venv/bin/horizon --hours 24
+0 8 * * * cd /path/to/horizon && .venv/bin/horizon --hours 336 --theme "informatique"
 
 # Generates HTML daily at 8 AM
 # Outputs to data/summaries/2026-05-{day}-bilingual.html

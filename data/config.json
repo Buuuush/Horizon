@@ -15,6 +15,18 @@
   },
 
   "sources": {
+    "github": [
+      {
+        "type": "user_events",
+        "username": "numerique-gouv",
+        "enabled": true
+      },
+      {
+        "type": "user_events",
+        "username": "betagouv",
+        "enabled": true
+      }
+    ],
     "rss": [
       {
         "name": "Reuters World",
@@ -231,7 +243,7 @@
 
   "filtering": {
     "ai_score_threshold": 7.0,
-    "time_window_hours": 24
+    "time_window_hours": 336
   },
 
   "email": {

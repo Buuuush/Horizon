@@ -6,6 +6,7 @@ from datetime import datetime, timedelta, timezone
 from typing import List, Dict, Optional, Callable, Any
 from urllib.parse import urlparse
 import re
+from functools import lru_cache
 import httpx
 from rich.console import Console
 import json
@@ -497,9 +498,14 @@ class HorizonOrchestrator:
     def _matches_theme_term(self, text: str, term: str) -> bool:
         if not text or not term:
             return False
+        return self._theme_term_pattern(term).search(text) is not None
+
+    @staticmethod
+    @lru_cache(maxsize=256)
+    def _theme_term_pattern(term: str) -> re.Pattern[str]:
         escaped = re.escape(term)
-        pattern = escaped.replace(r"\ ", r"\s+")
-        return re.search(rf"(?<!\w){pattern}(?!\w)", text) is not None
+        pattern = escaped.replace(r"\ ", r"\s+").replace(" ", r"\s+")
+        return re.compile(rf"(?<!\w){pattern}(?!\w)")
 
     async def fetch_all_sources(self, since: datetime) -> List[ContentItem]:
         """Fetch content from all configured sources.

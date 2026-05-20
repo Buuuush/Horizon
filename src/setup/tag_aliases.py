@@ -46,7 +46,7 @@ TAG_ALIASES: dict[str, list[str]] = {
     "golang": ["Go", "Golang", "go语言"],
     "hardware": ["硬件", "Hardware"],
     "html": ["HTML"],
-    "informatique": ["computer science", "software", "technology", "tech", "programmation"],
+    "informatique": ["computer science", "software engineering", "programmation"],
     "ios": ["iOS", "苹果开发"],
     "java": ["Java", "java语言"],
     "javascript": ["JavaScript", "JS", "js", "ECMAScript"],

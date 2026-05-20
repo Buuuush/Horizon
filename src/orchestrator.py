@@ -38,7 +38,6 @@ class HorizonOrchestrator:
     _THEME_EXPANSIONS: Dict[str, List[str]] = {
         "informatique": [
             "informatique",
-            "tech",
             "technology",
             "software",
             "open source",
@@ -46,14 +45,12 @@ class HorizonOrchestrator:
             "devtools",
             "developer",
             "programming",
-            "code",
             "linux",
             "security",
             "cyber",
             "github",
             "gouv",
             "gouvernement",
-            "france",
             "lasuite",
             "dinum",
             "numerique-gouv",
@@ -504,7 +501,7 @@ class HorizonOrchestrator:
     @lru_cache(maxsize=256)
     def _theme_term_pattern(term: str) -> re.Pattern[str]:
         escaped = re.escape(term)
-        pattern = escaped.replace(r"\ ", r"\s+").replace(" ", r"\s+")
+        pattern = escaped.replace(" ", r"\s+")
         return re.compile(rf"(?<!\w){pattern}(?!\w)")
 
     async def fetch_all_sources(self, since: datetime) -> List[ContentItem]:

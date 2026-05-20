@@ -5,6 +5,7 @@ from collections import defaultdict
 from datetime import datetime, timedelta, timezone
 from typing import List, Dict, Optional, Callable, Any
 from urllib.parse import urlparse
+import re
 import httpx
 from rich.console import Console
 import json
@@ -52,7 +53,7 @@ class HorizonOrchestrator:
             "gouv",
             "gouvernement",
             "france",
-            "la suite",
+            "lasuite",
             "dinum",
             "numerique-gouv",
             "betagouv",
@@ -171,7 +172,7 @@ class HorizonOrchestrator:
 
                     text_chunks = [feed_cat, feed_name, title, *tags]
                     match = any(
-                        term in chunk
+                        self._matches_theme_term(chunk, term)
                         for term in theme_terms
                         for chunk in text_chunks
                     )
@@ -210,7 +211,7 @@ class HorizonOrchestrator:
 
                     text_chunks = [title, summary, *ai_tags]
                     match = any(
-                        term in chunk
+                        self._matches_theme_term(chunk, term)
                         for term in theme_terms
                         for chunk in text_chunks
                     )
@@ -486,6 +487,13 @@ class HorizonOrchestrator:
         canonical = self._THEME_ALIASES.get(normalized, normalized)
         expanded = self._THEME_EXPANSIONS.get(canonical, [])
         return list(dict.fromkeys([normalized, canonical, *expanded]))
+
+    def _matches_theme_term(self, text: str, term: str) -> bool:
+        if not text or not term:
+            return False
+        if any(sep in term for sep in (" ", "-", "/")):
+            return term in text
+        return re.search(rf"(?<!\w){re.escape(term)}(?!\w)", text) is not None
 
     async def fetch_all_sources(self, since: datetime) -> List[ContentItem]:
         """Fetch content from all configured sources.

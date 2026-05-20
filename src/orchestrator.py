@@ -29,31 +29,12 @@ from .ai.tokens import get_usage_snapshot
 
 class HorizonOrchestrator:
     """Orchestrates the complete workflow for content aggregation and analysis."""
+    _THEME_ALIASES: Dict[str, str] = {
+        "full informatique": "informatique",
+    }
+
     _THEME_EXPANSIONS: Dict[str, List[str]] = {
         "informatique": [
-            "informatique",
-            "tech",
-            "technology",
-            "software",
-            "open source",
-            "opensource",
-            "devtools",
-            "developer",
-            "programming",
-            "code",
-            "linux",
-            "security",
-            "cyber",
-            "github",
-            "gouv",
-            "gouvernement",
-            "france",
-            "la suite",
-            "dinum",
-            "numerique-gouv",
-            "betagouv",
-        ],
-        "full informatique": [
             "informatique",
             "tech",
             "technology",
@@ -502,8 +483,9 @@ class HorizonOrchestrator:
 
     def _theme_terms(self, theme: str) -> List[str]:
         normalized = theme.strip().lower()
-        expanded = self._THEME_EXPANSIONS.get(normalized, [])
-        return list(dict.fromkeys([normalized, *expanded]))
+        canonical = self._THEME_ALIASES.get(normalized, normalized)
+        expanded = self._THEME_EXPANSIONS.get(canonical, [])
+        return list(dict.fromkeys([normalized, canonical, *expanded]))
 
     async def fetch_all_sources(self, since: datetime) -> List[ContentItem]:
         """Fetch content from all configured sources.

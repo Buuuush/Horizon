@@ -187,7 +187,7 @@ class FilteringConfig(BaseModel):
     """Content filtering configuration."""
 
     ai_score_threshold: float = 7.0
-    time_window_hours: int = 24
+    time_window_hours: int = 336
     # Whether to apply an editorial anti-mainstream bonus during filtering
     anti_mainstream_bonus: bool = False
 

@@ -220,7 +220,7 @@
       "id": "devtools",
       "name": "Open Source / DevTools",
       "name_zh": "开源 / 开发工具",
-      "keywords": ["open source", "开源", "devtools", "开发工具", "cli", "terminal", "终端", "editor", "编辑器", "vim", "neovim", "emacs", "vscode", "git", "ci/cd", "devops"],
+      "keywords": ["open source", "开源", "devtools", "开发工具", "informatique", "full informatique", "logiciels", "cli", "terminal", "终端", "editor", "编辑器", "vim", "neovim", "emacs", "vscode", "git", "ci/cd", "devops", "gouvernement", "france"],
       "sources": [
         {
           "type": "rss",
@@ -242,6 +242,13 @@
           "description_zh": "Neovim 编辑器版本发布",
           "tags": ["editor", "neovim"],
           "config": { "owner": "neovim", "repo": "neovim" }
+        },
+        {
+          "type": "github_user",
+          "description": "DINUM / La Suite open-source activity (French government)",
+          "description_zh": "法国政府 DINUM / La Suite 开源动态",
+          "tags": ["open source", "france", "government", "software"],
+          "config": { "username": "numerique-gouv" }
         }
       ]
     },

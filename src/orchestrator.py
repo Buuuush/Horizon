@@ -29,6 +29,54 @@ from .ai.tokens import get_usage_snapshot
 
 class HorizonOrchestrator:
     """Orchestrates the complete workflow for content aggregation and analysis."""
+    _THEME_EXPANSIONS: Dict[str, List[str]] = {
+        "informatique": [
+            "informatique",
+            "tech",
+            "technology",
+            "software",
+            "open source",
+            "opensource",
+            "devtools",
+            "developer",
+            "programming",
+            "code",
+            "linux",
+            "security",
+            "cyber",
+            "github",
+            "gouv",
+            "gouvernement",
+            "france",
+            "la suite",
+            "dinum",
+            "numerique-gouv",
+            "betagouv",
+        ],
+        "full informatique": [
+            "informatique",
+            "tech",
+            "technology",
+            "software",
+            "open source",
+            "opensource",
+            "devtools",
+            "developer",
+            "programming",
+            "code",
+            "linux",
+            "security",
+            "cyber",
+            "github",
+            "gouv",
+            "gouvernement",
+            "france",
+            "la suite",
+            "dinum",
+            "numerique-gouv",
+            "betagouv",
+        ],
+    }
 
     def __init__(
         self,
@@ -131,7 +179,7 @@ class HorizonOrchestrator:
             # Optional theme filtering: keep items whose RSS-configured category,
             # feed name, tags or title match the requested theme string.
             if theme:
-                t = theme.strip().lower()
+                theme_terms = self._theme_terms(theme)
                 filtered = []
                 for item in merged_items:
                     meta = item.metadata or {}
@@ -140,11 +188,12 @@ class HorizonOrchestrator:
                     tags = [t_.lower() for t_ in (meta.get("tags") or []) if isinstance(t_, str)]
                     title = (item.title or "").lower()
 
-                    match = False
-                    if t in feed_cat or t in feed_name or t in title:
-                        match = True
-                    if any(t in tag for tag in tags):
-                        match = True
+                    text_chunks = [feed_cat, feed_name, title, *tags]
+                    match = any(
+                        term in chunk
+                        for term in theme_terms
+                        for chunk in text_chunks
+                    )
 
                     if match:
                         filtered.append(item)
@@ -171,18 +220,19 @@ class HorizonOrchestrator:
             # If a theme was requested, also filter based on AI-generated tags
             # and AI summary/title (taxonomy-aware matching).
             if theme:
-                t = theme.strip().lower()
+                theme_terms = self._theme_terms(theme)
                 ai_filtered = []
                 for item in analyzed_items:
                     ai_tags = [tag.lower() for tag in (item.ai_tags or []) if isinstance(tag, str)]
                     title = (item.title or "").lower()
                     summary = (item.ai_summary or "").lower()
 
-                    match = False
-                    if any(t in tag for tag in ai_tags):
-                        match = True
-                    if t in title or t in summary:
-                        match = True
+                    text_chunks = [title, summary, *ai_tags]
+                    match = any(
+                        term in chunk
+                        for term in theme_terms
+                        for chunk in text_chunks
+                    )
 
                     if match:
                         ai_filtered.append(item)
@@ -197,32 +247,32 @@ class HorizonOrchestrator:
             # Use profile threshold if available, otherwise use config default
             threshold = self.profile.ai_score_threshold if self.profile else self.config.filtering.ai_score_threshold
             # Apply trending flags before score filtering
-        for item in analyzed_items:
-            # Hacker News trending
-            if item.source_type.value == "hackernews":
-                score = item.metadata.get("score", 0)
-                if score > 2000:
-                    item.is_trending_hn = True
-                    item.trending_score += 100
-                    item.selection_method = "viral_hn"
-            # Reddit trending
-            if item.source_type.value == "reddit":
-                comments = item.metadata.get("descendants") or item.metadata.get("num_comments") or 0
-                if comments > 500:
-                    item.is_trending_reddit = True
-                    item.trending_score += 50
-                    if item.selection_method == "ai_only":
-                        item.selection_method = "viral_reddit"
-            # Default if no trending flags set
-            if not getattr(item, "is_trending_hn", False) and not getattr(item, "is_trending_reddit", False):
-                item.selection_method = "ai_only"
+            for item in analyzed_items:
+                # Hacker News trending
+                if item.source_type.value == "hackernews":
+                    score = item.metadata.get("score", 0)
+                    if score > 2000:
+                        item.is_trending_hn = True
+                        item.trending_score += 100
+                        item.selection_method = "viral_hn"
+                # Reddit trending
+                if item.source_type.value == "reddit":
+                    comments = item.metadata.get("descendants") or item.metadata.get("num_comments") or 0
+                    if comments > 500:
+                        item.is_trending_reddit = True
+                        item.trending_score += 50
+                        if item.selection_method == "ai_only":
+                            item.selection_method = "viral_reddit"
+                # Default if no trending flags set
+                if not getattr(item, "is_trending_hn", False) and not getattr(item, "is_trending_reddit", False):
+                    item.selection_method = "ai_only"
 
-        # Now filter by score threshold
-        important_items = [
-            item for item in analyzed_items
-            if item.ai_score and item.ai_score >= threshold
-        ]
-        important_items.sort(key=lambda x: x.ai_score or 0, reverse=True)
+            # Now filter by score threshold
+            important_items = [
+                item for item in analyzed_items
+                if item.ai_score and item.ai_score >= threshold
+            ]
+            important_items.sort(key=lambda x: x.ai_score or 0, reverse=True)
 
             self.console.print(
                 f"⭐️ {len(important_items)} éléments notés ≥ {threshold}\n"
@@ -449,6 +499,11 @@ class HorizonOrchestrator:
             hours = self.config.filtering.time_window_hours
             since = datetime.now(timezone.utc) - timedelta(hours=hours)
         return since
+
+    def _theme_terms(self, theme: str) -> List[str]:
+        normalized = theme.strip().lower()
+        expanded = self._THEME_EXPANSIONS.get(normalized, [])
+        return list(dict.fromkeys([normalized, *expanded]))
 
     async def fetch_all_sources(self, since: datetime) -> List[ContentItem]:
         """Fetch content from all configured sources.

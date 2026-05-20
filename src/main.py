@@ -231,7 +231,7 @@ def print_config_template():
   },
   "filtering": {
     "ai_score_threshold": 7.0,
-    "time_window_hours": 24
+    "time_window_hours": 336
   }
 }
 

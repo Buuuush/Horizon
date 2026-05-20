@@ -486,14 +486,20 @@ class HorizonOrchestrator:
         normalized = theme.strip().lower()
         canonical = self._THEME_ALIASES.get(normalized, normalized)
         expanded = self._THEME_EXPANSIONS.get(canonical, [])
-        return list(dict.fromkeys([normalized, canonical, *expanded]))
+        terms: List[str] = []
+        seen = set()
+        for term in [normalized, canonical, *expanded]:
+            if term not in seen:
+                seen.add(term)
+                terms.append(term)
+        return terms
 
     def _matches_theme_term(self, text: str, term: str) -> bool:
         if not text or not term:
             return False
-        if any(sep in term for sep in (" ", "-", "/")):
-            return term in text
-        return re.search(rf"(?<!\w){re.escape(term)}(?!\w)", text) is not None
+        escaped = re.escape(term)
+        pattern = escaped.replace(r"\ ", r"\s+")
+        return re.search(rf"(?<!\w){pattern}(?!\w)", text) is not None
 
     async def fetch_all_sources(self, since: datetime) -> List[ContentItem]:
         """Fetch content from all configured sources.

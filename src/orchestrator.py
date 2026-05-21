@@ -34,7 +34,7 @@ class HorizonOrchestrator:
 
     # Target number of items to deliver in one briefing.  Both the balancing
     # pass and the downstream hard cap use this constant so they stay in sync.
-    _BALANCE_TARGET: int = 25
+    _BALANCE_TARGET: int = 50
 
     _THEME_ALIASES: Dict[str, str] = {
         "full informatique": "informatique",

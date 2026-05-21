@@ -6,7 +6,7 @@
     "api_key_env": "NVIDIA_API_KEY",
     "base_url": "https://integrate.api.nvidia.com/v1",
     "temperature": 0.3,
-    "max_tokens": 8192,
+    "max_tokens": 12288,
     "throttle_sec": 2.0,
     "languages": [
       "fr",
@@ -242,7 +242,7 @@
   },
 
   "filtering": {
-    "ai_score_threshold": 7.0,
+    "ai_score_threshold": 5.0,
     "time_window_hours": 336
   },
 

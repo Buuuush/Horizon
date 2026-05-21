@@ -1,0 +1,396 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Horizon — 2026-05-21</title>
+  <style>
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600&family=Manrope:wght@500;700&display=swap');
+
+:root {
+    --bg: #f4fbfb;
+    --paper: #ffffff;
+    --surface: #f7fffe;
+    --accent: #007a79;
+    --accent-2: color-mix(in srgb, var(--accent) 55%, #b73fd6);
+    --accent-3: color-mix(in srgb, var(--accent) 40%, #f59e0b);
+    --accent-soft: #d6f3f2;
+    --muted: #58646e;
+    --text: #0e2a2f;
+    --ring: color-mix(in srgb, var(--accent) 32%, transparent);
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+    color: var(--text);
+    background:
+        radial-gradient(1300px 420px at -10% -20%, var(--accent-soft), transparent 60%),
+        radial-gradient(760px 300px at 88% -12%, color-mix(in srgb, var(--accent-2) 24%, transparent), transparent 66%),
+        radial-gradient(640px 240px at 30% 0%, color-mix(in srgb, var(--accent-3) 18%, transparent), transparent 70%),
+        var(--bg);
+    font-family: 'Source Serif 4', Georgia, serif;
+    line-height: 1.78;
+}
+
+.container { max-width: 1100px; margin: 1.5rem auto; padding: 1rem; }
+
+.tab-switcher {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+    border-bottom: 2px solid color-mix(in srgb, var(--accent) 20%, transparent);
+}
+
+.tab-button {
+    background: transparent;
+    border: none;
+    color: var(--muted);
+    font-family: 'Manrope', 'Segoe UI', sans-serif;
+    font-size: 1rem;
+    font-weight: 600;
+    padding: 0.75rem 1.2rem;
+    cursor: pointer;
+    transition: color 0.18s ease, border-color 0.18s ease;
+    border-bottom: 3px solid transparent;
+}
+
+.tab-button:hover {
+    color: var(--text);
+}
+
+.tab-button.active {
+    color: var(--accent);
+    border-bottom-color: var(--accent);
+}
+
+.tab-content {
+    display: none;
+    animation: fadeIn 0.2s ease-in;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.summary-header {
+    background: var(--paper);
+    border: 1px solid color-mix(in srgb, var(--accent) 16%, transparent);
+    border-radius: 24px;
+    padding: 1.5rem 1.6rem 1.1rem;
+    box-shadow: 0 18px 48px rgba(19, 33, 68, 0.08);
+    margin-bottom: 1rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.summary-header::after {
+    content: "";
+    position: absolute;
+    inset: auto -60px -80px auto;
+    width: 220px;
+    height: 220px;
+    border-radius: 999px;
+    background: radial-gradient(circle, color-mix(in srgb, var(--accent-2) 28%, transparent), transparent 70%);
+    pointer-events: none;
+}
+
+.summary-header h1 {
+    margin: 0;
+    font-family: 'Fraunces', 'DM Serif Display', 'Iowan Old Style', 'Palatino Linotype', serif;
+    letter-spacing: .01em;
+    font-size: clamp(1.8rem, 3.6vw, 2.8rem);
+    line-height: 1.15;
+}
+
+.lead { margin: .55rem 0 1.1rem; color: var(--muted); font-size: 1.04rem; max-width: 78ch; }
+
+.toc-title {
+    margin: 0 0 .45rem;
+    font-family: 'Manrope', 'Segoe UI', sans-serif;
+    font-size: .85rem;
+    text-transform: uppercase;
+    letter-spacing: .11em;
+    color: var(--muted);
+}
+
+.toc ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: .55rem;
+}
+
+.toc li {
+    background: linear-gradient(160deg, var(--surface), color-mix(in srgb, var(--accent-soft) 48%, #ffffff));
+    border: 1px solid color-mix(in srgb, var(--accent) 16%, transparent);
+    border-radius: 10px;
+    padding: .55rem .65rem;
+    transition: transform .18s ease, box-shadow .18s ease;
+}
+
+.toc li:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 8px 20px color-mix(in srgb, var(--accent) 15%, transparent);
+}
+
+.toc a { text-decoration: none; color: var(--text); }
+
+.items { display: grid; gap: .95rem; }
+
+.items article {
+    background: var(--paper);
+    border: 1px solid color-mix(in srgb, var(--accent) 15%, transparent);
+    border-radius: 20px;
+    padding: 1.15rem 1.2rem;
+    box-shadow: 0 10px 32px rgba(0, 0, 0, 0.05);
+}
+
+.item-title {
+    font-family: 'Fraunces', 'DM Serif Display', 'Iowan Old Style', 'Palatino Linotype', serif;
+    font-size: clamp(1.2rem, 2.2vw, 1.55rem);
+    margin: 0 0 .55rem;
+    line-height: 1.22;
+}
+
+.item-title a { color: inherit; text-decoration: none; }
+.item-title a:hover { color: var(--accent); }
+
+.item-title a:focus-visible,
+.toc a:focus-visible,
+summary:focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
+    border-radius: 6px;
+}
+
+.meta { color: var(--muted); font-family: 'Manrope', 'Segoe UI', sans-serif; font-size: .9rem; margin-bottom: .7rem; }
+.score { color: var(--accent); margin-left: .45rem; font-weight: 700; font-family: 'Manrope', 'Segoe UI', sans-serif; }
+
+.content { font-size: 1.03rem; line-height: 1.8; }
+
+.fr-only {
+    display: grid;
+    gap: .72rem;
+}
+
+.content-section {
+    background: linear-gradient(170deg, var(--surface), color-mix(in srgb, var(--accent-soft) 24%, #ffffff));
+    border: 1px solid color-mix(in srgb, var(--accent) 12%, transparent);
+    border-radius: 12px;
+    padding: .78rem .85rem;
+}
+
+.content-section h3 {
+    margin: 0 0 .35rem;
+    font-family: 'Manrope', 'Segoe UI', sans-serif;
+    font-size: .82rem;
+    color: var(--muted);
+    letter-spacing: .07em;
+    text-transform: uppercase;
+}
+
+.evidence-note {
+    margin: .7rem 0 0;
+    color: var(--muted);
+    font-size: .94rem;
+}
+
+.tags { margin-top: .75rem; color: var(--muted); font-family: 'Manrope', 'Segoe UI', sans-serif; font-size: .9rem; }
+code { background: color-mix(in srgb, var(--accent-soft) 65%, #ffffff); border-radius: 8px; padding: .12rem .4rem; }
+
+details { margin-top: .65rem; }
+details summary { cursor: pointer; color: var(--accent); font-family: 'Manrope', 'Segoe UI', sans-serif; }
+
+@media (max-width: 860px) {
+    .container { margin: .7rem auto; padding: .65rem; }
+    .tab-switcher { flex-wrap: wrap; }
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --bg: #0f1420;
+        --paper: #161d2c;
+        --surface: #1b2435;
+        --accent: #7cb1ff;
+        --accent-2: #c28cff;
+        --accent-3: #ffc36c;
+        --accent-soft: #1a2740;
+        --muted: #a6b4cd;
+        --text: #edf2ff;
+        --ring: rgba(124, 177, 255, 0.55);
+    }
+
+    body {
+        background:
+            radial-gradient(1200px 420px at -10% -20%, #1a2740, transparent 60%),
+            radial-gradient(760px 300px at 88% -12%, rgba(194, 140, 255, 0.2), transparent 66%),
+            radial-gradient(640px 240px at 30% 0%, rgba(255, 195, 108, 0.14), transparent 70%),
+            var(--bg);
+    }
+
+    .summary-header,
+    .items article {
+        border-color: rgba(124, 177, 255, 0.24);
+        box-shadow: 0 18px 44px rgba(0, 0, 0, 0.32);
+    }
+
+    .tab-switcher {
+        border-bottom-color: rgba(124, 177, 255, 0.2);
+    }
+
+    code {
+        background: rgba(124, 177, 255, 0.16);
+    }
+}
+</style>
+  <script>
+    function switchTab(button) {
+      const lang = button.getAttribute('data-lang');
+      const allButtons = document.querySelectorAll('.tab-button');
+      const allContents = document.querySelectorAll('.tab-content');
+      
+      allButtons.forEach(b => b.classList.remove('active'));
+      allContents.forEach(c => c.classList.remove('active'));
+      
+      button.classList.add('active');
+      document.querySelector(`.tab-content[data-lang="${lang}"]`).classList.add('active');
+    }
+  </script>
+</head>
+<body>
+  <div class="container">
+    <div class="tab-switcher">
+      <button class="tab-button active" onclick="switchTab(this)" data-lang="fr">Français</button><button class="tab-button " onclick="switchTab(this)" data-lang="en">English</button>
+    </div>
+    <div class="tab-content active" data-lang="fr"><div class="fr-item">### 1.
+<section class="summary-header">
+  <h1>Horizon Quotidien — 2026-05-21</h1>
+  <p class="lead">4 sujets essentiels sélectionnés parmi 443 contenus collectés.</p>
+  <nav class="toc" aria-label="Sommaire">
+    <p class="toc-title">Sommaire</p>
+    <ul><li><a href="#item-1">Google a publié du code d&#39;exploit menaçant des millions d&#39;utilisateurs Chromium.</a> <span class="score">⭐ 10.0/10</span></li>
+<li><a href="#item-2">GitHub confirms breach of 3,800 repos via malicious VSCode extension</a> <span class="score">⭐ 7.9590000000000005/10</span></li>
+<li><a href="#item-3">Colossal Biosciences fait pousser des poules à partir d&#39;obus artificiels imprimés en 3D.</a> <span class="score">⭐ 7.1918750000000005/10</span></li>
+<li><a href="#item-4">Anthropic paie SpaceX 45 milliards de dollars pour l&#39;IA</a> <span class="score">⭐ 6.17053125/10</span></li></ul>
+  </nav>
+</section>
+<main class="items">
+<article id="item-1">
+  <header>
+    <h2 class="item-title"><a href="https://arstechnica.com/security/2026/05/google-publishes-exploit-code-threatening-millions-of-chromium-users/">Google a publié du code d&#39;exploit menaçant des millions d&#39;utilisateurs Chromium.</a> <span class="score">⭐ 10.0/10</span></h2>
+    <div class="meta">rss · Ars Technica · May 20, 19:10</div>
+  </header>
+  <div class="lang-blocks fr-only"><section class="content-section"><h3>Contexte</h3><div class="content">Chromium applique une politique stricte limitant la divulgation publique des détails de vulnérabilité jusqu&#39;à ce que les correctifs soient largement déployés, mais Google a récemment publié du code d&#39;exploit pour une faille déjà corrigée il y a 29 mois. Cette rupture de protocole suscite des inquiétudes quant à l&#39;utilisation malveillante du code. Les directives de sévérité classent les exploits armés comme priorité P0, indépendamment de la sévérité.</div></section></div>
+  
+  <div class="tags"><code>#Cybersecurity</code>, <code>#Google</code>, <code>#Chromium</code>, <code>#Software Vulnerability</code>, <code>#Security</code></div>
+  <details><summary>Références</summary><ul><li><a href="https://www.chromium.org/Home/chromium-security/">Chromium Security</a></li><li><a href="https://chromium.googlesource.com/chromium/src.git/+/HEAD/docs/security/severity-guidelines.md">Chromium Docs - Severity Guidelines for Security Issues</a></li></ul></details>
+</article>
+
+<article id="item-2">
+  <header>
+    <h2 class="item-title"><a href="https://www.bleepingcomputer.com/news/security/github-confirms-breach-of-3-800-repos-via-malicious-vscode-extension/">GitHub confirms breach of 3,800 repos via malicious VSCode extension</a> <span class="score">⭐ 7.9590000000000005/10</span></h2>
+    <div class="meta">hackernews · Timofeibu · May 20, 13:43 · <a href="https://news.ycombinator.com/item?id=48207660">Discussion</a></div>
+  </header>
+  <div class="lang-blocks fr-only"><section class="content-section"><h3>Extrait de l&#39;article</h3><div class="content">Previous thread in sequence: GitHub is investigating unauthorized access to their internal repositories - https://news.ycombinator.com/item?id=48201316 - May 2026 (321 comments)</div></section></div>
+  
+  <div class="tags"><code>#Security</code>, <code>#VSCode</code>, <code>#GitHub</code>, <code>#Supply Chain</code>, <code>#Developer Tools</code></div>
+  
+</article>
+
+<article id="item-3">
+  <header>
+    <h2 class="item-title"><a href="https://www.technologyreview.com/2026/05/20/1137579/the-download-colossal-biosciences-egg-musk-altman-trial/">Colossal Biosciences fait pousser des poules à partir d&#39;obus artificiels imprimés en 3D.</a> <span class="score">⭐ 7.1918750000000005/10</span></h2>
+    <div class="meta">rss · MIT Technology Review · May 20, 12:10</div>
+  </header>
+  <div class="lang-blocks fr-only"><section class="content-section"><h3>Contexte</h3><div class="content">Colossal Biosciences est une entreprise biotechnologique spécialisée dans la dé‐extinction et la biologie synthétique. Son récent experiment a fait pousser des embryons de poulet à partir d&#39;obus artificiels imprimés en 3D, montrant une approche novatrice de l&#39;agriculture animale.</div></section></div>
+  
+  <div class="tags"><code>#Biotechnology</code>, <code>#Synthetic Biology</code>, <code>#Food Technology</code>, <code>#Animal Science</code>, <code>#Elon Musk</code></div>
+  
+</article>
+
+<article id="item-4">
+  <header>
+    <h2 class="item-title"><a href="https://www.bloomberg.com/news/articles/2026-05-20/anthropic-to-pay-spacex-nearly-45-billion-for-computing-deal">Anthropic paie SpaceX 45 milliards de dollars pour l&#39;IA</a> <span class="score">⭐ 6.17053125/10</span></h2>
+    <div class="meta">rss · Bloomberg Technology · May 20, 21:54</div>
+  </header>
+  <div class="lang-blocks fr-only"><section class="content-section"><h3>Résumé</h3><div class="content">Anthropic a accepté de payer SpaceX près de 45 milliards de dollars sur trois ans pour des ressources informatiques afin de soutenir son logiciel d&#39;IA Claude. Le contrat a été révélé dans un dépôt de valeurs mobilières. Ce contrat colossal souligne la demande croissante en infrastructure IA et pourrait remodeler la concurrence dans les secteurs de l&#39;IA et de l&#39;espace. Il pourrait également influencer les prix et l&#39;accès aux ressources de calcul haute performance pour d&#39;autres développeurs d&#39;IA. L&#39;accord couvre une période de trois ans et représente l&#39;un des plus grands deals privés impliquant des calculs IA. Il repose sur un dépôt de valeurs mobilières, indiquant les exigences de divulgation réglementaire.</div></section></div>
+  
+  <div class="tags"><code>#AI</code>, <code>#SpaceX</code>, <code>#Cloud Computing</code>, <code>#Business</code>, <code>#Technology</code></div>
+  
+</article>
+</main></div></div><div class="tab-content " data-lang="en"><section class="summary-header">
+  <h1>Horizon Daily — 2026-05-21</h1>
+  <p class="lead">4 essential stories selected from 443 collected items.</p>
+  <nav class="toc" aria-label="Contents">
+    <p class="toc-title">Contents</p>
+    <ul><li><a href="#item-1">Google has published exploit code that threatens millions of Chromium users.</a> <span class="score">⭐ 10.0/10</span></li>
+<li><a href="#item-2">GitHub confirms breach of 3,800 repos via malicious VSCode extension</a> <span class="score">⭐ 7.9590000000000005/10</span></li>
+<li><a href="#item-3">Colossal Biosciences grows chickens from 3D‐printed artificial eggshells.</a> <span class="score">⭐ 7.1918750000000005/10</span></li>
+<li><a href="#item-4">Anthropic to Pay SpaceX $45 Billion for AI Computing</a> <span class="score">⭐ 6.17053125/10</span></li></ul>
+  </nav>
+</section>
+<main class="items">
+<article id="item-1">
+  <header>
+    <h2 class="item-title"><a href="https://arstechnica.com/security/2026/05/google-publishes-exploit-code-threatening-millions-of-chromium-users/">Google has published exploit code that threatens millions of Chromium users.</a> <span class="score">⭐ 10.0/10</span></h2>
+    <div class="meta">rss · Ars Technica · May 20, 19:10</div>
+  </header>
+    <div class="lang-blocks">
+        <section class="lang"><h3>EN</h3><div class="content">Google released exploit code for a Chromium vulnerability that had been patched 29 months earlier, raising concerns about potential misuse. This threatens millions of Chromium users and could enable malicious actors to exploit the flaw despite the patch. The exploit code was published despite the vulnerability being patched, and the issue is classified as P0 severity if weaponized.</div></section>
+        <section class="lang"><h3>FR</h3><div class="content">Google a publié du code d&#39;exploit pour une vulnérabilité Chromium qui avait été corrigée il y a 29 mois, soulevant des inquiétudes quant à son éventuelle utilisation malveillante. Cela menace des millions d&#39;utilisateurs de Chromium et pourrait permettre à des acteurs malveillants d&#39;exploiter la faille malgré le correctif. Le code d&#39;exploit a été publié même si la vulnérabilité était déjà corrigée, et le problème est classé comme priorité P0 s&#39;il est armé.</div></section>
+    </div>
+  <div class="tags"><code>#Cybersecurity</code>, <code>#Google</code>, <code>#Chromium</code>, <code>#Software Vulnerability</code>, <code>#Security</code></div>
+  <details><summary>References</summary><ul><li><a href="https://www.chromium.org/Home/chromium-security/">Chromium Security</a></li><li><a href="https://chromium.googlesource.com/chromium/src.git/+/HEAD/docs/security/severity-guidelines.md">Chromium Docs - Severity Guidelines for Security Issues</a></li></ul></details>
+</article>
+
+<article id="item-2">
+  <header>
+    <h2 class="item-title"><a href="https://www.bleepingcomputer.com/news/security/github-confirms-breach-of-3-800-repos-via-malicious-vscode-extension/">GitHub confirms breach of 3,800 repos via malicious VSCode extension</a> <span class="score">⭐ 7.9590000000000005/10</span></h2>
+    <div class="meta">hackernews · Timofeibu · May 20, 13:43 · <a href="https://news.ycombinator.com/item?id=48207660">Discussion</a></div>
+  </header>
+    <div class="lang-blocks">
+        <section class="lang"><h3>EN</h3><div class="content">GitHub confirmed that a malicious VSCode extension compromised 3,800 repositories, sparking concerns about extension security and prompting calls for stronger permission controls.</div></section>
+        <section class="lang"><h3>FR</h3><div class="content">GitHub confirmed that a malicious VSCode extension compromised 3,800 repositories, sparking concerns about extension security and prompting calls for stronger permission controls.</div></section>
+    </div>
+  <div class="tags"><code>#Security</code>, <code>#VSCode</code>, <code>#GitHub</code>, <code>#Supply Chain</code>, <code>#Developer Tools</code></div>
+  
+</article>
+
+<article id="item-3">
+  <header>
+    <h2 class="item-title"><a href="https://www.technologyreview.com/2026/05/20/1137579/the-download-colossal-biosciences-egg-musk-altman-trial/">Colossal Biosciences grows chickens from 3D‐printed artificial eggshells.</a> <span class="score">⭐ 7.1918750000000005/10</span></h2>
+    <div class="meta">rss · MIT Technology Review · May 20, 12:10</div>
+  </header>
+    <div class="lang-blocks">
+        <section class="lang"><h3>EN</h3><div class="content">Colossal Biosciences reported that baby chicks are shifting and attempting to pip while growing from 3D‐printed artificial eggshells, showing a breakthrough in synthetic biology. This breakthrough could revolutionize food production by providing a sustainable source of protein and reducing reliance on conventional poultry farming. The baby chicks were observed shifting and attempting to pip, indicating they were hatching from the artificial shells rather than a natural egg.</div></section>
+        <section class="lang"><h3>FR</h3><div class="content">Colossal Biosciences a annoncé que les petits poussins bougent et essaient de percer leur coquille alors qu&#39;ils grandissent à partir d&#39;obus artificiels imprimés en 3D, marquant une avancée en biologie synthétique. Cette percée pourrait révolutionner la production alimentaire en offrant une source durable de protéines et en réduisant la dépendance à l&#39;élevage traditionnel. Les petits poussins ont été observés bouger et essayer de percer leur coquille, indiquant qu&#39;ils éclodaient à partir des coquilles artificielles plutôt que d&#39;un œuf naturel.</div></section>
+    </div>
+  <div class="tags"><code>#Biotechnology</code>, <code>#Synthetic Biology</code>, <code>#Food Technology</code>, <code>#Animal Science</code>, <code>#Elon Musk</code></div>
+  
+</article>
+
+<article id="item-4">
+  <header>
+    <h2 class="item-title"><a href="https://www.bloomberg.com/news/articles/2026-05-20/anthropic-to-pay-spacex-nearly-45-billion-for-computing-deal">Anthropic to Pay SpaceX $45 Billion for AI Computing</a> <span class="score">⭐ 6.17053125/10</span></h2>
+    <div class="meta">rss · Bloomberg Technology · May 20, 21:54</div>
+  </header>
+    <div class="lang-blocks">
+        <section class="lang"><h3>EN</h3><div class="content">Anthropic has agreed to pay SpaceX nearly $45 billion over three years for computing resources to support its Claude AI software. The deal was disclosed in a securities filing. The massive computing contract highlights the growing demand for AI infrastructure and could reshape competition in both AI and space sectors. It may also influence pricing and access to high‐performance computing for other AI developers. The agreement covers a three‐year period and represents one of the largest private‐sector deals involving AI compute. It is based on a securities filing, indicating regulatory disclosure requirements.</div></section>
+        <section class="lang"><h3>FR</h3><div class="content">Anthropic a accepté de payer SpaceX près de 45 milliards de dollars sur trois ans pour des ressources informatiques afin de soutenir son logiciel d&#39;IA Claude. Le contrat a été révélé dans un dépôt de valeurs mobilières. Ce contrat colossal souligne la demande croissante en infrastructure IA et pourrait remodeler la concurrence dans les secteurs de l&#39;IA et de l&#39;espace. Il pourrait également influencer les prix et l&#39;accès aux ressources de calcul haute performance pour d&#39;autres développeurs d&#39;IA. L&#39;accord couvre une période de trois ans et représente l&#39;un des plus grands deals privés impliquant des calculs IA. Il repose sur un dépôt de valeurs mobilières, indiquant les exigences de divulgation réglementaire.</div></section>
+    </div>
+  <div class="tags"><code>#AI</code>, <code>#SpaceX</code>, <code>#Cloud Computing</code>, <code>#Business</code>, <code>#Technology</code></div>
+  
+</article>
+</main></div>
+  </div>
+</body>
+</html>

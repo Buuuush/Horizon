@@ -31,6 +31,11 @@ from .ai.tokens import get_usage_snapshot
 
 class HorizonOrchestrator:
     """Orchestrates the complete workflow for content aggregation and analysis."""
+
+    # Target number of items to deliver in one briefing.  Both the balancing
+    # pass and the downstream hard cap use this constant so they stay in sync.
+    _BALANCE_TARGET: int = 25
+
     _THEME_ALIASES: Dict[str, str] = {
         "full informatique": "informatique",
     }
@@ -305,7 +310,7 @@ class HorizonOrchestrator:
 
             # 6.5 Re-rank after evidence-based enrichment adjustments and keep top items only.
             important_items.sort(key=lambda x: x.ai_score or 0, reverse=True)
-            max_items = 25
+            max_items = self._BALANCE_TARGET
             if len(important_items) > max_items:
                 dropped = len(important_items) - max_items
                 important_items = important_items[:max_items]
@@ -621,13 +626,20 @@ class HorizonOrchestrator:
         if self.profile and self.profile.max_items_per_source_type is not None:
             max_per_source_type = self.profile.max_items_per_source_type
         elif source_type_count > 1:
-            max_per_source_type = max(2, min(5, (len(items) + 2) // 3))
+            # Proportional cap: each source type gets at most ceil(target / num_types),
+            # with a floor of 2 so no source type is silently excluded.
+            max_per_source_type = max(2, -(-self._BALANCE_TARGET // source_type_count))
 
         max_per_sub_source = len(items)
         if self.profile and self.profile.max_items_per_sub_source is not None:
             max_per_sub_source = self.profile.max_items_per_sub_source
         elif sub_source_count > 1:
-            max_per_sub_source = 1
+            # Proportional cap: each individual feed/subreddit/channel gets at most
+            # ceil(target / num_sub_sources), with a floor of 2.  This prevents a
+            # single feed from monopolising the briefing while still allowing
+            # multiple high-scoring items from the same source to survive when the
+            # pool is small (e.g. after strict theme + score filtering).
+            max_per_sub_source = max(2, -(-self._BALANCE_TARGET // sub_source_count))
 
         source_type_counts: Dict[str, int] = defaultdict(int)
         sub_source_counts: Dict[str, int] = defaultdict(int)

@@ -132,15 +132,15 @@ Provide EACH text field in BOTH English and French. Use the following key naming
 Field definitions:
 0. **title** (one short phrase, ≤15 words): A clear, accurate headline for the news item.
 
-1. **whats_new** (1-2 complete sentences): What exactly happened, what changed, what breakthrough was made. Be specific — mention names, versions, numbers, dates when available.
+1. **whats_new** (2-3 complete sentences): What exactly happened, what changed, what breakthrough was made. Be specific — mention names, versions, numbers, dates when available, and avoid one-line summaries.
 
-2. **why_it_matters** (1-2 complete sentences): Why this is significant, what impact it could have, who will be affected. Connect to the broader ecosystem or industry trends.
+2. **why_it_matters** (2-3 complete sentences): Why this is significant, what impact it could have, who will be affected. Connect to the broader ecosystem or industry trends, and explain the practical consequence rather than restating the headline.
 
-3. **key_details** (1-2 complete sentences): Notable concrete details, limitations, caveats, or additional context worth knowing. Include specifics a well-informed general reader would find valuable.
+3. **key_details** (2-3 complete sentences): Notable concrete details, limitations, caveats, or additional context worth knowing. Include specifics a well-informed general reader would find valuable, and add at least one concrete fact or example when possible.
 
-4. **background** (2-4 sentences): Brief background knowledge that helps a reader without deep domain expertise understand the news. Explain key concepts, institutions, timelines, or context that the news assumes the reader already knows.
+4. **background** (3-5 sentences): Brief background knowledge that helps a reader without deep domain expertise understand the news. Explain key concepts, institutions, timelines, or context that the news assumes the reader already knows, and use the web results to add explanatory depth.
 
-5. **community_discussion** (1-3 sentences): If community comments are provided, summarize the overall sentiment and key viewpoints from the discussion — agreements, disagreements, concerns, additional insights, or notable counterarguments. If no comments are provided, return an empty string.
+5. **community_discussion** (2-4 sentences): If community comments are provided, summarize the overall sentiment and key viewpoints from the discussion — agreements, disagreements, concerns, additional insights, or notable counterarguments. If no comments are provided, return an empty string.
 
 **CRITICAL — Language rules (MUST follow):**
 - All *_en fields MUST be written in English.
@@ -178,16 +178,16 @@ Respond with valid JSON only. Each _en field must be in English; each _fr field 
 {{
   "title_en": "<short headline in English, ≤15 words>",
   "title_fr": "<court titre en français, ≤15 mots>",
-  "whats_new_en": "<1-2 sentences in English>",
-  "whats_new_fr": "<écrire 1-2 phrases en français>",
-  "why_it_matters_en": "<1-2 sentences in English>",
-  "why_it_matters_fr": "<écrire 1-2 phrases en français>",
-  "key_details_en": "<1-2 sentences in English>",
-  "key_details_fr": "<écrire 1-2 phrases en français>",
-  "background_en": "<2-4 sentences in English, or empty string>",
-  "background_fr": "<écrire 2-4 phrases en français, ou chaîne vide>",
-  "community_discussion_en": "<1-3 sentences in English, or empty string>",
-  "community_discussion_fr": "<écrire 1-3 phrases en français, ou chaîne vide>",
+  "whats_new_en": "<2-3 sentences in English>",
+  "whats_new_fr": "<écrire 2-3 phrases en français>",
+  "why_it_matters_en": "<2-3 sentences in English>",
+  "why_it_matters_fr": "<écrire 2-3 phrases en français>",
+  "key_details_en": "<2-3 sentences in English>",
+  "key_details_fr": "<écrire 2-3 phrases en français>",
+  "background_en": "<3-5 sentences in English, or empty string>",
+  "background_fr": "<écrire 3-5 phrases en français, ou chaîne vide>",
+  "community_discussion_en": "<2-4 sentences in English, or empty string>",
+  "community_discussion_fr": "<écrire 2-4 phrases en français, ou chaîne vide>",
   "evidence_strength": <0-10 score for strength of evidence>,
   "evidence_note_en": "<short sentence about evidence quality in English>",
   "evidence_note_fr": "<courte phrase en français sur la qualité des preuves>",

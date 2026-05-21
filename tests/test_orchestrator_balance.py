@@ -42,7 +42,7 @@ def test_balance_source_diversity_limits_dominant_source_family(tmp_path):
     """Even a dominant feed keeps all its items when the pool is small.
 
     With 6 items across 3 source types (RSS, HN, Reddit) and 3 sub-sources,
-    the proportional cap ceil(25/3) = 9 is larger than the 4 items from
+    the proportional cap ceil(50/3) = 17 is larger than the 4 items from
     Feed A, so every item passes.
     """
     orchestrator = _make_orchestrator(tmp_path)
@@ -57,7 +57,7 @@ def test_balance_source_diversity_limits_dominant_source_family(tmp_path):
 
     balanced = orchestrator._balance_source_diversity(items)
 
-    # All 6 items survive: the proportional cap (9) is larger than any sub-source size.
+    # All 6 items survive: the proportional cap (17) is larger than any sub-source size.
     assert len(balanced) == 6
     assert [item.id for item in balanced] == ["rss-1", "rss-2", "rss-3", "rss-4", "hn-1", "reddit-1"]
 
@@ -66,7 +66,7 @@ def test_balance_source_diversity_keeps_multiple_feeds(tmp_path):
     """With only one source type and a small pool, all items are kept.
 
     There are 3 sub-sources (Feed A, B, C), so the proportional sub-source
-    cap is ceil(25/3) = 9.  Each feed has only 2 items (< 9), so the full
+    cap is ceil(50/3) = 17.  Each feed has only 2 items (< 17), so the full
     list passes unchanged.
     """
     orchestrator = _make_orchestrator(tmp_path)
@@ -90,7 +90,7 @@ def test_balance_source_diversity_keeps_multiple_feeds(tmp_path):
 
 def test_balance_source_diversity_caps_per_sub_source_with_many_items(tmp_path):
     """With many items from a small number of feeds, each feed is capped at
-    ceil(25 / num_sub_sources) to prevent monopolisation.
+    ceil(50 / num_sub_sources) to prevent monopolisation.
     """
     orchestrator = _make_orchestrator(tmp_path)
     items = (
@@ -100,12 +100,12 @@ def test_balance_source_diversity_caps_per_sub_source_with_many_items(tmp_path):
 
     balanced = orchestrator._balance_source_diversity(items)
 
-    # 1 source type → no source-type cap; 2 sub-sources → ceil(25/2) = 13 each.
+    # 1 source type → no source-type cap; 2 sub-sources → ceil(50/2) = 25 each.
     feed_a_count = sum(1 for item in balanced if item.id.startswith("rss-a-"))
     feed_b_count = sum(1 for item in balanced if item.id.startswith("rss-b-"))
-    assert feed_a_count == 13
-    assert feed_b_count == 13
-    assert len(balanced) == 26
+    assert feed_a_count == 20
+    assert feed_b_count == 20
+    assert len(balanced) == 40
 
 
 def test_balance_source_diversity_respects_profile_limits(tmp_path):
@@ -127,3 +127,46 @@ def test_balance_source_diversity_respects_profile_limits(tmp_path):
 
     assert len(balanced) == 3
     assert [item.id for item in balanced] == ["rss-a-1", "rss-b-1", "hn-1"]
+
+
+def test_editorial_depth_filter_drops_shallow_items(tmp_path):
+    orchestrator = _make_orchestrator(tmp_path)
+
+    shallow_item = _make_item("rss-shallow", SourceType.RSS, feed_name="Feed A")
+    shallow_item.ai_summary = "Too short."
+    shallow_item.metadata.update({
+        "detailed_summary_en": "Short.",
+        "background_en": "",
+        "sources": [],
+    })
+
+    rich_item = _make_item("rss-rich", SourceType.RSS, feed_name="Feed B")
+    rich_item.ai_summary = "This item provides substantial context."
+    rich_item.metadata.update({
+        "detailed_summary_en": (
+            "What happened, why it matters, and a few concrete details are described here. "
+            "The item also adds background and a broader perspective for readers."
+        ),
+        "detailed_summary_fr": (
+            "Ce qui s'est passé, pourquoi c'est important et plusieurs détails concrets sont expliqués ici. "
+            "L'article ajoute aussi du contexte et une mise en perspective utile."
+        ),
+        "background_en": "Background context with more than enough substance for publication.",
+        "sources": [{"url": "https://example.com/source", "title": "Source"}],
+    })
+
+    filtered = orchestrator._filter_shallow_items([shallow_item, rich_item])
+
+    assert [item.id for item in filtered] == ["rss-rich"]
+
+
+def test_editorial_depth_filter_keeps_original_list_if_all_thin(tmp_path):
+    orchestrator = _make_orchestrator(tmp_path)
+
+    item = _make_item("rss-thin", SourceType.RSS, feed_name="Feed A")
+    item.ai_summary = "Tiny."
+    item.metadata.update({"detailed_summary_en": "Tiny.", "background_en": ""})
+
+    filtered = orchestrator._filter_shallow_items([item])
+
+    assert filtered == [item]

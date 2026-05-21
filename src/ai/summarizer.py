@@ -5,6 +5,7 @@ from html import unescape
 from typing import List, Dict
 
 from ..models import ContentItem
+from .translation import DeepLTranslator
 
 
 _CJK = r"[\u4e00-\u9fff\u3400-\u4dbf]"
@@ -82,8 +83,9 @@ LABELS = {
 class DailySummarizer:
     """Generates daily summaries and renders them as HTML (bilingual blocks)."""
 
-    def __init__(self, ai_client=None):
+    def __init__(self, ai_client=None, translator: DeepLTranslator | None = None):
         self.client = ai_client
+        self.translator = translator if translator is not None else DeepLTranslator()
 
     @staticmethod
     def _clean_content_excerpt(content: str, max_len: int = 520) -> str:
@@ -128,6 +130,8 @@ class DailySummarizer:
         """
         if not languages:
             languages = ["fr", "en"]
+
+        await self._translate_items_for_french_render(items)
 
         # Generate summaries for each language
         summaries = {}
@@ -208,6 +212,62 @@ class DailySummarizer:
 """
         return html
 
+    async def _translate_items_for_french_render(self, items: List[ContentItem]) -> None:
+        """Translate selected items to French right before rendering.
+
+        The translation happens after filtering and ranking so DeepL is only
+        used for articles that will actually be published.
+        """
+        if not items or getattr(self.translator, "available", False) is not True:
+            return
+
+        pending: list[tuple[ContentItem, str, str]] = []
+        for item in items:
+            if item.metadata.get("_deepl_french_ready"):
+                continue
+
+            fields = [
+                ("title_fr", str(item.metadata.get("title_en") or item.title or "").strip()),
+                ("whats_new_fr", str(item.metadata.get("whats_new_en") or "").strip()),
+                ("why_it_matters_fr", str(item.metadata.get("why_it_matters_en") or "").strip()),
+                ("key_details_fr", str(item.metadata.get("key_details_en") or "").strip()),
+                ("background_fr", str(item.metadata.get("background_en") or "").strip()),
+                ("community_discussion_fr", str(item.metadata.get("community_discussion_en") or "").strip()),
+                ("evidence_note_fr", str(item.metadata.get("evidence_note_en") or "").strip()),
+            ]
+
+            for target_key, source_text in fields:
+                if source_text:
+                    pending.append((item, target_key, source_text))
+
+        if not pending:
+            for item in items:
+                item.metadata["_deepl_french_ready"] = True
+            return
+
+        translated = await self.translator.translate_to_french([source for _, _, source in pending])
+
+        summary_fields = {
+            "whats_new_fr",
+            "why_it_matters_fr",
+            "key_details_fr",
+            "background_fr",
+            "community_discussion_fr",
+        }
+        by_item: dict[int, list[str]] = {}
+        for (item, target_key, _source_text), translated_text in zip(pending, translated):
+            if translated_text:
+                item.metadata[target_key] = translated_text
+                by_item.setdefault(id(item), [])
+                if target_key in summary_fields:
+                    by_item[id(item)].append(translated_text)
+
+        for item in items:
+            translated_parts = by_item.get(id(item), [])
+            if translated_parts:
+                item.metadata["detailed_summary_fr"] = "\n\n".join(translated_parts)
+            item.metadata["_deepl_french_ready"] = True
+
     async def generate_summary(
         self,
         items: List[ContentItem],
@@ -230,6 +290,9 @@ class DailySummarizer:
         """
         labels = LABELS.get(language, LABELS["en"])
 
+        if language == "fr":
+            await self._translate_items_for_french_render(items)
+
         # If no items, reuse existing flow but wrapped into simple HTML
         if not items:
             body = self._generate_empty_summary(date, total_fetched, labels)
@@ -244,8 +307,7 @@ class DailySummarizer:
             t = self._escape_html(str(_t).replace("[", "(").replace("]", ")"))
             if language == "zh":
                 t = _pangu(t)
-            score = item.ai_score or "?"
-            toc_entries.append(f'<li><a href="#item-{i+1}">{t}</a> <span class="score">⭐ {score}/10</span></li>')
+            toc_entries.append(f'<li><a href="#item-{i+1}">{t}</a></li>')
         toc_html = "\n".join(toc_entries)
 
         parts = []
@@ -309,8 +371,7 @@ class DailySummarizer:
             title = str(item.metadata.get(f"title_{language}") or item.title).replace("[", "(").replace("]", ")")
             if language == "zh":
                 title = _pangu(title)
-            score = item.ai_score or "?"
-            entries.append(f"{i}. [{title}]({item.url}) \u2b50\ufe0f {score}/10")
+            entries.append(f"{i}. [{title}]({item.url})")
 
         return header + "\n".join(entries)
 
@@ -418,7 +479,6 @@ class DailySummarizer:
         title_raw = meta.get("title_fr") or item.title
         title = self._escape_html(str(title_raw).replace("[", "(").replace("]", ")"))
         url = self._escape_html(str(item.url))
-        score = item.ai_score or "?"
 
         whats_new = (meta.get("whats_new_fr") or "").strip()
         why_it_matters = (meta.get("why_it_matters_fr") or "").strip()
@@ -500,7 +560,7 @@ class DailySummarizer:
         html = f"""
 <article id="item-{index}">
   <header>
-    <h2 class="item-title"><a href="{url}">{title}</a> <span class="score">⭐ {score}/10</span></h2>
+        <h2 class="item-title"><a href="{url}">{title}</a></h2>
     <div class="meta">{source_line}</div>
   </header>
   <div class="lang-blocks fr-only">{content_sections}</div>
@@ -1111,7 +1171,6 @@ details summary {{ cursor: pointer; color: var(--accent); font-family: {theme['u
         title_raw = item.metadata.get(f"title_{language}") or item.title
         title = self._escape_html(str(title_raw).replace("[", "(").replace("]", ")"))
         url = self._escape_html(str(item.url))
-        score = item.ai_score or "?"
 
         # Gather summaries in EN and FR when available
         summary_en = (
@@ -1174,7 +1233,7 @@ details summary {{ cursor: pointer; color: var(--accent); font-family: {theme['u
         html = f"""
 <article id="item-{index}">
   <header>
-    <h2 class="item-title"><a href="{url}">{title}</a> <span class="score">⭐ {score}/10</span></h2>
+        <h2 class="item-title"><a href="{url}">{title}</a></h2>
     <div class="meta">{source_line}</div>
   </header>
     <div class="lang-blocks">

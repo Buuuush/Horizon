@@ -151,9 +151,9 @@ class ContentAnalyzer:
             content_text = item.content
             if "--- Top Comments ---" in content_text:
                 main, comments_part = content_text.split("--- Top Comments ---", 1)
-                content_section = f"Content: {main.strip()[:800]}"
+                content_section = f"Content: {main.strip()[:1200]}"
             else:
-                content_section = f"Content: {content_text[:1000]}"
+                content_section = f"Content: {content_text[:1500]}"
 
         # Prepare discussion section (comments, engagement)
         discussion_parts = []

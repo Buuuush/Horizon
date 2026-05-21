@@ -2,6 +2,8 @@
 
 from datetime import datetime, timezone
 
+import pytest
+
 from src.ai.summarizer import DailySummarizer
 from src.models import ContentItem, SourceType
 
@@ -98,3 +100,53 @@ def test_generate_webhook_item_uses_localized_discussion_label():
     )
 
     assert "[社区讨论](https://www.reddit.com/r/python/comments/abc123/test/)" in result
+
+
+@pytest.mark.asyncio
+async def test_generate_summary_translates_english_fields_only_at_render_time():
+    class FakeTranslator:
+        available = True
+
+        async def translate_to_french(self, texts):
+            return [f"FR: {text}" for text in texts]
+
+    summarizer = DailySummarizer(translator=FakeTranslator())
+    item = _make_item(1)
+    item.metadata.update({
+        "title_en": "English title",
+        "whats_new_en": "What happened in English.",
+        "why_it_matters_en": "Why it matters in English.",
+        "key_details_en": "Key details in English.",
+        "background_en": "Background in English.",
+        "community_discussion_en": "Community discussion in English.",
+        "evidence_note_en": "Evidence note in English.",
+    })
+
+    result = await summarizer.generate_summary(
+        [item],
+        date="2026-04-25",
+        total_fetched=10,
+        language="fr",
+    )
+
+    assert "FR: English title" in result
+    assert "FR: What happened in English." in result
+    assert "FR: Background in English." in result
+    assert "English title" not in item.metadata.get("title_fr", "") or item.metadata.get("title_fr", "").startswith("FR:")
+
+
+@pytest.mark.asyncio
+async def test_generate_summary_does_not_render_ai_scores_in_html():
+    summarizer = DailySummarizer()
+    item = _make_item(1)
+
+    result = await summarizer.generate_summary(
+        [item],
+        date="2026-04-25",
+        total_fetched=10,
+        language="en",
+    )
+
+    assert "Important Item 1" in result
+    assert "<span class=\"score\">" not in result
+    assert "⭐" not in result

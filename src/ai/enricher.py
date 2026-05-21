@@ -75,7 +75,7 @@ class ContentEnricher:
 
             await asyncio.gather(*[track_and_enrich(item) for item in items])
 
-    async def _web_search(self, query: str, max_results: int = 3) -> list:
+    async def _web_search(self, query: str, max_results: int = 5) -> list:
         """Search the web for context via DuckDuckGo.
 
         Returns:
@@ -133,7 +133,7 @@ class ContentEnricher:
             if result is None:
                 return []
             queries = result.get("queries", [])
-            return queries[:1]
+            return queries[:2]
         except Exception:
             return []
 
@@ -225,7 +225,7 @@ class ContentEnricher:
 
             # Aggregate descriptive fields into a detailed summary
             parts = []
-            for field in ("whats_new", "why_it_matters", "key_details"):
+            for field in ("whats_new", "why_it_matters", "key_details", "background"):
                 key = f"{field}_{lang}"
                 raw = result.get(key, "")
                 if isinstance(raw, dict):
@@ -236,7 +236,7 @@ class ContentEnricher:
                 if text:
                     parts.append(text)
             if parts:
-                item.metadata[f"detailed_summary_{lang}"] = " ".join(parts)
+                item.metadata[f"detailed_summary_{lang}"] = "\n\n".join(parts)
 
             # Background and community discussion can also be dicts or strings
             bg_key = f"background_{lang}"
@@ -254,6 +254,16 @@ class ContentEnricher:
                     item.metadata[disc_key] = val.get("text", "") or str(val)
                 else:
                     item.metadata[disc_key] = str(val or "")
+
+        # Store evidence notes.
+        for lang in ("en", "fr"):
+            note_key = f"evidence_note_{lang}"
+            if note_key in result:
+                val = result.get(note_key)
+                if isinstance(val, dict):
+                    item.metadata[note_key] = val.get("text", "") or str(val)
+                else:
+                    item.metadata[note_key] = str(val or "")
 
         # Store citation sources — only URLs that actually came from our search results
         if result.get("sources") and available_urls:

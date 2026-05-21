@@ -319,6 +319,16 @@ class HorizonOrchestrator:
                     f"({dropped} éléments retirés)\n"
                 )
 
+            # 6.6 Drop items whose enriched content is still too thin.
+            depth_filtered_items = self._filter_shallow_items(important_items)
+            if len(depth_filtered_items) < len(important_items):
+                removed = len(important_items) - len(depth_filtered_items)
+                self.console.print(
+                    f"🧱 Filtrage éditorial: {removed} éléments trop courts ou trop pauvres retirés\n"
+                )
+                if depth_filtered_items:
+                    important_items = depth_filtered_items
+
             # 7. Generate and save bilingual daily summary with tabbed interface (FR/EN onglets)
             today = datetime.now(timezone.utc).strftime("%Y-%m-%d")
             ai_client = create_ai_client(self.config.ai)
@@ -859,6 +869,32 @@ class HorizonOrchestrator:
         enricher = ContentEnricher(ai_client)
         await enricher.enrich_batch(items)
         self.console.print(f"   {len(items)} éléments enrichis\n")
+
+    @staticmethod
+    def _has_sufficient_editorial_depth(item: ContentItem) -> bool:
+        """Return True when an enriched item is substantive enough to publish."""
+        meta = item.metadata
+
+        text_parts = [
+            str(item.ai_summary or "").strip(),
+            str(meta.get("detailed_summary_en") or "").strip(),
+            str(meta.get("detailed_summary_fr") or "").strip(),
+            str(meta.get("background_en") or "").strip(),
+            str(meta.get("background_fr") or "").strip(),
+        ]
+        combined_length = sum(len(part) for part in text_parts)
+
+        sources = meta.get("sources") or []
+        has_structure = any(len(part) >= 80 for part in text_parts[1:])
+        has_multiple_sections = sum(bool(part) for part in text_parts[1:]) >= 2
+        has_sources = len(sources) >= 1
+
+        return combined_length >= 160 and has_structure and (has_sources or has_multiple_sections)
+
+    def _filter_shallow_items(self, items: List[ContentItem]) -> List[ContentItem]:
+        """Keep the richest items, but fall back to the original list if all are thin."""
+        filtered = [item for item in items if self._has_sufficient_editorial_depth(item)]
+        return filtered or items
 
     async def _analyze_content(self, items: List[ContentItem]) -> List[ContentItem]:
         """Analyze content items with AI.

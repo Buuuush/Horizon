@@ -10,7 +10,7 @@ from enum import Enum
 import json
 import asyncio
 
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 
 # Import from core modules
 import sys
@@ -27,6 +27,8 @@ from src.models import Profile, FeedbackSignal
 
 class ProfileResponse(BaseModel):
     """Profile response model."""
+    model_config = ConfigDict(from_attributes=True)
+
     name: str
     description: Optional[str] = None
     ai_score_threshold: float
@@ -35,10 +37,6 @@ class ProfileResponse(BaseModel):
     created_at: str
     updated_at: str
     is_active: bool
-
-    class Config:
-        from_attributes = True
-
 
 class FeedbackRequest(BaseModel):
     """Request model for submitting feedback."""

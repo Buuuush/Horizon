@@ -52,18 +52,6 @@ After scoring, items are filtered by `filtering.ai_score_threshold` (default: `7
 
 Items scoring 9.0 or above are featured in the "Today's Highlights" section of the summary.
 
-## Editorial Depth Filter
-
-After enrichment, Horizon applies a lightweight editorial depth check before building the final summary. This keeps items that have enough substantive material to publish and drops items that remain too thin, even if they passed the score threshold.
-
-The depth check considers:
-
-- AI summary length and presence of enriched fields
-- Whether at least one or more substantial sections were produced
-- Whether grounding sources were found during enrichment
-
-If every remaining item is still shallow, Horizon keeps the original list so the run does not end up empty.
-
 ## Enrichment
 
 Items that pass the score threshold go through a second AI pass for enrichment (`src/ai/enricher.py`):
@@ -76,4 +64,4 @@ Items that pass the score threshold go through a second AI pass for enrichment (
    - `key_details` — notable technical details or caveats
    - `background` — background knowledge for readers without deep domain expertise
 
-These fields are combined into a `detailed_summary` stored in the item's metadata and used in the final daily summary. The enrichment prompts now ask for slightly longer, more explanatory sections so the final briefing reads less like a bullet digest and more like a compact report.
+These fields are combined into a `detailed_summary` stored in the item's metadata and used in the final daily summary.

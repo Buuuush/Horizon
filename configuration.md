@@ -233,6 +233,10 @@ Content is scored 0-10:
 
 Horizon also applies a lightweight diversity pass after scoring so a single feed, subreddit, or channel does not crowd out the rest of the briefing.
 
+After enrichment, Horizon also applies a small editorial depth filter. This removes items that remain too thin after the second AI pass, while keeping a fallback path so a run is not emptied entirely if all items are shallow.
+
+If `DEEPL_AUTH_KEY` is set, Horizon will also use DeepL as a French translation fallback right before rendering the final summary. This keeps the translation cost limited to the selected items that are actually published.
+
 ## Environment Variable Substitution
 
 RSS feed URLs support `${VAR_NAME}` syntax for secrets. The variable is expanded at runtime from environment variables (or `.env` file):
@@ -311,6 +315,10 @@ Webhook notification is optional and disabled unless `webhook.enabled` is `true`
 - `headers`: Optional custom headers, one `Key: Value` pair per line.
 
 When `request_body` is a JSON object or array, Horizon renders placeholders and serializes it as JSON. When it is a string, Horizon renders it directly and detects JSON if the rendered string is valid JSON.
+
+### HTML Summary Notes
+
+Public HTML summaries no longer show the internal AI score badges next to article titles or in the table of contents. The score remains available for ranking, filtering, and internal debugging, but it is not rendered in the visible HTML output.
 
 ### Webhook Templates
 

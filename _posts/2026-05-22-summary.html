@@ -1,0 +1,760 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Horizon — 2026-05-22</title>
+  <style>
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600&family=Manrope:wght@500;700&display=swap');
+
+:root {
+    --bg: #f8f8fb;
+    --paper: #ffffff;
+    --surface: #fcfbff;
+    --accent: #325c9b;
+    --accent-2: color-mix(in srgb, var(--accent) 55%, #b73fd6);
+    --accent-3: color-mix(in srgb, var(--accent) 40%, #f59e0b);
+    --accent-soft: #e6eefb;
+    --muted: #5c6372;
+    --text: #1d2230;
+    --ring: color-mix(in srgb, var(--accent) 32%, transparent);
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+    color: var(--text);
+    background:
+        radial-gradient(1300px 420px at -10% -20%, var(--accent-soft), transparent 60%),
+        radial-gradient(760px 300px at 88% -12%, color-mix(in srgb, var(--accent-2) 24%, transparent), transparent 66%),
+        radial-gradient(640px 240px at 30% 0%, color-mix(in srgb, var(--accent-3) 18%, transparent), transparent 70%),
+        var(--bg);
+    font-family: 'Source Serif 4', Georgia, serif;
+    line-height: 1.78;
+}
+
+.container { max-width: 1100px; margin: 1.5rem auto; padding: 1rem; }
+
+.tab-switcher {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+    border-bottom: 2px solid color-mix(in srgb, var(--accent) 20%, transparent);
+}
+
+.tab-button {
+    background: transparent;
+    border: none;
+    color: var(--muted);
+    font-family: 'Manrope', 'Segoe UI', sans-serif;
+    font-size: 1rem;
+    font-weight: 600;
+    padding: 0.75rem 1.2rem;
+    cursor: pointer;
+    transition: color 0.18s ease, border-color 0.18s ease;
+    border-bottom: 3px solid transparent;
+}
+
+.tab-button:hover {
+    color: var(--text);
+}
+
+.tab-button.active {
+    color: var(--accent);
+    border-bottom-color: var(--accent);
+}
+
+.tab-content {
+    display: none;
+    animation: fadeIn 0.2s ease-in;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.summary-header {
+    background: var(--paper);
+    border: 1px solid color-mix(in srgb, var(--accent) 16%, transparent);
+    border-radius: 24px;
+    padding: 1.5rem 1.6rem 1.1rem;
+    box-shadow: 0 18px 48px rgba(19, 33, 68, 0.08);
+    margin-bottom: 1rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.summary-header::after {
+    content: "";
+    position: absolute;
+    inset: auto -60px -80px auto;
+    width: 220px;
+    height: 220px;
+    border-radius: 999px;
+    background: radial-gradient(circle, color-mix(in srgb, var(--accent-2) 28%, transparent), transparent 70%);
+    pointer-events: none;
+}
+
+.summary-header h1 {
+    margin: 0;
+    font-family: 'Fraunces', 'DM Serif Display', 'Iowan Old Style', 'Palatino Linotype', serif;
+    letter-spacing: .01em;
+    font-size: clamp(1.8rem, 3.6vw, 2.8rem);
+    line-height: 1.15;
+}
+
+.lead { margin: .55rem 0 1.1rem; color: var(--muted); font-size: 1.04rem; max-width: 78ch; }
+
+.toc-title {
+    margin: 0 0 .45rem;
+    font-family: 'Manrope', 'Segoe UI', sans-serif;
+    font-size: .85rem;
+    text-transform: uppercase;
+    letter-spacing: .11em;
+    color: var(--muted);
+}
+
+.toc ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: .55rem;
+}
+
+.toc li {
+    background: linear-gradient(160deg, var(--surface), color-mix(in srgb, var(--accent-soft) 48%, #ffffff));
+    border: 1px solid color-mix(in srgb, var(--accent) 16%, transparent);
+    border-radius: 10px;
+    padding: .55rem .65rem;
+    transition: transform .18s ease, box-shadow .18s ease;
+}
+
+.toc li:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 8px 20px color-mix(in srgb, var(--accent) 15%, transparent);
+}
+
+.toc a { text-decoration: none; color: var(--text); }
+
+.items { display: grid; gap: .95rem; }
+
+.items article {
+    background: var(--paper);
+    border: 1px solid color-mix(in srgb, var(--accent) 15%, transparent);
+    border-radius: 20px;
+    padding: 1.15rem 1.2rem;
+    box-shadow: 0 10px 32px rgba(0, 0, 0, 0.05);
+}
+
+.item-title {
+    font-family: 'Fraunces', 'DM Serif Display', 'Iowan Old Style', 'Palatino Linotype', serif;
+    font-size: clamp(1.2rem, 2.2vw, 1.55rem);
+    margin: 0 0 .55rem;
+    line-height: 1.22;
+}
+
+.item-title a { color: inherit; text-decoration: none; }
+.item-title a:hover { color: var(--accent); }
+
+.item-title a:focus-visible,
+.toc a:focus-visible,
+summary:focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
+    border-radius: 6px;
+}
+
+.meta { color: var(--muted); font-family: 'Manrope', 'Segoe UI', sans-serif; font-size: .9rem; margin-bottom: .7rem; }
+.score { color: var(--accent); margin-left: .45rem; font-weight: 700; font-family: 'Manrope', 'Segoe UI', sans-serif; }
+
+.content { font-size: 1.03rem; line-height: 1.8; }
+
+.fr-only {
+    display: grid;
+    gap: .72rem;
+}
+
+.content-section {
+    background: linear-gradient(170deg, var(--surface), color-mix(in srgb, var(--accent-soft) 24%, #ffffff));
+    border: 1px solid color-mix(in srgb, var(--accent) 12%, transparent);
+    border-radius: 12px;
+    padding: .78rem .85rem;
+}
+
+.content-section h3 {
+    margin: 0 0 .35rem;
+    font-family: 'Manrope', 'Segoe UI', sans-serif;
+    font-size: .82rem;
+    color: var(--muted);
+    letter-spacing: .07em;
+    text-transform: uppercase;
+}
+
+.evidence-note {
+    margin: .7rem 0 0;
+    color: var(--muted);
+    font-size: .94rem;
+}
+
+.tags { margin-top: .75rem; color: var(--muted); font-family: 'Manrope', 'Segoe UI', sans-serif; font-size: .9rem; }
+code { background: color-mix(in srgb, var(--accent-soft) 65%, #ffffff); border-radius: 8px; padding: .12rem .4rem; }
+
+details { margin-top: .65rem; }
+details summary { cursor: pointer; color: var(--accent); font-family: 'Manrope', 'Segoe UI', sans-serif; }
+
+@media (max-width: 860px) {
+    .container { margin: .7rem auto; padding: .65rem; }
+    .tab-switcher { flex-wrap: wrap; }
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --bg: #0f1420;
+        --paper: #161d2c;
+        --surface: #1b2435;
+        --accent: #7cb1ff;
+        --accent-2: #c28cff;
+        --accent-3: #ffc36c;
+        --accent-soft: #1a2740;
+        --muted: #a6b4cd;
+        --text: #edf2ff;
+        --ring: rgba(124, 177, 255, 0.55);
+    }
+
+    body {
+        background:
+            radial-gradient(1200px 420px at -10% -20%, #1a2740, transparent 60%),
+            radial-gradient(760px 300px at 88% -12%, rgba(194, 140, 255, 0.2), transparent 66%),
+            radial-gradient(640px 240px at 30% 0%, rgba(255, 195, 108, 0.14), transparent 70%),
+            var(--bg);
+    }
+
+    .summary-header,
+    .items article {
+        border-color: rgba(124, 177, 255, 0.24);
+        box-shadow: 0 18px 44px rgba(0, 0, 0, 0.32);
+    }
+
+    .tab-switcher {
+        border-bottom-color: rgba(124, 177, 255, 0.2);
+    }
+
+    code {
+        background: rgba(124, 177, 255, 0.16);
+    }
+}
+</style>
+  <script>
+    function switchTab(button) {
+      const lang = button.getAttribute('data-lang');
+      const allButtons = document.querySelectorAll('.tab-button');
+      const allContents = document.querySelectorAll('.tab-content');
+      
+      allButtons.forEach(b => b.classList.remove('active'));
+      allContents.forEach(c => c.classList.remove('active'));
+      
+      button.classList.add('active');
+      document.querySelector(`.tab-content[data-lang="${lang}"]`).classList.add('active');
+    }
+  </script>
+</head>
+<body>
+  <div class="container">
+    <div class="tab-switcher">
+      <button class="tab-button active" onclick="switchTab(this)" data-lang="fr">Français</button><button class="tab-button " onclick="switchTab(this)" data-lang="en">English</button>
+    </div>
+    <div class="tab-content active" data-lang="fr"><div class="fr-item">### 1.
+<section class="summary-header">
+  <h1>Horizon Quotidien — 2026-05-22</h1>
+  <p class="lead">18 sujets essentiels sélectionnés parmi 441 contenus collectés.</p>
+  <nav class="toc" aria-label="Sommaire">
+    <p class="toc-title">Sommaire</p>
+    <ul><li><a href="#item-1">La startup Green Steel Boston Metal lève 75 millions</a></li>
+<li><a href="#item-2">Le Download couvre l&#39;avenir de la sécurité en ligne et le virage climatique.</a></li>
+<li><a href="#item-3">Comprendre le paysage moderne de la cybercriminalité.</a></li>
+<li><a href="#item-4">Les rondes de discussion explorent si l&#39;IA peut comprendre le monde.</a></li>
+<li><a href="#item-5">Colossal Biosciences fait éclore des poules à partir d&#39;œufs artificiels imprimés.</a></li>
+<li><a href="#item-6">L&#39;article explore le scaling de la créativité à l&#39;âge de l&#39;IA.</a></li>
+<li><a href="#item-7">IBM voit ses actions grimper après 1 milliard de dollars de financement quantique</a></li>
+<li><a href="#item-8">Anthropic’s Code with Claude a montré l’avenir du codage—que vous aimiez ou non</a></li>
+<li><a href="#item-9">Waymo prend une pause multi-ville en cas d&#39;inondation et arrête l&#39;accès aux autoroutes.</a></li>
+<li><a href="#item-10">Cursor atteint un chiffre d&#39;affaires annuel de 3 milliards de dollars avant un accord SpaceX</a></li>
+<li><a href="#item-11">Prochaine phase de l&#39;intelligence artificielle</a></li>
+<li><a href="#item-12">Nvidia indique aux investisseurs sceptiques que l&#39;IA est prête à devenir grand public.</a></li>
+<li><a href="#item-13">Insilico utilise l&#39;IA pour transformer la découverte de médicaments et la recherche sur la longévité.</a></li>
+<li><a href="#item-14">Take-Two confirme le 19 novembre du lancement de Grand Theft Auto VI.</a></li>
+<li><a href="#item-15">Les investisseurs tournent le dos à TSMC avec l&#39;essor de l&#39;IA.</a></li>
+<li><a href="#item-16">Lenovo a grimpé à un sommet de 26 ans après une forte croissance de l&#39;IA.</a></li>
+<li><a href="#item-17">Les roundtables offrent un aperçu interne du procès Musk contre Altman.</a></li>
+<li><a href="#item-18">Les concurrents de Nvidia devraient avoir peur, avertit Ross Gerber</a></li></ul>
+  </nav>
+</section>
+<main class="items">
+<article id="item-1">
+  <header>
+        <h2 class="item-title"><a href="https://www.technologyreview.com/2026/05/20/1137523/boston-metal-funding-critical-metals/">La startup Green Steel Boston Metal lève 75 millions</a></h2>
+    <div class="meta">rss · MIT Technology Review · May 20, 13:00</div>
+  </header>
+  <div class="lang-blocks fr-only"><section class="content-section"><h3>Contexte</h3><div class="content">L&#39;acier est une industrie très énergivore, responsable d&#39;environ 7 à 8 % des émissions mondiales de gaz à effet de serre. Le terme « steel vert » désigne la production d&#39;acier avec des émissions réduites ou nulles, un objectif majeur pour la transition écologique. Les métaux critiques, tels que le lithium et les éléments terre rares, sont indispensables aux technologies propres qui soutiennent ce processus. Boston Metal se concentre sur ces métaux pour soutenir la décarbonation de l&#39;acier.</div></section></div>
+  <p class="evidence-note"><strong>Fiabilité</strong> : Les preuves sont solides, basées sur un reportage d&#39;actualité réputé avec un montant de financement clair et un impact climatique évident.</p>
+  <div class="tags"><code>#cleantech</code>, <code>#funding</code>, <code>#climate</code>, <code>#steel</code>, <code>#technology</code></div>
+  <details><summary>Références</summary><ul><li><a href="https://en.wikipedia.org/wiki/Green_steel">Green steel</a></li><li><a href="https://www.ssab.com/en-gb/fossil-free-steel/insights/green-steel">What is green steel? - SSAB</a></li></ul></details>
+</article>
+
+<article id="item-2">
+  <header>
+        <h2 class="item-title"><a href="https://www.technologyreview.com/2026/05/21/1137733/the-download-online-safety-climate-tech-pivot/">Le Download couvre l&#39;avenir de la sécurité en ligne et le virage climatique.</a></h2>
+    <div class="meta">rss · MIT Technology Review · May 21, 12:10</div>
+  </header>
+  <div class="lang-blocks fr-only"><section class="content-section"><h3>Contexte</h3><div class="content">La Section 230, adoptée en 1996 dans le cadre de la Communications Decency Act, confère aux plateformes en ligne une immunité contre la responsabilité du contenu généré par les utilisateurs, un pilier essentiel à la croissance d’Internet et sujet à de récents débats juridiques. Les actions récentes de l’administration Trump visent à restreindre cette immunité, entraînant des poursuites intentées par des chercheurs étudiant la haine en ligne et la désinformation. La technologie climatique, définie comme des solutions favorisant la décarbonisation et la réduction des émissions, connaît un virage avec davantage d’investissements et d’attention politique, comme le montrent les rapports sectoriels et les efforts de coordination gouvernementale tels que le Comité sur la science et la technologie du changement climatique.</div></section></div>
+  <p class="evidence-note"><strong>Fiabilité</strong> : Les preuves sont solides, s’appuyant sur des sources réputées concernant la loi sur la Section 230 et les tendances de la technologie climatique.</p>
+  <div class="tags"><code>#online safety</code>, <code>#legal</code>, <code>#climate tech</code>, <code>#technology policy</code></div>
+  <details><summary>Références</summary><ul><li><a href="https://en.wikipedia.org/wiki/Section_230">Section 230</a></li><li><a href="https://www.eff.org/issues/cda230">Section 230 | Electronic Frontier Foundation</a></li><li><a href="https://netzeroinsights.com/what-is-climate-tech/">What is Climate Tech? - Net Zero Insights</a></li></ul></details>
+</article>
+
+<article id="item-3">
+  <header>
+        <h2 class="item-title"><a href="https://www.technologyreview.com/2026/05/19/1136925/understanding-the-modern-cybercrime-landscape/">Comprendre le paysage moderne de la cybercriminalité.</a></h2>
+    <div class="meta">rss · MIT Technology Review · May 19, 13:00</div>
+  </header>
+  <div class="lang-blocks fr-only"><section class="content-section"><h3>Contexte</h3><div class="content">La cybercriminalité a évolué depuis des décennies, passant d’activités isolées d’amateurs à une industrie professionnelle et organisée. Le rapport In the Wild d’HPE s’appuie sur une activité de menace globale en temps réel observée tout au long de 2025, en analysant 1186 attaques actives. Il montre que l’automatisation et l’IA sont désormais des outils essentiels permettant aux cybercriminels d’augmenter rapidement leur échelle et de maintenir des flux de travail structurés à la manière d’entreprise. Cette industrialisation est également soulignée par des analyses de Fortinet et Cloudflare, indiquant un virage durable vers des opérations criminelles systématiques.</div></section></div>
+  <p class="evidence-note"><strong>Fiabilité</strong> : Les preuves sont solides, tirées de l’analyse de 1186 menaces en temps réel d’HPE et corroborées par des rapports d’industrie reconnus.</p>
+  <div class="tags"><code>#Cybersecurity</code>, <code>#AI</code>, <code>#Automation</code>, <code>#Cybercrime</code>, <code>#Technology Review</code></div>
+  <details><summary>Références</summary><ul><li><a href="https://www.technologyreview.com/2026/05/19/1136925/understanding-the-modern-cybercrime-landscape/">Understanding the modern cybercrime landscape - MIT Technology Review</a></li><li><a href="https://www.hpe.com/psnow/downloadDoc/HPE+Threat+Labs+2026+In+the+Wild+Threat+Report-a50014950enw.pdf?id=a50014950enw&amp;isFutureVersion=true&amp;ver=1&amp;form=false&amp;preview=false&amp;hf=regular&amp;isLinearized=false&amp;contentDisposition=attachment">HPE Threat Labs 2026 In the Wild Threat Report</a></li><li><a href="https://www.fortinet.com/blog/industry-trends/inside-industrialization-of-cybercrime-what-to-expect-in-2026">Inside the Industrialization of Cybercrime: What to Expect in ...</a></li></ul></details>
+</article>
+
+<article id="item-4">
+  <header>
+        <h2 class="item-title"><a href="https://www.technologyreview.com/2026/05/21/1137756/roundtables-can-ai-learn-to-understand-the-world/">Les rondes de discussion explorent si l&#39;IA peut comprendre le monde.</a></h2>
+    <div class="meta">rss · MIT Technology Review · May 21, 20:41</div>
+  </header>
+  <div class="lang-blocks fr-only"><section class="content-section"><h3>Contexte</h3><div class="content">Les modèles de monde sont des systèmes d&#39;apprentissage automatique qui créent des représentations internes d&#39;un environnement et prédisent comment il évolue dans le temps en réponse à des actions, un concept issu de la théorie des modèles mentaux en psychologie. Ils diffèrent des modèles de langage, qui génèrent principalement du texte basé sur des motifs statistiques, en se concentrant sur la dynamique physique, les relations spatiales et le raisonnement causal. Des entreprises comme NVIDIA décrivent les modèles de monde comme des réseaux de neurones capables d&#39;ingérer des vidéos, des images et des données de capteurs pour simuler des environnements physiques réalistes. L&#39;idée a attiré des investissements substantiels, comme le souligne Forbes, et est perçue comme une étape vers des IA plus capables fonctionnant en toute sécurité dans le monde réel.</div></section></div>
+  <p class="evidence-note"><strong>Fiabilité</strong> : Les preuves s&#39;appuient sur un rondeau réputé de MIT Technology Review et sur des définitions de Wikipedia et NVIDIA, ce qui les rend modérément solides.</p>
+  <div class="tags"><code>#AI</code>, <code>#World Models</code>, <code>#Technology</code>, <code>#Innovation</code>, <code>#Discussion</code></div>
+  <details><summary>Références</summary><ul><li><a href="https://en.m.wikipedia.org/wiki/World_model_(artificial_intelligence)">World model (artificial intelligence) - Wikipedia</a></li><li><a href="https://www.nvidia.com/en-us/glossary/world-models/">What Is a World Model? | NVIDIA Glossary</a></li><li><a href="https://www.forbes.com/sites/nishatalagala/2026/04/19/ai-world-models-what-are-they-and-why-should-you-care/">AI World Models: What Are They And Why Should You Care - Forbes</a></li></ul></details>
+</article>
+
+<article id="item-5">
+  <header>
+        <h2 class="item-title"><a href="https://www.technologyreview.com/2026/05/20/1137579/the-download-colossal-biosciences-egg-musk-altman-trial/">Colossal Biosciences fait éclore des poules à partir d&#39;œufs artificiels imprimés.</a></h2>
+    <div class="meta">rss · MIT Technology Review · May 20, 12:10</div>
+  </header>
+  <div class="lang-blocks fr-only"><section class="content-section"><h3>Contexte</h3><div class="content">Fondée en 2021 par le généticien George Church et l&#39;entrepreneur Ben Lamm, Colossal Biosciences est une société de biotechnologie basée à Dallas qui se concentre sur des projets de dé‐extinction, comme la résurrection du mammouth laineux et du thylacine. L&#39;entreprise a récemment élargi son champ d&#39;action à la biologie synthétique pour la conservation des oiseaux, comme le montre l&#39;utilisation d&#39;une coquille d&#39;œuf artificielle imprimée en 3D pour faire éclore des poulets. Cette technologie s&#39;appuie sur des recherches antérieures démontrant la faisabilité de faire pousser des embryons dans des contenants ingénierés reproduisant les conditions physiologiques d&#39;une vraie coquille. L&#39;article mentionne également un défi juridique impliquant Elon Musk, indiquant que les entreprises biotech de renom peuvent faire face à une surveillance réglementaire accrue.</div></section></div>
+  <p class="evidence-note"><strong>Fiabilité</strong> : Les preuves sont solides pour la revendication d&#39;éclosion, mais plus faibles concernant le revers juridique impliquant Musk.</p>
+  <div class="tags"><code>#synthetic biology</code>, <code>#food technology</code>, <code>#biotech</code>, <code>#Elon Musk</code>, <code>#agriculture</code></div>
+  <details><summary>Références</summary><ul><li><a href="https://www.technologyreview.com/2026/05/19/1137471/colossal-biosciences-is-growing-chickens-in-a-3d-printed-container/">Colossal Biosciences is growing chickens in a 3D-printed artificial eggshell | MIT Technology Review</a></li><li><a href="https://science.slashdot.org/story/26/05/21/0112253/colossal-biosciences-is-growing-chickens-in-a-3d-printed-artificial-eggshell">Colossal Biosciences Is Growing Chickens In a 3D-Printed Artificial Eggshell - Slashdot</a></li><li><a href="https://en.wikipedia.org/wiki/Colossal_Biosciences">Colossal Biosciences</a></li></ul></details>
+</article>
+
+<article id="item-6">
+  <header>
+        <h2 class="item-title"><a href="https://www.technologyreview.com/2026/05/21/1137613/scaling-creativity-in-the-age-of-ai/">L&#39;article explore le scaling de la créativité à l&#39;âge de l&#39;IA.</a></h2>
+    <div class="meta">rss · MIT Technology Review · May 21, 19:16</div>
+  </header>
+  <div class="lang-blocks fr-only"><section class="content-section"><h3>Contexte</h3><div class="content">Les peintures rupestres datant de dizaines de milliers d&#39;années utilisaient des pigments tels que l&#39;ocre, le charbon et l&#39;oxyde de manganèse mélangés à de la graisse animale ou de la salive pour adhérer aux parois de pierre (Wikipedia, 2026). Les recherches sur le récit généré par l&#39;IA indiquent que les modèles génératifs produisent aujourd&#39;hui du contenu narratif procédural, y compris des quêtes et des rebondissements cohérents avec l&#39;intrigue, dans les médias interactifs (Research Square, 2026). La durabilité de ces œuvres anciennes s&#39;explique par les propriétés liantes des pigments, qui les ont conservés pendant des millénaires malgré l&#39;exposition environnementale (RSC Education, 2024).</div></section></div>
+  <p class="evidence-note"><strong>Fiabilité</strong> : Les preuves sont modérées ; l&#39;article cite des études académiques et des faits historiques, mais l&#39;extrait est bref, limitant la profondeur.</p>
+  <div class="tags"><code>#AI</code>, <code>#Creativity</code>, <code>#Technology</code>, <code>#Storytelling</code></div>
+  <details><summary>Références</summary><ul><li><a href="https://en.wikipedia.org/wiki/Cave_painting">Cave painting - Wikipedia</a></li><li><a href="https://www.researchsquare.com/article/rs-7318246/v1">AI storytelling &amp; narrative evolution in creative industries: a ...</a></li><li><a href="https://edu.rsc.org/resources/prehistoric-pigments/1540.article">Prehistoric pigments | Resource | RSC Education</a></li></ul></details>
+</article>
+
+<article id="item-7">
+  <header>
+        <h2 class="item-title"><a href="https://www.bloomberg.com/news/articles/2026-05-21/trump-administration-pledges-2-billion-for-quantum-firms-wsj">IBM voit ses actions grimper après 1 milliard de dollars de financement quantique</a></h2>
+    <div class="meta">rss · Bloomberg Technology · May 21, 10:42</div>
+  </header>
+  <div class="lang-blocks fr-only"><section class="content-section"><h3>Contexte</h3><div class="content">Une fonderie de puces quantiques est une installation de fabrication spécialisée qui produit des unités de traitement quantique (QPU) sur mesure, dépassant les solutions matérielles génériques. Des travaux récents dans des fonderies commerciales, comme la première puce quantique photonic‐électronique réalisée dans une fabrique de semi‐conducteurs, démontrent que des systèmes quantiques répétables et contrôlables peuvent être fabriqués avec les procédés existants. L&#39;initiative quantique de 2 milliards de dollars de l&#39;administration Trump, annoncée en mai 2026, prévoit un financement et des parts d&#39;équité pour neuf entreprises afin de renforcer la leadership américain dans ce domaine émergent.</div></section></div>
+  <p class="evidence-note"><strong>Fiabilité</strong> : Les preuves sont solides, tirées de plusieurs médias réputés et d&#39;articles techniques détaillés sur les fonderies quantiques.</p>
+  <div class="tags"><code>#quantum computing</code>, <code>#IBM</code>, <code>#US government funding</code>, <code>#technology</code>, <code>#news</code></div>
+  <details><summary>Références</summary><ul><li><a href="https://www.spinquanta.com/news-detail/the-ultimate-guide-to-spinq-chip-foundry-revolutionizing-quantum-computing-manufacturing">The Ultimate Guide to SpinQ Chip Foundry: Revolutionizing Quantum Computing Manufacturing | SpinQ</a></li><li><a href="https://www.bu.edu/eng/2025/07/14/first-electronic-photonic-quantum-chip-created-in-commercial-foundry/">First Electronic–Photonic Quantum Chip Created in Commercial Foundry | College of Engineering</a></li><li><a href="https://www.nytimes.com/2026/05/21/business/trump-quantum-computers-stake.html">U.S. Invests $2 Billion and Takes Stake in Quantum Firms</a></li></ul></details>
+</article>
+
+<article id="item-8">
+  <header>
+        <h2 class="item-title"><a href="https://www.technologyreview.com/2026/05/21/1137735/anthropics-code-with-claude-showed-off-codings-future-whether-you-like-it-or-not/">Anthropic’s Code with Claude a montré l’avenir du codage—que vous aimiez ou non</a></h2>
+    <div class="meta">rss · MIT Technology Review · May 21, 14:30</div>
+  </header>
+  <div class="lang-blocks fr-only"><section class="content-section"><h3>Contexte</h3><div class="content">Claude Code est l’assistant de codage IA d’Anthropic qui peut comprendre un dépôt, effectuer des modifications, exécuter des commandes et s’intégrer aux IDE, comme le précise la page produit officielle. Il vise à accélérer le développement logiciel en automatisant les tâches de codage, un point souligné dans un article de blog de 2026 sur sa compréhension approfondie du projet. Anthropic, connu pour ses modèles de langage Claude, a lancé Claude Opus 4.7 en février 2026, élargissant les capacités du modèle aux travaux professionnels complexes, y compris le codage. La technologie se veut complémentaire aux développeurs, selon la description du produit.</div></section></div>
+  <p class="evidence-note"><strong>Fiabilité</strong> : La revendication est bien appuyée par la description de l’événement et plusieurs sources indépendantes détaillant les capacités de Claude Code.</p>
+  <div class="tags"><code>#AI</code>, <code>#Software Development</code>, <code>#Tech Event</code>, <code>#Anthropic</code>, <code>#Coding</code></div>
+  <details><summary>Références</summary><ul><li><a href="https://claude.com/product/claude-code">Claude Code by Anthropic | AI Coding Agent, Terminal, IDE</a></li><li><a href="https://www.mindtwo.com/blog/claude-code-ai-coding-assistants">Claude Code: Anthropic&#39;s AI Coding Assistant for Developers</a></li></ul></details>
+</article>
+
+<article id="item-9">
+  <header>
+        <h2 class="item-title"><a href="https://www.bloomberg.com/news/articles/2026-05-21/waymo-suspends-service-in-atlanta-as-robotaxis-stumped-by-floods">Waymo prend une pause multi-ville en cas d&#39;inondation et arrête l&#39;accès aux autoroutes.</a></h2>
+    <div class="meta">rss · Bloomberg Technology · May 21, 18:32</div>
+  </header>
+  <div class="lang-blocks fr-only"><section class="content-section"><h3>Contexte</h3><div class="content">Waymo, filiale d&#39;Alphabet Inc., exploite des services de robotaxi sans conducteur dans dix zones métropolitaines américaines à mars 2026 et s&#39;expand rapidement vers d&#39;autres villes et marchés internationaux (Built In, mai 2026). L&#39;entreprise a rappelé des milliers de ses Chrysler Pacifica Hybrid plus tôt en 2026 en raison de problèmes de sécurité, marquant un revers précédent (Bloomberg, mai 2026). Des recherches sur la navigation autonome en conditions d&#39;inondation, comme la mesure du niveau d&#39;eau par capteurs, suggèrent des approches techniques pour améliorer la sécurité par mauvais temps (Springer Nature, mars 2025).</div></section></div>
+  <p class="evidence-note"><strong>Fiabilité</strong> : Les preuves sont solides, basées sur une source d&#39;information réputée et des articles web corroborants sur les opérations de Waymo et la recherche sur la navigation en inondations.</p>
+  <div class="tags"><code>#Autonomous Vehicles</code>, <code>#Transportation Safety</code>, <code>#Floods</code>, <code>#Technology News</code>, <code>#Regulatory Impact</code></div>
+  <details><summary>Références</summary><ul><li><a href="https://builtin.com/articles/waymo-robotaxis">Waymo Explained: Alphabet’s Autonomous Vehicle Company | Built In</a></li><li><a href="https://link.springer.com/chapter/10.1007/978-3-031-81517-1_19">Development of an Autonomous Floating Vehicle Model with a Flood Detection System | Springer Nature Link (formerly SpringerLink)</a></li></ul></details>
+</article>
+
+<article id="item-10">
+  <header>
+        <h2 class="item-title"><a href="https://www.bloomberg.com/news/articles/2026-05-21/cursor-hits-3-billion-annual-sales-rate-ahead-of-spacex-deal">Cursor atteint un chiffre d&#39;affaires annuel de 3 milliards de dollars avant un accord SpaceX</a></h2>
+    <div class="meta">rss · Bloomberg Technology · May 21, 21:09</div>
+  </header>
+  <div class="lang-blocks fr-only"><section class="content-section"><h3>Contexte</h3><div class="content">Le revenu annualisé (ARR) correspond à la valeur annuelle des contrats d&#39;abonnement récurrents d&#39;une entreprise, calculé en projetant les revenus d&#39;abonnement récents sur une année complète, selon les définitions de DualEntry et Gtm Stage2 Capital. Cursor est une startup d&#39;IA pour le codage qui aide les développeurs à écrire, refactoriser et déboguer du code, se concrétisant avec des outils comme GitHub Copilot et Claude Code, comme le montrent les classements de 2026 de Zapier et Morphllm. SpaceX, l&#39;entreprise aérospatiale et technologique fondée par Elon Musk, acquiert des startups d&#39;IA pour renforcer ses capacités d&#39;ingénierie, une tendance observée dans les analyses sectorielles récentes. Le marché de l&#39;IA pour le codage s&#39;est développé rapidement, avec de nombreux fournisseurs atteignant des valorisations multimilliardaires, témoignant d&#39;une adoption massive dans le développement logiciel.</div></section></div>
+  <p class="evidence-note"><strong>Fiabilité</strong> : Les preuves sont solides, basées sur le rapport de Bloomberg sur les revenus et les définitions claires de l&#39;ARR provenant de sources réputées.</p>
+  <div class="tags"><code>#Artificial Intelligence</code>, <code>#Technology</code>, <code>#Business</code>, <code>#SpaceX</code>, <code>#Mergers &amp; Acquisitions</code></div>
+  <details><summary>Références</summary><ul><li><a href="https://www.dualentry.com/blog/arr-vs-revenue">ARR vs Revenue: Differences and Reconciliation | DualEntry</a></li><li><a href="https://gtm.stage2.capital/p/making-sense-of-revenue-metrics-for">Making Sense of Revenue Metrics for Fundraising</a></li><li><a href="https://zapier.com/blog/ai-coding-tools/">The 9 best AI coding tools in 2026 - Zapier</a></li></ul></details>
+</article>
+
+<article id="item-11">
+  <header>
+        <h2 class="item-title"><a href="https://www.bloomberg.com/news/videos/2026-05-21/the-next-phase-of-artificial-intelligence">Prochaine phase de l&#39;intelligence artificielle</a></h2>
+    <div class="meta">rss · Bloomberg Technology · May 21, 21:28</div>
+  </header>
+  <div class="lang-blocks fr-only"><section class="content-section"><h3>Contexte</h3><div class="content">L&#39;IA physique désigne des systèmes d&#39;IA qui opèrent dans le monde réel, traitant des données sensorielles provenant de robots, de véhicules ou d&#39;autres appareils pour prendre des décisions. Le concept s&#39;appuie sur les grands modèles linguistiques, qui sont des réseaux de neurones formés sur de très grands corpus de texte, et nécessite une nouvelle infrastructure combinant l&#39;entraînement cloud avec le déploiement sur site. Des experts comme Yann LeCun et JP Vert soulignent que la traduction des LLM vers le domaine physique exigera des matériels robustes, du calcul edge et des cadres normalisés pour le développement robotique. Des rapports récents de l&#39;industrie décrivent cinq composants critiques d&#39;infrastructure nécessaires à l&#39;IA physique, notamment la fabrication de précision, la distribution intelligente et l&#39;intégration des grands modèles linguistiques.</div></section></div>
+  <p class="evidence-note"><strong>Fiabilité</strong> : Les preuves sont solides grâce à une interview réputée de Bloomberg avec des chercheurs leaders en IA.</p>
+  <div class="tags"><code>#Artificial Intelligence</code>, <code>#Machine Learning</code>, <code>#Technology</code>, <code>#Future of AI</code>, <code>#Expert Interview</code></div>
+  <details><summary>Références</summary><ul><li><a href="https://en.wikipedia.org/wiki/Physical_infrastructure">Physical infrastructure</a></li><li><a href="https://www.nvidia.com/en-us/glossary/generative-physical-ai/">What is Physical AI? | NVIDIA Glossary</a></li><li><a href="https://aws.amazon.com/blogs/physical-ai/physical-ai-building-the-next-foundation-in-autonomous-intelligence/">Physical AI: Building the Next Foundation in Autonomous Intelligence | AWS Physical AI Blog</a></li></ul></details>
+</article>
+
+<article id="item-12">
+  <header>
+        <h2 class="item-title"><a href="https://www.bloomberg.com/news/articles/2026-05-20/nvidia-gives-disappointing-forecast-as-chip-competition-mounts">Nvidia indique aux investisseurs sceptiques que l&#39;IA est prête à devenir grand public.</a></h2>
+    <div class="meta">rss · Bloomberg Technology · May 20, 20:23</div>
+  </header>
+  <div class="lang-blocks fr-only"><section class="content-section"><h3>Contexte</h3><div class="content">Nvidia est devenu le fournisseur leader de GPU qui alimentent les plus grands modèles d&#39;IA, une position qui a généré la majeure partie de sa croissance des revenus auprès des exploitants de centres de données. Toutefois, l&#39;entreprise fait face à une concurrence accrue de la part d&#39;AMD, Intel et d&#39;ASIC personnalisés, ce qui l&#39;incite à diversifier ses sources de revenus au-delà du gaming et des puces de centres de données. Des rapports récents de l&#39;industrie montrent que l&#39;adoption de l&#39;IA passe d&#39;une utilisation nichée à des applications grand public et enterprise, soutenue par des initiatives gouvernementales et de grandes campagnes publicitaires. Ce contexte explique pourquoi la diversification de Nvidia et sa readiness à l&#39;IA sont closely surveillées par les investisseurs.</div></section></div>
+  <p class="evidence-note"><strong>Fiabilité</strong> : Les preuves sont solides, s’appuyant sur le rapport de Bloomberg et sur plusieurs analyses indépendantes de la stratégie de Nvidia et des tendances d’adoption de l’IA.</p>
+  <div class="tags"><code>#Nvidia</code>, <code>#AI</code>, <code>#Investors</code>, <code>#Quarterly earnings</code>, <code>#Technology</code></div>
+  <details><summary>Références</summary><ul><li><a href="https://www.tipranks.com/news/nvidia-stock-may-not-hold-the-ai-crown-forever-heres-why-you-should-diversify">Nvidia Stock May Not Hold the AI Crown Forever. - TipRanks.com</a></li><li><a href="https://finance.yahoo.com/news/decoding-nvidia-corp-nvda-strategic-050134845.html">Decoding NVIDIA Corp (NVDA): A Strategic SWOT Insight</a></li></ul></details>
+</article>
+
+<article id="item-13">
+  <header>
+        <h2 class="item-title"><a href="https://www.bloomberg.com/news/videos/2026-05-22/insilico-on-applying-ai-to-transform-drug-discovery-video">Insilico utilise l&#39;IA pour transformer la découverte de médicaments et la recherche sur la longévité.</a></h2>
+    <div class="meta">rss · Bloomberg Technology · May 22, 06:01</div>
+  </header>
+  <div class="lang-blocks fr-only"><section class="content-section"><h3>Contexte</h3><div class="content">L&#39;intelligence artificielle est utilisée pour analyser de grands ensembles de données biologiques, ce qui permet d&#39;identifier plus rapidement des candidats potentiels à la médication. Des entreprises comme Isomorphic Labs ont levé plusieurs milliards de dollars pour développer leurs plateformes de découverte de médicaments basées sur l&#39;IA, témoignant d&#39;un fort intérêt des investisseurs. En recherche sur la longévité, les scientifiques étudient les processus du vieillissement, notamment la sénescence cellulaire, l&#39;inflammation et le déclin métabolique, afin de concevoir des interventions prolongeant la santé. Des études préliminaires indiquent que des molécules comme la Metformine pourraient imiter la restriction calorique et améliorer la longévité chez les modèles animaux, tandis que les thérapies sénolytiques visent à éliminer les cellules sénescentes.</div></section></div>
+  <p class="evidence-note"><strong>Fiabilité</strong> : Les preuves reposent sur une interview de Bloomberg réputée et des articles sectoriels, offrant des données solides mais non expérimentales.</p>
+  <div class="tags"><code>#AI</code>, <code>#Drug Discovery</code>, <code>#Biotechnology</code>, <code>#Healthcare</code>, <code>#Technology</code></div>
+  <details><summary>Références</summary><ul><li><a href="https://www.linkedin.com/pulse/ai-drug-discovery-separating-signal-from-buzz-roots-analysis-rqqoc">AI in Drug Discovery: Separating Signal from Buzz</a></li><li><a href="https://news.google.com/stories/CAAqNggKIjBDQklTSGpvSmMzUnZjbmt0TXpZd1NoRUtEd2o4ei1LTUVSRURmajAxLUJOSjB5Z0FQAQ?hl=en-GB&amp;gl=GB&amp;ceid=GB:en">Isomorphic Labs raises $2.1 billion for AI drug discovery - Overview</a></li><li><a href="https://grokipedia.com/page/research_on_aging">Research on Aging</a></li></ul></details>
+</article>
+
+<article id="item-14">
+  <header>
+        <h2 class="item-title"><a href="https://www.bloomberg.com/news/articles/2026-05-21/take-two-confirms-november-debut-for-grand-theft-auto-vi">Take-Two confirme le 19 novembre du lancement de Grand Theft Auto VI.</a></h2>
+    <div class="meta">rss · Bloomberg Technology · May 21, 20:22</div>
+  </header>
+  <div class="lang-blocks fr-only"><section class="content-section"><h3>Contexte</h3><div class="content">Take‐Two Interactive est l&#39;une des plus grandes sociétés de jeux vidéo cotées en bourse, avec une capitalisation boursière d&#39;environ 41 milliards de dollars en avril 2025 et un portefeuille incluant Rockstar Games, 2K et plusieurs franchises majeures. Grand Theft Auto V, sorti en 2013, reste l&#39;un des titres les plus vendus de tous les temps et a maintenu la série dans l&#39;attention du public pendant plus d&#39;une décennie. Après plusieurs retards, Rockstar a confirmé le lancement le 19 novembre 2026, qui était incertain depuis l&#39;annonce initiale en 2022 et une fuite majeure de séquences inachevées en septembre 2023. La sortie à venir devrait être la huitième entrée principale de la série Grand Theft Auto et la seizième entrée globale de la franchise.</div></section></div>
+  <p class="evidence-note"><strong>Fiabilité</strong> : La date de lancement est confirmée directement par Reuters et Bloomberg, rendant l&#39;affirmation très fiable.</p>
+  <div class="tags"><code>#Video Games</code>, <code>#Gaming Industry</code>, <code>#Release Announcement</code>, <code>#Technology</code></div>
+  <details><summary>Références</summary><ul><li><a href="https://en.wikipedia.org/wiki/Take-Two_Interactive">Take-Two Interactive</a></li><li><a href="https://www.reuters.com/business/take-two-forecasts-annual-bookings-below-estimates-sticks-with-gta-vi-launch-2026-05-21/">Take-Two sticks with &#39;GTA VI&#39; launch timeline, forecasts annual bookings ...</a></li><li><a href="https://en.wikipedia.org/wiki/Grand_Theft_Auto_VI">Grand Theft Auto VI</a></li></ul></details>
+</article>
+
+<article id="item-15">
+  <header>
+        <h2 class="item-title"><a href="https://www.bloomberg.com/news/articles/2026-05-21/investors-look-beyond-tsmc-as-ai-boom-spreads-to-new-winners">Les investisseurs tournent le dos à TSMC avec l&#39;essor de l&#39;IA.</a></h2>
+    <div class="meta">rss · Bloomberg Technology · May 21, 23:30</div>
+  </header>
+  <div class="lang-blocks fr-only"><section class="content-section"><h3>Contexte</h3><div class="content">Taiwan Semiconductor Manufacturing Co. (TSMC) est le premier fabricant de semi-conducteurs sous-traitant au monde, fondé en 1987 et produit des puces pour de nombreux concepteurs, dont Nvidia. Nvidia, créée en 1993, est devenue le fournisseur dominant de GPU haut de gamme, détenant environ 92 % du marché des graphiques discrets en 2025 et stimulant largement le boom de l&#39;IA. La hausse de l&#39;IA a accru l&#39;intérêt des investisseurs pour les entreprises du secteur des semi-conducteurs et du logiciel IA, entraînant un réallocation de capitaux loin de TSMC.</div></section></div>
+  <p class="evidence-note"><strong>Fiabilité</strong> : Les preuves sont solides, tirées de l&#39;article Bloomberg et des pages Wikipedia et des entreprises.</p>
+  <div class="tags"><code>#AI</code>, <code>#Semiconductors</code>, <code>#Investment</code>, <code>#Technology</code>, <code>#Taiwan</code></div>
+  <details><summary>Références</summary><ul><li><a href="https://en.wikipedia.org/wiki/TSMC">TSMC - Wikipedia</a></li><li><a href="https://en.wikipedia.org/wiki/Nvidia">Nvidia - Wikipedia</a></li><li><a href="https://www.nvidia.com/en-us/about-nvidia/">About Us: Company Leadership, History, Jobs, News | NVIDIA</a></li></ul></details>
+</article>
+
+<article id="item-16">
+  <header>
+        <h2 class="item-title"><a href="https://www.bloomberg.com/news/videos/2026-05-22/the-china-show-5-22-2026-video">Lenovo a grimpé à un sommet de 26 ans après une forte croissance de l&#39;IA.</a></h2>
+    <div class="meta">rss · Bloomberg Technology · May 22, 05:47</div>
+  </header>
+  <div class="lang-blocks fr-only"><section class="content-section"><h3>Contexte</h3><div class="content">Lenovo est une entreprise technologique chinoise de premier plan, spécialisée dans les ordinateurs portables et les appareils électroniques grand public. Un sommet de 26 ans pour son cours boursier signifie que le prix de clôture, ajusté pour les splits, est le plus élevé enregistré au cours des 26 semaines précédentes. L’émission « The China Show » de Bloomberg est un programme matinal phare qui analyse l’économie, la politique et les tendances technologiques de la Chine. La forte croissance de l’IA chez Lenovo a été mise en avant comme le principal moteur de la hausse de son action.</div></section></div>
+  <p class="evidence-note"><strong>Fiabilité</strong> : Les preuves sont solides, le titre et le résumé proviennent directement de Bloomberg, complétés par des définitions financières provenant de sources réputées.</p>
+  <div class="tags"><code>#Technology</code>, <code>#Business</code>, <code>#AI</code>, <code>#China</code>, <code>#Stock Market</code></div>
+  <details><summary>Références</summary><ul><li><a href="https://tradingeconomics.com/united-states/stock-market">United States Stock Market Index - Quote - Chart - Historical Data - News | Trading Economics</a></li><li><a href="https://www.nasdaq.com/glossary/h/high-price">High price Definition | Nasdaq</a></li><li><a href="https://www.bloomberg.com/btv/series/the-china-show">The China Show - Bloomberg</a></li></ul></details>
+</article>
+
+<article id="item-17">
+  <header>
+        <h2 class="item-title"><a href="https://www.technologyreview.com/2026/05/19/1137454/roundtables-inside-the-musk-v-altman-trial/">Les roundtables offrent un aperçu interne du procès Musk contre Altman.</a></h2>
+    <div class="meta">rss · MIT Technology Review · May 19, 20:15</div>
+  </header>
+  <div class="lang-blocks fr-only"><section class="content-section"><h3>Résumé</h3><div class="content">Le MIT Technology Review a organisé un roundtable sur le résultat du procès d&#39;Elon Musk contre OpenAI, qui a conclu que Musk a perdu son affaire. Le panel incluait la journaliste IA et avocate Michelle Kim ainsi qu&#39;un éditeur.<br /><br />L&#39;affaire met en lumière les défis juridiques liés au passage d&#39;OpenAI d&#39;une entité à but non lucratif à une société à but lucratif, affectant la confiance dans le développement de l&#39;IA. Elle souligne la nécessité de transparence dans les structures d&#39;entreprise et pourrait influencer de futures litiges impliquant des entreprises d&#39;IA.<br /><br />Le procès alléguait que OpenAI dissimulait son statut à but non lucratif, incitant Musk à investir sur cette base. Des témoignages ont été fournis par le PDG Sam Altman et le président Greg Brockman, et les procédures ont été couvertes par la journaliste IA de MIT Technology Review, Michelle Kim.</div></section></div>
+  <p class="evidence-note"><strong>Fiabilité</strong> : Les preuves se basent uniquement sur le texte fourni et ne sont pas vérifiées externement.</p>
+  <div class="tags"><code>#AI</code>, <code>#Law</code>, <code>#Elon Musk</code>, <code>#OpenAI</code>, <code>#Technology</code></div>
+  
+</article>
+
+<article id="item-18">
+  <header>
+        <h2 class="item-title"><a href="https://www.bloomberg.com/news/videos/2026-05-21/nvidia-s-competitors-should-be-scared-ross-gerber-warns-video">Les concurrents de Nvidia devraient avoir peur, avertit Ross Gerber</a></h2>
+    <div class="meta">rss · Bloomberg Technology · May 21, 19:55</div>
+  </header>
+  <div class="lang-blocks fr-only"><section class="content-section"><h3>Contexte</h3><div class="content">Les résultats de recherche fournis ne contiennent aucune information sur Nvidia, les technologies de l&#39;IA, les technologies spatiales ou les avertissements spécifiques de Ross Gerber. Les sources fournies ne contiennent aucune information sur les concurrents de Nvidia ou les dynamiques du marché dans les secteurs de l&#39;IA et de l&#39;espace.</div></section></div>
+  <p class="evidence-note"><strong>Fiabilité</strong> : Les résultats de recherche ne contiennent aucune information sur les concurrents de Nvidia, les technologies de l&#39;IA, les technologies spatiales ou l&#39;avertissement spécifique de Ross Gerber, rendant les preuves très faibles.</p>
+  <div class="tags"><code>#Nvidia</code>, <code>#AI</code>, <code>#Space</code>, <code>#Competition</code>, <code>#Technology</code></div>
+  <details><summary>Références</summary><ul><li><a href="https://www.gerberkawasaki.com/our-team">Our Team - Gerber Kawasaki Wealth and Investment Management</a></li><li><a href="https://www.gerberkawasaki.com/">Gerber Kawasaki Wealth and Investment Management: Home</a></li><li><a href="https://www.bnnbloomberg.ca/video/shows/the-close/">The Close - Shows - BNN Bloomberg</a></li></ul></details>
+</article>
+</main></div></div><div class="tab-content " data-lang="en"><section class="summary-header">
+  <h1>Horizon Daily — 2026-05-22</h1>
+  <p class="lead">18 essential stories selected from 441 collected items.</p>
+  <nav class="toc" aria-label="Contents">
+    <p class="toc-title">Contents</p>
+    <ul><li><a href="#item-1">Green steel startup Boston Metal raises $75 million</a></li>
+<li><a href="#item-2">The Download covers online safety’s future and a major climate tech pivot.</a></li>
+<li><a href="#item-3">Understanding the modern cybercrime landscape.</a></li>
+<li><a href="#item-4">Roundtables explore whether AI can learn to understand the world.</a></li>
+<li><a href="#item-5">Colossal Biosciences hatches chickens from 3D‐printed artificial eggs.</a></li>
+<li><a href="#item-6">Scaling creativity in the age of AI is explored in this article.</a></li>
+<li><a href="#item-7">IBM Shares Surge After $1 Billion Quantum Foundry Funding</a></li>
+<li><a href="#item-8">Anthropic’s Code with Claude showed off coding’s future—whether you like it or not</a></li>
+<li><a href="#item-9">Waymo takes a multi-city pause on floods and halts freeway access.</a></li>
+<li><a href="#item-10">Cursor hits a $3 billion annual sales rate ahead of a SpaceX deal</a></li>
+<li><a href="#item-11">Next Phase of Artificial Intelligence</a></li>
+<li><a href="#item-12">Nvidia tells skeptical investors that AI is ready to go mainstream.</a></li>
+<li><a href="#item-13">Insilico Uses AI to Transform Drug Discovery and Longevity Research.</a></li>
+<li><a href="#item-14">Take-Two confirms the November 19 launch of Grand Theft Auto VI.</a></li>
+<li><a href="#item-15">Investors Look Beyond TSMC as AI Boom Spreads to New Winners.</a></li>
+<li><a href="#item-16">Lenovo surged to a 26-year high after strong AI growth.</a></li>
+<li><a href="#item-17">The roundtables provide an inside look at the Musk v. Altman trial.</a></li>
+<li><a href="#item-18">Nvidia&#39;s Competitors Should Be Scared, Ross Gerber Warns</a></li></ul>
+  </nav>
+</section>
+<main class="items">
+<article id="item-1">
+  <header>
+        <h2 class="item-title"><a href="https://www.technologyreview.com/2026/05/20/1137523/boston-metal-funding-critical-metals/">Green steel startup Boston Metal raises $75 million</a></h2>
+    <div class="meta">rss · MIT Technology Review · May 20, 13:00</div>
+  </header>
+    <div class="lang-blocks">
+        <section class="lang"><h3>EN</h3><div class="content">Boston Metal has secured a $75 million funding round to expand production of critical metals and reduce emissions from steelmaking. The company, known for its work on low‐carbon steel, will use the capital to scale up critical metal supply for green steel technologies.<br /><br />This funding enables Boston Metal to accelerate the supply chain for critical metals needed in green steel, directly addressing a major source of industrial carbon emissions. It signals growing investor confidence in cleantech solutions that can cut the steel sector’s climate impact.<br /><br />The round, reported exclusively by MIT Technology Review, will fund expansion of critical metal extraction and processing, targeting metals such as lithium and rare earths essential for green steel. Boston Metal aims to lower steel‐related greenhouse gas emissions, which currently account for about 8 % of global emissions.<br /><br />Steelmaking is a highly carbon‐intensive industry, responsible for roughly 7‐8 % of global greenhouse gas emissions, and the term green steel refers to production methods that cut those emissions. Critical metals such as lithium and rare earth elements are vital for the clean‐energy technologies that enable low‐carbon steel processes. Boston Metal’s focus on these metals aligns with the broader industry shift toward decarbonised steelmaking.</div></section>
+        <section class="lang"><h3>FR</h3><div class="content">Boston Metal a levé 75 millions de dollars pour élargir la production de métaux critiques et réduire les émissions de l&#39;acier. L&#39;entreprise, connue pour ses efforts visant à rendre l&#39;acier plus propre, utilisera ces fonds pour développer les chaînes d&#39;approvisionnement en métaux essentiels au steel vert.<br /><br />Ce financement permet à Boston Metal d&#39;accélérer l&#39;approvisionnement en métaux critiques nécessaires au steel vert, répondant ainsi à une source majeure d&#39;émissions industrielles. Il témoigne de la confiance croissante des investisseurs dans les solutions cleantech capables de réduire l&#39;impact climatique du secteur de l&#39;acier.<br /><br />Le tour de financement, rapporté exclusivement par MIT Technology Review, finance l&#39;expansion de l&#39;extraction et du traitement des métaux critiques comme le lithium et les terres rares, essentiels au steel vert. Boston Metal vise à diminuer les émissions de gaz à effet de serre liées à l&#39;acier, qui représentent environ 8 % des émissions mondiales.<br /><br />L&#39;acier est une industrie très énergivore, responsable d&#39;environ 7 à 8 % des émissions mondiales de gaz à effet de serre. Le terme « steel vert » désigne la production d&#39;acier avec des émissions réduites ou nulles, un objectif majeur pour la transition écologique. Les métaux critiques, tels que le lithium et les éléments terre rares, sont indispensables aux technologies propres qui soutiennent ce processus. Boston Metal se concentre sur ces métaux pour soutenir la décarbonation de l&#39;acier.</div></section>
+    </div>
+  <div class="tags"><code>#cleantech</code>, <code>#funding</code>, <code>#climate</code>, <code>#steel</code>, <code>#technology</code></div>
+  <details><summary>References</summary><ul><li><a href="https://en.wikipedia.org/wiki/Green_steel">Green steel</a></li><li><a href="https://www.ssab.com/en-gb/fossil-free-steel/insights/green-steel">What is green steel? - SSAB</a></li></ul></details>
+</article>
+
+<article id="item-2">
+  <header>
+        <h2 class="item-title"><a href="https://www.technologyreview.com/2026/05/21/1137733/the-download-online-safety-climate-tech-pivot/">The Download covers online safety’s future and a major climate tech pivot.</a></h2>
+    <div class="meta">rss · MIT Technology Review · May 21, 12:10</div>
+  </header>
+    <div class="lang-blocks">
+        <section class="lang"><h3>EN</h3><div class="content">Tech researchers have filed a lawsuit against the Trump administration, challenging its recent actions targeting scholars who study and combat hate speech under Section 230. At the same time, the newsletter highlights a major shift in climate technology, with new investment and policy directions aimed at accelerating decarbonization and emissions reduction.<br /><br />The lawsuit could reshape the legal framework governing online content moderation, affecting free speech, hate speech policies, and the liability of platforms. Meanwhile, the climate tech pivot signals a strategic reallocation of resources and innovation toward solutions that can more effectively mitigate climate change, influencing investment patterns and policy priorities.<br /><br />The suit targets the administration&#39;s attempts to restrict research on hate speech, raising questions about the scope of Section 230 immunity and potential changes to platform moderation practices. The climate tech pivot includes increased federal funding for carbon capture and renewable energy projects, but faces challenges such as high costs and the need for scalable technologies.<br /><br />Section 230, enacted in 1996 as part of the Communications Decency Act, grants online platforms immunity from liability for user‐generated content, a provision that has been central to the growth of the internet and remains a focal point of legal debate. Recent actions by the Trump administration have sought to limit the scope of this immunity, prompting lawsuits from researchers who study hate speech and misinformation. Climate technology, defined as solutions that support decarbonization and emissions reduction, has seen a shift toward greater investment and policy focus, as highlighted in recent industry reports and government coordination efforts such as the Committee on Climate Change Science and Technology Integration.</div></section>
+        <section class="lang"><h3>FR</h3><div class="content">Des chercheurs technologiques ont intenté une action en justice contre l&#39;administration Trump, contestant ses récentes mesures visant les chercheurs étudiant et luttant contre la haine en ligne selon le texte de la Section 230. Parallèlement, le bulletin souligne un virage majeur dans la technologie climatique, avec de nouveaux investissements et orientations politiques visant à accélérer la décarbonisation et la réduction des émissions.<br /><br />Le procès pourrait redéfinir le cadre juridique régissant la modération du contenu en ligne, impactant la liberté d&#39;expression, les politiques de lutte contre la haine et la responsabilité des plateformes. En même temps, le virage de la technologie climatique indique un recentrage des ressources et de l&#39;innovation vers des solutions capables de mieux atténuer le changement climatique, influençant les tendances d&#39;investissement et les priorités politiques.<br /><br />Le recours vise les tentatives de l&#39;administration Trump de limiter la recherche sur la haine en ligne, soulevant des questions sur l&#39;étendue de l&#39;immunité de la Section 230 et sur d&#39;éventuelles modifications des pratiques de modération des plateformes. Le virage de la technologie climatique comprend un financement fédéral accru pour les projets de capture du carbone et d&#39;énergies renouvelables, mais rencontre des défis tels que des coûts élevés et la nécessité de technologies évolutives.<br /><br />La Section 230, adoptée en 1996 dans le cadre de la Communications Decency Act, confère aux plateformes en ligne une immunité contre la responsabilité du contenu généré par les utilisateurs, un pilier essentiel à la croissance d’Internet et sujet à de récents débats juridiques. Les actions récentes de l’administration Trump visent à restreindre cette immunité, entraînant des poursuites intentées par des chercheurs étudiant la haine en ligne et la désinformation. La technologie climatique, définie comme des solutions favorisant la décarbonisation et la réduction des émissions, connaît un virage avec davantage d’investissements et d’attention politique, comme le montrent les rapports sectoriels et les efforts de coordination gouvernementale tels que le Comité sur la science et la technologie du changement climatique.</div></section>
+    </div>
+  <div class="tags"><code>#online safety</code>, <code>#legal</code>, <code>#climate tech</code>, <code>#technology policy</code></div>
+  <details><summary>References</summary><ul><li><a href="https://en.wikipedia.org/wiki/Section_230">Section 230</a></li><li><a href="https://www.eff.org/issues/cda230">Section 230 | Electronic Frontier Foundation</a></li><li><a href="https://netzeroinsights.com/what-is-climate-tech/">What is Climate Tech? - Net Zero Insights</a></li></ul></details>
+</article>
+
+<article id="item-3">
+  <header>
+        <h2 class="item-title"><a href="https://www.technologyreview.com/2026/05/19/1136925/understanding-the-modern-cybercrime-landscape/">Understanding the modern cybercrime landscape.</a></h2>
+    <div class="meta">rss · MIT Technology Review · May 19, 13:00</div>
+  </header>
+    <div class="lang-blocks">
+        <section class="lang"><h3>EN</h3><div class="content">HPE’s 2025 In the Wild Report shows that cybercriminals are industrializing their attacks by using AI and automation to exploit longstanding vulnerabilities. This shift enables greater scale, speed, and structural organization of criminal campaigns across multiple sectors.<br /><br />Industrialized cybercrime increases the frequency and sophistication of attacks, putting governments, finance, and critical infrastructure at higher risk. Organizations must adopt more proactive, AI‐driven defense strategies to keep pace with the accelerated threat landscape.<br /><br />HPE analyzed 1186 active threats and found hierarchical command structures with specialized teams operating globally from January to December 2025. Governments were the most frequently targeted sector, followed by finance, technology, defense, and manufacturing, while AI‐driven automation exploited known vulnerabilities.<br /><br />Cybercrime has evolved over decades from isolated hobbyist activities to a professional, organized industry. HPE’s Threat Labs based their In the Wild report on live global threat activity observed throughout 2025, analyzing 1186 ongoing attacks. The report highlights that automation and AI are now core tools that enable cybercriminals to scale operations rapidly and maintain structured, enterprise‐like workflows. This industrialization mirrors trends seen in other security analyses, such as Fortinet and Cloudflare reports, indicating a sustained shift toward systematic cyber‐crime operations.</div></section>
+        <section class="lang"><h3>FR</h3><div class="content">Le rapport In the Wild 2025 d’HPE indique que les cybercriminels industrialisent leurs attaques en utilisant l’IA et l’automatisation pour exploiter des vulnérabilités existantes. Cette évolution permet une plus grande échelle, rapidité et structuration des campagnes criminelles dans plusieurs secteurs.<br /><br />La cybercriminalité industrialisée augmente la fréquence et la sophistication des attaques, mettant en danger les gouvernements, les finances et les infrastructures critiques. Les organisations doivent adopter des stratégies de défense proactives et basées sur l’IA pour suivre le paysage des menaces accéléré.<br /><br />HPE a analysé 1186 menaces actives et a identifié des structures de commandement hiérarchiques avec des équipes spécialisées opérant à l’échelle mondiale de janvier à décembre 2025. Les gouvernements étaient le secteur le plus ciblé, suivi par la finance, la technologie, la défense et la fabrication, tandis que l’automatisation pilotée par l’IA exploitait des vulnérabilités connues.<br /><br />La cybercriminalité a évolué depuis des décennies, passant d’activités isolées d’amateurs à une industrie professionnelle et organisée. Le rapport In the Wild d’HPE s’appuie sur une activité de menace globale en temps réel observée tout au long de 2025, en analysant 1186 attaques actives. Il montre que l’automatisation et l’IA sont désormais des outils essentiels permettant aux cybercriminels d’augmenter rapidement leur échelle et de maintenir des flux de travail structurés à la manière d’entreprise. Cette industrialisation est également soulignée par des analyses de Fortinet et Cloudflare, indiquant un virage durable vers des opérations criminelles systématiques.</div></section>
+    </div>
+  <div class="tags"><code>#Cybersecurity</code>, <code>#AI</code>, <code>#Automation</code>, <code>#Cybercrime</code>, <code>#Technology Review</code></div>
+  <details><summary>References</summary><ul><li><a href="https://www.technologyreview.com/2026/05/19/1136925/understanding-the-modern-cybercrime-landscape/">Understanding the modern cybercrime landscape - MIT Technology Review</a></li><li><a href="https://www.hpe.com/psnow/downloadDoc/HPE+Threat+Labs+2026+In+the+Wild+Threat+Report-a50014950enw.pdf?id=a50014950enw&amp;isFutureVersion=true&amp;ver=1&amp;form=false&amp;preview=false&amp;hf=regular&amp;isLinearized=false&amp;contentDisposition=attachment">HPE Threat Labs 2026 In the Wild Threat Report</a></li><li><a href="https://www.fortinet.com/blog/industry-trends/inside-industrialization-of-cybercrime-what-to-expect-in-2026">Inside the Industrialization of Cybercrime: What to Expect in ...</a></li></ul></details>
+</article>
+
+<article id="item-4">
+  <header>
+        <h2 class="item-title"><a href="https://www.technologyreview.com/2026/05/21/1137756/roundtables-can-ai-learn-to-understand-the-world/">Roundtables explore whether AI can learn to understand the world.</a></h2>
+    <div class="meta">rss · MIT Technology Review · May 21, 20:41</div>
+  </header>
+    <div class="lang-blocks">
+        <section class="lang"><h3>EN</h3><div class="content">MIT Technology Review editors hosted a roundtable discussion on whether AI can learn to understand the world beyond large language models. The session examined emerging world models that aim to build internal representations of environments and predict changes. Attendees included editor in chief Mat Honan, senior AI editor Will Douglas Heaven, and other AI reporters.<br /><br />Understanding the world beyond text could enable AI systems to interact more reliably with physical environments, advancing robotics and autonomous systems. This shift may reshape how businesses apply AI, creating new opportunities for simulation, planning, and safety-critical applications. It also raises important questions about AI alignment and societal impact.<br /><br />The discussion highlighted that AI world models aim to internalize dynamics of real environments, using data such as video and sensor inputs to predict future states. While promising for robotics, these models still require large amounts of diverse, high‐quality data and face challenges in generalization. The roundtable also noted that current research is still experimental and not yet deployed at scale.<br /><br />World models are machine learning systems that build internal representations of an environment and predict how it changes over time in response to actions, a concept derived from mental model theory in psychology. They differ from large language models, which primarily generate text based on statistical patterns, by focusing on physical dynamics, spatial relationships, and causal reasoning. Companies such as NVIDIA describe world models as neural networks that can ingest video, images, and sensor data to simulate realistic physical environments. The idea has attracted substantial investment, as highlighted by Forbes, and is seen as a step toward more capable AI that can operate safely in the real world.</div></section>
+        <section class="lang"><h3>FR</h3><div class="content">Les éditeurs de MIT Technology Review ont animé un rondeau de discussion sur la capacité de l&#39;IA à comprendre le monde au-delà des modèles de langage. La séance a examiné les modèles de monde émergents qui cherchent à créer des représentations internes des environnements et à prédire leurs évolutions. Parmi les participants figuraient Mat Honan, rédacteur en chef, Will Douglas Heaven, éditeur senior en IA, et d&#39;autres journalistes spécialisés en IA.<br /><br />Comprendre le monde au-delà du texte permettrait aux systèmes d&#39;IA d&#39;interagir plus fiablement avec les environnements physiques, favorisant la robotique et les systèmes autonomes. Cette évolution pourrait transformer l&#39;application des IA dans les entreprises, ouvrant de nouvelles opportunités pour la simulation, la planification et les applications critiques pour la sécurité. Elle soulève également des questions importantes sur l&#39;alignement de l&#39;IA et ses impacts sociétaux.<br /><br />La discussion a souligné que les modèles de monde d&#39;IA visent à internaliser la dynamique des environnements réels, en utilisant des données telles que des vidéos et des entrées de capteurs pour prédire les états futurs. Bien qu&#39;ils soient prometteurs pour la robotique, ces modèles nécessitent encore de grandes quantités de données diverses et de haute qualité et rencontrent des défis de généralisation. Le rondeau a également indiqué que la recherche actuelle reste expérimentale et n&#39;est pas encore déployée à grande échelle.<br /><br />Les modèles de monde sont des systèmes d&#39;apprentissage automatique qui créent des représentations internes d&#39;un environnement et prédisent comment il évolue dans le temps en réponse à des actions, un concept issu de la théorie des modèles mentaux en psychologie. Ils diffèrent des modèles de langage, qui génèrent principalement du texte basé sur des motifs statistiques, en se concentrant sur la dynamique physique, les relations spatiales et le raisonnement causal. Des entreprises comme NVIDIA décrivent les modèles de monde comme des réseaux de neurones capables d&#39;ingérer des vidéos, des images et des données de capteurs pour simuler des environnements physiques réalistes. L&#39;idée a attiré des investissements substantiels, comme le souligne Forbes, et est perçue comme une étape vers des IA plus capables fonctionnant en toute sécurité dans le monde réel.</div></section>
+    </div>
+  <div class="tags"><code>#AI</code>, <code>#World Models</code>, <code>#Technology</code>, <code>#Innovation</code>, <code>#Discussion</code></div>
+  <details><summary>References</summary><ul><li><a href="https://en.m.wikipedia.org/wiki/World_model_(artificial_intelligence)">World model (artificial intelligence) - Wikipedia</a></li><li><a href="https://www.nvidia.com/en-us/glossary/world-models/">What Is a World Model? | NVIDIA Glossary</a></li><li><a href="https://www.forbes.com/sites/nishatalagala/2026/04/19/ai-world-models-what-are-they-and-why-should-you-care/">AI World Models: What Are They And Why Should You Care - Forbes</a></li></ul></details>
+</article>
+
+<article id="item-5">
+  <header>
+        <h2 class="item-title"><a href="https://www.technologyreview.com/2026/05/20/1137579/the-download-colossal-biosciences-egg-musk-altman-trial/">Colossal Biosciences hatches chickens from 3D‐printed artificial eggs.</a></h2>
+    <div class="meta">rss · MIT Technology Review · May 20, 12:10</div>
+  </header>
+    <div class="lang-blocks">
+        <section class="lang"><h3>EN</h3><div class="content">Colossal Biosciences reported that it has grown chicken embryos inside a 3D‐printed artificial eggshell coated with a silicone membrane, and several chicks have begun to pip and hatch. The company says the technology could aid conservation of at‐risk bird species, and it also alludes to a recent legal dispute involving Elon Musk.<br /><br />This breakthrough demonstrates that synthetic biology can recreate natural reproductive environments, opening possibilities for conserving endangered birds and potentially other species. It also highlights the growing intersection of biotech innovation with high‐profile entrepreneurs, as the mentioned legal setback involving Musk underscores regulatory and public scrutiny of such ventures.<br /><br />The artificial eggshell is an oval lattice printed with a titanium framework and coated with a silicone‐based membrane that allows oxygen exchange, mimicking a real shell. Colossal reported that 26 baby chickens were born from this structure, ranging in age from a few days to several months, and the chicks were observed shifting and attempting to hatch.<br /><br />Colossal Biosciences, founded in 2021 by geneticist George Church and entrepreneur Ben Lamm, is a Dallas‐based biotech firm focused on de‐extinction projects such as reviving the woolly mammoth and the Tasmanian tiger. The company has recently expanded its work to include synthetic biology approaches for avian conservation, as shown by its 3D‐printed artificial eggshell used to hatch chickens. This technology builds on earlier research that demonstrated the feasibility of growing embryos in engineered containers that replicate the physiological conditions of a natural eggshell. The article also notes a legal challenge involving Elon Musk, suggesting that high‐profile biotech ventures may face regulatory scrutiny.</div></section>
+        <section class="lang"><h3>FR</h3><div class="content">Colossal Biosciences a annoncé qu&#39;elle a fait pousser des embryons de poulet à l&#39;intérieur d&#39;une coquille d&#39;œuf artificielle imprimée en 3D recouverte d&#39;un revêtement en silicone, et plusieurs poussins ont commencé à pipper et à éclore. L&#39;entreprise affirme que cette technologie pourrait aider à la conservation des espèces d&#39;oiseaux menacées, et elle fait également allusion à un récent litige juridique impliquant Elon Musk.<br /><br />Cette percée montre que la biologie synthétique peut recréer des environnements de reproduction naturels, ouvrant des perspectives pour la conservation des oiseaux menacés et potentiellement d&#39;autres espèces. Elle souligne également l&#39;intersection croissante entre l&#39;innovation biotechnologique et les entrepreneurs de renom, comme le montre le récent revers juridique impliquant Musk, qui attire une surveillance réglementaire et publique accrue sur de telles entreprises.<br /><br />La coquille artificielle est un treillis ovale imprimé avec un cadre en titane recouvert d&#39;une membrane à base de silicone permettant l&#39;échange d&#39;oxygène, imitant une vraie coquille. Colossal a indiqué que 26 petits poulets sont nés de cette structure, âgés de quelques jours à plusieurs mois, et les poussins ont été observés en train de bouger et d&#39;essayer d&#39;éclore.<br /><br />Fondée en 2021 par le généticien George Church et l&#39;entrepreneur Ben Lamm, Colossal Biosciences est une société de biotechnologie basée à Dallas qui se concentre sur des projets de dé‐extinction, comme la résurrection du mammouth laineux et du thylacine. L&#39;entreprise a récemment élargi son champ d&#39;action à la biologie synthétique pour la conservation des oiseaux, comme le montre l&#39;utilisation d&#39;une coquille d&#39;œuf artificielle imprimée en 3D pour faire éclore des poulets. Cette technologie s&#39;appuie sur des recherches antérieures démontrant la faisabilité de faire pousser des embryons dans des contenants ingénierés reproduisant les conditions physiologiques d&#39;une vraie coquille. L&#39;article mentionne également un défi juridique impliquant Elon Musk, indiquant que les entreprises biotech de renom peuvent faire face à une surveillance réglementaire accrue.</div></section>
+    </div>
+  <div class="tags"><code>#synthetic biology</code>, <code>#food technology</code>, <code>#biotech</code>, <code>#Elon Musk</code>, <code>#agriculture</code></div>
+  <details><summary>References</summary><ul><li><a href="https://www.technologyreview.com/2026/05/19/1137471/colossal-biosciences-is-growing-chickens-in-a-3d-printed-container/">Colossal Biosciences is growing chickens in a 3D-printed artificial eggshell | MIT Technology Review</a></li><li><a href="https://science.slashdot.org/story/26/05/21/0112253/colossal-biosciences-is-growing-chickens-in-a-3d-printed-artificial-eggshell">Colossal Biosciences Is Growing Chickens In a 3D-Printed Artificial Eggshell - Slashdot</a></li><li><a href="https://en.wikipedia.org/wiki/Colossal_Biosciences">Colossal Biosciences</a></li></ul></details>
+</article>
+
+<article id="item-6">
+  <header>
+        <h2 class="item-title"><a href="https://www.technologyreview.com/2026/05/21/1137613/scaling-creativity-in-the-age-of-ai/">Scaling creativity in the age of AI is explored in this article.</a></h2>
+    <div class="meta">rss · MIT Technology Review · May 21, 19:16</div>
+  </header>
+    <div class="lang-blocks">
+        <section class="lang"><h3>EN</h3><div class="content">The article explains how AI is transforming human storytelling by leveraging centuries of narrative technology, from prehistoric pigments to modern generative models. It highlights AI-driven procedural content generation that creates coherent narratives and personalized storytelling experiences.<br /><br />This shift could democratize storytelling tools, enabling broader participation while challenging traditional notions of authorship. It may also reshape entertainment, education, and marketing sectors by integrating AI-generated narratives.<br /><br />The piece notes that AI can generate quests and narrative beats that follow plot logic, yet fundamental dilemmas such as maintaining player agency versus narrative coherence remain unresolved. It also references the durability of prehistoric cave paintings, which used mineral pigments like ochre and charcoal bound with animal fat, illustrating long‐term material resilience.<br /><br />Cave paintings dating back tens of thousands of years used pigments such as ochre, charcoal, and manganese oxide mixed with animal fat or saliva to adhere to stone surfaces (Wikipedia, 2026). Research on AI storytelling shows that generative models now produce procedural narrative content, including quests and plot‐consistent beats, across interactive media (Research Square, 2026). The durability of these ancient artworks is attributed to the binding properties of the pigments, which have survived for millennia despite environmental exposure (RSC Education, 2024).</div></section>
+        <section class="lang"><h3>FR</h3><div class="content">L&#39;article explique comment l&#39;IA transforme le récit humain en s&#39;appuyant sur des siècles d&#39;innovation narrative, des pigments préhistoriques aux modèles génératifs modernes. Il souligne la génération de contenu procédural pilotée par l&#39;IA qui crée des récits cohérents et des expériences de narration personnalisées.<br /><br />Ce changement pourrait démocratiser les outils de narration, permettant une participation plus large tout en remettant en question les notions traditionnelles d&#39;auteur. Il pourrait également transformer les secteurs du divertissement, de l&#39;éducation et du marketing en intégrant des récits générés par l&#39;IA.<br /><br />L&#39;article indique que l&#39;IA peut créer des quêtes et des rebondissements narratifs conformes à la logique de l&#39;intrigue, mais les dilemmes fondamentaux entre l&#39;agence du joueur et la cohérence de l&#39;histoire persistent. Il évoque également la durabilité des peintures rupestres préhistoriques, réalisées avec des pigments minéraux comme l&#39;ocre et le charbon liés à la graisse animale, montrant une résistance matérielle sur le long terme.<br /><br />Les peintures rupestres datant de dizaines de milliers d&#39;années utilisaient des pigments tels que l&#39;ocre, le charbon et l&#39;oxyde de manganèse mélangés à de la graisse animale ou de la salive pour adhérer aux parois de pierre (Wikipedia, 2026). Les recherches sur le récit généré par l&#39;IA indiquent que les modèles génératifs produisent aujourd&#39;hui du contenu narratif procédural, y compris des quêtes et des rebondissements cohérents avec l&#39;intrigue, dans les médias interactifs (Research Square, 2026). La durabilité de ces œuvres anciennes s&#39;explique par les propriétés liantes des pigments, qui les ont conservés pendant des millénaires malgré l&#39;exposition environnementale (RSC Education, 2024).</div></section>
+    </div>
+  <div class="tags"><code>#AI</code>, <code>#Creativity</code>, <code>#Technology</code>, <code>#Storytelling</code></div>
+  <details><summary>References</summary><ul><li><a href="https://en.wikipedia.org/wiki/Cave_painting">Cave painting - Wikipedia</a></li><li><a href="https://www.researchsquare.com/article/rs-7318246/v1">AI storytelling &amp; narrative evolution in creative industries: a ...</a></li><li><a href="https://edu.rsc.org/resources/prehistoric-pigments/1540.article">Prehistoric pigments | Resource | RSC Education</a></li></ul></details>
+</article>
+
+<article id="item-7">
+  <header>
+        <h2 class="item-title"><a href="https://www.bloomberg.com/news/articles/2026-05-21/trump-administration-pledges-2-billion-for-quantum-firms-wsj">IBM Shares Surge After $1 Billion Quantum Foundry Funding</a></h2>
+    <div class="meta">rss · Bloomberg Technology · May 21, 10:42</div>
+  </header>
+    <div class="lang-blocks">
+        <section class="lang"><h3>EN</h3><div class="content">The Trump administration announced it will provide $1 billion to International Business Machines Corp. to develop a quantum chip foundry, marking the largest single allocation in its $2 billion quantum computing initiative. IBM&#39;s stock price rose sharply following the announcement.<br /><br />This funding positions IBM as a central player in the U.S. push to dominate quantum computing, potentially accelerating chip development and attracting further private investment. It also reinforces national security interests by securing domestic quantum manufacturing capabilities.<br /><br />The $1 billion allocation is part of a broader $2 billion package that includes equity stakes in eight other quantum firms such as D‐Wave, Rigetti and Infleqtion. The foundry will enable custom quantum chip designs with specialized qubit topologies, a capability highlighted by recent demonstrations of photonic‐electronic chips in commercial semiconductor facilities.<br /><br />A quantum chip foundry is a specialized manufacturing facility that fabricates custom quantum processing units tailored to specific application requirements, moving beyond generic hardware. Recent work at commercial foundries, such as the first electronic‐photonic quantum chip produced at a semiconductor fab, shows that repeatable, controllable quantum systems can be built using existing semiconductor processes. The Trump administration&#39;s $2 billion quantum initiative, announced in May 2026, earmarks funding and equity stakes for nine companies to strengthen U.S. leadership in this emerging field.</div></section>
+        <section class="lang"><h3>FR</h3><div class="content">L&#39;administration Trump a annoncé qu&#39;elle allouera 1 milliard de dollars à International Business Machines Corp. pour développer une fonderie de puces quantiques, marquant la plus grande affectation unique de son initiative de 2 milliards de dollars en informatique quantique. Le cours de l&#39;action IBM a grimpé fortement après l&#39;annonce.<br /><br />Ce financement place IBM au cœur de l&#39;effort américain visant à dominer l&#39;informatique quantique, ce qui pourrait accélérer le développement des puces et attirer davantage d&#39;investissements privés. Il renforce également les intérêts de sécurité nationale en assurant une fabrication domestique de technologies quantiques.<br /><br />L&#39;allocation de 1 milliard de dollars s&#39;inscrit dans un package global de 2 milliards de dollars incluant des stakes d&#39;équité dans huit autres entreprises quantiques comme D‐Wave, Rigetti et Infleqtion. La fonderie permettra des conceptions de puces quantiques personnalisées avec des topologies de qubits spécialisées, un besoin souligné par des démonstrations récentes de puces photonic‐électroniques dans des installations de fabrication commerciales.<br /><br />Une fonderie de puces quantiques est une installation de fabrication spécialisée qui produit des unités de traitement quantique (QPU) sur mesure, dépassant les solutions matérielles génériques. Des travaux récents dans des fonderies commerciales, comme la première puce quantique photonic‐électronique réalisée dans une fabrique de semi‐conducteurs, démontrent que des systèmes quantiques répétables et contrôlables peuvent être fabriqués avec les procédés existants. L&#39;initiative quantique de 2 milliards de dollars de l&#39;administration Trump, annoncée en mai 2026, prévoit un financement et des parts d&#39;équité pour neuf entreprises afin de renforcer la leadership américain dans ce domaine émergent.</div></section>
+    </div>
+  <div class="tags"><code>#quantum computing</code>, <code>#IBM</code>, <code>#US government funding</code>, <code>#technology</code>, <code>#news</code></div>
+  <details><summary>References</summary><ul><li><a href="https://www.spinquanta.com/news-detail/the-ultimate-guide-to-spinq-chip-foundry-revolutionizing-quantum-computing-manufacturing">The Ultimate Guide to SpinQ Chip Foundry: Revolutionizing Quantum Computing Manufacturing | SpinQ</a></li><li><a href="https://www.bu.edu/eng/2025/07/14/first-electronic-photonic-quantum-chip-created-in-commercial-foundry/">First Electronic–Photonic Quantum Chip Created in Commercial Foundry | College of Engineering</a></li><li><a href="https://www.nytimes.com/2026/05/21/business/trump-quantum-computers-stake.html">U.S. Invests $2 Billion and Takes Stake in Quantum Firms</a></li></ul></details>
+</article>
+
+<article id="item-8">
+  <header>
+        <h2 class="item-title"><a href="https://www.technologyreview.com/2026/05/21/1137735/anthropics-code-with-claude-showed-off-codings-future-whether-you-like-it-or-not/">Anthropic’s Code with Claude showed off coding’s future—whether you like it or not</a></h2>
+    <div class="meta">rss · MIT Technology Review · May 21, 14:30</div>
+  </header>
+    <div class="lang-blocks">
+        <section class="lang"><h3>EN</h3><div class="content">Anthropic hosted its two‐day Code with Claude developer event in London on May 19, showcasing the Claude Code AI coding assistant to software engineers. The event coincided with Google I/O in Palo Alto, though Anthropic said the timing was coincidental. Attendees were shown how the tool can edit files, run commands, and help ship pull requests.<br /><br />The demonstration highlights how AI coding assistants could reshape software development by automating routine coding tasks and improving developer productivity. As AI tools become more capable, they may change hiring practices, code review processes, and the overall economics of software engineering. This event signals Anthropic’s ambition to embed its AI deeply into the developer workflow.<br /><br />The Code with Claude event ran for two days beginning on May 19 in London, coinciding with Google I/O in Palo Alto, which Anthropic said was accidental. Claude Code was demonstrated as an agentic tool that can understand a codebase, edit files, execute terminal commands, and assist with pull requests. The article notes a moderate relevance score of 6.5/10, indicating the event is noteworthy for developers but does not yet have broad societal impact.<br /><br />Claude Code is Anthropic&#39;s AI coding agent that can understand a repository, make edits, run commands, and integrate with IDEs, as described on the official product page. It is positioned as a tool to accelerate software development by automating routine coding tasks, a capability highlighted in a 2026 blog post about its deep project understanding. Anthropic, known for its Claude large language models, introduced Claude Opus 4.7 in February 2026, which expands the model&#39;s abilities for complex professional work including coding. The technology aims to complement developers rather than replace them, according to the product description.</div></section>
+        <section class="lang"><h3>FR</h3><div class="content">Anthropic a organisé un événement développeur de deux jours à Londres, Code with Claude, le 19 mai, pour présenter l’assistant de codage IA Claude Code aux ingénieurs logiciels. L’événement a eu lieu le même jour que le Google I/O à Palo Alto, bien que Anthropic ait précisé que le timing était fortuit. Les participants ont vu comment l’outil peut modifier des fichiers, exécuter des commandes et faciliter l’envoi de demandes de tirage.<br /><br />La démonstration montre comment les assistants de codage IA pourraient transformer le développement logiciel en automatisant les tâches de codage et en augmentant la productivité des développeurs. Avec des outils IA de plus en plus performants, ils pourraient modifier les pratiques d’embauche, les processus de revue de code et l’économie globale de l’ingénierie logicielle. Cet événement indique l’ambition d’Anthropic d’intégrer son IA profondément dans le flux de travail des développeurs.<br /><br />L’événement Code with Claude a duré deux jours, débutant le 19 mai à Londres, coïncidant avec le Google I/O à Palo Alto, que Anthropic a précisé était fortuit. Claude Code a été présenté comme un outil agentique capable de comprendre une base de code, de modifier des fichiers, d’exécuter des commandes dans le terminal et d’aider aux demandes de tirage. L’article attribue une note de pertinence de 6,5/10, indiquant que l’événement est pertinent pour les développeurs mais n’a pas encore d’impact sociétal majeur.<br /><br />Claude Code est l’assistant de codage IA d’Anthropic qui peut comprendre un dépôt, effectuer des modifications, exécuter des commandes et s’intégrer aux IDE, comme le précise la page produit officielle. Il vise à accélérer le développement logiciel en automatisant les tâches de codage, un point souligné dans un article de blog de 2026 sur sa compréhension approfondie du projet. Anthropic, connu pour ses modèles de langage Claude, a lancé Claude Opus 4.7 en février 2026, élargissant les capacités du modèle aux travaux professionnels complexes, y compris le codage. La technologie se veut complémentaire aux développeurs, selon la description du produit.</div></section>
+    </div>
+  <div class="tags"><code>#AI</code>, <code>#Software Development</code>, <code>#Tech Event</code>, <code>#Anthropic</code>, <code>#Coding</code></div>
+  <details><summary>References</summary><ul><li><a href="https://claude.com/product/claude-code">Claude Code by Anthropic | AI Coding Agent, Terminal, IDE</a></li><li><a href="https://www.mindtwo.com/blog/claude-code-ai-coding-assistants">Claude Code: Anthropic&#39;s AI Coding Assistant for Developers</a></li></ul></details>
+</article>
+
+<article id="item-9">
+  <header>
+        <h2 class="item-title"><a href="https://www.bloomberg.com/news/articles/2026-05-21/waymo-suspends-service-in-atlanta-as-robotaxis-stumped-by-floods">Waymo takes a multi-city pause on floods and halts freeway access.</a></h2>
+    <div class="meta">rss · Bloomberg Technology · May 21, 18:32</div>
+  </header>
+    <div class="lang-blocks">
+        <section class="lang"><h3>EN</h3><div class="content">Waymo temporarily halted its robotaxi service in five cities after concerns that its vehicles might attempt to drive on flooded roads. The pause follows a recent recall of thousands of Waymo vehicles. Service is expected to resume once safety concerns are addressed.<br /><br />The pause highlights ongoing safety challenges for autonomous vehicles in extreme weather, raising questions about their reliability in flood conditions. It may prompt regulators to tighten oversight and could delay broader adoption of robotaxi services in urban areas.<br /><br />Waymo halted service in five cities, including Atlanta, after video showed its vehicles stopping on flooded Riverside Drive in Austin. The company recently recalled thousands of its Chrysler Pacifica Hybrid vehicles due to safety concerns. As of March 2026, Waymo operates commercial robotaxi services in ten U.S. metropolitan areas and plans to expand to roughly 26 markets worldwide.<br /><br />Waymo, a subsidiary of Alphabet Inc., operates driverless robotaxi services in ten U.S. metropolitan areas as of March 2026 and is expanding rapidly to additional cities and international markets (Built In, May 2026). The company recalled thousands of its Chrysler Pacifica Hybrid vehicles earlier in 2026 due to safety issues, marking a previous setback (Bloomberg, May 2026). Research on autonomous navigation in flood conditions, such as sensor-based water level measurement, suggests technical approaches to improve safety in adverse weather (Springer Nature, March 2025).</div></section>
+        <section class="lang"><h3>FR</h3><div class="content">Waymo a temporairement suspendu son service de robotaxi dans cinq villes après des inquiétudes selon lesquelles ses véhicules pourraient conduire sur des routes inondées. Cette pause suit un rappel récent de milliers de véhicules Waymo. Le service devrait reprendre une fois les préoccupations de sécurité résolues.<br /><br />L&#39;arrêt souligne les défis de sécurité persistants pour les véhicules autonomes en conditions météorologiques extrêmes, posant des questions sur leur fiabilité en cas d&#39;inondations. Cela pourrait inciter les régulateurs à renforcer le contrôle et retarder l&#39;adoption généralisée des services de robotaxis en zones urbaines.<br /><br />Waymo a suspendu son service dans cinq villes, dont Atlanta, après que des vidéos aient montré ses véhicules s&#39;arrêtant sur une route inondée à Riverside Drive à Austin. L&#39;entreprise a récemment rappelé des milliers de ses Chrysler Pacifica Hybrid en raison de préoccupations de sécurité. À mars 2026, Waymo exploite des services de robotaxi commerciaux dans dix zones métropolitaines américaines et prévoit d&#39;étendre son offre à environ 26 marchés mondiaux.<br /><br />Waymo, filiale d&#39;Alphabet Inc., exploite des services de robotaxi sans conducteur dans dix zones métropolitaines américaines à mars 2026 et s&#39;expand rapidement vers d&#39;autres villes et marchés internationaux (Built In, mai 2026). L&#39;entreprise a rappelé des milliers de ses Chrysler Pacifica Hybrid plus tôt en 2026 en raison de problèmes de sécurité, marquant un revers précédent (Bloomberg, mai 2026). Des recherches sur la navigation autonome en conditions d&#39;inondation, comme la mesure du niveau d&#39;eau par capteurs, suggèrent des approches techniques pour améliorer la sécurité par mauvais temps (Springer Nature, mars 2025).</div></section>
+    </div>
+  <div class="tags"><code>#Autonomous Vehicles</code>, <code>#Transportation Safety</code>, <code>#Floods</code>, <code>#Technology News</code>, <code>#Regulatory Impact</code></div>
+  <details><summary>References</summary><ul><li><a href="https://builtin.com/articles/waymo-robotaxis">Waymo Explained: Alphabet’s Autonomous Vehicle Company | Built In</a></li><li><a href="https://link.springer.com/chapter/10.1007/978-3-031-81517-1_19">Development of an Autonomous Floating Vehicle Model with a Flood Detection System | Springer Nature Link (formerly SpringerLink)</a></li></ul></details>
+</article>
+
+<article id="item-10">
+  <header>
+        <h2 class="item-title"><a href="https://www.bloomberg.com/news/articles/2026-05-21/cursor-hits-3-billion-annual-sales-rate-ahead-of-spacex-deal">Cursor hits a $3 billion annual sales rate ahead of a SpaceX deal</a></h2>
+    <div class="meta">rss · Bloomberg Technology · May 21, 21:09</div>
+  </header>
+    <div class="lang-blocks">
+        <section class="lang"><h3>EN</h3><div class="content">Cursor&#39;s annualized revenue reached $3 billion in late April, showing strong demand for its AI coding software. The company&#39;s revenue, which annualizes recent subscription performance, had previously topped $2 billion in February.<br /><br />This milestone signals that AI coding tools are becoming core revenue drivers in software development, attracting major acquisitions. The impending SpaceX deal could integrate Cursor&#39;s technology into SpaceX&#39;s engineering workflows, influencing the broader AI‐assisted development market.<br /><br />Cursor now serves over 3,000 customers each paying at least $100,000 annually, underscoring its high‐value enterprise focus. The $3 billion figure is annualized, meaning it extrapolates recent subscription revenue and may not reflect actual cash flow. The acquisition is still pending regulatory approval and has not been finalized.<br /><br />Annualized revenue (ARR) is the annualized value of a company&#39;s recurring subscription contracts, calculated by projecting recent subscription income over a full year, as defined by sources such as DualEntry and Gtm Stage2 Capital. Cursor is an AI coding startup whose software helps developers write, refactor, and debug code, competing with tools like GitHub Copilot and Claude Code, as highlighted in 2026 rankings from Zapier and Morphllm. SpaceX, Elon Musk&#39;s aerospace and technology company, has been acquiring AI startups to enhance its engineering capabilities, a trend noted in recent industry analyses. The AI coding market has grown rapidly, with multiple vendors achieving multi‐billion‐dollar valuations, reflecting widespread adoption across software development.</div></section>
+        <section class="lang"><h3>FR</h3><div class="content">Le chiffre d&#39;affaires annuelisé de Cursor a atteint 3 milliards de dollars fin avril, témoignant d&#39;une forte demande pour son logiciel d&#39;IA de codage. Le chiffre d&#39;affaires, qui annualise les performances récentes d&#39;abonnement, avait dépassé 2 milliards de dollars en février.<br /><br />Cette étape montre que les outils d&#39;IA pour le codage deviennent des moteurs de revenus essentiels dans le développement logiciel, attirant des acquisitions majeures. Le prochain accord avec SpaceX pourrait intégrer la technologie de Cursor dans les flux de travail d&#39;ingénierie de SpaceX, influençant le marché de l&#39;IA assistée.<br /><br />Cursor compte désormais plus de 3 000 clients payant chacun au moins 100 000 $ par an, ce qui souligne son orientation vers les entreprises de grande valeur. Le chiffre de 3 milliards de dollars est annualisé, donc il extrapole les revenus d&#39;abonnement récents et ne reflète pas forcément le flux de trésorerie réel. L&#39;acquisition reste soumise à l&#39;approbation réglementaire et n&#39;est pas encore finalisée.<br /><br />Le revenu annualisé (ARR) correspond à la valeur annuelle des contrats d&#39;abonnement récurrents d&#39;une entreprise, calculé en projetant les revenus d&#39;abonnement récents sur une année complète, selon les définitions de DualEntry et Gtm Stage2 Capital. Cursor est une startup d&#39;IA pour le codage qui aide les développeurs à écrire, refactoriser et déboguer du code, se concrétisant avec des outils comme GitHub Copilot et Claude Code, comme le montrent les classements de 2026 de Zapier et Morphllm. SpaceX, l&#39;entreprise aérospatiale et technologique fondée par Elon Musk, acquiert des startups d&#39;IA pour renforcer ses capacités d&#39;ingénierie, une tendance observée dans les analyses sectorielles récentes. Le marché de l&#39;IA pour le codage s&#39;est développé rapidement, avec de nombreux fournisseurs atteignant des valorisations multimilliardaires, témoignant d&#39;une adoption massive dans le développement logiciel.</div></section>
+    </div>
+  <div class="tags"><code>#Artificial Intelligence</code>, <code>#Technology</code>, <code>#Business</code>, <code>#SpaceX</code>, <code>#Mergers &amp; Acquisitions</code></div>
+  <details><summary>References</summary><ul><li><a href="https://www.dualentry.com/blog/arr-vs-revenue">ARR vs Revenue: Differences and Reconciliation | DualEntry</a></li><li><a href="https://gtm.stage2.capital/p/making-sense-of-revenue-metrics-for">Making Sense of Revenue Metrics for Fundraising</a></li><li><a href="https://zapier.com/blog/ai-coding-tools/">The 9 best AI coding tools in 2026 - Zapier</a></li></ul></details>
+</article>
+
+<article id="item-11">
+  <header>
+        <h2 class="item-title"><a href="https://www.bloomberg.com/news/videos/2026-05-21/the-next-phase-of-artificial-intelligence">Next Phase of Artificial Intelligence</a></h2>
+    <div class="meta">rss · Bloomberg Technology · May 21, 21:28</div>
+  </header>
+    <div class="lang-blocks">
+        <section class="lang"><h3>EN</h3><div class="content">Yann LeCun and JP Vert discussed upcoming phases of artificial intelligence and how large language models could be applied to physical systems during a Bloomberg interview. They outlined new techniques and required infrastructure for building physical AI components, such as autonomous vehicle processing and robot development pipelines.<br /><br />This conversation highlights the transition from theoretical AI to tangible physical implementations, which could reshape manufacturing, logistics, and autonomous systems. It signals a need for robust infrastructure and new standards that will affect businesses and regulators.<br /><br />The interview featured a conversation with Roman Bostick on “The Close,” and mentioned concrete examples such as Foxconn reducing deployment times by 40% and Walmart creating perfect pallets using AI vision. It also noted that building physical AI will require new hardware and software stacks across the robot development lifecycle.<br /><br />Physical AI refers to AI systems that operate in the real world, processing sensor data from robots, vehicles, or other devices to make decisions. The concept builds on large language models, which are neural networks trained on massive text corpora, and requires new infrastructure that combines cloud training with on‐site deployment. Experts such as Yann LeCun and JP Vert emphasize that translating LLMs into physical contexts will demand robust hardware, edge computing, and standardized frameworks for robot development. Recent industry reports describe five critical infrastructure components needed for physical AI, including precision manufacturing, smart distribution, and large language model integration.</div></section>
+        <section class="lang"><h3>FR</h3><div class="content">Yann LeCun et JP Vert ont discuté des prochaines phases de l&#39;intelligence artificielle et de l&#39;application des grands modèles linguistiques aux systèmes physiques lors d&#39;une interview Bloomberg. Ils ont décrit de nouvelles techniques et l&#39;infrastructure nécessaire pour concevoir des composants d&#39;IA physique, comme le traitement des véhicules autonomes et les chaînes de développement robotique.<br /><br />Cette discussion souligne la transition de l&#39;IA théorique vers des implémentations physiques concrètes, pouvant transformer la fabrication, la logistique et les systèmes autonomes. Elle indique un besoin d&#39;infrastructure solide et de nouvelles normes impactant les entreprises et les régulateurs.<br /><br />L&#39;interview a inclus une discussion avec Roman Bostick dans “The Close” et a cité des exemples concrets comme Foxconn réduisant les temps de déploiement de 40 % et Walmart créant des palettes parfaites grâce à la vision IA. Il a également souligné que la construction d&#39;IA physique nécessite de nouvelles piles matérielles et logicielles tout au long du cycle de développement robotique.<br /><br />L&#39;IA physique désigne des systèmes d&#39;IA qui opèrent dans le monde réel, traitant des données sensorielles provenant de robots, de véhicules ou d&#39;autres appareils pour prendre des décisions. Le concept s&#39;appuie sur les grands modèles linguistiques, qui sont des réseaux de neurones formés sur de très grands corpus de texte, et nécessite une nouvelle infrastructure combinant l&#39;entraînement cloud avec le déploiement sur site. Des experts comme Yann LeCun et JP Vert soulignent que la traduction des LLM vers le domaine physique exigera des matériels robustes, du calcul edge et des cadres normalisés pour le développement robotique. Des rapports récents de l&#39;industrie décrivent cinq composants critiques d&#39;infrastructure nécessaires à l&#39;IA physique, notamment la fabrication de précision, la distribution intelligente et l&#39;intégration des grands modèles linguistiques.</div></section>
+    </div>
+  <div class="tags"><code>#Artificial Intelligence</code>, <code>#Machine Learning</code>, <code>#Technology</code>, <code>#Future of AI</code>, <code>#Expert Interview</code></div>
+  <details><summary>References</summary><ul><li><a href="https://en.wikipedia.org/wiki/Physical_infrastructure">Physical infrastructure</a></li><li><a href="https://www.nvidia.com/en-us/glossary/generative-physical-ai/">What is Physical AI? | NVIDIA Glossary</a></li><li><a href="https://aws.amazon.com/blogs/physical-ai/physical-ai-building-the-next-foundation-in-autonomous-intelligence/">Physical AI: Building the Next Foundation in Autonomous Intelligence | AWS Physical AI Blog</a></li></ul></details>
+</article>
+
+<article id="item-12">
+  <header>
+        <h2 class="item-title"><a href="https://www.bloomberg.com/news/articles/2026-05-20/nvidia-gives-disappointing-forecast-as-chip-competition-mounts">Nvidia tells skeptical investors that AI is ready to go mainstream.</a></h2>
+    <div class="meta">rss · Bloomberg Technology · May 20, 20:23</div>
+  </header>
+    <div class="lang-blocks">
+        <section class="lang"><h3>EN</h3><div class="content">Nvidia released its latest quarterly report, reporting a disappointing forecast as competition intensifies in the chip market. At the same time, the company highlighted its diversification efforts to reduce reliance on data center operators and stressed that AI technologies are ready for mainstream deployment.<br /><br />The report signals that Nvidia’s growth may become less dependent on a few large data center customers, which could make its earnings more stable amid volatile demand. Demonstrating AI readiness also positions the company to capture broader market opportunities as AI moves into mainstream products and services.<br /><br />Nvidia said it is expanding into new verticals such as automotive, edge computing, and partnerships with neocloud providers and nation‐state programs to broaden its customer base. The company also disclosed a weaker-than‐expected revenue outlook, citing heightened competition from rivals like AMD and Intel and the need to invest heavily in AI chip development.<br /><br />Nvidia has become the leading supplier of GPUs that power the largest AI models, a position that has driven most of its revenue growth from data center operators. However, the company faces increasing competition from AMD, Intel and custom ASICs, prompting a strategic shift toward diversifying its revenue streams beyond gaming and data center chips. Recent industry reports indicate that AI adoption is moving from niche enterprise use to mainstream consumer and enterprise applications, supported by government initiatives and large‐scale advertising campaigns. This context explains why Nvidia’s diversification and AI readiness are being closely watched by investors.</div></section>
+        <section class="lang"><h3>FR</h3><div class="content">Nvidia a publié son dernier rapport trimestriel, indiquant une prévision décevante en raison de la concurrence accrue sur le marché des puces. Parallèlement, l&#39;entreprise a mis en avant ses efforts de diversification pour réduire sa dépendance aux opérateurs de centres de données et a affirmé que l&#39;IA est prête pour une adoption grand public.<br /><br />Le rapport indique que la croissance de Nvidia pourrait devenir moins dépendante de quelques grands clients de centres de données, ce qui rendrait ses résultats plus stables face à une demande volatile. Montrer que l&#39;IA est prête permet également à l&#39;entreprise de saisir de plus larges opportunités de marché alors que l&#39;IA s&#39;intègre aux produits et services grand public.<br /><br />Nvidia a annoncé qu&#39;il s&#39;expand vers de nouveaux secteurs tels que l&#39;automobile, le computing de bord et des partenariats avec des fournisseurs de neoclouds ainsi que des programmes d&#39;États-nations pour élargir sa clientèle. L&#39;entreprise a également indiqué une perspective de revenus plus faible que prévu, attribuant cela à une concurrence accrue avec des rivaux comme AMD et Intel et à la nécessité d&#39;investir massivement dans le développement de puces IA.<br /><br />Nvidia est devenu le fournisseur leader de GPU qui alimentent les plus grands modèles d&#39;IA, une position qui a généré la majeure partie de sa croissance des revenus auprès des exploitants de centres de données. Toutefois, l&#39;entreprise fait face à une concurrence accrue de la part d&#39;AMD, Intel et d&#39;ASIC personnalisés, ce qui l&#39;incite à diversifier ses sources de revenus au-delà du gaming et des puces de centres de données. Des rapports récents de l&#39;industrie montrent que l&#39;adoption de l&#39;IA passe d&#39;une utilisation nichée à des applications grand public et enterprise, soutenue par des initiatives gouvernementales et de grandes campagnes publicitaires. Ce contexte explique pourquoi la diversification de Nvidia et sa readiness à l&#39;IA sont closely surveillées par les investisseurs.</div></section>
+    </div>
+  <div class="tags"><code>#Nvidia</code>, <code>#AI</code>, <code>#Investors</code>, <code>#Quarterly earnings</code>, <code>#Technology</code></div>
+  <details><summary>References</summary><ul><li><a href="https://www.tipranks.com/news/nvidia-stock-may-not-hold-the-ai-crown-forever-heres-why-you-should-diversify">Nvidia Stock May Not Hold the AI Crown Forever. - TipRanks.com</a></li><li><a href="https://finance.yahoo.com/news/decoding-nvidia-corp-nvda-strategic-050134845.html">Decoding NVIDIA Corp (NVDA): A Strategic SWOT Insight</a></li></ul></details>
+</article>
+
+<article id="item-13">
+  <header>
+        <h2 class="item-title"><a href="https://www.bloomberg.com/news/videos/2026-05-22/insilico-on-applying-ai-to-transform-drug-discovery-video">Insilico Uses AI to Transform Drug Discovery and Longevity Research.</a></h2>
+    <div class="meta">rss · Bloomberg Technology · May 22, 06:01</div>
+  </header>
+    <div class="lang-blocks">
+        <section class="lang"><h3>EN</h3><div class="content">During a Bloomberg interview at the JPMorgan Global China Summit in Shanghai, Insilico founder Alex Zhavoronkov explained how his company is using artificial intelligence to reshape drug discovery and longevity research. He highlighted recent advances in AI models that can analyze massive biological datasets to identify promising drug candidates more quickly.<br /><br />This interview underscores AI&#39;s growing role in reshaping pharmaceutical R&amp;D, potentially cutting years and billions of dollars from development timelines. It also signals a broader shift toward using AI for longevity science, which could yield treatments that extend healthy human lifespan.<br /><br />Alex Zhavoronkov, CEO of Insilico Medicine, emphasized that their AI platforms can process massive biological datasets to pinpoint drug candidates faster than traditional methods. He also noted that the same technology is being applied to longevity research, targeting mechanisms such as cellular senescence and metabolic decline.<br /><br />Artificial intelligence is being used to analyze large biological datasets, enabling faster identification of potential drug candidates in the pharmaceutical pipeline. Companies such as Isomorphic Labs have raised billions of dollars to scale AI‐driven drug discovery platforms, reflecting strong investment interest. In longevity research, scientists study aging processes including cellular senescence, inflammation, and metabolic decline to develop interventions that extend healthspan. Preliminary evidence suggests drugs like Metformin may mimic caloric restriction and improve longevity in animal models, while senolytic therapies aim to clear senescent cells.</div></section>
+        <section class="lang"><h3>FR</h3><div class="content">Lors d&#39;une interview de Bloomberg au sommet mondial JPMorgan à Shanghai, le fondateur d&#39;Insilico Alex Zhavoronkov a expliqué comment son entreprise utilise l&#39;intelligence artificielle pour transformer la découverte de médicaments et la recherche sur la longévité. Il a souligné les récentes avancées des modèles d&#39;IA capables d&#39;analyser d&#39;énormes ensembles de données biologiques pour identifier plus rapidement des candidats prometteurs.<br /><br />Cette interview souligne le rôle croissant de l&#39;IA dans la transformation de la recherche et du développement pharmaceutiques, pouvant réduire de plusieurs années et de milliards de dollars les délais de développement. Elle indique également un virage général vers l&#39;utilisation de l&#39;IA en science de la longévité, ce qui pourrait aboutir à des traitements prolongeant la durée de vie en bonne santé des humains.<br /><br />Alex Zhavoronkov, PDG d&#39;Insilico Medicine, a souligné que leurs plateformes d&#39;IA peuvent traiter d&#39;énormes ensembles de données biologiques pour identifier plus rapidement des candidats médicaments. Il a également indiqué que la même technologie est appliquée à la recherche sur la longévité, visant des mécanismes comme la sénescence cellulaire et le déclin métabolique.<br /><br />L&#39;intelligence artificielle est utilisée pour analyser de grands ensembles de données biologiques, ce qui permet d&#39;identifier plus rapidement des candidats potentiels à la médication. Des entreprises comme Isomorphic Labs ont levé plusieurs milliards de dollars pour développer leurs plateformes de découverte de médicaments basées sur l&#39;IA, témoignant d&#39;un fort intérêt des investisseurs. En recherche sur la longévité, les scientifiques étudient les processus du vieillissement, notamment la sénescence cellulaire, l&#39;inflammation et le déclin métabolique, afin de concevoir des interventions prolongeant la santé. Des études préliminaires indiquent que des molécules comme la Metformine pourraient imiter la restriction calorique et améliorer la longévité chez les modèles animaux, tandis que les thérapies sénolytiques visent à éliminer les cellules sénescentes.</div></section>
+    </div>
+  <div class="tags"><code>#AI</code>, <code>#Drug Discovery</code>, <code>#Biotechnology</code>, <code>#Healthcare</code>, <code>#Technology</code></div>
+  <details><summary>References</summary><ul><li><a href="https://www.linkedin.com/pulse/ai-drug-discovery-separating-signal-from-buzz-roots-analysis-rqqoc">AI in Drug Discovery: Separating Signal from Buzz</a></li><li><a href="https://news.google.com/stories/CAAqNggKIjBDQklTSGpvSmMzUnZjbmt0TXpZd1NoRUtEd2o4ei1LTUVSRURmajAxLUJOSjB5Z0FQAQ?hl=en-GB&amp;gl=GB&amp;ceid=GB:en">Isomorphic Labs raises $2.1 billion for AI drug discovery - Overview</a></li><li><a href="https://grokipedia.com/page/research_on_aging">Research on Aging</a></li></ul></details>
+</article>
+
+<article id="item-14">
+  <header>
+        <h2 class="item-title"><a href="https://www.bloomberg.com/news/articles/2026-05-21/take-two-confirms-november-debut-for-grand-theft-auto-vi">Take-Two confirms the November 19 launch of Grand Theft Auto VI.</a></h2>
+    <div class="meta">rss · Bloomberg Technology · May 21, 20:22</div>
+  </header>
+    <div class="lang-blocks">
+        <section class="lang"><h3>EN</h3><div class="content">Take-Two Interactive announced that Grand Theft Auto VI will launch on November 19, 2026, ending previous uncertainty about delays. The company also confirmed the game will be released on PlayStation 5 and Xbox Series X/S.<br /><br />The confirmed launch date solidifies one of the most anticipated video game releases, likely driving record sales and reinforcing Take-Two&#39;s dominance in the premium gaming market. It also sets a benchmark for future open‐world titles and may influence hardware sales for the current console generation.<br /><br />Grand Theft Auto VI is being developed by Rockstar Games and is set in the fictional state of Leonida, inspired by Florida, with protagonists Jason Duval and Lucia Caminos. The title will launch on November 19, 2026 for PlayStation 5 and Xbox Series X/S, after several postponements that had caused speculation. Take‐Two also projected annual bookings below Wall Street expectations while reaffirming this release schedule.<br /><br />Take‐Two Interactive is one of the world’s largest publicly traded video game companies, with a market capitalization of about $41 billion as of April 2025 and a portfolio that includes Rockstar Games, 2K, and several major franchises. Grand Theft Auto V, released in 2013, remains one of the best‐selling titles of all time and has kept the series in the public eye for over a decade. After multiple delays, Rockstar confirmed the November 19, 2026 launch, which had been uncertain since the game’s initial announcement in 2022 and a major leak of unfinished footage in September 2023. The upcoming release is expected to be the eighth main entry in the Grand Theft Auto series and the sixteenth overall entry in the franchise.</div></section>
+        <section class="lang"><h3>FR</h3><div class="content">Take-Two Interactive a annoncé que Grand Theft Auto VI sortira le 19 novembre 2026, mettant fin aux doutes sur d&#39;éventuels retards. L&#39;entreprise a également confirmé que le jeu sera disponible sur PlayStation 5 et Xbox Series X/S.<br /><br />La date de lancement confirmée consolide l&#39;un des jeux les plus attendus, probablement générant des ventes record et renforçant la domination de Take-Two sur le marché du gaming premium. Elle établit également une référence pour les futurs titres en monde ouvert et peut influencer les ventes de matériel de la génération de consoles actuelle.<br /><br />Grand Theft Auto VI est développé par Rockstar Games et se déroule dans l&#39;état fictif de Leonida, inspiré de la Floride, avec pour protagonistes Jason Duval et Lucia Caminos. Le titre sortira le 19 novembre 2026 sur PlayStation 5 et Xbox Series X/S, après plusieurs reports qui avaient alimenté les spéculations. Take‐Two a également indiqué que ses bookings annuels seront inférieurs aux attentes de Wall Street tout en confirmant ce calendrier de sortie.<br /><br />Take‐Two Interactive est l&#39;une des plus grandes sociétés de jeux vidéo cotées en bourse, avec une capitalisation boursière d&#39;environ 41 milliards de dollars en avril 2025 et un portefeuille incluant Rockstar Games, 2K et plusieurs franchises majeures. Grand Theft Auto V, sorti en 2013, reste l&#39;un des titres les plus vendus de tous les temps et a maintenu la série dans l&#39;attention du public pendant plus d&#39;une décennie. Après plusieurs retards, Rockstar a confirmé le lancement le 19 novembre 2026, qui était incertain depuis l&#39;annonce initiale en 2022 et une fuite majeure de séquences inachevées en septembre 2023. La sortie à venir devrait être la huitième entrée principale de la série Grand Theft Auto et la seizième entrée globale de la franchise.</div></section>
+    </div>
+  <div class="tags"><code>#Video Games</code>, <code>#Gaming Industry</code>, <code>#Release Announcement</code>, <code>#Technology</code></div>
+  <details><summary>References</summary><ul><li><a href="https://en.wikipedia.org/wiki/Take-Two_Interactive">Take-Two Interactive</a></li><li><a href="https://www.reuters.com/business/take-two-forecasts-annual-bookings-below-estimates-sticks-with-gta-vi-launch-2026-05-21/">Take-Two sticks with &#39;GTA VI&#39; launch timeline, forecasts annual bookings ...</a></li><li><a href="https://en.wikipedia.org/wiki/Grand_Theft_Auto_VI">Grand Theft Auto VI</a></li></ul></details>
+</article>
+
+<article id="item-15">
+  <header>
+        <h2 class="item-title"><a href="https://www.bloomberg.com/news/articles/2026-05-21/investors-look-beyond-tsmc-as-ai-boom-spreads-to-new-winners">Investors Look Beyond TSMC as AI Boom Spreads to New Winners.</a></h2>
+    <div class="meta">rss · Bloomberg Technology · May 21, 23:30</div>
+  </header>
+    <div class="lang-blocks">
+        <section class="lang"><h3>EN</h3><div class="content">Investors are shifting focus from Taiwan Semiconductor Manufacturing Co. to other AI-related stocks as the AI boom expands beyond the company&#39;s dominance. This move reflects growing interest in firms developing AI chips, software, and related infrastructure.<br /><br />This shift signals a broader diversification in AI investment, reducing dependence on TSMC and boosting the prospects of other semiconductor and AI-focused firms. It may also pressure TSMC to innovate faster and could influence the valuation of the entire AI chip ecosystem.<br /><br />Investors are turning away from TSMC, which previously served as the primary proxy for Nvidia, toward other AI-related stocks such as those developing AI chips and software. TSMC, founded in 1987, represents about 30% of the Taiwan stock market and is the world’s largest dedicated semiconductor foundry. Nvidia, a leading GPU maker, commands a 92% market share in the discrete graphics segment as of 2025.<br /><br />Taiwan Semiconductor Manufacturing Co. (TSMC) is the world’s first dedicated semiconductor contract manufacturer, founded in 1987 and now responsible for producing chips for many leading designers, including Nvidia. Nvidia, founded in 1993, has become the dominant supplier of high‐end GPUs, holding about 92% of the discrete graphics market in 2025 and driving much of the AI boom. The AI surge has intensified investor interest in companies across the semiconductor and AI software stack, prompting a reallocation of capital away from TSMC.</div></section>
+        <section class="lang"><h3>FR</h3><div class="content">Les investisseurs redirigent leur attention de Taiwan Semiconductor Manufacturing Co. vers d&#39;autres actions liées à l&#39;IA alors que le boom de l&#39;IA s&#39;étend au-delà de la domination de l&#39;entreprise. Cette évolution montre un intérêt croissant pour les entreprises développant des puces, logiciels et infrastructures liés à l&#39;IA.<br /><br />Ce déplacement indique une diversification accrue des investissements en IA, réduisant la dépendance à TSMC et dynamisant les perspectives des autres entreprises spécialisées en semi-conducteurs et IA. Il pourrait également inciter TSMC à innover plus rapidement et influencer l&#39;évaluation de l&#39;écosystème des puces IA.<br /><br />Les investisseurs se détournent de TSMC, qui était auparavant le principal proxy de Nvidia, pour se tourner vers d&#39;autres actions liées à l&#39;IA, notamment celles développant des puces et du logiciel IA. TSMC, fondée en 1987, représente environ 30 % du marché boursier taïwanais et est le plus grand fonderie de semi-conducteurs dédiée au monde. Nvidia, leader des GPU, détient une part de 92 % du segment des graphiques discrets en 2025.<br /><br />Taiwan Semiconductor Manufacturing Co. (TSMC) est le premier fabricant de semi-conducteurs sous-traitant au monde, fondé en 1987 et produit des puces pour de nombreux concepteurs, dont Nvidia. Nvidia, créée en 1993, est devenue le fournisseur dominant de GPU haut de gamme, détenant environ 92 % du marché des graphiques discrets en 2025 et stimulant largement le boom de l&#39;IA. La hausse de l&#39;IA a accru l&#39;intérêt des investisseurs pour les entreprises du secteur des semi-conducteurs et du logiciel IA, entraînant un réallocation de capitaux loin de TSMC.</div></section>
+    </div>
+  <div class="tags"><code>#AI</code>, <code>#Semiconductors</code>, <code>#Investment</code>, <code>#Technology</code>, <code>#Taiwan</code></div>
+  <details><summary>References</summary><ul><li><a href="https://en.wikipedia.org/wiki/TSMC">TSMC - Wikipedia</a></li><li><a href="https://en.wikipedia.org/wiki/Nvidia">Nvidia - Wikipedia</a></li><li><a href="https://www.nvidia.com/en-us/about-nvidia/">About Us: Company Leadership, History, Jobs, News | NVIDIA</a></li></ul></details>
+</article>
+
+<article id="item-16">
+  <header>
+        <h2 class="item-title"><a href="https://www.bloomberg.com/news/videos/2026-05-22/the-china-show-5-22-2026-video">Lenovo surged to a 26-year high after strong AI growth.</a></h2>
+    <div class="meta">rss · Bloomberg Technology · May 22, 05:47</div>
+  </header>
+    <div class="lang-blocks">
+        <section class="lang"><h3>EN</h3><div class="content">Bloomberg reported that Lenovo’s stock reached a 26-year high on May 22, 2026, driven by strong growth in its artificial intelligence business. The surge was highlighted during an episode of The China Show, which provides investors with insight into China’s technology sector. This marks a notable milestone for Lenovo after years of relatively stable share performance.<br /><br />The stock surge signals heightened investor confidence in Lenovo’s AI strategy and could attract more capital to Chinese tech firms. It also underscores the growing importance of AI across the technology industry, influencing competitive dynamics and potentially prompting other companies to accelerate their own AI investments. For investors, the rise may affect portfolio allocations and benchmark comparisons within global equity indices.<br /><br />Lenovo’s stock closed at $85.36 on May 22, 2026, with a day high of $86.44 and a low of $83.81, reflecting a 1:1 split adjustment factor. The 26-year high is defined as the highest closing price over the previous 52 weeks after adjusting for splits, according to Nasdaq’s definition. Lenovo, the world’s largest PC manufacturer, has been expanding its AI offerings, which analysts say are driving the recent market momentum.<br /><br />Lenovo is a leading Chinese technology company known for its PCs and consumer electronics. A 26-year high in its stock price means the closing price is the highest recorded in the past 26 weeks after adjusting for splits. The China Show is Bloomberg’s flagship morning program that provides analysis of China’s economy, politics, and technology trends. Recent AI growth at Lenovo has been highlighted as a key driver of its stock surge.</div></section>
+        <section class="lang"><h3>FR</h3><div class="content">Bloomberg a indiqué que l’action de Lenovo a atteint un sommet de 26 ans le 22 mai 2026, grâce à une forte croissance de son business en intelligence artificielle. La hausse a été soulignée lors de l’émission de The China Show, qui offre aux investisseurs des informations sur le secteur technologique chinois. Il s’agit d’un jalon notable pour Lenovo après des années de performance boursière relativement stable.<br /><br />La hausse du cours indique une confiance accrue des investisseurs dans la stratégie IA de Lenovo et pourrait attirer davantage de capitaux vers les entreprises technologiques chinoises. Elle souligne également l’importance croissante de l’IA dans le secteur technologique, influençant la dynamique concurrentielle et incitant d’autres entreprises à intensifier leurs investissements en IA. Pour les investisseurs, cette progression peut impacter les allocations de portefeuille et les comparaisons avec les indices boursiers mondiaux.<br /><br />L’action de Lenovo a clôturé à 85,36 $ le 22 mai 2026, avec un sommet quotidien de 86,44 $ et une basse de 83,81 $, après ajustement d’un facteur de split de 1:1. Le sommet de 26 ans correspond au prix de clôture le plus élevé des 52 semaines précédentes, ajusté pour les splits, selon la définition de Nasdaq. Lenovo, le plus grand fabricant mondial d’ordinateurs portables, a développé des offres en IA qui, selon les analystes, alimentent la dynamique du marché.<br /><br />Lenovo est une entreprise technologique chinoise de premier plan, spécialisée dans les ordinateurs portables et les appareils électroniques grand public. Un sommet de 26 ans pour son cours boursier signifie que le prix de clôture, ajusté pour les splits, est le plus élevé enregistré au cours des 26 semaines précédentes. L’émission « The China Show » de Bloomberg est un programme matinal phare qui analyse l’économie, la politique et les tendances technologiques de la Chine. La forte croissance de l’IA chez Lenovo a été mise en avant comme le principal moteur de la hausse de son action.</div></section>
+    </div>
+  <div class="tags"><code>#Technology</code>, <code>#Business</code>, <code>#AI</code>, <code>#China</code>, <code>#Stock Market</code></div>
+  <details><summary>References</summary><ul><li><a href="https://tradingeconomics.com/united-states/stock-market">United States Stock Market Index - Quote - Chart - Historical Data - News | Trading Economics</a></li><li><a href="https://www.nasdaq.com/glossary/h/high-price">High price Definition | Nasdaq</a></li><li><a href="https://www.bloomberg.com/btv/series/the-china-show">The China Show - Bloomberg</a></li></ul></details>
+</article>
+
+<article id="item-17">
+  <header>
+        <h2 class="item-title"><a href="https://www.technologyreview.com/2026/05/19/1137454/roundtables-inside-the-musk-v-altman-trial/">The roundtables provide an inside look at the Musk v. Altman trial.</a></h2>
+    <div class="meta">rss · MIT Technology Review · May 19, 20:15</div>
+  </header>
+    <div class="lang-blocks">
+        <section class="lang"><h3>EN</h3><div class="content">MIT Technology Review hosted a roundtable discussing the outcome of Elon Musk&#39;s lawsuit against OpenAI, which found that Musk lost his case. The panel included AI reporter and attorney Michelle Kim and an editor.<br /><br />The case highlights legal challenges surrounding OpenAI&#39;s shift from a nonprofit to a for‐profit model, affecting trust in AI development. It underscores the need for transparency in corporate structures and may influence future litigation involving AI companies.<br /><br />The lawsuit alleged that OpenAI misrepresented its nonprofit status, leading Musk to invest based on that claim. Testimony was given by OpenAI CEO Sam Altman and President Greg Brockman, and the proceedings were reported by MIT Technology Review&#39;s AI reporter Michelle Kim.</div></section>
+        <section class="lang"><h3>FR</h3><div class="content">Le MIT Technology Review a organisé un roundtable sur le résultat du procès d&#39;Elon Musk contre OpenAI, qui a conclu que Musk a perdu son affaire. Le panel incluait la journaliste IA et avocate Michelle Kim ainsi qu&#39;un éditeur.<br /><br />L&#39;affaire met en lumière les défis juridiques liés au passage d&#39;OpenAI d&#39;une entité à but non lucratif à une société à but lucratif, affectant la confiance dans le développement de l&#39;IA. Elle souligne la nécessité de transparence dans les structures d&#39;entreprise et pourrait influencer de futures litiges impliquant des entreprises d&#39;IA.<br /><br />Le procès alléguait que OpenAI dissimulait son statut à but non lucratif, incitant Musk à investir sur cette base. Des témoignages ont été fournis par le PDG Sam Altman et le président Greg Brockman, et les procédures ont été couvertes par la journaliste IA de MIT Technology Review, Michelle Kim.</div></section>
+    </div>
+  <div class="tags"><code>#AI</code>, <code>#Law</code>, <code>#Elon Musk</code>, <code>#OpenAI</code>, <code>#Technology</code></div>
+  
+</article>
+
+<article id="item-18">
+  <header>
+        <h2 class="item-title"><a href="https://www.bloomberg.com/news/videos/2026-05-21/nvidia-s-competitors-should-be-scared-ross-gerber-warns-video">Nvidia&#39;s Competitors Should Be Scared, Ross Gerber Warns</a></h2>
+    <div class="meta">rss · Bloomberg Technology · May 21, 19:55</div>
+  </header>
+    <div class="lang-blocks">
+        <section class="lang"><h3>EN</h3><div class="content">Ross Gerber, co-founder and CEO of Gerber Kawasaki Wealth and Investment Management, warned that Nvidia&#39;s competitors should be worried as AI and space technologies converge, highlighting a pivotal moment for the tech sector during a Bloomberg The Close interview.<br /><br />This warning signals a critical juncture where AI and space technologies are converging, potentially reshaping competition in the tech sector. If true, it could impact investors, tech companies, and market dynamics as Nvidia&#39;s position becomes more contested in emerging tech domains.<br /><br />Gerber leads a wealth management firm focused on financial planning and investment guidance, not a technology analyst, raising questions about his expertise on Nvidia&#39;s competitive position. The Bloomberg video provides no specific data about Nvidia&#39;s competitors or market share changes in AI or space sectors.<br /><br />The web search results only describe Gerber Kawasaki Wealth Management&#39;s services and Bloomberg&#39;s video programming, with no information about Nvidia, AI, space technologies, or Ross Gerber&#39;s specific warnings. The provided sources do not contain information about Nvidia&#39;s competitors or market dynamics in AI and space technologies.</div></section>
+        <section class="lang"><h3>FR</h3><div class="content">Ross Gerber, co-fondateur et PDG de Gerber Kawasaki Wealth and Investment Management, a averti que les concurrents de Nvidia devraient avoir peur alors que les technologies de l&#39;IA et de l&#39;espace convergent, soulignant un moment décisif pour le secteur technologique lors d&#39;une interview de Bloomberg The Close.<br /><br />Cette mise en garde indique un moment critique où l&#39;IA et les technologies spatiales convergent, ce qui pourrait transformer la concurrence dans le secteur technologique. Si cela est vrai, cela pourrait impacter les investisseurs, les entreprises technologiques et les dynamiques du marché alors que la position de Nvidia devient plus contestée dans les domaines technologiques émergents.<br /><br />Gerber dirige une société de gestion de patrimoine axée sur la planification financière et les conseils d&#39;investissement, et non un analyste technologique, ce qui soulève des questions sur son expertise concernant la position concurrentielle de Nvidia. La vidéo Bloomberg ne fournit aucune donnée spécifique sur les concurrents de Nvidia ou les variations de part de marché dans les secteurs de l&#39;IA ou de l&#39;espace.<br /><br />Les résultats de recherche fournis ne contiennent aucune information sur Nvidia, les technologies de l&#39;IA, les technologies spatiales ou les avertissements spécifiques de Ross Gerber. Les sources fournies ne contiennent aucune information sur les concurrents de Nvidia ou les dynamiques du marché dans les secteurs de l&#39;IA et de l&#39;espace.</div></section>
+    </div>
+  <div class="tags"><code>#Nvidia</code>, <code>#AI</code>, <code>#Space</code>, <code>#Competition</code>, <code>#Technology</code></div>
+  <details><summary>References</summary><ul><li><a href="https://www.gerberkawasaki.com/our-team">Our Team - Gerber Kawasaki Wealth and Investment Management</a></li><li><a href="https://www.gerberkawasaki.com/">Gerber Kawasaki Wealth and Investment Management: Home</a></li><li><a href="https://www.bnnbloomberg.ca/video/shows/the-close/">The Close - Shows - BNN Bloomberg</a></li></ul></details>
+</article>
+</main></div>
+  </div>
+</body>
+</html>

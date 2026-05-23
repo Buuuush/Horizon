@@ -1,0 +1,526 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Horizon — 2026-05-23</title>
+  <style>
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600&family=Manrope:wght@500;700&display=swap');
+
+:root {
+    --bg: #f8f8fb;
+    --paper: #ffffff;
+    --surface: #fcfbff;
+    --accent: #325c9b;
+    --accent-2: color-mix(in srgb, var(--accent) 55%, #b73fd6);
+    --accent-3: color-mix(in srgb, var(--accent) 40%, #f59e0b);
+    --accent-soft: #e6eefb;
+    --muted: #5c6372;
+    --text: #1d2230;
+    --ring: color-mix(in srgb, var(--accent) 32%, transparent);
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+    color: var(--text);
+    background:
+        radial-gradient(1300px 420px at -10% -20%, var(--accent-soft), transparent 60%),
+        radial-gradient(760px 300px at 88% -12%, color-mix(in srgb, var(--accent-2) 24%, transparent), transparent 66%),
+        radial-gradient(640px 240px at 30% 0%, color-mix(in srgb, var(--accent-3) 18%, transparent), transparent 70%),
+        var(--bg);
+    font-family: 'Source Serif 4', Georgia, serif;
+    line-height: 1.78;
+}
+
+.container { max-width: 1100px; margin: 1.5rem auto; padding: 1rem; }
+
+.tab-switcher {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+    border-bottom: 2px solid color-mix(in srgb, var(--accent) 20%, transparent);
+}
+
+.tab-button {
+    background: transparent;
+    border: none;
+    color: var(--muted);
+    font-family: 'Manrope', 'Segoe UI', sans-serif;
+    font-size: 1rem;
+    font-weight: 600;
+    padding: 0.75rem 1.2rem;
+    cursor: pointer;
+    transition: color 0.18s ease, border-color 0.18s ease;
+    border-bottom: 3px solid transparent;
+}
+
+.tab-button:hover {
+    color: var(--text);
+}
+
+.tab-button.active {
+    color: var(--accent);
+    border-bottom-color: var(--accent);
+}
+
+.tab-content {
+    display: none;
+    animation: fadeIn 0.2s ease-in;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.summary-header {
+    background: var(--paper);
+    border: 1px solid color-mix(in srgb, var(--accent) 16%, transparent);
+    border-radius: 24px;
+    padding: 1.5rem 1.6rem 1.1rem;
+    box-shadow: 0 18px 48px rgba(19, 33, 68, 0.08);
+    margin-bottom: 1rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.summary-header::after {
+    content: "";
+    position: absolute;
+    inset: auto -60px -80px auto;
+    width: 220px;
+    height: 220px;
+    border-radius: 999px;
+    background: radial-gradient(circle, color-mix(in srgb, var(--accent-2) 28%, transparent), transparent 70%);
+    pointer-events: none;
+}
+
+.summary-header h1 {
+    margin: 0;
+    font-family: 'Fraunces', 'DM Serif Display', 'Iowan Old Style', 'Palatino Linotype', serif;
+    letter-spacing: .01em;
+    font-size: clamp(1.8rem, 3.6vw, 2.8rem);
+    line-height: 1.15;
+}
+
+.lead { margin: .55rem 0 1.1rem; color: var(--muted); font-size: 1.04rem; max-width: 78ch; }
+
+.toc-title {
+    margin: 0 0 .45rem;
+    font-family: 'Manrope', 'Segoe UI', sans-serif;
+    font-size: .85rem;
+    text-transform: uppercase;
+    letter-spacing: .11em;
+    color: var(--muted);
+}
+
+.toc ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: .55rem;
+}
+
+.toc li {
+    background: linear-gradient(160deg, var(--surface), color-mix(in srgb, var(--accent-soft) 48%, #ffffff));
+    border: 1px solid color-mix(in srgb, var(--accent) 16%, transparent);
+    border-radius: 10px;
+    padding: .55rem .65rem;
+    transition: transform .18s ease, box-shadow .18s ease;
+}
+
+.toc li:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 8px 20px color-mix(in srgb, var(--accent) 15%, transparent);
+}
+
+.toc a { text-decoration: none; color: var(--text); }
+
+.items { display: grid; gap: .95rem; }
+
+.items article {
+    background: var(--paper);
+    border: 1px solid color-mix(in srgb, var(--accent) 15%, transparent);
+    border-radius: 20px;
+    padding: 1.15rem 1.2rem;
+    box-shadow: 0 10px 32px rgba(0, 0, 0, 0.05);
+}
+
+.item-title {
+    font-family: 'Fraunces', 'DM Serif Display', 'Iowan Old Style', 'Palatino Linotype', serif;
+    font-size: clamp(1.2rem, 2.2vw, 1.55rem);
+    margin: 0 0 .55rem;
+    line-height: 1.22;
+}
+
+.item-title a { color: inherit; text-decoration: none; }
+.item-title a:hover { color: var(--accent); }
+
+.item-title a:focus-visible,
+.toc a:focus-visible,
+summary:focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
+    border-radius: 6px;
+}
+
+.meta { color: var(--muted); font-family: 'Manrope', 'Segoe UI', sans-serif; font-size: .9rem; margin-bottom: .7rem; }
+.score { color: var(--accent); margin-left: .45rem; font-weight: 700; font-family: 'Manrope', 'Segoe UI', sans-serif; }
+
+.content { font-size: 1.03rem; line-height: 1.8; }
+
+.fr-only {
+    display: grid;
+    gap: .72rem;
+}
+
+.content-section {
+    background: linear-gradient(170deg, var(--surface), color-mix(in srgb, var(--accent-soft) 24%, #ffffff));
+    border: 1px solid color-mix(in srgb, var(--accent) 12%, transparent);
+    border-radius: 12px;
+    padding: .78rem .85rem;
+}
+
+.content-section h3 {
+    margin: 0 0 .35rem;
+    font-family: 'Manrope', 'Segoe UI', sans-serif;
+    font-size: .82rem;
+    color: var(--muted);
+    letter-spacing: .07em;
+    text-transform: uppercase;
+}
+
+.evidence-note {
+    margin: .7rem 0 0;
+    color: var(--muted);
+    font-size: .94rem;
+}
+
+.tags { margin-top: .75rem; color: var(--muted); font-family: 'Manrope', 'Segoe UI', sans-serif; font-size: .9rem; }
+code { background: color-mix(in srgb, var(--accent-soft) 65%, #ffffff); border-radius: 8px; padding: .12rem .4rem; }
+
+details { margin-top: .65rem; }
+details summary { cursor: pointer; color: var(--accent); font-family: 'Manrope', 'Segoe UI', sans-serif; }
+
+@media (max-width: 860px) {
+    .container { margin: .7rem auto; padding: .65rem; }
+    .tab-switcher { flex-wrap: wrap; }
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --bg: #0f1420;
+        --paper: #161d2c;
+        --surface: #1b2435;
+        --accent: #7cb1ff;
+        --accent-2: #c28cff;
+        --accent-3: #ffc36c;
+        --accent-soft: #1a2740;
+        --muted: #a6b4cd;
+        --text: #edf2ff;
+        --ring: rgba(124, 177, 255, 0.55);
+    }
+
+    body {
+        background:
+            radial-gradient(1200px 420px at -10% -20%, #1a2740, transparent 60%),
+            radial-gradient(760px 300px at 88% -12%, rgba(194, 140, 255, 0.2), transparent 66%),
+            radial-gradient(640px 240px at 30% 0%, rgba(255, 195, 108, 0.14), transparent 70%),
+            var(--bg);
+    }
+
+    .summary-header,
+    .items article {
+        border-color: rgba(124, 177, 255, 0.24);
+        box-shadow: 0 18px 44px rgba(0, 0, 0, 0.32);
+    }
+
+    .tab-switcher {
+        border-bottom-color: rgba(124, 177, 255, 0.2);
+    }
+
+    code {
+        background: rgba(124, 177, 255, 0.16);
+    }
+}
+</style>
+  <script>
+    function switchTab(button) {
+      const lang = button.getAttribute('data-lang');
+      const allButtons = document.querySelectorAll('.tab-button');
+      const allContents = document.querySelectorAll('.tab-content');
+      
+      allButtons.forEach(b => b.classList.remove('active'));
+      allContents.forEach(c => c.classList.remove('active'));
+      
+      button.classList.add('active');
+      document.querySelector(`.tab-content[data-lang="${lang}"]`).classList.add('active');
+    }
+  </script>
+</head>
+<body>
+  <div class="container">
+    <div class="tab-switcher">
+      <button class="tab-button active" onclick="switchTab(this)" data-lang="fr">Français</button><button class="tab-button " onclick="switchTab(this)" data-lang="en">English</button>
+    </div>
+    <div class="tab-content active" data-lang="fr"><div class="fr-item">### 1.
+<section class="summary-header">
+  <h1>Horizon Quotidien — 2026-05-23</h1>
+  <p class="lead">9 sujets essentiels sélectionnés parmi 438 contenus collectés.</p>
+  <nav class="toc" aria-label="Sommaire">
+    <p class="toc-title">Sommaire</p>
+    <ul><li><a href="#item-1">Un groupe de hackers empoisonne le code open source à une échelle sans précédent.</a></li>
+<li><a href="#item-2">Échelle de la créativité à l&#39;âge de l&#39;IA</a></li>
+<li><a href="#item-3">SpaceX Starship décolle dans un test à haut risque.</a></li>
+<li><a href="#item-4">Une équipe étudiante crée une méthode plus simple pour programmer les muscles artificiels</a></li>
+<li><a href="#item-5">Anthropic présente le codage assisté par IA avec Code with Claude à Londres.</a></li>
+<li><a href="#item-6">Le procureur général du Texas poursuit Meta pour les allégations d&#39;absence de chiffrement WhatsApp.</a></li>
+<li><a href="#item-7">Microna discute de l&#39;expansion de puces aux États-Unis et de la demande</a></li>
+<li><a href="#item-8">Anthropic va clore un tour de financement de plus de 30 milliards.</a></li>
+<li><a href="#item-9">Le rondtable explore si l&#39;IA peut comprendre le monde.</a></li></ul>
+  </nav>
+</section>
+<main class="items">
+<article id="item-1">
+  <header>
+        <h2 class="item-title"><a href="https://arstechnica.com/information-technology/2026/05/a-hacker-group-is-poisoning-open-source-code-at-an-unprecedented-scale/">Un groupe de hackers empoisonne le code open source à une échelle sans précédent.</a></h2>
+    <div class="meta">rss · Ars Technica · May 22, 10:30</div>
+  </header>
+  <div class="lang-blocks fr-only"><section class="content-section"><h3>Contexte</h3><div class="content">Les attaques de chaîne d&#39;approvisionnement consistent à compromettre un composant utilisé par de nombreuses applications en aval, permettant la propagation du code malveillant à grande échelle. La vague de 2026 menée par TeamPCP fait suite à des incidents antérieurs, comme la compromission de la chaîne d&#39;approvisionnement de LiteLLM en mars 2026. Les projets open source, notamment les extensions VS Code, sont des vecteurs attractifs car ils sont diffusés à de nombreux développeurs. GitHub, principal hébergeur de code open source, est récemment devenu la cible, incitant à une enquête sur la compromission de ses dépôts internes.</div></section></div>
+  <p class="evidence-note"><strong>Fiabilité</strong> : Les preuves sont solides, tirées du journalisme réputé de WIRED et corroborées par plusieurs rapports d&#39;entreprises de sécurité.</p>
+  <div class="tags"><code>#cybersecurity</code>, <code>#open-source</code>, <code>#supply-chain attacks</code>, <code>#hacking</code>, <code>#software security</code></div>
+  <details><summary>Références</summary><ul><li><a href="https://www.wired.com/story/teampcp-software-supply-chain-attack-spree-github/">A Hacker Group Is Poisoning Open Source Code at an ... - WIRED</a></li><li><a href="https://unit42.paloaltonetworks.com/teampcp-supply-chain-attacks/">Weaponizing the Protectors: TeamPCP’s Multi-Stage Supply Chain Attack ...</a></li></ul></details>
+</article>
+
+<article id="item-2">
+  <header>
+        <h2 class="item-title"><a href="https://www.technologyreview.com/2026/05/21/1137613/scaling-creativity-in-the-age-of-ai/">Échelle de la créativité à l&#39;âge de l&#39;IA</a></h2>
+    <div class="meta">rss · MIT Technology Review · May 21, 19:16</div>
+  </header>
+  <div class="lang-blocks fr-only"><section class="content-section"><h3>Contexte</h3><div class="content">Le récit est une activité humaine fondamentale depuis les peintures rupestres préhistoriques, évoluant à travers la littérature, le théâtre et les médias numériques. Les récentes avancées de l&#39;IA générative, décrites dans un article de 2025 de Springer sur la narrativité algorithmique, permettent aux systèmes de produire des récits cohérents à partir d&#39;entrées minimales. Des plateformes comme Udemy proposent désormais des cours pour aider les créateurs à intégrer l&#39;IA dans le brainstorming et la révision tout en conservant une voix authentique. Parallèlement, des experts avertissent que les limites visuelles de l&#39;IA restent une préoccupation, comme le souligne un post LinkedIn de 2025.</div></section></div>
+  <p class="evidence-note"><strong>Fiabilité</strong> : Les preuves sont solides, tirées d&#39;un article revu par les pairs et de récents articles industriels.</p>
+  <div class="tags"><code>#AI</code>, <code>#Creativity</code>, <code>#Storytelling</code>, <code>#Technology</code></div>
+  <details><summary>Références</summary><ul><li><a href="https://link.springer.com/article/10.1007/s00146-025-02297-8">Algorithmic narrativity as a new narrative mode | AI &amp; SOCIETY | Springer Nature Link</a></li><li><a href="https://www.the-future-of-commerce.com/2025/05/15/generative-ai-storytelling/">Generative AI storytelling: Collaboration creates compelling content</a></li></ul></details>
+</article>
+
+<article id="item-3">
+  <header>
+        <h2 class="item-title"><a href="https://www.bloomberg.com/news/videos/2026-05-22/spacex-starship-lifts-off-in-high-stakes-test-video">SpaceX Starship décolle dans un test à haut risque.</a></h2>
+    <div class="meta">rss · Bloomberg Technology · May 22, 22:51</div>
+  </header>
+  <div class="lang-blocks fr-only"><section class="content-section"><h3>Contexte</h3><div class="content">Starship est un lanceur super lourd réutilisable à deux étages développé par SpaceX, destiné à remplacer les fusées Falcon 9 et Falcon Heavy et à permettre des missions vers la Lune, Mars et des constellations de satellites. À ce jour, il a effectué 12 lancements avec un taux de succès de 7 sur 12, et son design comprend un booster Super Heavy et un vaisseau Starship propulsés par des moteurs Raptor, capables de retourner verticalement à la tour de lancement pour être réutilisés. Ce test a démontré ces capacités tout en déployant des satellites Starlink factices, s’inscrivant dans le plan plus large de SpaceX pour un Internet mondial et une infrastructure en orbite.</div></section></div>
+  <p class="evidence-note"><strong>Fiabilité</strong> : Les preuves sont solides, tirées du rapport de Bloomberg et corroborées par les pages Wikipedia et BBC sur Starship et Starlink.</p>
+  <div class="tags"><code>#SpaceX</code>, <code>#Starship</code>, <code>#Space launch</code>, <code>#Satellite internet</code>, <code>#Technology</code></div>
+  <details><summary>Références</summary><ul><li><a href="https://en.wikipedia.org/wiki/Starship_rocket">Starship rocket</a></li><li><a href="https://en.wikipedia.org/wiki/SpaceX_Starship">SpaceX Starship - Wikipedia</a></li><li><a href="https://www.bbc.com/news/articles/cx2lk2mwwnxo">What is Elon Musk&#39;s Starship space vehicle?</a></li></ul></details>
+</article>
+
+<article id="item-4">
+  <header>
+        <h2 class="item-title"><a href="https://phys.org/news/2026-05-student-talent-simpler-method-artificial.html">Une équipe étudiante crée une méthode plus simple pour programmer les muscles artificiels</a></h2>
+    <div class="meta">rss · Phys.org · May 22, 19:20</div>
+  </header>
+  <div class="lang-blocks fr-only"><section class="content-section"><h3>Contexte</h3><div class="content">Les hydrogels sont des matériaux riches en eau, semblable à de la gelée, qui peuvent imiter le comportement mécanique et chimique des tissus biologiques, comme le montre le travail de chercheurs de l&#39;Université du Colorado Boulder qui ont créé une plateforme étirable et contrôlée par la lumière. Un article récent publié dans Nature Communications décrit une assemblée dirigée par un modèle synthétique qui produit des hydrogels hautement conducteurs et mécaniquement robustes avec un module similaire à celui du tissu, adaptés à l&#39;interfaçage avec les tissus vivants. Les muscles artificiels, ou actuateurs semblables aux muscles, sont des matériaux capables de se contracter, s&#39;étendre ou modifier leur rigidité de façon réversible, et ils dépendent de ces hydrogels intelligents pour être programmés. L&#39;hydrogel développé par l&#39;équipe d&#39;étudiants de Waterloo relie donc la robotique souple à l&#39;ingénierie des tissus, offrant une voie plus simple pour programmer ces actuateurs.</div></section></div>
+  <p class="evidence-note"><strong>Fiabilité</strong> : Les preuves sont solides grâce à des publications évaluées par les pairs et une source d&#39;information réputée, mais l&#39;impact reste encore émergent.</p>
+  <div class="tags"><code>#soft robotics</code>, <code>#materials science</code>, <code>#artificial muscles</code>, <code>#student research</code>, <code>#hydrogel</code></div>
+  <details><summary>Références</summary><ul><li><a href="https://www.nature.com/articles/s41467-023-37948-1">Highly conductive tissue-like hydrogel interface through template-directed assembly | Nature Communications</a></li><li><a href="https://www.colorado.edu/chbe/scientists-develop-hydrogel-platform-mimics-human-tissue">Scientists develop hydrogel platform that mimics human tissue | Chemical and Biological Engineering | University of Colorado Boulder</a></li></ul></details>
+</article>
+
+<article id="item-5">
+  <header>
+        <h2 class="item-title"><a href="https://www.technologyreview.com/2026/05/22/1137845/the-download-coding-future-steroid-olympics-ai-science/">Anthropic présente le codage assisté par IA avec Code with Claude à Londres.</a></h2>
+    <div class="meta">rss · MIT Technology Review · May 22, 12:10</div>
+  </header>
+  <div class="lang-blocks fr-only"><section class="content-section"><h3>Contexte</h3><div class="content">Une pull request est une proposition pour fusionner des modifications de code dans un dépôt, permettant aux équipes de réviser et de discuter des changements avant leur intégration, comme le décrit la documentation GitHub et Atlassian. Claude Code est l&#39;agent de codage piloté par IA d&#39;Anthropic qui peut comprendre une base de code, modifier des fichiers, exécuter des commandes et aider les développeurs à livrer plus rapidement, selon sa page produit. OpenMemory est une bibliothèque de gestion de mémoire qui peut être intégrée à Claude Code via une interface en ligne de commande, comme détaillé dans le guide d&#39;intégration. Les conférences de développeurs, comme l&#39;événement londonien d&#39;Anthropic, offrent aux entreprises une plateforme pour présenter de nouveaux outils d&#39;IA et influencer les tendances du secteur.</div></section></div>
+  <p class="evidence-note"><strong>Fiabilité</strong> : L&#39;analyse s&#39;appuie sur l&#39;article et les détails publics sur les pull requests et Claude Code, bien référencés.</p>
+  <div class="tags"><code>#AI</code>, <code>#Coding</code>, <code>#Technology</code>, <code>#Developer</code>, <code>#Anthropic</code></div>
+  <details><summary>Références</summary><ul><li><a href="https://en.wikipedia.org/wiki/Pull_request">Pull request</a></li><li><a href="https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/about-pull-requests">About pull requests - GitHub Docs</a></li><li><a href="https://claude.com/product/claude-code">Claude Code by Anthropic | AI Coding Agent, Terminal, IDE</a></li></ul></details>
+</article>
+
+<article id="item-6">
+  <header>
+        <h2 class="item-title"><a href="https://arstechnica.com/security/2026/05/texas-ag-sues-meta-over-claims-that-whatsapp-doesnt-provide-end-to-end-encryption/">Le procureur général du Texas poursuit Meta pour les allégations d&#39;absence de chiffrement WhatsApp.</a></h2>
+    <div class="meta">rss · Ars Technica · May 22, 18:13</div>
+  </header>
+  <div class="lang-blocks fr-only"><section class="content-section"><h3>Contexte</h3><div class="content">Le chiffrement de bout en bout garantit que seules le transmetteur et le destinataire peuvent lire les messages, empêchant même le fournisseur de service d’y accéder. WhatsApp, qui compte plus de trois milliards d’utilisateurs, vante cette confidentialité dans son modèle de sécurité, utilisant un chiffrement hybride AES‐RSA. La poursuite du procureur général du Texas s’inscrit dans un conflit politique et juridique plus large concernant le chiffrement, alors que des gouvernements en Australie, au Royaume‐Uni, aux États‐Unis et dans l’UE ont proposé ou adopté des lois limitant ou régulant le E2EE. Meta a souvent affirmé que le chiffrement de WhatsApp protège les utilisateurs contre le mining de données et la surveillance gouvernementale, une affirmation désormais contestée devant les tribunaux.</div></section></div>
+  <p class="evidence-note"><strong>Fiabilité</strong> : La affirmation selon laquelle WhatsApp ne possède pas de chiffrement de bout en bout est contestée par les experts et ne repose pas sur des preuves techniques concrètes.</p>
+  <div class="tags"><code>#Privacy</code>, <code>#WhatsApp</code>, <code>#Meta</code>, <code>#Legal</code>, <code>#Technology</code></div>
+  <details><summary>Références</summary><ul><li><a href="https://en.wikipedia.org/wiki/End-to-end_encryption">End-to-end encryption</a></li><li><a href="https://en.wikipedia.org/wiki/WhatsApp">WhatsApp - Wikipedia</a></li></ul></details>
+</article>
+
+<article id="item-7">
+  <header>
+        <h2 class="item-title"><a href="https://www.bloomberg.com/news/videos/2026-05-22/micron-ceo-on-expanding-chip-production-memory-demand-video">Microna discute de l&#39;expansion de puces aux États-Unis et de la demande</a></h2>
+    <div class="meta">rss · Bloomberg Technology · May 22, 18:56</div>
+  </header>
+  <div class="lang-blocks fr-only"><section class="content-section"><h3>Contexte</h3><div class="content">La mémoire DRAM (Dynamic Random-Access Memory) est un type de mémoire semi-conductrice utilisant des condensateurs et des transistors pour stocker des données, ayant évolué des premières formes comme le FPM jusqu&#39;au DDR5 moderne pour répondre à la demande de performances et d&#39;efficacité accrues. L&#39;industrie de la DRAM fait face à un &#39;mur de mémoire&#39; où les progrès de calcul dépassent ceux de la mémoire, nécessitant des innovations en bande passante et capacité. Sous l&#39;Acte CHIPS, les États-Unis investissent massivement pour tripler leur capacité de fabrication de semi-conducteurs d&#39;ici 2032, avec des entreprises comme Intel s&#39;engageant à plus de 100 milliards de dollars pour la production domestique.</div></section></div>
+  <p class="evidence-note"><strong>Fiabilité</strong> : Les preuves sont solides grâce au rapport de Bloomberg réputé et aux sources web corroborantes sur la DRAM et l&#39;Acte CHIPS, bien que les plans précis de l&#39;expansion de Micron soient résumés à partir des déclarations du PDG.</p>
+  <div class="tags"><code>#technology</code>, <code>#semiconductors</code>, <code>#US manufacturing</code>, <code>#DRAM</code>, <code>#economic policy</code></div>
+  <details><summary>Références</summary><ul><li><a href="https://en.m.wikipedia.org/wiki/Dynamic_random-access_memory">Dynamic random-access memory - Wikipedia</a></li><li><a href="https://www.intel.com/content/www/us/en/corporate/usa-chipmaking/home.html">US Semiconductor Manufacturing | CHIPS and Science Act - Intel</a></li></ul></details>
+</article>
+
+<article id="item-8">
+  <header>
+        <h2 class="item-title"><a href="https://www.bloomberg.com/news/articles/2026-05-22/anthropic-to-close-over-30-billion-round-as-soon-as-next-week">Anthropic va clore un tour de financement de plus de 30 milliards.</a></h2>
+    <div class="meta">rss · Bloomberg Technology · May 22, 19:42</div>
+  </header>
+  <div class="lang-blocks fr-only"><section class="content-section"><h3>Contexte</h3><div class="content">Anthropic a été fondée en 2021 par d&#39;anciens chercheurs d&#39;OpenAI et se concentre sur des systèmes d&#39;IA sûrs et interprétables. L&#39;entreprise a levé plusieurs tours de financement, dont une série C de 1,5 milliard de dollars en 2023, et est devenue un acteur majeur du marché de l&#39;IA générative. Les tendances récentes montrent un afflux croissant de capitaux vers les start‐ups d&#39;IA, avec des valorisations en hausse grâce aux investisseurs misant sur un progrès technologique rapide. Si le tour de 30 milliards se clôture, Anthropic rejoindra les rangs des entreprises technologiques les plus fortement financées au monde.</div></section></div>
+  <p class="evidence-note"><strong>Fiabilité</strong> : Les preuves sont solides, basées sur un rapport fiable de Bloomberg et sur le contenu détaillé de l&#39;article d&#39;actualité.</p>
+  <div class="tags"><code>#AI</code>, <code>#Funding</code>, <code>#Technology</code>, <code>#Business</code>, <code>#Startup</code></div>
+  
+</article>
+
+<article id="item-9">
+  <header>
+        <h2 class="item-title"><a href="https://www.technologyreview.com/2026/05/21/1137756/roundtables-can-ai-learn-to-understand-the-world/">Le rondtable explore si l&#39;IA peut comprendre le monde.</a></h2>
+    <div class="meta">rss · MIT Technology Review · May 21, 20:41</div>
+  </header>
+  <div class="lang-blocks fr-only"><section class="content-section"><h3>Contexte</h3><div class="content">Les modèles de monde désignent des systèmes d&#39;IA qui cherchent à représenter et à raisonner sur l&#39;environnement extérieur, au-delà des modèles de langage uniquement basés sur le texte. Les grands modèles de langues, bien que puissants, sont limités aux patterns statistiques du texte et ne possèdent pas de véritable compréhension de la réalité physique. MIT Technology Review organise régulièrement des rondtables d&#39;experts pour explorer les sujets émergents en IA, offrant une plateforme de discussion entre journalistes et chercheurs. Cette session s&#39;inscrit dans la tendance croissante d&#39;attention aux modèles de monde dans la recherche en IA.</div></section></div>
+  <p class="evidence-note"><strong>Fiabilité</strong> : L&#39;analyse repose uniquement sur l&#39;article fourni et le résumé, sans sources externes pour vérifier les affirmations.</p>
+  <div class="tags"><code>#AI</code>, <code>#World Models</code>, <code>#Technology</code>, <code>#Discussion</code>, <code>#AI Research</code></div>
+  
+</article>
+</main></div></div><div class="tab-content " data-lang="en"><section class="summary-header">
+  <h1>Horizon Daily — 2026-05-23</h1>
+  <p class="lead">9 essential stories selected from 438 collected items.</p>
+  <nav class="toc" aria-label="Contents">
+    <p class="toc-title">Contents</p>
+    <ul><li><a href="#item-1">Hacker group poisons open source code at unprecedented scale.</a></li>
+<li><a href="#item-2">Scaling creativity in the age of AI</a></li>
+<li><a href="#item-3">SpaceX Starship lifts off in a high‐stakes test.</a></li>
+<li><a href="#item-4">Student team creates simpler method for programming artificial muscles</a></li>
+<li><a href="#item-5">Anthropic showcases AI‐assisted coding with Code with Claude at a London event.</a></li>
+<li><a href="#item-6">The Texas Attorney General sues Meta over WhatsApp encryption claims.</a></li>
+<li><a href="#item-7">Micron CEO Discusses Expanding US Chip Production and Memory Demand</a></li>
+<li><a href="#item-8">Anthropic is set to close a $30+ billion funding round.</a></li>
+<li><a href="#item-9">Roundtables explore whether AI can learn to understand the world.</a></li></ul>
+  </nav>
+</section>
+<main class="items">
+<article id="item-1">
+  <header>
+        <h2 class="item-title"><a href="https://arstechnica.com/information-technology/2026/05/a-hacker-group-is-poisoning-open-source-code-at-an-unprecedented-scale/">Hacker group poisons open source code at unprecedented scale.</a></h2>
+    <div class="meta">rss · Ars Technica · May 22, 10:30</div>
+  </header>
+    <div class="lang-blocks">
+        <section class="lang"><h3>EN</h3><div class="content">TeamPCP, a hacker group, has poisoned open source code on a massive scale, compromising a VS Code extension that gave them access to roughly 4,000 GitHub repositories. The attacks have impacted hundreds of organizations, including security firms Trivy, Checkmarx, and Bitwarden. GitHub is now investigating the breach of its internal repositories.<br /><br />These supply chain attacks undermine trust in open source ecosystems, which many critical applications rely on. They enable attackers to inject malicious code into widely used libraries, potentially affecting millions of downstream users. The scale of the breach highlights the need for stronger verification and monitoring practices across the software supply chain.<br /><br />TeamPCP breached GitHub by poisoning a VS Code extension, exfiltrating data from about 3,800 internal repositories. The group has also compromised tools such as Trivy, Checkmarx, and Bitwarden, indicating a broad target set. GitHub is investigating the internal repository breach after the claim of access to roughly 4,000 repositories.<br /><br />Software supply chain attacks involve compromising a component that is used by many downstream applications, allowing malicious code to spread widely. The 2026 wave of attacks, led by TeamPCP, follows earlier incidents such as the LiteLLM supply chain compromise in March 2026. Open source projects like VS Code extensions are attractive vectors because they are distributed to many developers. GitHub, a major host for open source code, has recently become a target, prompting investigations into its internal repositories.</div></section>
+        <section class="lang"><h3>FR</h3><div class="content">L groupe TeamPCP a empoisonné le code open source à grande échelle, en compromettant une extension VS Code qui a donné accès à environ 4 000 dépôts GitHub. Les attaques ont touché des centaines d organisations, y compris les sociétés de sécurité Trivy, Checkmarx et Bitwarden. GitHub enquête actuellement sur la compromission de ses dépôts internes.<br /><br />Ces attaques de chaîne d&#39;approvisionnement sapent la confiance dans les écosystèmes open source, sur lesquels de nombreuses applications critiques dépendent. Elles permettent aux attaquants d&#39;injecter du code malveillant dans des bibliothèques largement utilisées, pouvant toucher des millions d&#39;utilisateurs en aval. L&#39;ampleur de la violation souligne la nécessité de pratiques de vérification et de surveillance renforcées dans la chaîne d&#39;approvisionnement logicielle.<br /><br />TeamPCP a compromis GitHub en empoisonnant une extension VS Code, extrayant des données de près de 3 800 dépôts internes. Le groupe a également touché des outils comme Trivy, Checkmarx et Bitwarden, montrant une cible large. GitHub enquête sur la compromission de ses dépôts internes après la revendication d&#39;accès à environ 4 000 dépôts.<br /><br />Les attaques de chaîne d&#39;approvisionnement consistent à compromettre un composant utilisé par de nombreuses applications en aval, permettant la propagation du code malveillant à grande échelle. La vague de 2026 menée par TeamPCP fait suite à des incidents antérieurs, comme la compromission de la chaîne d&#39;approvisionnement de LiteLLM en mars 2026. Les projets open source, notamment les extensions VS Code, sont des vecteurs attractifs car ils sont diffusés à de nombreux développeurs. GitHub, principal hébergeur de code open source, est récemment devenu la cible, incitant à une enquête sur la compromission de ses dépôts internes.</div></section>
+    </div>
+  <div class="tags"><code>#cybersecurity</code>, <code>#open-source</code>, <code>#supply-chain attacks</code>, <code>#hacking</code>, <code>#software security</code></div>
+  <details><summary>References</summary><ul><li><a href="https://www.wired.com/story/teampcp-software-supply-chain-attack-spree-github/">A Hacker Group Is Poisoning Open Source Code at an ... - WIRED</a></li><li><a href="https://unit42.paloaltonetworks.com/teampcp-supply-chain-attacks/">Weaponizing the Protectors: TeamPCP’s Multi-Stage Supply Chain Attack ...</a></li></ul></details>
+</article>
+
+<article id="item-2">
+  <header>
+        <h2 class="item-title"><a href="https://www.technologyreview.com/2026/05/21/1137613/scaling-creativity-in-the-age-of-ai/">Scaling creativity in the age of AI</a></h2>
+    <div class="meta">rss · MIT Technology Review · May 21, 19:16</div>
+  </header>
+    <div class="lang-blocks">
+        <section class="lang"><h3>EN</h3><div class="content">The article explains how generative AI tools are reshaping storytelling by assisting brainstorming, drafting, and refining narratives while preserving authorial voice. It cites recent research and industry examples showing AI&#39;s growing influence on creative expression.<br /><br />This shift matters because it expands who can create stories, accelerates content production, and challenges traditional notions of authorship. It also influences industries such as entertainment, marketing, and education, prompting new practices and ethical considerations.<br /><br />The piece references a 2025 Springer paper that defines algorithmic narrativity, tracing the evolution from early story generators to modern generative AI models. It also notes that while AI can brainstorm and revise, users must guard against overestimating its visual capabilities, as highlighted in a LinkedIn post.<br /><br />Storytelling has been a fundamental human activity since prehistoric cave paintings, evolving through literature, theater, and digital media. Recent advances in generative AI, described in a 2025 Springer article on algorithmic narrativity, enable systems to produce coherent narratives from minimal inputs. Platforms such as Udemy now offer courses that teach creators how to integrate AI for brainstorming and refining stories while maintaining authentic voice. At the same time, experts warn that AI&#39;s visual storytelling limits remain a concern, as noted in a 2025 LinkedIn post.</div></section>
+        <section class="lang"><h3>FR</h3><div class="content">L&#39;article explique comment les outils d&#39;IA générative transforment le récit en aidant à l&#39;idéation, à la rédaction et à la révision des récits tout en conservant la voix de l&#39;auteur. Il cite des recherches récentes et des exemples industriels montrant l&#39;influence croissante de l&#39;IA sur l&#39;expression créative.<br /><br />Ce changement est important car il élargit la possibilité de création narrative, accélère la production de contenu et remet en question les notions traditionnelles d&#39;auteur. Il influence également les secteurs du divertissement, du marketing et de l&#39;éducation, engendrant de nouvelles pratiques et des considérations éthiques.<br /><br />L&#39;article cite un article de 2025 de Springer qui définit la narrativité algorithmique, retraçant l&#39;évolution des générateurs de récits précoces aux modèles d&#39;IA générative actuels. Il souligne également que, bien que l&#39;IA puisse brainstormer et réviser, les utilisateurs doivent éviter de surestimer ses capacités visuelles, comme le mentionne un post LinkedIn de 2025.<br /><br />Le récit est une activité humaine fondamentale depuis les peintures rupestres préhistoriques, évoluant à travers la littérature, le théâtre et les médias numériques. Les récentes avancées de l&#39;IA générative, décrites dans un article de 2025 de Springer sur la narrativité algorithmique, permettent aux systèmes de produire des récits cohérents à partir d&#39;entrées minimales. Des plateformes comme Udemy proposent désormais des cours pour aider les créateurs à intégrer l&#39;IA dans le brainstorming et la révision tout en conservant une voix authentique. Parallèlement, des experts avertissent que les limites visuelles de l&#39;IA restent une préoccupation, comme le souligne un post LinkedIn de 2025.</div></section>
+    </div>
+  <div class="tags"><code>#AI</code>, <code>#Creativity</code>, <code>#Storytelling</code>, <code>#Technology</code></div>
+  <details><summary>References</summary><ul><li><a href="https://link.springer.com/article/10.1007/s00146-025-02297-8">Algorithmic narrativity as a new narrative mode | AI &amp; SOCIETY | Springer Nature Link</a></li><li><a href="https://www.the-future-of-commerce.com/2025/05/15/generative-ai-storytelling/">Generative AI storytelling: Collaboration creates compelling content</a></li></ul></details>
+</article>
+
+<article id="item-3">
+  <header>
+        <h2 class="item-title"><a href="https://www.bloomberg.com/news/videos/2026-05-22/spacex-starship-lifts-off-in-high-stakes-test-video">SpaceX Starship lifts off in a high‐stakes test.</a></h2>
+    <div class="meta">rss · Bloomberg Technology · May 22, 22:51</div>
+  </header>
+    <div class="lang-blocks">
+        <section class="lang"><h3>EN</h3><div class="content">SpaceX’s Starship rocket successfully lifted off from its Texas launch site and reached space, deploying 20 dummy Starlink satellites during the test. The flight demonstrated upgraded power and capabilities compared to earlier prototypes.<br /><br />The successful test validates key upgrades that bring Starship closer to supporting crewed missions, large‐scale satellite internet deployment, and orbital data centers. It also demonstrates progress toward reducing launch costs through reusability, a critical step for the commercial space industry.<br /><br />The flight lasted only a few minutes before the vehicle reached space and released 20 dummy Starlink satellites. It showcased upgraded engine power and structural upgrades from earlier prototypes, though the vehicle has a mixed record of 7 successful flights out of 12 attempts to date.<br /><br />Starship is a two‐stage, fully reusable super heavy‐lift launch vehicle developed by SpaceX, intended to replace the Falcon 9 and Falcon Heavy and enable missions to the Moon, Mars, and large satellite constellations. As of May 2026, it has completed 12 launches with a 7‐success rate, and its design includes a Super Heavy booster and a Starship spacecraft powered by Raptor engines that aim to return vertically to the launch tower for reuse. The recent test demonstrated these capabilities while also deploying dummy Starlink satellites, linking the launch to SpaceX’s broader plan for global broadband and orbital infrastructure.</div></section>
+        <section class="lang"><h3>FR</h3><div class="content">Le rocket Starship de SpaceX a décollé du site de lancement du Texas, a atteint l&#39;orbite et a déployé 20 satellites Starlink factices, montrant des améliorations de puissance et de capacités par rapport aux prototypes précédents.<br /><br />Ce test réussi valide les améliorations majeures qui rapprochent Starship des missions humaines, du déploiement massif d&#39;Internet par satellite et des centres de données en orbite, tout en avançant vers la réduction des coûts de lancement grâce à la réutilisation, étape cruciale pour l&#39;industrie spatiale commerciale.<br /><br />Le vol a duré seulement quelques minutes avant que le véhicule n&#39;atteigne l&#39;orbite et libère 20 satellites Starlink factices, démontrant des améliorations de puissance et de structure par rapport aux prototypes antérieurs, bien que le véhicule ait un historique mitigé avec 7 succès sur 12 lancements à ce jour.<br /><br />Starship est un lanceur super lourd réutilisable à deux étages développé par SpaceX, destiné à remplacer les fusées Falcon 9 et Falcon Heavy et à permettre des missions vers la Lune, Mars et des constellations de satellites. À ce jour, il a effectué 12 lancements avec un taux de succès de 7 sur 12, et son design comprend un booster Super Heavy et un vaisseau Starship propulsés par des moteurs Raptor, capables de retourner verticalement à la tour de lancement pour être réutilisés. Ce test a démontré ces capacités tout en déployant des satellites Starlink factices, s’inscrivant dans le plan plus large de SpaceX pour un Internet mondial et une infrastructure en orbite.</div></section>
+    </div>
+  <div class="tags"><code>#SpaceX</code>, <code>#Starship</code>, <code>#Space launch</code>, <code>#Satellite internet</code>, <code>#Technology</code></div>
+  <details><summary>References</summary><ul><li><a href="https://en.wikipedia.org/wiki/Starship_rocket">Starship rocket</a></li><li><a href="https://en.wikipedia.org/wiki/SpaceX_Starship">SpaceX Starship - Wikipedia</a></li><li><a href="https://www.bbc.com/news/articles/cx2lk2mwwnxo">What is Elon Musk&#39;s Starship space vehicle?</a></li></ul></details>
+</article>
+
+<article id="item-4">
+  <header>
+        <h2 class="item-title"><a href="https://phys.org/news/2026-05-student-talent-simpler-method-artificial.html">Student team creates simpler method for programming artificial muscles</a></h2>
+    <div class="meta">rss · Phys.org · May 22, 19:20</div>
+  </header>
+    <div class="lang-blocks">
+        <section class="lang"><h3>EN</h3><div class="content">An interdisciplinary student team at the University of Waterloo developed a tissue-like hydrogel that allows artificial muscles in soft robots to be programmed more simply, enabling them to bend and change shape in response to triggers such as pH or salinity. The hydrogel combines mechanical toughness with high conductivity, making it easier to control the muscles without complex actuators.<br /><br />This advancement could lower the complexity and cost of soft robotic systems, making them more accessible for applications in healthcare, wearable devices, and environmental monitoring. It also demonstrates how student-driven research can yield practical materials that bridge biology and engineering.<br /><br />The hydrogel mimics the modulus of biological tissue, providing a tissue-like mechanical property while remaining highly conductive. Programming is achieved by varying input mechanical training strain or adjusting the density of coordination bonds, allowing precise deformation control. The method simplifies fabrication compared to previous approaches that required complex electrical or thermal stimuli.<br /><br />Hydrogels are water‐rich, Jell‐O‐like materials that can mimic the mechanical and chemical behavior of biological tissues, as demonstrated by researchers at the University of Colorado Boulder who created a light‐controlled, stretchable platform. Recent work published in Nature Communications shows that a synthetic template‐directed assembly can produce highly conductive and mechanically tough hydrogels with tissue‐like modulus, suitable for interfacing with living tissue. Artificial muscles, or muscle‐like actuators, are materials that can reversibly contract, expand, or change stiffness, and they rely on such smart hydrogels to be programmed for specific motions. The University of Waterloo student team’s hydrogel therefore bridges the gap between soft robotics and tissue engineering, offering a simpler route to program these actuators.</div></section>
+        <section class="lang"><h3>FR</h3><div class="content">Une équipe interdisciplinaire d&#39;étudiants de l&#39;Université de Waterloo a développé un hydrogel semblable à du tissu qui permet de programmer plus simplement les muscles artificiels des robots souples, les faisant se courber et changer de forme en réponse à des déclencheurs tels que le pH ou la salinité. L&#39;hydrogel combine robustesse mécanique et haute conductivité, simplifiant le contrôle des muscles sans actuateurs complexes.<br /><br />Cette avancée pourrait réduire la complexité et le coût des systèmes robotiques souples, les rendant plus accessibles pour des applications en santé, dispositifs portables et surveillance environnementale. Elle montre également comment la recherche menée par des étudiants peut produire des matériaux pratiques reliant biologie et ingénierie.<br /><br />L&#39;hydrogel imite le module de la tissue biologique, offrant une propriété mécanique similaire à celle du tissu tout en restant hautement conductif. Le programmation se fait en modifiant la souche d&#39;entraînement mécanique ou la densité des liaisons de coordination, permettant un contrôle précis de la déformation. Cette méthode simplifie la fabrication par rapport aux approches précédentes nécessitant des stimuli électriques ou thermiques complexes.<br /><br />Les hydrogels sont des matériaux riches en eau, semblable à de la gelée, qui peuvent imiter le comportement mécanique et chimique des tissus biologiques, comme le montre le travail de chercheurs de l&#39;Université du Colorado Boulder qui ont créé une plateforme étirable et contrôlée par la lumière. Un article récent publié dans Nature Communications décrit une assemblée dirigée par un modèle synthétique qui produit des hydrogels hautement conducteurs et mécaniquement robustes avec un module similaire à celui du tissu, adaptés à l&#39;interfaçage avec les tissus vivants. Les muscles artificiels, ou actuateurs semblables aux muscles, sont des matériaux capables de se contracter, s&#39;étendre ou modifier leur rigidité de façon réversible, et ils dépendent de ces hydrogels intelligents pour être programmés. L&#39;hydrogel développé par l&#39;équipe d&#39;étudiants de Waterloo relie donc la robotique souple à l&#39;ingénierie des tissus, offrant une voie plus simple pour programmer ces actuateurs.</div></section>
+    </div>
+  <div class="tags"><code>#soft robotics</code>, <code>#materials science</code>, <code>#artificial muscles</code>, <code>#student research</code>, <code>#hydrogel</code></div>
+  <details><summary>References</summary><ul><li><a href="https://www.nature.com/articles/s41467-023-37948-1">Highly conductive tissue-like hydrogel interface through template-directed assembly | Nature Communications</a></li><li><a href="https://www.colorado.edu/chbe/scientists-develop-hydrogel-platform-mimics-human-tissue">Scientists develop hydrogel platform that mimics human tissue | Chemical and Biological Engineering | University of Colorado Boulder</a></li></ul></details>
+</article>
+
+<article id="item-5">
+  <header>
+        <h2 class="item-title"><a href="https://www.technologyreview.com/2026/05/22/1137845/the-download-coding-future-steroid-olympics-ai-science/">Anthropic showcases AI‐assisted coding with Code with Claude at a London event.</a></h2>
+    <div class="meta">rss · MIT Technology Review · May 22, 12:10</div>
+  </header>
+    <div class="lang-blocks">
+        <section class="lang"><h3>EN</h3><div class="content">At Anthropic’s developer event in London on May 19, the company demonstrated Code with Claude, an AI coding assistant that can generate and edit code. Attendees were asked whether they had shipped a pull request written entirely by the tool, highlighting the tool’s ability to produce production‐ready code. The demo also showed how to integrate OpenMemory with Claude Code using a command‐line instruction.<br /><br />AI‐assisted coding could dramatically increase developer productivity and shorten software development cycles, reshaping how companies build products. The demonstration shows that tools like Code with Claude may reduce the need for manual coding, affecting hiring practices and the skill sets developers need. As AI becomes more capable, the technology could become a standard part of the software engineering toolkit.<br /><br />The London event ran for two days and coincided with Google I/O, underscoring the competitive pressure among major AI firms. Code with Claude can generate pull requests, and the article notes that its latest version, Claude Opus 4.7, improved task resolution by 13% on a 93‐task benchmark. Integrating OpenMemory with Claude Code requires the command &#39;claude mcp add --transport http openmemory&#39;.<br /><br />A pull request is a proposal to merge code changes into a repository, allowing teams to review and discuss modifications before they are integrated, as described by GitHub and Atlassian documentation. Claude Code is Anthropic’s AI‐driven coding agent that can understand a codebase, edit files, run commands, and help developers ship faster, according to its product page. OpenMemory is a memory‐management library that can be integrated with Claude Code via a command‐line interface, as detailed in the integration guide. Developer conferences such as Anthropic’s London event provide companies a platform to showcase new AI tools and influence industry trends.</div></section>
+        <section class="lang"><h3>FR</h3><div class="content">Lors de l&#39;événement développeur d&#39;Anthropic à Londres le 19 mai, l&#39;entreprise a présenté Code with Claude, un assistant de codage assisté par IA capable de générer et modifier du code. Les participants ont été interrogés sur le fait d&#39;avoir livré une pull request entièrement écrite par l&#39;outil, soulignant sa capacité à produire du code prêt à la production. La démonstration a également montré comment intégrer OpenMemory avec Claude Code via une instruction en ligne de commande.<br /><br />Le codage assisté par IA pourrait considérablement augmenter la productivité des développeurs et raccourcir les cycles de développement logiciel, transformant la façon dont les entreprises créent des produits. La démonstration montre que des outils comme Code with Claude peuvent réduire le besoin de coder manuellement, influençant les pratiques d&#39;embauche et les compétences requises des développeurs. Alors que l&#39;IA devient plus performante, cette technologie pourrait devenir une composante standard de l&#39;outillage de l&#39;ingénierie logicielle.<br /><br />L&#39;événement de Londres a duré deux jours et a coïncidé avec Google I/O, soulignant la pression concurrentielle parmi les grands acteurs de l&#39;IA. Code with Claude peut générer des pull requests, et l&#39;article indique que la dernière version, Claude Opus 4.7, a amélioré la résolution des tâches de 13 % sur un benchmark de 93 tâches. L&#39;intégration d&#39;OpenMemory avec Claude Code nécessite la commande &#39;claude mcp add --transport http openmemory&#39;.<br /><br />Une pull request est une proposition pour fusionner des modifications de code dans un dépôt, permettant aux équipes de réviser et de discuter des changements avant leur intégration, comme le décrit la documentation GitHub et Atlassian. Claude Code est l&#39;agent de codage piloté par IA d&#39;Anthropic qui peut comprendre une base de code, modifier des fichiers, exécuter des commandes et aider les développeurs à livrer plus rapidement, selon sa page produit. OpenMemory est une bibliothèque de gestion de mémoire qui peut être intégrée à Claude Code via une interface en ligne de commande, comme détaillé dans le guide d&#39;intégration. Les conférences de développeurs, comme l&#39;événement londonien d&#39;Anthropic, offrent aux entreprises une plateforme pour présenter de nouveaux outils d&#39;IA et influencer les tendances du secteur.</div></section>
+    </div>
+  <div class="tags"><code>#AI</code>, <code>#Coding</code>, <code>#Technology</code>, <code>#Developer</code>, <code>#Anthropic</code></div>
+  <details><summary>References</summary><ul><li><a href="https://en.wikipedia.org/wiki/Pull_request">Pull request</a></li><li><a href="https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/about-pull-requests">About pull requests - GitHub Docs</a></li><li><a href="https://claude.com/product/claude-code">Claude Code by Anthropic | AI Coding Agent, Terminal, IDE</a></li></ul></details>
+</article>
+
+<article id="item-6">
+  <header>
+        <h2 class="item-title"><a href="https://arstechnica.com/security/2026/05/texas-ag-sues-meta-over-claims-that-whatsapp-doesnt-provide-end-to-end-encryption/">The Texas Attorney General sues Meta over WhatsApp encryption claims.</a></h2>
+    <div class="meta">rss · Ars Technica · May 22, 18:13</div>
+  </header>
+    <div class="lang-blocks">
+        <section class="lang"><h3>EN</h3><div class="content">The Texas Attorney General has filed a lawsuit against Meta, alleging that WhatsApp does not provide end‐to‐end encryption. Critics, including a US Senate candidate, argue that the complaint lacks factual basis and misrepresents WhatsApp’s encryption practices.<br /><br />The lawsuit challenges Meta’s public assertions about WhatsApp’s security, potentially undermining consumer confidence in its privacy protections. It also fuels ongoing regulatory debates over end‐to‐end encryption, which could shape future legislation and enforcement actions worldwide.<br /><br />The suit alleges that WhatsApp’s encryption is a false promise, despite the service using hybrid AES‐RSA encryption that secures messages in transit. Critics, including a US Senate candidate, say the complaint offers no technical evidence and misstates how WhatsApp’s end‐to‐end encryption actually works. The case also highlights the broader tension between strong encryption and law‐enforcement access demands.<br /><br />End‐to‐end encryption means that only the sender and recipient can read messages, preventing even the service provider from accessing the content. WhatsApp, which has more than three billion users, advertises this level of privacy as part of its security model, using hybrid AES‐RSA encryption. The Texas Attorney General’s lawsuit is part of a wider political and legal battle over encryption, as governments in Australia, the UK, the US and the EU have proposed or enacted laws that limit or regulate E2EE. Meta has repeatedly asserted that WhatsApp’s encryption protects users from data mining and government surveillance, a claim now being contested in court.</div></section>
+        <section class="lang"><h3>FR</h3><div class="content">Le procureur général du Texas a intenté une action en justice contre Meta, alléguant que WhatsApp ne propose pas de chiffrement de bout en bout. Des critiques, dont un candidat au Sénat américain, affirment que la plainte manque de fondement factuel et déforme les pratiques de chiffrement de WhatsApp.<br /><br />Cette action judiciaire remet en question les affirmations publiques de Meta concernant la sécurité de WhatsApp, ce qui pourrait affaiblir la confiance des consommateurs dans ses garanties de confidentialité. Elle alimente également les débats réglementaires sur le chiffrement de bout en bout, pouvant influencer future législation et mesures d’exécution à l’échelle mondiale.<br /><br />Le recours affirme que le chiffrement de WhatsApp est une promesse fallacieuse, même si le service utilise un chiffrement hybride AES‐RSA qui protège les messages en transit. Des critiques, dont un candidat au Sénat américain, affirment que la plainte ne fournit aucune preuve technique et déforme le fonctionnement réel du chiffrement de bout en bout de WhatsApp. Cette affaire souligne également la tension générale entre un chiffrement fort et les exigences d’accès des forces de l’ordre.<br /><br />Le chiffrement de bout en bout garantit que seules le transmetteur et le destinataire peuvent lire les messages, empêchant même le fournisseur de service d’y accéder. WhatsApp, qui compte plus de trois milliards d’utilisateurs, vante cette confidentialité dans son modèle de sécurité, utilisant un chiffrement hybride AES‐RSA. La poursuite du procureur général du Texas s’inscrit dans un conflit politique et juridique plus large concernant le chiffrement, alors que des gouvernements en Australie, au Royaume‐Uni, aux États‐Unis et dans l’UE ont proposé ou adopté des lois limitant ou régulant le E2EE. Meta a souvent affirmé que le chiffrement de WhatsApp protège les utilisateurs contre le mining de données et la surveillance gouvernementale, une affirmation désormais contestée devant les tribunaux.</div></section>
+    </div>
+  <div class="tags"><code>#Privacy</code>, <code>#WhatsApp</code>, <code>#Meta</code>, <code>#Legal</code>, <code>#Technology</code></div>
+  <details><summary>References</summary><ul><li><a href="https://en.wikipedia.org/wiki/End-to-end_encryption">End-to-end encryption</a></li><li><a href="https://en.wikipedia.org/wiki/WhatsApp">WhatsApp - Wikipedia</a></li></ul></details>
+</article>
+
+<article id="item-7">
+  <header>
+        <h2 class="item-title"><a href="https://www.bloomberg.com/news/videos/2026-05-22/micron-ceo-on-expanding-chip-production-memory-demand-video">Micron CEO Discusses Expanding US Chip Production and Memory Demand</a></h2>
+    <div class="meta">rss · Bloomberg Technology · May 22, 18:56</div>
+  </header>
+    <div class="lang-blocks">
+        <section class="lang"><h3>EN</h3><div class="content">Micron CEO Sanjay Mehrotra announced plans to expand DRAM manufacturing in the United States to meet rising demand in critical sectors including automotive, aerospace, and defense. He emphasized the importance of this advanced memory technology for national security and industrial applications.<br /><br />This expansion strengthens US semiconductor manufacturing capabilities and reduces reliance on foreign memory supplies, which is critical for national security and high-tech industries. It supports the CHIPS Act&#39;s goal of domestic semiconductor production and will benefit sectors like automotive, aerospace, and defense that depend on advanced memory technologies.<br /><br />Micron&#39;s expansion focuses on DRAM production, a type of dynamic random-access memory critical for high-performance computing and driven by rising demand in AI, automotive, and defense sectors. This initiative is part of broader US efforts under the CHIPS Act to triple domestic semiconductor manufacturing capacity by 2032.<br /><br />DRAM (Dynamic Random-Access Memory) is a type of semiconductor memory that uses capacitors and transistors to store data, evolving from early forms like FPM to modern DDR5 to meet demands for higher performance and efficiency. The DRAM industry faces a &#39;memory wall&#39; where compute advancements outpace memory improvements, necessitating innovations in bandwidth and capacity. Under the CHIPS Act, the US is investing heavily to triple its semiconductor manufacturing capacity by 2032, with companies like Intel committing over $100 billion to domestic production facilities.</div></section>
+        <section class="lang"><h3>FR</h3><div class="content">Le PDG de Micron Sanjay Mehrotra a annoncé l&#39;expansion de la production de DRAM aux États-Unis pour répondre à la demande croissante dans les secteurs critiques comme l&#39;automobile, l&#39;aérospatial et la défense. Il a souligné l&#39;importance de cette technologie de mémoire avancée pour la sécurité nationale et les applications industrielles.<br /><br />Cette expansion renforce les capacités de fabrication de semi-conducteurs aux États-Unis et réduit la dépendance aux fournisseurs étrangers de mémoire, ce qui est crucial pour la sécurité nationale et les industries technologiques de pointe. Elle soutient l&#39;objectif de l&#39;Acte CHIPS de production domestique de semi-conducteurs et profitera aux secteurs comme l&#39;automobile, l&#39;aérospatial et la défense qui dépendent des technologies de mémoire avancées.<br /><br />L&#39;expansion de Micron se concentre sur la production de DRAM, une mémoire vive dynamique essentielle pour l&#39;informatique haute performance et motivée par la demande croissante en IA, automobile et défense. Cette initiative s&#39;inscrit dans les efforts américains sous l&#39;Acte CHIPS pour tripler la capacité de fabrication domestique de semi-conducteurs d&#39;ici 2032.<br /><br />La mémoire DRAM (Dynamic Random-Access Memory) est un type de mémoire semi-conductrice utilisant des condensateurs et des transistors pour stocker des données, ayant évolué des premières formes comme le FPM jusqu&#39;au DDR5 moderne pour répondre à la demande de performances et d&#39;efficacité accrues. L&#39;industrie de la DRAM fait face à un &#39;mur de mémoire&#39; où les progrès de calcul dépassent ceux de la mémoire, nécessitant des innovations en bande passante et capacité. Sous l&#39;Acte CHIPS, les États-Unis investissent massivement pour tripler leur capacité de fabrication de semi-conducteurs d&#39;ici 2032, avec des entreprises comme Intel s&#39;engageant à plus de 100 milliards de dollars pour la production domestique.</div></section>
+    </div>
+  <div class="tags"><code>#technology</code>, <code>#semiconductors</code>, <code>#US manufacturing</code>, <code>#DRAM</code>, <code>#economic policy</code></div>
+  <details><summary>References</summary><ul><li><a href="https://en.m.wikipedia.org/wiki/Dynamic_random-access_memory">Dynamic random-access memory - Wikipedia</a></li><li><a href="https://www.intel.com/content/www/us/en/corporate/usa-chipmaking/home.html">US Semiconductor Manufacturing | CHIPS and Science Act - Intel</a></li></ul></details>
+</article>
+
+<article id="item-8">
+  <header>
+        <h2 class="item-title"><a href="https://www.bloomberg.com/news/articles/2026-05-22/anthropic-to-close-over-30-billion-round-as-soon-as-next-week">Anthropic is set to close a $30+ billion funding round.</a></h2>
+    <div class="meta">rss · Bloomberg Technology · May 22, 19:42</div>
+  </header>
+    <div class="lang-blocks">
+        <section class="lang"><h3>EN</h3><div class="content">Anthropic PBC is set to close its latest funding round, which could exceed $30 billion and push its valuation above $900 billion. The round is expected to finalize as soon as next week, potentially making Anthropic the world’s most valuable AI startup, surpassing OpenAI.<br /><br />This funding round would give Anthropic unprecedented financial resources to accelerate AI research and development, intensifying competition with OpenAI and other major AI firms. It could reshape the AI industry landscape, attract more talent and capital, and set new standards for AI safety and alignment.<br /><br />The valuation of over $900 billion would place Anthropic ahead of OpenAI, which is currently valued at around $86 billion. The round size of more than $30 billion is unprecedented for a startup and may involve a mix of equity and convertible instruments. Closing the round soon adds uncertainty, as market conditions and regulatory scrutiny could affect the timing.<br /><br />Anthropic was founded in 2021 by former OpenAI researchers and focuses on safe, interpretable AI systems. The company has raised several rounds, including a $1.5 billion Series C in 2023, and has become a major player in the generative AI market. Recent trends show increasing capital flowing into AI startups, with valuations soaring as investors bet on rapid technological progress. If the $30 billion round closes, Anthropic would join the ranks of the most heavily funded tech companies globally.</div></section>
+        <section class="lang"><h3>FR</h3><div class="content">Anthropic PBC doit clore son dernier tour de financement, qui pourrait dépasser 30 milliards de dollars et porter sa valorisation au‐delà de 900 milliards. Ce tour devrait se conclure dès la semaine prochaine, le rendant potentiellement le plus valuable start‐up d&#39;IA au monde, devant OpenAI.<br /><br />Ce financement donnerait à Anthropic des ressources financières sans précédent pour accélérer la recherche et le développement d&#39;IA, intensifiant la concurrence avec OpenAI et les autres acteurs majeurs. Il pourrait transformer le paysage de l&#39;IA, attirer davantage de talents et de capitaux, et établir de nouveaux standards en matière de sécurité et d&#39;alignement de l&#39;IA.<br /><br />Une valorisation de plus de 900 milliards placerait Anthropic devant OpenAI, actuellement évaluée à environ 86 milliards. Un montant de plus de 30 milliards de dollars constitue un record pour une start‐up et pourrait combiner actions et instruments convertibles. La clôture rapide introduit une incertitude, car les conditions du marché et l scrutiny réglementaire pourraient impacter le timing.<br /><br />Anthropic a été fondée en 2021 par d&#39;anciens chercheurs d&#39;OpenAI et se concentre sur des systèmes d&#39;IA sûrs et interprétables. L&#39;entreprise a levé plusieurs tours de financement, dont une série C de 1,5 milliard de dollars en 2023, et est devenue un acteur majeur du marché de l&#39;IA générative. Les tendances récentes montrent un afflux croissant de capitaux vers les start‐ups d&#39;IA, avec des valorisations en hausse grâce aux investisseurs misant sur un progrès technologique rapide. Si le tour de 30 milliards se clôture, Anthropic rejoindra les rangs des entreprises technologiques les plus fortement financées au monde.</div></section>
+    </div>
+  <div class="tags"><code>#AI</code>, <code>#Funding</code>, <code>#Technology</code>, <code>#Business</code>, <code>#Startup</code></div>
+  
+</article>
+
+<article id="item-9">
+  <header>
+        <h2 class="item-title"><a href="https://www.technologyreview.com/2026/05/21/1137756/roundtables-can-ai-learn-to-understand-the-world/">Roundtables explore whether AI can learn to understand the world.</a></h2>
+    <div class="meta">rss · MIT Technology Review · May 21, 20:41</div>
+  </header>
+    <div class="lang-blocks">
+        <section class="lang"><h3>EN</h3><div class="content">MIT Technology Review hosted a roundtable featuring Mat Honan, Will Douglas Heaven and an AI reporter to debate whether AI can learn to understand the world beyond large language models. The conversation highlighted recent developments in world models and the challenges of moving past current LLMs.<br /><br />This roundtable brings together leading voices to assess the feasibility of world‐understanding AI, a capability that could enable more reliable, general‐purpose systems. Insights from the discussion may guide research priorities and industry investments in next‐generation AI architectures.<br /><br />The discussion featured three experts debating the promise and difficulty of world models, which aim to go beyond text‐based LLMs by incorporating perception and reasoning about the physical world. While enthusiasm is high, the panel noted that current models still struggle with grounding, consistency, and scalability.<br /><br />World models refer to AI systems that aim to represent and reason about the external environment, going beyond language‐only models that process text. Large language models, while powerful, are limited to statistical patterns in text and lack true understanding of physical reality. MIT Technology Review regularly hosts expert roundtables to explore emerging AI topics, providing a platform for discussion among journalists and researchers. This particular session follows a trend of increasing attention to world models in AI research.</div></section>
+        <section class="lang"><h3>FR</h3><div class="content">MIT Technology Review a organisé un rondtable avec Mat Honan, Will Douglas Heaven et un reporter IA pour débattre de la capacité de l&#39;IA à comprendre le monde au-delà des modèles de langues actuels. La discussion a mis en lumière les récentes avancées des modèles de monde et les défis de dépasser les LLM.<br /><br />Ce rondtable réunit des voix de premier plan pour évaluer la faisabilité de l&#39;IA capable de comprendre le monde, une capacité qui pourrait permettre des systèmes plus fiables et généralistes. Les enseignements de la discussion pourraient orienter les priorités de recherche et les investissements industriels dans les architectures d&#39;IA de nouvelle génération.<br /><br />Le débat a réuni trois experts qui débattent du potentiel et de la difficulté des modèles de monde, qui visent à dépasser les LLM basés uniquement sur le texte en incorporant perception et raisonnement sur le monde physique. Bien que l&#39;enthousiasme soit grand, le panel a souligné que les modèles actuels peinent encore avec l&#39;ancrage, la cohérence et la scalabilité.<br /><br />Les modèles de monde désignent des systèmes d&#39;IA qui cherchent à représenter et à raisonner sur l&#39;environnement extérieur, au-delà des modèles de langage uniquement basés sur le texte. Les grands modèles de langues, bien que puissants, sont limités aux patterns statistiques du texte et ne possèdent pas de véritable compréhension de la réalité physique. MIT Technology Review organise régulièrement des rondtables d&#39;experts pour explorer les sujets émergents en IA, offrant une plateforme de discussion entre journalistes et chercheurs. Cette session s&#39;inscrit dans la tendance croissante d&#39;attention aux modèles de monde dans la recherche en IA.</div></section>
+    </div>
+  <div class="tags"><code>#AI</code>, <code>#World Models</code>, <code>#Technology</code>, <code>#Discussion</code>, <code>#AI Research</code></div>
+  
+</article>
+</main></div>
+  </div>
+</body>
+</html>

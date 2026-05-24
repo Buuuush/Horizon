@@ -1,0 +1,708 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Horizon — 2026-05-24</title>
+  <style>
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600&family=Manrope:wght@500;700&display=swap');
+
+:root {
+    --bg: #f4fbfb;
+    --paper: #ffffff;
+    --surface: #f7fffe;
+    --accent: #007a79;
+    --accent-2: color-mix(in srgb, var(--accent) 55%, #b73fd6);
+    --accent-3: color-mix(in srgb, var(--accent) 40%, #f59e0b);
+    --accent-soft: #d6f3f2;
+    --muted: #58646e;
+    --text: #0e2a2f;
+    --ring: color-mix(in srgb, var(--accent) 32%, transparent);
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+    color: var(--text);
+    background:
+        radial-gradient(1300px 420px at -10% -20%, var(--accent-soft), transparent 60%),
+        radial-gradient(760px 300px at 88% -12%, color-mix(in srgb, var(--accent-2) 24%, transparent), transparent 66%),
+        radial-gradient(640px 240px at 30% 0%, color-mix(in srgb, var(--accent-3) 18%, transparent), transparent 70%),
+        var(--bg);
+    font-family: 'Source Serif 4', Georgia, serif;
+    line-height: 1.78;
+}
+
+.container { max-width: 1100px; margin: 1.5rem auto; padding: 1rem; }
+
+.tab-switcher {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+    border-bottom: 2px solid color-mix(in srgb, var(--accent) 20%, transparent);
+}
+
+.tab-button {
+    background: transparent;
+    border: none;
+    color: var(--muted);
+    font-family: 'Manrope', 'Segoe UI', sans-serif;
+    font-size: 1rem;
+    font-weight: 600;
+    padding: 0.75rem 1.2rem;
+    cursor: pointer;
+    transition: color 0.18s ease, border-color 0.18s ease;
+    border-bottom: 3px solid transparent;
+}
+
+.tab-button:hover {
+    color: var(--text);
+}
+
+.tab-button.active {
+    color: var(--accent);
+    border-bottom-color: var(--accent);
+}
+
+.tab-content {
+    display: none;
+    animation: fadeIn 0.2s ease-in;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.summary-header {
+    background: var(--paper);
+    border: 1px solid color-mix(in srgb, var(--accent) 16%, transparent);
+    border-radius: 24px;
+    padding: 1.5rem 1.6rem 1.1rem;
+    box-shadow: 0 18px 48px rgba(19, 33, 68, 0.08);
+    margin-bottom: 1rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.summary-header::after {
+    content: "";
+    position: absolute;
+    inset: auto -60px -80px auto;
+    width: 220px;
+    height: 220px;
+    border-radius: 999px;
+    background: radial-gradient(circle, color-mix(in srgb, var(--accent-2) 28%, transparent), transparent 70%);
+    pointer-events: none;
+}
+
+.summary-header h1 {
+    margin: 0;
+    font-family: 'Fraunces', 'DM Serif Display', 'Iowan Old Style', 'Palatino Linotype', serif;
+    letter-spacing: .01em;
+    font-size: clamp(1.8rem, 3.6vw, 2.8rem);
+    line-height: 1.15;
+}
+
+.lead { margin: .55rem 0 1.1rem; color: var(--muted); font-size: 1.04rem; max-width: 78ch; }
+
+.toc-title {
+    margin: 0 0 .45rem;
+    font-family: 'Manrope', 'Segoe UI', sans-serif;
+    font-size: .85rem;
+    text-transform: uppercase;
+    letter-spacing: .11em;
+    color: var(--muted);
+}
+
+.toc ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: .55rem;
+}
+
+.toc li {
+    background: linear-gradient(160deg, var(--surface), color-mix(in srgb, var(--accent-soft) 48%, #ffffff));
+    border: 1px solid color-mix(in srgb, var(--accent) 16%, transparent);
+    border-radius: 10px;
+    padding: .55rem .65rem;
+    transition: transform .18s ease, box-shadow .18s ease;
+}
+
+.toc li:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 8px 20px color-mix(in srgb, var(--accent) 15%, transparent);
+}
+
+.toc a { text-decoration: none; color: var(--text); }
+
+.items { display: grid; gap: .95rem; }
+
+.items article {
+    background: var(--paper);
+    border: 1px solid color-mix(in srgb, var(--accent) 15%, transparent);
+    border-radius: 20px;
+    padding: 1.15rem 1.2rem;
+    box-shadow: 0 10px 32px rgba(0, 0, 0, 0.05);
+}
+
+.item-title {
+    font-family: 'Fraunces', 'DM Serif Display', 'Iowan Old Style', 'Palatino Linotype', serif;
+    font-size: clamp(1.2rem, 2.2vw, 1.55rem);
+    margin: 0 0 .55rem;
+    line-height: 1.22;
+}
+
+.item-title a { color: inherit; text-decoration: none; }
+.item-title a:hover { color: var(--accent); }
+
+.item-title a:focus-visible,
+.toc a:focus-visible,
+summary:focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
+    border-radius: 6px;
+}
+
+.meta { color: var(--muted); font-family: 'Manrope', 'Segoe UI', sans-serif; font-size: .9rem; margin-bottom: .7rem; }
+.score { color: var(--accent); margin-left: .45rem; font-weight: 700; font-family: 'Manrope', 'Segoe UI', sans-serif; }
+
+.content { font-size: 1.03rem; line-height: 1.8; }
+
+.fr-only {
+    display: grid;
+    gap: .72rem;
+}
+
+.content-section {
+    background: linear-gradient(170deg, var(--surface), color-mix(in srgb, var(--accent-soft) 24%, #ffffff));
+    border: 1px solid color-mix(in srgb, var(--accent) 12%, transparent);
+    border-radius: 12px;
+    padding: .78rem .85rem;
+}
+
+.content-section h3 {
+    margin: 0 0 .35rem;
+    font-family: 'Manrope', 'Segoe UI', sans-serif;
+    font-size: .82rem;
+    color: var(--muted);
+    letter-spacing: .07em;
+    text-transform: uppercase;
+}
+
+.evidence-note {
+    margin: .7rem 0 0;
+    color: var(--muted);
+    font-size: .94rem;
+}
+
+.tags { margin-top: .75rem; color: var(--muted); font-family: 'Manrope', 'Segoe UI', sans-serif; font-size: .9rem; }
+code { background: color-mix(in srgb, var(--accent-soft) 65%, #ffffff); border-radius: 8px; padding: .12rem .4rem; }
+
+details { margin-top: .65rem; }
+details summary { cursor: pointer; color: var(--accent); font-family: 'Manrope', 'Segoe UI', sans-serif; }
+
+@media (max-width: 860px) {
+    .container { margin: .7rem auto; padding: .65rem; }
+    .tab-switcher { flex-wrap: wrap; }
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --bg: #0f1420;
+        --paper: #161d2c;
+        --surface: #1b2435;
+        --accent: #7cb1ff;
+        --accent-2: #c28cff;
+        --accent-3: #ffc36c;
+        --accent-soft: #1a2740;
+        --muted: #a6b4cd;
+        --text: #edf2ff;
+        --ring: rgba(124, 177, 255, 0.55);
+    }
+
+    body {
+        background:
+            radial-gradient(1200px 420px at -10% -20%, #1a2740, transparent 60%),
+            radial-gradient(760px 300px at 88% -12%, rgba(194, 140, 255, 0.2), transparent 66%),
+            radial-gradient(640px 240px at 30% 0%, rgba(255, 195, 108, 0.14), transparent 70%),
+            var(--bg);
+    }
+
+    .summary-header,
+    .items article {
+        border-color: rgba(124, 177, 255, 0.24);
+        box-shadow: 0 18px 44px rgba(0, 0, 0, 0.32);
+    }
+
+    .tab-switcher {
+        border-bottom-color: rgba(124, 177, 255, 0.2);
+    }
+
+    code {
+        background: rgba(124, 177, 255, 0.16);
+    }
+}
+</style>
+  <script>
+    function switchTab(button) {
+      const lang = button.getAttribute('data-lang');
+      const allButtons = document.querySelectorAll('.tab-button');
+      const allContents = document.querySelectorAll('.tab-content');
+      
+      allButtons.forEach(b => b.classList.remove('active'));
+      allContents.forEach(c => c.classList.remove('active'));
+      
+      button.classList.add('active');
+      document.querySelector(`.tab-content[data-lang="${lang}"]`).classList.add('active');
+    }
+  </script>
+</head>
+<body>
+  <div class="container">
+    <div class="tab-switcher">
+      <button class="tab-button active" onclick="switchTab(this)" data-lang="fr">Français</button><button class="tab-button " onclick="switchTab(this)" data-lang="en">English</button>
+    </div>
+    <div class="tab-content active" data-lang="fr"><div class="fr-item">### 1.
+<section class="summary-header">
+  <h1>Horizon Quotidien — 2026-05-24</h1>
+  <p class="lead">16 sujets essentiels sélectionnés parmi 436 contenus collectés.</p>
+  <nav class="toc" aria-label="Sommaire">
+    <p class="toc-title">Sommaire</p>
+    <ul><li><a href="#item-1">Échelle de créativité à l&#39;âge de l&#39;IA.</a></li>
+<li><a href="#item-2">Google I/O a montré comment le chemin de la science pilotée par l&#39;IA évolue.</a></li>
+<li><a href="#item-3">Police affirment qu&#39;ils ont piraté un VPN utilisé par des criminels</a></li>
+<li><a href="#item-4">Les chercheurs technologiques poursuivent l&#39;administration Trump pour l&#39;avenir de la sécurité en ligne.</a></li>
+<li><a href="#item-5">SpaceX Starship décolle lors d&#39;un test à haut risque.</a></li>
+<li><a href="#item-6">Anthropic a présenté l’avenir du codage avec Claude lors d’un événement développeur à Londres</a></li>
+<li><a href="#item-7">Le Download aborde l&#39;avenir du codage, les &#39;Jeux stéroïdes&#39; et la science IA.</a></li>
+<li><a href="#item-8">L&#39;afflux de dette des hyperscalers entraîne un boom des dérivés.</a></li>
+<li><a href="#item-9">Le rocket Starship de SpaceX décolle du Texas.</a></li>
+<li><a href="#item-10">Le PDG de Micron annonce l&#39;expansion du DRAM aux États‐Unis.</a></li>
+<li><a href="#item-11">US envisage des tarifs sur les puces pour soutenir la production locale.</a></li>
+<li><a href="#item-12">Le CFO de Lenovo affirme une forte croissance de l&#39;IA.</a></li>
+<li><a href="#item-13">Les chercheurs technologiques poursuivent l&#39;administration Trump pour la sécurité en ligne.</a></li>
+<li><a href="#item-14">Débat de table ronde : l&#39;IA peut-elle comprendre le monde ?</a></li>
+<li><a href="#item-15">Vivado 2026.1 supprime le support Linux du niveau gratuit.</a></li>
+<li><a href="#item-16">SpaceX Starship réussit à décoller et à retourner à la Terre</a></li></ul>
+  </nav>
+</section>
+<main class="items">
+<article id="item-1">
+  <header>
+        <h2 class="item-title"><a href="https://www.technologyreview.com/2026/05/21/1137613/scaling-creativity-in-the-age-of-ai/">Échelle de créativité à l&#39;âge de l&#39;IA.</a></h2>
+    <div class="meta">rss · MIT Technology Review · May 21, 19:16</div>
+  </header>
+  <div class="lang-blocks fr-only"><section class="content-section"><h3>Contexte</h3><div class="content">Contexte : Le récit est une activité fondamentale de l’humanité, passée des peintures rupestres préhistoriques aux pigments naturels, à la photographie et aux médias numériques. Le domaine de la créativité computationnelle, situé à la croisée de l’IA, de la psychologie cognitive, de la philosophie et des arts, fournit le cadre théorique de la génération algorithmique de contenus artistiques novateurs. Les récentes avancées en IA générative permettent à des outils comme Storywizard AI et Amazon Alexa de créer automatiquement des récits illustrés et des histoires du coucher, poursuivant une longue tradition où la technologie façonne la diffusion des récits. Ces évolutions s’inscrivent dans un écosystème où la recherche examine comment la créativité algorithmique influence le comportement des consommateurs et la pratique du design, comme le montrent plusieurs publications académiques.</div></section></div>
+  <p class="evidence-note"><strong>Fiabilité</strong> : Les preuves sont solides, s’appuyant sur plusieurs sources réputées, dont des études académiques et des exemples industriels.</p>
+  <div class="tags"><code>#AI</code>, <code>#Creativity</code>, <code>#Storytelling</code>, <code>#Technology</code>, <code>#Culture</code></div>
+  <details><summary>Références</summary><ul><li><a href="https://design-encyclopedia.com/?T=Algorithmic+Creativity">Algorithmic Creativity - design-encyclopedia.com</a></li><li><a href="https://www.sciencedirect.com/science/article/pii/S0969698926000494">Beyond the code: How algorithmic creativity enhances tolerance to ...</a></li></ul></details>
+</article>
+
+<article id="item-2">
+  <header>
+        <h2 class="item-title"><a href="https://www.technologyreview.com/2026/05/22/1137813/google-i-o-showed-how-the-path-for-ai-science-is-shifting/">Google I/O a montré comment le chemin de la science pilotée par l&#39;IA évolue.</a></h2>
+    <div class="meta">rss · MIT Technology Review · May 22, 10:00</div>
+  </header>
+  <div class="lang-blocks fr-only"><section class="content-section"><h3>Contexte</h3><div class="content">La singularité technologique désigne un futur hypothétique où les systèmes d’IA deviennent beaucoup plus intelligents que les humains et peuvent s’améliorer plus rapidement qu’ils ne le peuvent les personnes, entraînant des changements sociétaux rapides et imprévisibles (Wikipedia). Google DeepMind, fondée en 2010 et acquise par Google en 2014, a fusionné avec la division Google Brain en avril 2023 pour devenir Google DeepMind, la plaçant à la pointe de la recherche en IA (Wikipedia DeepMind). Google I/O est la conférence annuelle des développeurs de Google où l’entreprise présente de nouvelles technologies et ses orientations stratégiques, y compris sa vision de l’IA dans la science. La déclaration selon laquelle nous sommes au pied de la singularité suggère que l’IA pourrait bientôt permettre des percées dans de nombreux domaines scientifiques, accélérant ainsi les processus de découverte.</div></section></div>
+  <p class="evidence-note"><strong>Fiabilité</strong> : L&#39;article présente une affirmation de haut niveau mais offre peu de preuves concrètes pour étayer l&#39;assertion sur la singularité.</p>
+  <div class="tags"><code>#Artificial Intelligence</code>, <code>#Science</code>, <code>#Technology</code>, <code>#AI Research</code></div>
+  <details><summary>Références</summary><ul><li><a href="https://en.wikipedia.org/wiki/Technological_singularity">Technological singularity - Wikipedia</a></li><li><a href="https://en.wikipedia.org/wiki/Google_DeepMind">Google DeepMind - Wikipedia</a></li></ul></details>
+</article>
+
+<article id="item-3">
+  <header>
+        <h2 class="item-title"><a href="https://arstechnica.com/tech-policy/2026/05/police-boast-of-hacking-vpn-where-criminals-believed-themselves-to-be-safe/">Police affirment qu&#39;ils ont piraté un VPN utilisé par des criminels</a></h2>
+    <div class="meta">rss · Ars Technica · May 22, 18:43</div>
+  </header>
+  <div class="lang-blocks fr-only"><section class="content-section"><h3>Contexte</h3><div class="content">Un réseau privé virtuel (VPN) chiffre le trafic Internet pour masquer l&#39;identité des utilisateurs, une fonction exploitée par les criminels pour dissimuler le ransomware et d&#39;autres activités illicites. En mai 2026, une opération internationale menée par les autorités françaises et néerlandaises, avec le soutien d&#39;Europol et d&#39;Eurojust, a démantelé le service VPN et saisi ses domaines après avoir intercepté son trafic. La saisie de domaine est un mécanisme juridique utilisé par les gouvernements, comme le Département de la Justice américain, pour prendre le contrôle de sites web et de leurs noms de domaine dans le cadre d&#39;enquêtes sur la cybercriminalité. Ce cas s&#39;inscrit dans une tendance plus large où les forces de l&#39;ordre visent l&#39;infrastructure VPN pour réduire l&#39;anonymat, comme le montrent les précédentes saisies de services tels que First VPN.</div></section></div>
+  <p class="evidence-note"><strong>Fiabilité</strong> : Les preuves sont solides, appuyées par plusieurs sources réputées décrivant l&#39;opération et la saisie de domaine.</p>
+  <div class="tags"><code>#cybersecurity</code>, <code>#law enforcement</code>, <code>#VPN</code>, <code>#privacy</code>, <code>#technology</code></div>
+  <details><summary>Références</summary><ul><li><a href="https://arstechnica.com/tech-policy/2026/05/police-boast-of-hacking-vpn-where-criminals-believed-themselves-to-be-safe/">Police boast of hacking VPN where criminals &quot;believed...&quot; - Ars Techni...</a></li><li><a href="https://www.europol.europa.eu/media-press/newsroom/news/cybercriminal-vpn-used-ransomware-actors-dismantled-in-global-crackdown">Cybercriminal VPN used by ransomware actors dismantled in... | Europol</a></li><li><a href="https://www.justice.gov/opa/pr/justice-department-seizes-domains-behind-major-information-stealing-malware-operation">Office of Public Affairs | Justice Department Seizes Domains Behind ...</a></li></ul></details>
+</article>
+
+<article id="item-4">
+  <header>
+        <h2 class="item-title"><a href="https://www.technologyreview.com/2026/05/21/1137632/lawsuit-trump-administration-online-safety-coalition-for-independent-technology-research/">Les chercheurs technologiques poursuivent l&#39;administration Trump pour l&#39;avenir de la sécurité en ligne.</a></h2>
+    <div class="meta">rss · MIT Technology Review · May 21, 09:00</div>
+  </header>
+  <div class="lang-blocks fr-only"><section class="content-section"><h3>Contexte</h3><div class="content">Le terme « discours haineux » désigne un discours public qui insulte, offense ou intimide des personnes ou groupes en fonction de traits tels que la race, la religion, le genre ou le handicap, même si aucune définition juridique universelle n&#39;existe sous le droit international des droits de l&#39;homme. La désinformation en ligne correspond à de fausses ou trompeuses informations qui sont délibérément diffusées, souvent via des plateformes qui en augmentent la portée, comme le montrent les outils Hamilton 2.0 et Hoaxy qui suivent la propagande russe et le partage automatisé. Les chercheurs qui étudient ces phénomènes ont vu leurs travaux sur la haine et la désinformation être de plus en plus ciblés par l&#39;administration Trump, ce qui a conduit à l&#39;actuel défi juridique.</div></section></div>
+  <p class="evidence-note"><strong>Fiabilité</strong> : La affirmation repose sur un seul article d&#39;information et des définitions de dictionnaire, avec une vérification indépendante limitée des détails du procès.</p>
+  <div class="tags"><code>#online safety</code>, <code>#free speech</code>, <code>#legal action</code>, <code>#technology policy</code>, <code>#Trump administration</code></div>
+  <details><summary>Références</summary><ul><li><a href="https://www.un.org/en/hate-speech/understanding-hate-speech/what-is-hate-speech">What is hate speech? | United Nations</a></li><li><a href="https://www.rand.org/research/projects/truth-decay/fighting-disinformation/search.html">Tools That Fight Disinformation Online | RAND</a></li></ul></details>
+</article>
+
+<article id="item-5">
+  <header>
+        <h2 class="item-title"><a href="https://www.bloomberg.com/news/videos/2026-05-22/spacex-starship-lifts-off-in-high-stakes-test-video">SpaceX Starship décolle lors d&#39;un test à haut risque.</a></h2>
+    <div class="meta">rss · Bloomberg Technology · May 22, 22:51</div>
+  </header>
+  <div class="lang-blocks fr-only"><section class="content-section"><h3>Contexte</h3><div class="content">Starship est un lanceur super lourd réutilisable à deux étages développé par SpaceX, destiné à remplacer les fusées Falcon 9 et Falcon Heavy. Il combine un booster Super Heavy et un vaisseau Starship, tous deux propulsés par des moteurs Raptor brûlant du méthane liquide et de l&#39;oxygène liquide, et chaque étage est conçu pour atterrir verticalement sur la tour de lancement afin d&#39;être réutilisé. Le système vise à réduire les coûts de lancement grâce à la production en série et à la réutilisation, soutenant les ambitions de missions lunaires crewed dans le cadre du programme Artemis de la NASA et des voyages futurs vers Mars. Le vol humain continue depuis 2000 avec une présence permanente sur la Station spatiale internationale, et les vols d&#39;équipage commerciaux de SpaceX élargissent l&#39;accès au-delà des programmes gouvernementaux. Ces développements représentent un changement majeur dans l&#39;ingénierie aérospatiale vers un accès durable et à haute capacité à l&#39;espace.</div></section></div>
+  <p class="evidence-note"><strong>Fiabilité</strong> : Les preuves sont solides, tirées d’un reportage Bloomberg réputé et corroborées par plusieurs sources Wikipedia et d’actualité récentes.</p>
+  <div class="tags"><code>#SpaceX</code>, <code>#Starship</code>, <code>#Space Exploration</code>, <code>#Technology</code>, <code>#Aerospace</code></div>
+  <details><summary>Références</summary><ul><li><a href="https://en.wikipedia.org/wiki/Starship_rocket">Starship rocket</a></li><li><a href="https://www.spacex.com/vehicles/starship">Starship - SpaceX</a></li></ul></details>
+</article>
+
+<article id="item-6">
+  <header>
+        <h2 class="item-title"><a href="https://www.technologyreview.com/2026/05/21/1137735/anthropics-code-with-claude-showed-off-codings-future-whether-you-like-it-or-not/">Anthropic a présenté l’avenir du codage avec Claude lors d’un événement développeur à Londres</a></h2>
+    <div class="meta">rss · MIT Technology Review · May 21, 14:30</div>
+  </header>
+  <div class="lang-blocks fr-only"><section class="content-section"><h3>Contexte</h3><div class="content">Anthropic est une société de recherche et de sécurité spécialisée en IA, reconnue pour ses modèles de langage Claude. Code with Claude est une série de conférences destinées aux développeurs, visant à montrer comment les modèles Claude peuvent être employés pour le développement logiciel, comme la rédaction, la relecture et le débogage du code. L&#39;événement de Londres, qui s&#39;est tenu le 19 mai 2026, a eu lieu le même jour que le Google I/O, soulignant le paysage concurrentiel des rassemblements de développeurs axés sur l&#39;IA. La conférence proposait des ateliers et des laboratoires sur l&#39;API Claude, les outils en ligne de commande et le Model Context Protocol, afin d&#39;aider les ingénieurs à intégrer l&#39;IA dans leurs pipelines de codage.</div></section></div>
+  <p class="evidence-note"><strong>Fiabilité</strong> : Les preuves sont solides, avec plusieurs sources confirmant les dates, le format et le but de l&#39;événement.</p>
+  <div class="tags"><code>#AI</code>, <code>#Coding</code>, <code>#Tech Events</code>, <code>#Anthropic</code>, <code>#Software Development</code></div>
+  <details><summary>Références</summary><ul><li><a href="https://www.technologyreview.com/2026/05/21/1137735/anthropics-code-with-claude-showed-off-codings-future-whether-you-like-it-or-not/">Anthropic’s Code with Claude showed off coding&#39;s future—whether you like it or not | MIT Technology Review</a></li><li><a href="https://claude.com/code-with-claude">Code with Claude — Anthropic&#39;s Developer Conference</a></li><li><a href="https://simonwillison.net/2026/May/6/code-w-claude-2026/">Live blog: Code w/ Claude 2026</a></li></ul></details>
+</article>
+
+<article id="item-7">
+  <header>
+        <h2 class="item-title"><a href="https://www.technologyreview.com/2026/05/22/1137845/the-download-coding-future-steroid-olympics-ai-science/">Le Download aborde l&#39;avenir du codage, les &#39;Jeux stéroïdes&#39; et la science IA.</a></h2>
+    <div class="meta">rss · MIT Technology Review · May 22, 12:10</div>
+  </header>
+  <div class="lang-blocks fr-only"><section class="content-section"><h3>Contexte</h3><div class="content">Anthropic, filiale d’Alphabet (Google), a développé Claude, un modèle de langage présenté comme un assistant IA sûr et précis pour les tâches de codage. Claude Code est une interface en ligne de commande qui permet aux utilisateurs d’interagir avec le modèle via un langage naturel, capable de lire des bases de code, d’écrire de nouveaux fichiers, d’exécuter des programmes et de réaliser des tests. Les Enhanced Games, créés par l’entrepreneur australien Aron D&#39;Souza, visent à organiser une compétition où les substances dopantes sont autorisées sous supervision médicale, remettant en cause le cadre antidopage traditionnel du Comité olympique international. La première édition aura lieu le 24 mai 2026 à Las Vegas et comprendra des épreuves de natation, d’athlétisme et d’haltérophilie. Des guides externes expliquent comment intégrer OpenMemory à Claude Code en ajoutant un transport MCP, ce qui permet à l’IA d’accéder à des ressources mémoire supplémentaires lors des sessions de codage.</div></section></div>
+  <p class="evidence-note"><strong>Fiabilité</strong> : Les preuves proviennent de plusieurs articles d’actualité et de guides techniques, mais certaines sources sont moins fiables.</p>
+  <div class="tags"><code>#AI</code>, <code>#Coding</code>, <code>#Technology</code>, <code>#Anthropic</code>, <code>#Innovation</code></div>
+  <details><summary>Références</summary><ul><li><a href="https://en.wikipedia.org/wiki/Steroid_Olympics">Steroid Olympics</a></li><li><a href="https://en.wikipedia.org/wiki/Enhanced_Games">Enhanced Games - Wikipedia</a></li><li><a href="https://www.bbc.com/news/articles/cedpz1zqp8po">The Enhanced Games: Like the Olympics, but steroids are allowed</a></li></ul></details>
+</article>
+
+<article id="item-8">
+  <header>
+        <h2 class="item-title"><a href="https://www.bloomberg.com/news/articles/2026-05-23/hyperscaler-debt-flood-brings-derivatives-bonanza-credit-weekly">L&#39;afflux de dette des hyperscalers entraîne un boom des dérivés.</a></h2>
+    <div class="meta">rss · Bloomberg Technology · May 23, 19:00</div>
+  </header>
+  <div class="lang-blocks fr-only"><section class="content-section"><h3>Contexte</h3><div class="content">Les hyperscalers sont de grands fournisseurs de services cloud qui exploitent d&#39;immenses centres de données offrant des ressources de calcul, de stockage et de réseau évolutives, comme le précisent des sources telles que Wikipedia et Red Hat. Les dérivés de crédit sont des contrats financiers qui transfèrent le risque de défaut de l&#39;emprunteur à un tiers, généralement via des swaps de défaut de crédit sous les accords ISDA. Au cours des dernières années, les grandes entreprises technologiques ont levé collectivement plusieurs centaines de milliards de dollars de dette pour financer le développement de l&#39;intelligence artificielle, créant ainsi une nouvelle source de risque de crédit pour les prêteurs et les banques. Les banques de Wall Street ont répondu en augmentant le trading de ces dérivés afin de conserver leurs relations avec les hyperscalers et de gérer le risque associé.</div></section></div>
+  <p class="evidence-note"><strong>Fiabilité</strong> : Les preuves sont solides, basées sur un reportage Bloomberg et plusieurs définitions réputées d&#39;hyperscalers et de dérivés de crédit.</p>
+  <div class="tags"><code>#Artificial Intelligence</code>, <code>#Corporate Debt</code>, <code>#Credit Derivatives</code>, <code>#Technology</code>, <code>#Wall Street</code></div>
+  <details><summary>Références</summary><ul><li><a href="https://en.wikipedia.org/wiki/Hyperscale_computing">Hyperscale computing - Wikipedia</a></li><li><a href="https://www.redhat.com/en/topics/cloud-computing/what-is-a-hyperscaler">What is a hyperscaler?</a></li></ul></details>
+</article>
+
+<article id="item-9">
+  <header>
+        <h2 class="item-title"><a href="https://www.bloomberg.com/news/videos/2026-05-22/spacex-starship-rocket-takes-off-from-texas-video">Le rocket Starship de SpaceX décolle du Texas.</a></h2>
+    <div class="meta">rss · Bloomberg Technology · May 22, 23:20</div>
+  </header>
+  <div class="lang-blocks fr-only"><section class="content-section"><h3>Contexte</h3><div class="content">Starship est un lanceur super lourd à deux étages, entièrement réutilisable, en développement par SpaceX, construit et lancé depuis Starbase au Texas. Il est destiné à remplacer les fusées Falcon 9 et Falcon Heavy et serait le premier rocket orbital entièrement réutilisable avec la plus grande capacité de charge utile de tout véhicule de lancement. À ce jour, le 22 mai 2026, Starship a effectué 12 lancements avec 7 succès et 5 échecs. Le véhicule utilise des moteurs Raptor brûlant du méthane liquide et de l&#39;oxygène liquide, et les deux étages sont conçus pour revenir verticalement à la tour de lancement pour réutilisation.</div></section></div>
+  <p class="evidence-note"><strong>Fiabilité</strong> : Les preuves sont solides, basées sur un reportage de Bloomberg réputé et des données corroborantes de Wikipedia sur l&#39;historique des lancements de Starship.</p>
+  <div class="tags"><code>#SpaceX</code>, <code>#Starship</code>, <code>#Space Launch</code>, <code>#Starlink</code>, <code>#Technology</code></div>
+  <details><summary>Références</summary><ul><li><a href="https://en.wikipedia.org/wiki/Starship_rocket">Starship rocket</a></li><li><a href="https://en.wikipedia.org/wiki/SpaceX_Starship">SpaceX Starship - Wikipedia</a></li><li><a href="https://www.spacex.com/vehicles/starship">Starship - SpaceX</a></li></ul></details>
+</article>
+
+<article id="item-10">
+  <header>
+        <h2 class="item-title"><a href="https://www.bloomberg.com/news/videos/2026-05-22/micron-ceo-on-expanding-chip-production-memory-demand-video">Le PDG de Micron annonce l&#39;expansion du DRAM aux États‐Unis.</a></h2>
+    <div class="meta">rss · Bloomberg Technology · May 22, 18:56</div>
+  </header>
+  <div class="lang-blocks fr-only"><section class="content-section"><h3>Contexte</h3><div class="content">La DRAM, ou mémoire à accès aléatoire dynamique, stocke chaque bit dans une cellule composé d&#39;un condensateur et d&#39;un transistor, et nécessite un rafraîchissement périodique pour conserver les données. Sa fabrication suit le processus de production de dispositifs semiconducteurs, incluant de multiples étapes de photolithographie, de dépôt et d&#39;usinage dans des usines propres, ce qui peut prendre jusqu&#39;à 15 semaines pour les nœuds avancés. Les États‐Unis encouragent la production domestique de puces via des politiques comme la loi CHIPS et Science, afin de diminuer la dépendance aux fabricants asiatiques.</div></section></div>
+  <p class="evidence-note"><strong>Fiabilité</strong> : Les preuves sont solides, tirées de l&#39;interview de Bloomberg et de sources réputées sur la DRAM et la fabrication de semi‐conducteurs.</p>
+  <div class="tags"><code>#Semiconductors</code>, <code>#Memory chips</code>, <code>#US manufacturing</code>, <code>#Technology</code>, <code>#Industry news</code></div>
+  <details><summary>Références</summary><ul><li><a href="https://en.wikipedia.org/wiki/Dynamic_random-access_memory">Dynamic random-access memory - Wikipedia</a></li><li><a href="https://semiconductor.samsung.com/dram/">DRAM | Memory | Samsung Semiconductor Global</a></li><li><a href="https://en.wikipedia.org/wiki/Semiconductor_manufacturing_process">Semiconductor manufacturing process</a></li></ul></details>
+</article>
+
+<article id="item-11">
+  <header>
+        <h2 class="item-title"><a href="https://www.bloomberg.com/news/articles/2026-05-22/us-weighs-chip-tariffs-to-spur-domestic-growth-trade-chief-says">US envisage des tarifs sur les puces pour soutenir la production locale.</a></h2>
+    <div class="meta">rss · Bloomberg Technology · May 22, 21:46</div>
+  </header>
+  <div class="lang-blocks fr-only"><section class="content-section"><h3>Contexte</h3><div class="content">L&#39;article 232 de la loi d&#39;expansion du commerce permet au président d&#39;imposer des droits de douane sur les importations jugées menacer la sécurité nationale, et il a été utilisé en 2026 pour viser les articles de semi-conducteurs avec un droit de 25 %. Le représentant du commerce, Jamieson Greer, dirige l&#39;agence qui élabore la politique commerciale et conseille le président sur de telles mesures. La fabrication de semi-conducteurs est au cœur de la politique industrielle américaine, visant à réduire la dépendance aux fournisseurs étrangers. Des propositions récentes envisagent des tarifs plus larges après la conclusion des négociations commerciales, reflétant les tensions persistantes avec la Chine en matière de technologie et de commerce.</div></section></div>
+  <p class="evidence-note"><strong>Fiabilité</strong> : Les preuves sont solides, avec plusieurs déclarations officielles et des actions documentées de tarifs Section 232 confirmant le report.</p>
+  <div class="tags"><code>#Semiconductors</code>, <code>#Trade Policy</code>, <code>#Domestic Manufacturing</code>, <code>#US Politics</code>, <code>#Technology</code></div>
+  <details><summary>Références</summary><ul><li><a href="https://www.strtrade.com/trade-news-resources/tariff-actions-resources/section-232-investigation-semiconductors">Section 232 Tariffs on Semiconductors | Sandler, Travis &amp; Rosenberg, P.A.</a></li><li><a href="https://www.federalregister.gov/documents/2026/01/20/2026-01052/adjusting-imports-of-semiconductors-semiconductor-manufacturing-equipment-and-their-derivative">Adjusting Imports of Semiconductors, Semiconductor Manufacturing ...</a></li><li><a href="https://en.wikipedia.org/wiki/United_States_Trade_Representative">United States Trade Representative</a></li></ul></details>
+</article>
+
+<article id="item-12">
+  <header>
+        <h2 class="item-title"><a href="https://www.bloomberg.com/news/videos/2026-05-22/lenovo-cfo-weighs-in-on-strong-ai-growth-video">Le CFO de Lenovo affirme une forte croissance de l&#39;IA.</a></h2>
+    <div class="meta">rss · Bloomberg Technology · May 22, 18:11</div>
+  </header>
+  <div class="lang-blocks fr-only"><section class="content-section"><h3>Contexte</h3><div class="content">L&#39;intelligence artificielle est passée d&#39;un thème d&#39;investissement spéculatif à un moteur mesurable des résultats des entreprises, selon les analyses récentes du marché. La hausse du chiffre d&#39;affaires de l&#39;IA chez Lenovo illustre le virage sectoriel où les services d&#39;IA représentent une part importante des revenus des sociétés technologiques. Parallèlement, les coûts des composants semi‐conducteurs ont augmenté de près de 12 % en raison de l&#39;inflation des matières premières et des perturbations de la chaîne d&#39;approvisionnement. Cette opposition montre les défis et les opportunités auxquels sont confrontés les fabricants de matériel dans l&#39;environnement économique actuel.</div></section></div>
+  <p class="evidence-note"><strong>Fiabilité</strong> : Les preuves sont modérément solides, basées sur des données de résultats et des rapports sur les coûts.</p>
+  <div class="tags"><code>#AI</code>, <code>#Technology</code>, <code>#Corporate Earnings</code>, <code>#Financial Markets</code>, <code>#China</code></div>
+  <details><summary>Références</summary><ul><li><a href="https://en.wikipedia.org/wiki/AI_bubble">AI bubble - Wikipedia</a></li><li><a href="https://www.cnbc.com/2026/05/22/lenovo-shares-jump-15percent-on-record-earnings-as-ai-revenue-nearly-doubles.html">Lenovo shares jump nearly 20% on record earnings as AI revenue ...</a></li><li><a href="https://electronics360.globalspec.com/article/19692/why-electronic-manufacturing-costs-are-dependent-on-logistics-and-sourcing">Why electronic manufacturing costs are dependent on logistics and...</a></li></ul></details>
+</article>
+
+<article id="item-13">
+  <header>
+        <h2 class="item-title"><a href="https://www.technologyreview.com/2026/05/21/1137733/the-download-online-safety-climate-tech-pivot/">Les chercheurs technologiques poursuivent l&#39;administration Trump pour la sécurité en ligne.</a></h2>
+    <div class="meta">rss · MIT Technology Review · May 21, 12:10</div>
+  </header>
+  <div class="lang-blocks fr-only"><section class="content-section"><h3>Contexte</h3><div class="content">La sécurité en ligne est devenue une priorité majeure alors que les plateformes luttent contre la haine, la désinformation et le harcèlement des utilisateurs. Les chercheurs qui étudient ces questions subissent une pression croissante de la part de l&#39;administration Trump, qui cherche à limiter leurs travaux par des coupures de financement et une intimidation juridique. Cette poursuite représente un effort de haute visibilité pour défendre la liberté académique et la continuité de la recherche en sécurité. Parallèlement, le techno‐climat change également de façon significative, mais le conflit juridique immédiat porte sur la régulation de la sécurité en ligne.</div></section></div>
+  <p class="evidence-note"><strong>Fiabilité</strong> : Les preuves sont basées uniquement sur le résumé de l’article fourni ; aucune source externe n’a été consultée.</p>
+  <div class="tags"><code>#online safety</code>, <code>#climate tech</code>, <code>#legal action</code>, <code>#technology policy</code>, <code>#research</code></div>
+  
+</article>
+
+<article id="item-14">
+  <header>
+        <h2 class="item-title"><a href="https://www.technologyreview.com/2026/05/21/1137756/roundtables-can-ai-learn-to-understand-the-world/">Débat de table ronde : l&#39;IA peut-elle comprendre le monde ?</a></h2>
+    <div class="meta">rss · MIT Technology Review · May 21, 20:41</div>
+  </header>
+  <div class="lang-blocks fr-only"><section class="content-section"><h3>Contexte</h3><div class="content">MIT Technology Review est une source réputée couvrant les tendances technologiques, et le format de table ronde permet aux experts d’échanger leurs points de vue sur la recherche d’IA de pointe. Le débat porte sur la capacité de l’IA à dépasser les modèles de langage pour développer des systèmes qui comprennent réellement la réalité extérieure. Aucun contexte historique ou technique supplémentaire n’est fourni au-delà des commentaires des participants. L’article s’appuie donc sur les insights du panel plutôt que sur des documents externes.</div></section></div>
+  <p class="evidence-note"><strong>Fiabilité</strong> : Les preuves sont basées uniquement sur le contenu de l’article, sans sources externes citées.</p>
+  <div class="tags"><code>#AI</code>, <code>#Machine Learning</code>, <code>#World Models</code>, <code>#Technology</code>, <code>#Expert Discussion</code></div>
+  
+</article>
+
+<article id="item-15">
+  <header>
+        <h2 class="item-title"><a href="https://adaptivesupport.amd.com/s/question/0D5Pd00001YQLdMKAX/why-is-vivado-20261-dropping-linux-support-for-free-tier-?language=en_US">Vivado 2026.1 supprime le support Linux du niveau gratuit.</a></h2>
+    <div class="meta">hackernews · zdw · May 24, 04:14 · <a href="https://news.ycombinator.com/item?id=48254309">Discussion</a></div>
+  </header>
+  <div class="lang-blocks fr-only"><section class="content-section"><h3>Contexte</h3><div class="content">Vivado est l’environnement de développement intégré d’AMD pour la conception et la programmation de FPGA. Le niveau gratuit de Vivado fournit des fonctionnalités de base aux passionnés et aux étudiants, supportant à la fois Windows et Linux. Les récentes mises à jour ont limité le niveau gratuit à Windows uniquement, reflétant une tendance plus large dans la licence logicielle où les fonctionnalités avancées sont déplacées vers des versions payantes.</div></section></div>
+  <p class="evidence-note"><strong>Fiabilité</strong> : Les preuves sont faibles car aucune source externe n’a été fournie.</p>
+  <div class="tags"><code>#FPGA</code>, <code>#EDA</code>, <code>#AMD</code>, <code>#Software Licensing</code>, <code>#Developer Tools</code></div>
+  
+</article>
+
+<article id="item-16">
+  <header>
+        <h2 class="item-title"><a href="https://www.bloomberg.com/news/videos/2026-05-23/spacex-starship-successfully-lifts-off-returns-to-earth-video">SpaceX Starship réussit à décoller et à retourner à la Terre</a></h2>
+    <div class="meta">rss · Bloomberg Technology · May 23, 00:07</div>
+  </header>
+  <div class="lang-blocks fr-only"><section class="content-section"><h3>Contexte</h3><div class="content">&lt;|unk|&gt;</div></section></div>
+  
+  <div class="tags"><code>#SpaceX</code>, <code>#Starship</code>, <code>#Space launch</code>, <code>#Aerospace</code>, <code>#Technology</code></div>
+  
+</article>
+</main></div></div><div class="tab-content " data-lang="en"><section class="summary-header">
+  <h1>Horizon Daily — 2026-05-24</h1>
+  <p class="lead">16 essential stories selected from 436 collected items.</p>
+  <nav class="toc" aria-label="Contents">
+    <p class="toc-title">Contents</p>
+    <ul><li><a href="#item-1">Scaling creativity in the age of AI.</a></li>
+<li><a href="#item-2">Google I/O showed how the path for AI-driven science is shifting.</a></li>
+<li><a href="#item-3">Police claim they hacked a VPN used by criminals</a></li>
+<li><a href="#item-4">Tech researchers are suing the Trump administration over the future of online safety.</a></li>
+<li><a href="#item-5">SpaceX Starship lifts off in a high‐stakes test.</a></li>
+<li><a href="#item-6">Anthropic’s Code with Claude showcased AI coding’s future at a London developer event</a></li>
+<li><a href="#item-7">The Download covers coding’s future, the ‘Steroid Olympics,’ and AI-driven science.</a></li>
+<li><a href="#item-8">Hyperscaler debt flood brings a derivatives bonanza.</a></li>
+<li><a href="#item-9">SpaceX Starship rocket takes off from Texas.</a></li>
+<li><a href="#item-10">Micron CEO announces US DRAM expansion to meet rising memory demand.</a></li>
+<li><a href="#item-11">US weighs chip tariffs to spur domestic growth, trade chief says.</a></li>
+<li><a href="#item-12">Lenovo CFO says AI growth is strong.</a></li>
+<li><a href="#item-13">Tech researchers are suing the Trump administration over online safety.</a></li>
+<li><a href="#item-14">Roundtable Debate: Can AI Learn to Understand the World?</a></li>
+<li><a href="#item-15">Vivado 2026.1 removes Linux support from the free tier.</a></li>
+<li><a href="#item-16">SpaceX Starship Successfully Lifts Off and Returns to Earth</a></li></ul>
+  </nav>
+</section>
+<main class="items">
+<article id="item-1">
+  <header>
+        <h2 class="item-title"><a href="https://www.technologyreview.com/2026/05/21/1137613/scaling-creativity-in-the-age-of-ai/">Scaling creativity in the age of AI.</a></h2>
+    <div class="meta">rss · MIT Technology Review · May 21, 19:16</div>
+  </header>
+    <div class="lang-blocks">
+        <section class="lang"><h3>EN</h3><div class="content">The article examines how AI technologies are reshaping storytelling, enabling generative models to create narratives and visual content. It links humanity&#39;s historic impulse to tell stories with modern AI tools such as Storywizard AI, Amazon Alexa bedtime generators, and Ajay Devgn&#39;s Prismix venture. The piece argues that while AI expands creative possibilities, the human touch remains essential.<br /><br />This matters because AI is reshaping the storytelling industry, education, and entertainment, democratizing content creation while raising questions about authorship and originality. It reflects a broader trend where technology increasingly mediates cultural expression, affecting how audiences engage with narratives. Understanding these dynamics is crucial for creators, policymakers, and consumers navigating the evolving creative landscape.<br /><br />The article cites concrete examples such as Storywizard AI generating illustrated moral stories, Amazon Alexa providing AI‐generated bedtime tales for children, and Ajay Devgn’s Prismix venture building generative storytelling infrastructure. It points out that while these tools can stimulate children’s imagination and expand creative pipelines, they also challenge notions of authorship and may limit the expressive depth that human storytellers bring. The discussion underscores that algorithmic creativity, though powerful, still relies on human framing and judgment.<br /><br />Storytelling has been a fundamental human activity, evolving from prehistoric cave paintings using natural pigments to modern photography and digital media. The field of computational creativity, defined at the intersection of AI, cognitive psychology, philosophy, and the arts, provides the theoretical basis for algorithmic generation of novel artistic content. Recent advances in generative AI enable tools such as Storywizard AI and Amazon Alexa to automatically produce illustrated narratives and bedtime stories, reflecting a long tradition of technology shaping narrative distribution. These developments are situated within a broader ecosystem where researchers study how algorithmic creativity influences consumer behavior and design practice, as shown in recent academic publications.</div></section>
+        <section class="lang"><h3>FR</h3><div class="content">L&#39;article examine comment les technologies d&#39;IA transforment le récit, permettant aux modèles génératifs de créer des récits et du contenu visuel. Il relie l&#39;impulsion historique humaine à raconter des histoires avec des outils modernes comme Storywizard AI, les générateurs de contes pour la sieste d&#39;Alexa et le projet Prismix d&#39;Ajay Devgn. L&#39;article soutient que, même si l&#39;IA élargit les possibilités créatives, la touche humaine reste essentielle.<br /><br />Cela est important car l&#39;IA redéfinit l&#39;industrie du récit, de l&#39;éducation et du divertissement, démocratisant la création de contenu tout en posant des questions sur l&#39;auteur et l&#39;originalité. Cela reflète une tendance plus large où la technologie médiatise de plus en plus l&#39;expression culturelle, influençant l&#39;engagement du public avec les récits. Comprendre ces dynamiques est crucial pour les créateurs, les décideurs et les consommateurs dans le paysage créatif en évolution.<br /><br />L&#39;article cite des exemples concrets comme Storywizard AI générant des histoires illustrées aux leçons morales, Amazon Alexa offrant des contes du coucher générés par IA pour les enfants, et le projet Prismix d&#39;Ajay Devgn construisant une infrastructure de narration générative. Il souligne que, même si ces outils stimulent l&#39;imagination des enfants et élargissent les possibilités créatives, ils remettent en cause les notions d&#39;auteur et peuvent limiter la profondeur expressive des conteurs humains. La discussion souligne que la créativité algorithmique, bien puissante, dépend toujours du cadre humain et du jugement.<br /><br />Contexte : Le récit est une activité fondamentale de l’humanité, passée des peintures rupestres préhistoriques aux pigments naturels, à la photographie et aux médias numériques. Le domaine de la créativité computationnelle, situé à la croisée de l’IA, de la psychologie cognitive, de la philosophie et des arts, fournit le cadre théorique de la génération algorithmique de contenus artistiques novateurs. Les récentes avancées en IA générative permettent à des outils comme Storywizard AI et Amazon Alexa de créer automatiquement des récits illustrés et des histoires du coucher, poursuivant une longue tradition où la technologie façonne la diffusion des récits. Ces évolutions s’inscrivent dans un écosystème où la recherche examine comment la créativité algorithmique influence le comportement des consommateurs et la pratique du design, comme le montrent plusieurs publications académiques.</div></section>
+    </div>
+  <div class="tags"><code>#AI</code>, <code>#Creativity</code>, <code>#Storytelling</code>, <code>#Technology</code>, <code>#Culture</code></div>
+  <details><summary>References</summary><ul><li><a href="https://design-encyclopedia.com/?T=Algorithmic+Creativity">Algorithmic Creativity - design-encyclopedia.com</a></li><li><a href="https://www.sciencedirect.com/science/article/pii/S0969698926000494">Beyond the code: How algorithmic creativity enhances tolerance to ...</a></li></ul></details>
+</article>
+
+<article id="item-2">
+  <header>
+        <h2 class="item-title"><a href="https://www.technologyreview.com/2026/05/22/1137813/google-i-o-showed-how-the-path-for-ai-science-is-shifting/">Google I/O showed how the path for AI-driven science is shifting.</a></h2>
+    <div class="meta">rss · MIT Technology Review · May 22, 10:00</div>
+  </header>
+    <div class="lang-blocks">
+        <section class="lang"><h3>EN</h3><div class="content">At the Tuesday Google I/O keynote, DeepMind CEO Demis Hassabis declared that humanity is “standing in the foothills of the singularity,” indicating a pivotal shift in AI‐driven scientific research. He suggested that this marks the early stage of a transformative era where AI could accelerate discovery across disciplines. The statement underscores Google’s focus on using AI to reshape how scientific breakthroughs are achieved.<br /><br />This claim signals that AI may soon become powerful enough to drive scientific progress beyond human capability, potentially reshaping research timelines and outcomes. If the foothills of the singularity are indeed approached, industries ranging from medicine to climate science could benefit from faster, AI‐led discoveries. Consequently, stakeholders across academia, business, and policy must prepare for rapid changes in how science is conducted.<br /><br />Hassabis made the remark during the Tuesday Google I/O keynote, a high‐profile event that gathers developers and researchers worldwide. He described the current state as the foothills of the singularity, a term referring to the hypothetical moment when AI surpasses human intelligence and self‐improves rapidly. The article notes that the excerpt is brief and lacks detailed evidence, keeping the overall importance moderate.<br /><br />The technological singularity is a hypothetical future point where AI systems become vastly more intelligent than humans and can improve themselves faster than people can, leading to rapid, unpredictable societal change (Wikipedia). Google DeepMind, founded in 2010 and acquired by Google in 2014, merged with Google Brain in April 2023 to form Google DeepMind, positioning it at the forefront of AI research (DeepMind Wikipedia). Google I/O is Google’s annual developer conference where the company showcases new technologies and strategic directions, including its vision for AI’s role in science. The claim that we are at the foothills of the singularity suggests that AI may soon enable breakthroughs across multiple scientific fields, accelerating discovery processes.</div></section>
+        <section class="lang"><h3>FR</h3><div class="content">Lors du keynote du mardi du Google I/O, le PDG de DeepMind Demis Hassabis a déclaré que l’humanité se tient « au pied de la singularité », signifiant un virage décisif dans la recherche scientifique pilotée par l’IA. Il a suggéré que cela marque le début d’une ère transformative où l’IA pourrait accélérer les découvertes dans de nombreux domaines. Cette prise de parole souligne l’orientation de Google vers l’utilisation de l’IA pour remodeler la manière dont les percées scientifiques sont réalisées.<br /><br />Cette affirmation indique que l’IA pourrait bientôt devenir assez puissante pour piloter le progrès scientifique au-delà des capacités humaines, ce qui pourrait transformer les délais et les résultats de la recherche. Si les pieds de la singularité sont effectivement approchés, les secteurs de la médecine, du climat ou d’autres domaines pourraient tirer profit de découvertes accélérées par l’IA. Ainsi, les acteurs de l’académie, des entreprises et des politiques doivent se préparer à des changements rapides dans la manière dont la science est menée.<br /><br />Hassabis a prononcé cette remarque lors du keynote du mardi du Google I/O, un événement de haut niveau rassemblant développeurs et chercheurs du monde entier. Il a décrit l’état actuel comme les pieds de la singularité, un terme désignant le moment hypothétique où l’IA dépasse l’intelligence humaine et s’améliore rapidement par elle‐même. L’article indique que l’extrait est bref et ne fournit pas de preuves détaillées, ce qui rend l’importance globale modérée.<br /><br />La singularité technologique désigne un futur hypothétique où les systèmes d’IA deviennent beaucoup plus intelligents que les humains et peuvent s’améliorer plus rapidement qu’ils ne le peuvent les personnes, entraînant des changements sociétaux rapides et imprévisibles (Wikipedia). Google DeepMind, fondée en 2010 et acquise par Google en 2014, a fusionné avec la division Google Brain en avril 2023 pour devenir Google DeepMind, la plaçant à la pointe de la recherche en IA (Wikipedia DeepMind). Google I/O est la conférence annuelle des développeurs de Google où l’entreprise présente de nouvelles technologies et ses orientations stratégiques, y compris sa vision de l’IA dans la science. La déclaration selon laquelle nous sommes au pied de la singularité suggère que l’IA pourrait bientôt permettre des percées dans de nombreux domaines scientifiques, accélérant ainsi les processus de découverte.</div></section>
+    </div>
+  <div class="tags"><code>#Artificial Intelligence</code>, <code>#Science</code>, <code>#Technology</code>, <code>#AI Research</code></div>
+  <details><summary>References</summary><ul><li><a href="https://en.wikipedia.org/wiki/Technological_singularity">Technological singularity - Wikipedia</a></li><li><a href="https://en.wikipedia.org/wiki/Google_DeepMind">Google DeepMind - Wikipedia</a></li></ul></details>
+</article>
+
+<article id="item-3">
+  <header>
+        <h2 class="item-title"><a href="https://arstechnica.com/tech-policy/2026/05/police-boast-of-hacking-vpn-where-criminals-believed-themselves-to-be-safe/">Police claim they hacked a VPN used by criminals</a></h2>
+    <div class="meta">rss · Ars Technica · May 22, 18:43</div>
+  </header>
+    <div class="lang-blocks">
+        <section class="lang"><h3>EN</h3><div class="content">Police announced they intercepted VPN traffic, seized the service&#39;s domains, and arrested its operator after discovering that criminals believed the VPN was secure. The operation, coordinated internationally, took place in May 2026.<br /><br />This demonstrates that law enforcement can penetrate even services marketed as private, undermining trust in VPNs for criminal and legitimate users alike. It may push criminals to adopt more secure or alternative tools, and could influence policy debates on encryption and surveillance.<br /><br />The VPN, believed to be a safe channel by its criminal users, was used to hide ransomware attacks and data theft. Authorities intercepted traffic before seizing the domains, allowing them to monitor communications. The operator was arrested, marking a rare case of a VPN service being taken down.<br /><br />A virtual private network (VPN) encrypts internet traffic to hide user identities, a feature that criminals have exploited to conceal ransomware and other illicit activities. In May 2026, an international operation led by French and Dutch authorities, with support from Europol and Eurojust, dismantled the VPN service and seized its domains after intercepting its traffic. Domain seizure is a legal mechanism used by governments, such as the U.S. Justice Department, to take control of websites and their domain names as part of cybercrime investigations. The case follows a broader trend of law enforcement targeting VPN infrastructure to undermine anonymity, as seen in previous takedowns of services like First VPN.</div></section>
+        <section class="lang"><h3>FR</h3><div class="content">La police a annoncé qu&#39;elle avait intercepté le trafic VPN, saisi les domaines du service et arrêté son opérateur après avoir découvert que les criminels pensaient que le VPN était sûr. Cette opération a été menée en coordination internationale en mai 2026.<br /><br />Cela montre que les forces de l&#39;ordre peuvent pénétrer même les services présentés comme privés, sapant la confiance dans les VPN pour les utilisateurs criminels et légitimes. Il pourrait inciter les criminels à adopter des outils plus sûrs ou différents, et influencer les débats sur le chiffrement et la surveillance.<br /><br />Le VPN, considéré comme un canal sûr par ses utilisateurs criminels, a servi à dissimuler des attaques de rançonnage et le vol de données. Les autorités ont intercepté le trafic avant de saisir les domaines, ce qui leur a permis d&#39;espionner les communications. L&#39;arrestation de l&#39;opérateur constitue un cas rare de démantèlement d&#39;un service VPN.<br /><br />Un réseau privé virtuel (VPN) chiffre le trafic Internet pour masquer l&#39;identité des utilisateurs, une fonction exploitée par les criminels pour dissimuler le ransomware et d&#39;autres activités illicites. En mai 2026, une opération internationale menée par les autorités françaises et néerlandaises, avec le soutien d&#39;Europol et d&#39;Eurojust, a démantelé le service VPN et saisi ses domaines après avoir intercepté son trafic. La saisie de domaine est un mécanisme juridique utilisé par les gouvernements, comme le Département de la Justice américain, pour prendre le contrôle de sites web et de leurs noms de domaine dans le cadre d&#39;enquêtes sur la cybercriminalité. Ce cas s&#39;inscrit dans une tendance plus large où les forces de l&#39;ordre visent l&#39;infrastructure VPN pour réduire l&#39;anonymat, comme le montrent les précédentes saisies de services tels que First VPN.</div></section>
+    </div>
+  <div class="tags"><code>#cybersecurity</code>, <code>#law enforcement</code>, <code>#VPN</code>, <code>#privacy</code>, <code>#technology</code></div>
+  <details><summary>References</summary><ul><li><a href="https://arstechnica.com/tech-policy/2026/05/police-boast-of-hacking-vpn-where-criminals-believed-themselves-to-be-safe/">Police boast of hacking VPN where criminals &quot;believed...&quot; - Ars Techni...</a></li><li><a href="https://www.europol.europa.eu/media-press/newsroom/news/cybercriminal-vpn-used-ransomware-actors-dismantled-in-global-crackdown">Cybercriminal VPN used by ransomware actors dismantled in... | Europol</a></li><li><a href="https://www.justice.gov/opa/pr/justice-department-seizes-domains-behind-major-information-stealing-malware-operation">Office of Public Affairs | Justice Department Seizes Domains Behind ...</a></li></ul></details>
+</article>
+
+<article id="item-4">
+  <header>
+        <h2 class="item-title"><a href="https://www.technologyreview.com/2026/05/21/1137632/lawsuit-trump-administration-online-safety-coalition-for-independent-technology-research/">Tech researchers are suing the Trump administration over the future of online safety.</a></h2>
+    <div class="meta">rss · MIT Technology Review · May 21, 09:00</div>
+  </header>
+    <div class="lang-blocks">
+        <section class="lang"><h3>EN</h3><div class="content">Tech researchers have filed a lawsuit against the Trump administration, alleging that the administration has targeted scholars studying hate speech, harassment, propaganda and disinformation online. The case, which could have global repercussions for online safety and free speech, made its first appearance in court last week.<br /><br />The lawsuit challenges the administration’s aggressive stance on online safety research, potentially reshaping how governments regulate speech and protect digital public spaces. Its outcome could set a precedent that influences free speech protections worldwide and determines the future of online safety policies.<br /><br />The suit alleges that the administration has targeted scholars examining hate speech, harassment, propaganda and disinformation, raising concerns about government interference in academic research. The case is notable because it confronts a legal landscape where hate speech lacks a universal definition and disinformation spreads rapidly online.<br /><br />Hate speech is a term used to describe public speech that insults, offends or intimidates individuals or groups based on traits such as race, religion, gender or disability, though no universal legal definition exists under international human rights law. Disinformation online refers to false or misleading information that is deliberately spread, often via platforms that amplify its reach, as documented by tools like Hamilton 2.0 and Hoaxy that track Russian propaganda and automated sharing. Researchers studying these phenomena have faced increasing pressure from the Trump administration, which has targeted their work on hate speech and disinformation, prompting the current legal challenge.</div></section>
+        <section class="lang"><h3>FR</h3><div class="content">Des chercheurs technologiques ont intenté un procès contre l&#39;administration Trump, affirmant que celle‐ci a visé des chercheurs étudiant la haine, le harcèlement, la propagande et la désinformation en ligne. Le dossier, qui pourrait avoir des répercussions mondiales sur la sécurité en ligne et la liberté d&#39;expression, a fait sa première apparition en cour la semaine dernière.<br /><br />Le procès conteste l&#39;approche agressive de l&#39;administration sur la recherche de sécurité en ligne, ce qui pourrait redéfinir la manière dont les gouvernements régulent le discours et protègent les espaces numériques. Son issue pourrait établir un précédent influençant la protection de la liberté d&#39;expression à l&#39;échelle mondiale et déterminer l&#39;avenir des politiques de sécurité en ligne.<br /><br />Le recours allègue que l&#39;administration a visé des chercheurs étudiant la haine, le harcèlement, la propagande et la désinformation, soulevant des inquiétudes quant à l&#39;ingérence gouvernementale dans la recherche académique. Le dossier est marquant car il confronte un cadre juridique où la haine n&#39;a pas de définition universelle et où la désinformation se propage rapidement en ligne.<br /><br />Le terme « discours haineux » désigne un discours public qui insulte, offense ou intimide des personnes ou groupes en fonction de traits tels que la race, la religion, le genre ou le handicap, même si aucune définition juridique universelle n&#39;existe sous le droit international des droits de l&#39;homme. La désinformation en ligne correspond à de fausses ou trompeuses informations qui sont délibérément diffusées, souvent via des plateformes qui en augmentent la portée, comme le montrent les outils Hamilton 2.0 et Hoaxy qui suivent la propagande russe et le partage automatisé. Les chercheurs qui étudient ces phénomènes ont vu leurs travaux sur la haine et la désinformation être de plus en plus ciblés par l&#39;administration Trump, ce qui a conduit à l&#39;actuel défi juridique.</div></section>
+    </div>
+  <div class="tags"><code>#online safety</code>, <code>#free speech</code>, <code>#legal action</code>, <code>#technology policy</code>, <code>#Trump administration</code></div>
+  <details><summary>References</summary><ul><li><a href="https://www.un.org/en/hate-speech/understanding-hate-speech/what-is-hate-speech">What is hate speech? | United Nations</a></li><li><a href="https://www.rand.org/research/projects/truth-decay/fighting-disinformation/search.html">Tools That Fight Disinformation Online | RAND</a></li></ul></details>
+</article>
+
+<article id="item-5">
+  <header>
+        <h2 class="item-title"><a href="https://www.bloomberg.com/news/videos/2026-05-22/spacex-starship-lifts-off-in-high-stakes-test-video">SpaceX Starship lifts off in a high‐stakes test.</a></h2>
+    <div class="meta">rss · Bloomberg Technology · May 22, 22:51</div>
+  </header>
+    <div class="lang-blocks">
+        <section class="lang"><h3>EN</h3><div class="content">SpaceX’s Starship rocket lifted off from its Texas launch site on May 22, 2026, marking a successful test of the fully reusable super heavy‐lift vehicle. The flight demonstrated the vehicle’s ability to ascend before returning to the launch tower, a key milestone toward future crewed missions and satellite deployment.<br /><br />This successful test brings SpaceX closer to achieving its vision of affordable, reusable launch services for crewed Moon missions, global broadband, and orbital habitats. It also validates the technical approach needed for NASA’s Artemis program and future Mars ambitions.<br /><br />As of May 22, 2026, Starship has completed 12 test flights, achieving 7 successful landings and suffering 5 failures, with the latest flight demonstrating a full ascent and planned vertical landing at the launch tower. The vehicle uses Raptor engines fueled by liquid methane and liquid oxygen, and both stages are designed to return to the launch site for reuse. SpaceX is developing a crewed variant for NASA&#39;s Artemis program, targeting a lunar landing in 2028.<br /><br />Starship is a two‐stage, fully reusable super heavy‐lift launch vehicle being developed by SpaceX, intended to replace the Falcon 9 and Falcon Heavy rockets. It combines a Super Heavy booster and a Starship spacecraft, both powered by Raptor engines that burn liquid methane and liquid oxygen, and each stage is designed to land vertically at the launch tower for reuse. The system aims to lower launch costs through mass production and reusability, supporting ambitions for crewed lunar missions under NASA’s Artemis program and future Mars travel. Human spaceflight, which has been continuous on the International Space Station since 2000, now includes commercial crewed flights by companies like SpaceX, expanding access beyond government programs. These developments represent a major shift in aerospace engineering toward sustainable, high‐capacity access to space.</div></section>
+        <section class="lang"><h3>FR</h3><div class="content">Le rocket Starship de SpaceX a décollé de son site de lancement au Texas le 22 mai 2026, marquant un test réussi du véhicule super lourd réutilisable. Ce vol a démontré la capacité du véhicule à monter avant de retourner à la tour de lancement, une étape clé vers des missions d&#39;équipage futures et le déploiement de satellites.<br /><br />Ce test réussi rapproche SpaceX de sa vision d&#39;un service de lancement abordable et réutilisable pour des missions lunaires d&#39;équipage, le broadband mondial et les habitats orbitaux. Il valide également l&#39;approche technique nécessaire au programme Artemis de la NASA et aux ambitions futures vers Mars.<br /><br />À la date du 22 mai 2026, Starship a effectué 12 vols d&#39;essai, avec 7 atterrissages réussis et 5 échecs, le dernier vol démontrant une ascension complète et un atterrissage vertical prévu à la tour de lancement. Le véhicule utilise des moteurs Raptor alimentés par du méthane liquide et de l&#39;oxygène liquide, et les deux étages sont conçus pour revenir à la site de lancement pour être réutilisés. SpaceX développe une variante crewed pour le programme Artemis de la NASA, visant un atterrissage lunaire en 2028.<br /><br />Starship est un lanceur super lourd réutilisable à deux étages développé par SpaceX, destiné à remplacer les fusées Falcon 9 et Falcon Heavy. Il combine un booster Super Heavy et un vaisseau Starship, tous deux propulsés par des moteurs Raptor brûlant du méthane liquide et de l&#39;oxygène liquide, et chaque étage est conçu pour atterrir verticalement sur la tour de lancement afin d&#39;être réutilisé. Le système vise à réduire les coûts de lancement grâce à la production en série et à la réutilisation, soutenant les ambitions de missions lunaires crewed dans le cadre du programme Artemis de la NASA et des voyages futurs vers Mars. Le vol humain continue depuis 2000 avec une présence permanente sur la Station spatiale internationale, et les vols d&#39;équipage commerciaux de SpaceX élargissent l&#39;accès au-delà des programmes gouvernementaux. Ces développements représentent un changement majeur dans l&#39;ingénierie aérospatiale vers un accès durable et à haute capacité à l&#39;espace.</div></section>
+    </div>
+  <div class="tags"><code>#SpaceX</code>, <code>#Starship</code>, <code>#Space Exploration</code>, <code>#Technology</code>, <code>#Aerospace</code></div>
+  <details><summary>References</summary><ul><li><a href="https://en.wikipedia.org/wiki/Starship_rocket">Starship rocket</a></li><li><a href="https://www.spacex.com/vehicles/starship">Starship - SpaceX</a></li></ul></details>
+</article>
+
+<article id="item-6">
+  <header>
+        <h2 class="item-title"><a href="https://www.technologyreview.com/2026/05/21/1137735/anthropics-code-with-claude-showed-off-codings-future-whether-you-like-it-or-not/">Anthropic’s Code with Claude showcased AI coding’s future at a London developer event</a></h2>
+    <div class="meta">rss · MIT Technology Review · May 21, 14:30</div>
+  </header>
+    <div class="lang-blocks">
+        <section class="lang"><h3>EN</h3><div class="content">Anthropic held a two‐day Code with Claude developer conference in London that began on May 19, the same day as Google I/O, where it demonstrated its AI‐powered coding tool to software developers. The event featured workshops, labs and sessions tailored to developers of all experience levels, though applications had already closed and attendees would be notified in early April.<br /><br />The showcase highlights a growing competition among major AI firms to embed coding assistance directly into developer workflows, which could reshape how software is built. If successful, it may increase productivity for developers and intensify pressure on rivals like Google to improve their own AI coding tools.<br /><br />The London event ran for two days and was limited in capacity, with applications closed and notifications scheduled for early April. Attendees were promised hands‐on sessions covering the Claude API, CLI tools and the Model Context Protocol, and the agenda emphasized practical ways to use the existing models.<br /><br />Anthropic is a research and safety-focused AI company known for its Claude large language models. Code with Claude is a developer conference series launched to demonstrate how the Claude models can be used for software development tasks such as writing, reviewing and debugging code. The London event, held on May 19 2026, coincided with Google I/O, underscoring the competitive landscape of AI‐focused developer gatherings. The conference offered workshops and labs on the Claude API, command‐line tools and the Model Context Protocol, aiming to help engineers integrate AI into their coding pipelines.</div></section>
+        <section class="lang"><h3>FR</h3><div class="content">Anthropic a organisé un événement développeur de deux jours, Code with Claude, à Londres, qui a débuté le 19 mai, le même jour que le Google I/O, où il a présenté son outil de codage assisté par IA aux développeurs. L&#39;événement comprenait des ateliers, des laboratoires et des sessions adaptées à tous les niveaux d&#39;expérience, mais les inscriptions étaient déjà fermées et les participants seraient informés fin avril.<br /><br />Cette vitrine montre la concurrence croissante entre les grands acteurs de l&#39;IA pour intégrer une assistance au codage directement dans les flux de travail des développeurs, ce qui pourrait transformer la façon dont le logiciel est créé. Si elle réussit, elle pourrait accroître la productivité des développeurs et exercer une pression accrue sur des rivaux comme Google pour améliorer leurs propres outils d&#39;IA pour le codage.<br /><br />L&#39;événement de Londres a duré deux jours et était limité en capacité, les inscriptions étant déjà fermées et les notifications prévues pour début avril. Les participants devaient suivre des sessions pratiques sur l&#39;API Claude, les outils en ligne de commande et le Model Context Protocol, avec un programme axé sur l&#39;utilisation concrète des modèles existants.<br /><br />Anthropic est une société de recherche et de sécurité spécialisée en IA, reconnue pour ses modèles de langage Claude. Code with Claude est une série de conférences destinées aux développeurs, visant à montrer comment les modèles Claude peuvent être employés pour le développement logiciel, comme la rédaction, la relecture et le débogage du code. L&#39;événement de Londres, qui s&#39;est tenu le 19 mai 2026, a eu lieu le même jour que le Google I/O, soulignant le paysage concurrentiel des rassemblements de développeurs axés sur l&#39;IA. La conférence proposait des ateliers et des laboratoires sur l&#39;API Claude, les outils en ligne de commande et le Model Context Protocol, afin d&#39;aider les ingénieurs à intégrer l&#39;IA dans leurs pipelines de codage.</div></section>
+    </div>
+  <div class="tags"><code>#AI</code>, <code>#Coding</code>, <code>#Tech Events</code>, <code>#Anthropic</code>, <code>#Software Development</code></div>
+  <details><summary>References</summary><ul><li><a href="https://www.technologyreview.com/2026/05/21/1137735/anthropics-code-with-claude-showed-off-codings-future-whether-you-like-it-or-not/">Anthropic’s Code with Claude showed off coding&#39;s future—whether you like it or not | MIT Technology Review</a></li><li><a href="https://claude.com/code-with-claude">Code with Claude — Anthropic&#39;s Developer Conference</a></li><li><a href="https://simonwillison.net/2026/May/6/code-w-claude-2026/">Live blog: Code w/ Claude 2026</a></li></ul></details>
+</article>
+
+<article id="item-7">
+  <header>
+        <h2 class="item-title"><a href="https://www.technologyreview.com/2026/05/22/1137845/the-download-coding-future-steroid-olympics-ai-science/">The Download covers coding’s future, the ‘Steroid Olympics,’ and AI-driven science.</a></h2>
+    <div class="meta">rss · MIT Technology Review · May 22, 12:10</div>
+  </header>
+    <div class="lang-blocks">
+        <section class="lang"><h3>EN</h3><div class="content">At Anthropic’s developer event in London, the company demonstrated Code with Claude, an AI‐assisted coding tool that can write, execute and review code in the terminal. The newsletter also previewed the upcoming ‘Steroid Olympics’—the Enhanced Games that will allow athletes to use performance‐enhancing drugs without drug testing. It highlighted recent AI‐driven advances in scientific research.<br /><br />The rollout of AI‐assisted coding tools like Code with Claude could reshape how developers write and maintain software, making coding faster and more accessible while raising questions about code ownership and quality. Meanwhile, the Steroid Olympics controversy highlights growing debates over athlete autonomy, safety, and the ethics of permitting performance‐enhancing substances in sport. Together, these stories illustrate how emerging technologies are influencing both professional productivity and societal norms.<br /><br />Code with Claude runs from the terminal, interpreting natural‐language commands to read files, generate code, run scripts and verify results, and can be extended via an MCP integration that adds OpenMemory support. The Enhanced Games are scheduled for 24 May 2026 in Las Vegas and will feature swimming, athletics and weightlifting events where athletes may use FDA‐approved performance‐enhancing drugs under medical supervision. Both initiatives remain in preview stages, with the coding tool still being evaluated by developers and the games awaiting regulatory approval.<br /><br />Anthropic, a subsidiary of Google’s Alphabet, developed Claude, a large language model positioned as a safe and accurate AI assistant for coding tasks. Claude Code is a terminal‐based interface that lets users interact with the model using natural language, enabling it to read codebases, write new files, execute programs and perform tests. The Enhanced Games, founded by Australian entrepreneur Aron D&#39;Souza, aim to create a competition where performance‐enhancing substances are permitted under medical supervision, challenging the traditional anti‐doping framework of the International Olympic Committee. The first edition is scheduled for May 24 2026 in Las Vegas and will include swimming, athletics and weightlifting events. External guides describe how to integrate OpenMemory with Claude Code by adding an MCP transport, allowing the AI to access additional memory resources during coding sessions.</div></section>
+        <section class="lang"><h3>FR</h3><div class="content">Lors de l’événement développeur d’Anthropic à Londres, la société a présenté Code with Claude, un outil d’assistance à la programmation basé sur l’IA capable d’écrire, d’exécuter et de réviser du code dans le terminal. Le newsletter a également présenté un aperçu des prochains « Jeux stéroïdes », les Enhanced Games qui autoriseront les athlètes à utiliser des substances dopantes sans contrôle antidopage. Il a aussi souligné les récentes avancées de l’IA dans la recherche scientifique.<br /><br />Le déploiement d’outils d’assistance à la programmation comme Code with Claude pourrait transformer le travail des développeurs, rendant le codage plus rapide et accessible tout en posant des questions sur la propriété et la qualité du code. La controverse autour des Jeux stéroïdes soulève également des débats sur l’autonomie des athlètes, leur sécurité et l’éthique d’une autorisation de substances dopantes dans le sport. Ensemble, ces articles montrent comment les technologies émergentes influencent à la fois la productivité professionnelle et les normes sociétales.<br /><br />Code with Claude fonctionne depuis le terminal, interprétant des commandes en langage naturel pour lire des fichiers, générer du code, exécuter des scripts et vérifier les résultats, et peut être étendu via une intégration MCP qui ajoute le support d’OpenMemory. Les Enhanced Games sont prévues le 24 mai 2026 à Las Vegas et comprendront des épreuves de natation, d’athlétisme et d’haltérophilie où les athlètes pourront utiliser des substances dopantes approuvées par la FDA sous supervision médicale. Les deux initiatives restent en phase de prévisualisation, le tool de codage étant encore évalué par les développeurs et les jeux attendant une approbation réglementaire.<br /><br />Anthropic, filiale d’Alphabet (Google), a développé Claude, un modèle de langage présenté comme un assistant IA sûr et précis pour les tâches de codage. Claude Code est une interface en ligne de commande qui permet aux utilisateurs d’interagir avec le modèle via un langage naturel, capable de lire des bases de code, d’écrire de nouveaux fichiers, d’exécuter des programmes et de réaliser des tests. Les Enhanced Games, créés par l’entrepreneur australien Aron D&#39;Souza, visent à organiser une compétition où les substances dopantes sont autorisées sous supervision médicale, remettant en cause le cadre antidopage traditionnel du Comité olympique international. La première édition aura lieu le 24 mai 2026 à Las Vegas et comprendra des épreuves de natation, d’athlétisme et d’haltérophilie. Des guides externes expliquent comment intégrer OpenMemory à Claude Code en ajoutant un transport MCP, ce qui permet à l’IA d’accéder à des ressources mémoire supplémentaires lors des sessions de codage.</div></section>
+    </div>
+  <div class="tags"><code>#AI</code>, <code>#Coding</code>, <code>#Technology</code>, <code>#Anthropic</code>, <code>#Innovation</code></div>
+  <details><summary>References</summary><ul><li><a href="https://en.wikipedia.org/wiki/Steroid_Olympics">Steroid Olympics</a></li><li><a href="https://en.wikipedia.org/wiki/Enhanced_Games">Enhanced Games - Wikipedia</a></li><li><a href="https://www.bbc.com/news/articles/cedpz1zqp8po">The Enhanced Games: Like the Olympics, but steroids are allowed</a></li></ul></details>
+</article>
+
+<article id="item-8">
+  <header>
+        <h2 class="item-title"><a href="https://www.bloomberg.com/news/articles/2026-05-23/hyperscaler-debt-flood-brings-derivatives-bonanza-credit-weekly">Hyperscaler debt flood brings a derivatives bonanza.</a></h2>
+    <div class="meta">rss · Bloomberg Technology · May 23, 19:00</div>
+  </header>
+    <div class="lang-blocks">
+        <section class="lang"><h3>EN</h3><div class="content">Big tech companies have raised hundreds of billions of dollars to fund artificial intelligence investments, and Wall Street banks are increasingly trading credit derivatives to maintain business with these hyperscalers. The surge in debt issuance has prompted banks to expand their use of credit default swaps and other synthetic structures to manage the heightened credit risk.<br /><br />This development matters because the massive debt load could amplify credit risk across the financial system if defaults rise, and the growing derivative market may increase volatility and systemic exposure. It also signals a deeper integration of tech financing with traditional banking practices, affecting investors and regulators.<br /><br />The debt issuance totals several hundred billion dollars, with major players like Microsoft, Amazon, and Google leading the raises, while banks rely on ISDA master agreements to trade credit default swaps linked to these issuers. Additionally, synthetic CDOs and credit-linked notes have become popular funding mechanisms for the derivatives exposure.<br /><br />Hyperscalers are large cloud service providers that operate massive data centers offering scalable computing, storage, and networking resources, as described by sources such as Wikipedia and Red Hat. Credit derivatives are financial contracts that transfer the risk of borrower default to a third party, commonly using credit default swaps under ISDA agreements. In recent years, big tech firms have collectively raised hundreds of billions of dollars in debt to fund AI development, creating a new source of credit risk for lenders and banks. Wall Street banks have responded by increasing their trading of these derivatives to maintain relationships with the hyperscalers and to manage the associated risk.</div></section>
+        <section class="lang"><h3>FR</h3><div class="content">Les grandes entreprises technologiques ont levé des centaines de milliards de dollars pour financer leurs investissements en intelligence artificielle, et les banques de Wall Street augmentent le trading de dérivés de crédit afin de conserver leurs relations avec ces hyperscalers. Cette hausse de l&#39;endettement a incité les banques à élargir l&#39;utilisation de swaps de défaut de crédit et d&#39;autres structures synthétiques pour gérer le risque de crédit accru.<br /><br />Ce développement est important car la charge de dette massive pourrait amplifier le risque de crédit dans le système financier si des défauts surviennent, et le marché croissant des dérivés peut accroître la volatilité et l&#39;exposition systémique. Il montre aussi une intégration plus profonde du financement technologique avec les pratiques bancaires traditionnelles, affectant les investisseurs et les régulateurs.<br /><br />Le montant de la dette s&#39;élève à plusieurs centaines de milliards de dollars, les principaux acteurs étant Microsoft, Amazon et Google, tandis que les banques utilisent des accords maîtres ISDA pour négocier des swaps de défaut de crédit liés à ces émetteurs. De plus, les CDO synthétiques et les notes liées au crédit sont devenus des mécanismes de financement populaires pour l&#39;exposition aux dérivés.<br /><br />Les hyperscalers sont de grands fournisseurs de services cloud qui exploitent d&#39;immenses centres de données offrant des ressources de calcul, de stockage et de réseau évolutives, comme le précisent des sources telles que Wikipedia et Red Hat. Les dérivés de crédit sont des contrats financiers qui transfèrent le risque de défaut de l&#39;emprunteur à un tiers, généralement via des swaps de défaut de crédit sous les accords ISDA. Au cours des dernières années, les grandes entreprises technologiques ont levé collectivement plusieurs centaines de milliards de dollars de dette pour financer le développement de l&#39;intelligence artificielle, créant ainsi une nouvelle source de risque de crédit pour les prêteurs et les banques. Les banques de Wall Street ont répondu en augmentant le trading de ces dérivés afin de conserver leurs relations avec les hyperscalers et de gérer le risque associé.</div></section>
+    </div>
+  <div class="tags"><code>#Artificial Intelligence</code>, <code>#Corporate Debt</code>, <code>#Credit Derivatives</code>, <code>#Technology</code>, <code>#Wall Street</code></div>
+  <details><summary>References</summary><ul><li><a href="https://en.wikipedia.org/wiki/Hyperscale_computing">Hyperscale computing - Wikipedia</a></li><li><a href="https://www.redhat.com/en/topics/cloud-computing/what-is-a-hyperscaler">What is a hyperscaler?</a></li></ul></details>
+</article>
+
+<article id="item-9">
+  <header>
+        <h2 class="item-title"><a href="https://www.bloomberg.com/news/videos/2026-05-22/spacex-starship-rocket-takes-off-from-texas-video">SpaceX Starship rocket takes off from Texas.</a></h2>
+    <div class="meta">rss · Bloomberg Technology · May 22, 23:20</div>
+  </header>
+    <div class="lang-blocks">
+        <section class="lang"><h3>EN</h3><div class="content">SpaceX successfully launched its Starship rocket from Texas. The vehicle reached space a few minutes after liftoff. It then deployed 20 dummy Starlink satellites.<br /><br />This launch demonstrates major upgrades to the Starship system, showing increased power and reliability that could lower launch costs and enable more frequent missions. It impacts the broader space industry by advancing reusable launch technology and supporting future crewed missions to the Moon and Mars.<br /><br />The flight marked the first successful deployment of 20 dummy Starlink satellites, demonstrating the upgraded power and capability of the new Starship configuration. It also highlighted that the rocket is built at SpaceX&#39;s Starbase facility in Texas and uses Raptor engines fueled by liquid methane and liquid oxygen. While the mission was a test, it follows a series of 12 launches with only 7 successful flights to date.<br /><br />Starship is a two-stage, fully reusable super heavy-lift launch vehicle under development by SpaceX, currently built and launched from Starbase in Texas. It is intended to replace the Falcon 9 and Falcon Heavy rockets and would be the first fully reusable orbital rocket with the highest payload capacity of any launch vehicle. As of May 22, 2026, Starship has completed 12 launches with 7 successes and 5 failures. The vehicle uses Raptor engines burning liquid methane and liquid oxygen, and both stages are designed to return vertically to the launch tower for reuse.</div></section>
+        <section class="lang"><h3>FR</h3><div class="content">SpaceX a réussi à lancer son rocket Starship depuis le Texas. Le véhicule a atteint l&#39;espace quelques minutes après le décollage. Il a ensuite déployé 20 satellites d&#39;essai Starlink.<br /><br />Ce lancement montre des améliorations majeures du système Starship, indiquant une plus grande puissance et fiabilité qui pourraient réduire les coûts de lancement et permettre des missions plus fréquentes. Il influence l&#39;industrie spatiale en avançant la technologie de lancement réutilisable et en soutenant les futures missions crewées vers la Lune et Mars.<br /><br />Ce vol a marqué le premier déploiement réussi de 20 satellites d&#39;essai Starlink, montrant la puissance et la capacité améliorée de la nouvelle configuration Starship. Il a également souligné que le rocket est construit à la base Starbase de SpaceX au Texas et utilise des moteurs Raptor alimentés par du méthane liquide et de l&#39;oxygène liquide. Bien que la mission soit un test, elle suit une série de 12 lancements avec seulement 7 vols réussis à ce jour.<br /><br />Starship est un lanceur super lourd à deux étages, entièrement réutilisable, en développement par SpaceX, construit et lancé depuis Starbase au Texas. Il est destiné à remplacer les fusées Falcon 9 et Falcon Heavy et serait le premier rocket orbital entièrement réutilisable avec la plus grande capacité de charge utile de tout véhicule de lancement. À ce jour, le 22 mai 2026, Starship a effectué 12 lancements avec 7 succès et 5 échecs. Le véhicule utilise des moteurs Raptor brûlant du méthane liquide et de l&#39;oxygène liquide, et les deux étages sont conçus pour revenir verticalement à la tour de lancement pour réutilisation.</div></section>
+    </div>
+  <div class="tags"><code>#SpaceX</code>, <code>#Starship</code>, <code>#Space Launch</code>, <code>#Starlink</code>, <code>#Technology</code></div>
+  <details><summary>References</summary><ul><li><a href="https://en.wikipedia.org/wiki/Starship_rocket">Starship rocket</a></li><li><a href="https://en.wikipedia.org/wiki/SpaceX_Starship">SpaceX Starship - Wikipedia</a></li><li><a href="https://www.spacex.com/vehicles/starship">Starship - SpaceX</a></li></ul></details>
+</article>
+
+<article id="item-10">
+  <header>
+        <h2 class="item-title"><a href="https://www.bloomberg.com/news/videos/2026-05-22/micron-ceo-on-expanding-chip-production-memory-demand-video">Micron CEO announces US DRAM expansion to meet rising memory demand.</a></h2>
+    <div class="meta">rss · Bloomberg Technology · May 22, 18:56</div>
+  </header>
+    <div class="lang-blocks">
+        <section class="lang"><h3>EN</h3><div class="content">Micron CEO Sanjay Mehrotra announced that the company is expanding DRAM manufacturing facilities in the United States to meet rising demand for memory chips across automotive, aerospace, defense, industrial and networking sectors. He made these remarks during a Bloomberg interview with Tyler Kendall, emphasizing the strategic importance of advanced DRAM technology.<br /><br />This expansion strengthens the United States&#39; domestic semiconductor supply chain, reducing reliance on overseas manufacturing and supporting national security priorities. It also positions Micron to capture growing demand in high‐value sectors such as automotive and defense, aligning with broader industry trends toward more resilient chip production.<br /><br />The plan involves building new or expanding existing DRAM fabs in the United States, a move that will require substantial capital investment and several years to bring products to market. Micron&#39;s focus on DRAM, rather than logic chips, reflects the specific demand for memory in automotive and defense applications. The expansion is part of broader U.S. efforts under the CHIPS and Science Act to boost domestic semiconductor production.<br /><br />DRAM is a type of dynamic random‐access memory that stores each bit in a capacitor‐transistor cell and requires periodic refreshing to retain data. Manufacturing DRAM follows the semiconductor device fabrication process, which involves multiple photolithography, deposition and etching steps performed in clean‐room fabs that can take up to 15 weeks for advanced nodes. The United States has been promoting domestic chip production through policies such as the CHIPS and Science Act, aiming to reduce reliance on Asian manufacturers.</div></section>
+        <section class="lang"><h3>FR</h3><div class="content">Le PDG de Micron Sanjay Mehrotra a annoncé que l&#39;entreprise étend ses usines de fabrication de DRAM aux États‐Unis pour répondre à la demande croissante de puces mémoire dans les secteurs automobile, aérospatial, défense, industriel et réseaux. Il a souligné l&#39;importance stratégique de la technologie DRAM avancée lors d&#39;une interview avec Tyler Kendall de Bloomberg.<br /><br />Cette expansion renforce la chaîne d&#39;approvisionnement semiconductrice nationale des États‐Unis, réduisant la dépendance aux usines à l&#39;étranger et soutenant les priorités de sécurité nationale. Elle permet également à Micron de répondre à la demande croissante dans des secteurs à forte valeur ajoutée comme l&#39;automobile et la défense, en phase avec les tendances industrielles vers une production de puces plus résiliente.<br /><br />Le plan prévoit la construction de nouvelles usines ou l&#39;expansion d&#39;usines existantes de DRAM aux États‐Unis, ce qui nécessite un investissement de capitaux important et plusieurs années avant que les produits soient disponibles. La concentration de Micron sur la DRAM, plutôt que sur les puces logiques, reflète la demande spécifique en mémoire pour les applications automobile et de défense. Cette initiative s&#39;inscrit dans le cadre de l&#39;effort américain plus large prévu par la loi CHIPS et Science pour renforcer la production de semi‐conducteurs domestique.<br /><br />La DRAM, ou mémoire à accès aléatoire dynamique, stocke chaque bit dans une cellule composé d&#39;un condensateur et d&#39;un transistor, et nécessite un rafraîchissement périodique pour conserver les données. Sa fabrication suit le processus de production de dispositifs semiconducteurs, incluant de multiples étapes de photolithographie, de dépôt et d&#39;usinage dans des usines propres, ce qui peut prendre jusqu&#39;à 15 semaines pour les nœuds avancés. Les États‐Unis encouragent la production domestique de puces via des politiques comme la loi CHIPS et Science, afin de diminuer la dépendance aux fabricants asiatiques.</div></section>
+    </div>
+  <div class="tags"><code>#Semiconductors</code>, <code>#Memory chips</code>, <code>#US manufacturing</code>, <code>#Technology</code>, <code>#Industry news</code></div>
+  <details><summary>References</summary><ul><li><a href="https://en.wikipedia.org/wiki/Dynamic_random-access_memory">Dynamic random-access memory - Wikipedia</a></li><li><a href="https://semiconductor.samsung.com/dram/">DRAM | Memory | Samsung Semiconductor Global</a></li><li><a href="https://en.wikipedia.org/wiki/Semiconductor_manufacturing_process">Semiconductor manufacturing process</a></li></ul></details>
+</article>
+
+<article id="item-11">
+  <header>
+        <h2 class="item-title"><a href="https://www.bloomberg.com/news/articles/2026-05-22/us-weighs-chip-tariffs-to-spur-domestic-growth-trade-chief-says">US weighs chip tariffs to spur domestic growth, trade chief says.</a></h2>
+    <div class="meta">rss · Bloomberg Technology · May 22, 21:46</div>
+  </header>
+    <div class="lang-blocks">
+        <section class="lang"><h3>EN</h3><div class="content">The Trump administration is considering tariffs on imported semiconductors to encourage domestic chip manufacturing, according to USTR Jamieson Greer. However, no new tariffs have been announced and the policy remains under review.<br /><br />Imposing tariffs could reshape global semiconductor supply chains and increase costs for US tech firms that rely on foreign chips. It may also accelerate domestic manufacturing capacity, influencing the broader technology sector and national security considerations.<br /><br />The administration is evaluating tariffs under Section 232, which could impose a 25% duty on selected semiconductor imports, though no specific rates have been set. The proposal remains provisional, with no timeline for implementation and ongoing trade negotiations influencing its scope.<br /><br />Section 232 of the Trade Expansion Act allows the president to impose tariffs on imports deemed a threat to national security, and it was used in 2026 to target semiconductor articles with a 25% duty. The United States Trade Representative, Jamieson Greer, heads the agency that develops trade policy and advises the president on such measures. Semiconductor manufacturing has been a focus of domestic industrial policy, with the administration seeking to boost U.S. production to reduce reliance on foreign suppliers. Recent proposals also consider broader tariffs after trade negotiations conclude, reflecting ongoing tensions with China over technology and trade.</div></section>
+        <section class="lang"><h3>FR</h3><div class="content">L&#39;administration Trump envisage des tarifs sur les semi-conducteurs importés pour stimuler la production nationale de puces, a déclaré Jamieson Greer, représentant du commerce. Néanmoins, aucun nouveau tarif n&#39;a été annoncé et la mesure reste en cours d&#39;examen.<br /><br />L&#39;imposition de tarifs pourrait transformer les chaînes d&#39;approvisionnement mondiales en semi-conducteurs et augmenter les coûts pour les entreprises technologiques américaines dépendantes des puces étrangères. Cela pourrait également accélérer la capacité de production nationale, influençant le secteur technologique et les considérations de sécurité nationale.<br /><br />L&#39;administration évalue les tarifs dans le cadre de la Section 232, pouvant imposer un droit de 25 % sur certaines importations de semi-conducteurs, mais aucun taux précis n&#39;a encore été fixé. La proposition reste provisoire, sans calendrier d&#39;application et soumise à des négociations commerciales en cours.<br /><br />L&#39;article 232 de la loi d&#39;expansion du commerce permet au président d&#39;imposer des droits de douane sur les importations jugées menacer la sécurité nationale, et il a été utilisé en 2026 pour viser les articles de semi-conducteurs avec un droit de 25 %. Le représentant du commerce, Jamieson Greer, dirige l&#39;agence qui élabore la politique commerciale et conseille le président sur de telles mesures. La fabrication de semi-conducteurs est au cœur de la politique industrielle américaine, visant à réduire la dépendance aux fournisseurs étrangers. Des propositions récentes envisagent des tarifs plus larges après la conclusion des négociations commerciales, reflétant les tensions persistantes avec la Chine en matière de technologie et de commerce.</div></section>
+    </div>
+  <div class="tags"><code>#Semiconductors</code>, <code>#Trade Policy</code>, <code>#Domestic Manufacturing</code>, <code>#US Politics</code>, <code>#Technology</code></div>
+  <details><summary>References</summary><ul><li><a href="https://www.strtrade.com/trade-news-resources/tariff-actions-resources/section-232-investigation-semiconductors">Section 232 Tariffs on Semiconductors | Sandler, Travis &amp; Rosenberg, P.A.</a></li><li><a href="https://www.federalregister.gov/documents/2026/01/20/2026-01052/adjusting-imports-of-semiconductors-semiconductor-manufacturing-equipment-and-their-derivative">Adjusting Imports of Semiconductors, Semiconductor Manufacturing ...</a></li><li><a href="https://en.wikipedia.org/wiki/United_States_Trade_Representative">United States Trade Representative</a></li></ul></details>
+</article>
+
+<article id="item-12">
+  <header>
+        <h2 class="item-title"><a href="https://www.bloomberg.com/news/videos/2026-05-22/lenovo-cfo-weighs-in-on-strong-ai-growth-video">Lenovo CFO says AI growth is strong.</a></h2>
+    <div class="meta">rss · Bloomberg Technology · May 22, 18:11</div>
+  </header>
+    <div class="lang-blocks">
+        <section class="lang"><h3>EN</h3><div class="content">Lenovo&#39;s shares jumped in Hong Kong trading after its CFO Winston Cheng highlighted robust AI‐related earnings that offset rising component costs. The CFO spoke about the results in a Bloomberg Tech interview, noting that AI revenue surged 84% in the fourth quarter.<br /><br />The strong AI earnings show that artificial intelligence is becoming a core profit driver for hardware manufacturers, not just a long‐term theme. This trend could accelerate investment in AI chips and influence pricing dynamics across the semiconductor supply chain.<br /><br />Lenovo reported that AI‐related revenue accounted for 38% of total group revenue in Q4, up from a smaller share a year earlier. Component costs rose about 12% year‐over‐year due to higher raw material prices and supply chain disruptions, yet the earnings growth helped the stock rise nearly 20%.<br /><br />Artificial intelligence has moved from a speculative investment theme to a measurable driver of corporate earnings, as noted by recent market analyses. Lenovo&#39;s AI revenue surge reflects the broader industry shift where AI services now represent a substantial portion of technology company revenues. At the same time, semiconductor component costs have risen sharply, with industry reports indicating price increases of around 12% due to raw material inflation and supply chain constraints. These opposing forces illustrate the challenges and opportunities facing hardware manufacturers in the current economic environment.</div></section>
+        <section class="lang"><h3>FR</h3><div class="content">Les actions de Lenovo ont grimpé à Hong Kong après que son CFO Winston Cheng a souligné des bénéfices solides liés à l&#39;IA, compensant l&#39;augmentation des coûts des composants. Le CFO a présenté ces résultats lors d&#39;une interview pour Bloomberg Tech, indiquant que le chiffre d&#39;affaires de l&#39;IA a augmenté de 84 % au quatrième trimestre.<br /><br />Des bénéfices solides liés à l&#39;IA montrent que l&#39;intelligence artificielle devient un moteur de profit central pour les fabricants de matériel, et non plus un simple thème à long terme. Cette tendance pourrait accélérer les investissements dans les puces IA et influencer les dynamiques de prix dans la chaîne d&#39;approvisionnement des semi‐conducteurs.<br /><br />Lenovo a indiqué que le chiffre d&#39;affaires lié à l&#39;IA représentait 38 % du chiffre d&#39;affaires total au quatrième trimestre, en hausse par rapport à l&#39;année précédente. Les coûts des composants ont augmenté d&#39;environ 12 % en glissement annuel en raison de la hausse des prix des matières premières et des perturbations de la chaîne d&#39;approvisionnement, mais la croissance des bénéfices a fait grimper l&#39;action de près de 20 %.<br /><br />L&#39;intelligence artificielle est passée d&#39;un thème d&#39;investissement spéculatif à un moteur mesurable des résultats des entreprises, selon les analyses récentes du marché. La hausse du chiffre d&#39;affaires de l&#39;IA chez Lenovo illustre le virage sectoriel où les services d&#39;IA représentent une part importante des revenus des sociétés technologiques. Parallèlement, les coûts des composants semi‐conducteurs ont augmenté de près de 12 % en raison de l&#39;inflation des matières premières et des perturbations de la chaîne d&#39;approvisionnement. Cette opposition montre les défis et les opportunités auxquels sont confrontés les fabricants de matériel dans l&#39;environnement économique actuel.</div></section>
+    </div>
+  <div class="tags"><code>#AI</code>, <code>#Technology</code>, <code>#Corporate Earnings</code>, <code>#Financial Markets</code>, <code>#China</code></div>
+  <details><summary>References</summary><ul><li><a href="https://en.wikipedia.org/wiki/AI_bubble">AI bubble - Wikipedia</a></li><li><a href="https://www.cnbc.com/2026/05/22/lenovo-shares-jump-15percent-on-record-earnings-as-ai-revenue-nearly-doubles.html">Lenovo shares jump nearly 20% on record earnings as AI revenue ...</a></li><li><a href="https://electronics360.globalspec.com/article/19692/why-electronic-manufacturing-costs-are-dependent-on-logistics-and-sourcing">Why electronic manufacturing costs are dependent on logistics and...</a></li></ul></details>
+</article>
+
+<article id="item-13">
+  <header>
+        <h2 class="item-title"><a href="https://www.technologyreview.com/2026/05/21/1137733/the-download-online-safety-climate-tech-pivot/">Tech researchers are suing the Trump administration over online safety.</a></h2>
+    <div class="meta">rss · MIT Technology Review · May 21, 12:10</div>
+  </header>
+    <div class="lang-blocks">
+        <section class="lang"><h3>EN</h3><div class="content">Tech researchers have filed a lawsuit against the Trump administration, challenging its future online safety policies and the targeting of scholars who study hate speech. The administration has been pursuing aggressive measures against researchers for months, including funding cuts and legal threats.<br /><br />This legal challenge could determine the scope of government regulation on online safety and protect the ability of researchers to investigate hate speech without retaliation. It also signals broader tensions between the administration and the tech community, potentially affecting future policy and public trust in digital platforms.<br /><br />The lawsuit was brought by a coalition of university researchers and civil‐rights organizations, alleging that the administration&#39;s actions violate First Amendment protections for academic freedom. The case may set a precedent for how future administrations can regulate or penalize research on hate speech, and it highlights the administration&#39;s broader crackdown on dissenting scholarly work.<br /><br />Online safety has become a major policy focus as platforms grapple with hate speech, misinformation, and user harassment. Researchers who study these issues have faced increasing pressure from the Trump administration, which has sought to limit their work through funding cuts and legal intimidation. The lawsuit represents a high‐profile effort to defend academic freedom and the continuity of safety research. Meanwhile, climate tech is also undergoing a major pivot, but the immediate legal battle centers on online safety regulation.</div></section>
+        <section class="lang"><h3>FR</h3><div class="content">Les chercheurs technologiques ont intenté une action en justice contre l&#39;administration Trump, contestant ses futures politiques de sécurité en ligne et le harcèlement des chercheurs sur la haine en ligne. L&#39;administration agit depuis des mois contre les chercheurs, notamment en coupant les financements et en menaçant de poursuites judiciaires.<br /><br />Cette poursuite judiciaire pourrait définir l&#39;étendue de la régulation gouvernementale en matière de sécurité en ligne et protéger la capacité des chercheurs à étudier la haine en ligne sans représailles. Elle reflète également les tensions entre l&#39;administration et la communauté technologique, pouvant influencer les politiques futures et la confiance du public dans les plateformes numériques.<br /><br />Le recours a été intenté par une coalition de chercheurs universitaires et d&#39;organisations de défense des droits civiques, alléguant que les actions de l&#39;administration violent les protections du premier amendement pour la liberté académique. Ce dossier pourrait établir un précédent quant à la manière dont les futures administrations peuvent réguler ou sanctionner la recherche sur la haine en ligne, soulignant la répression plus large de l&#39;administration envers les travaux académiques divergents.<br /><br />La sécurité en ligne est devenue une priorité majeure alors que les plateformes luttent contre la haine, la désinformation et le harcèlement des utilisateurs. Les chercheurs qui étudient ces questions subissent une pression croissante de la part de l&#39;administration Trump, qui cherche à limiter leurs travaux par des coupures de financement et une intimidation juridique. Cette poursuite représente un effort de haute visibilité pour défendre la liberté académique et la continuité de la recherche en sécurité. Parallèlement, le techno‐climat change également de façon significative, mais le conflit juridique immédiat porte sur la régulation de la sécurité en ligne.</div></section>
+    </div>
+  <div class="tags"><code>#online safety</code>, <code>#climate tech</code>, <code>#legal action</code>, <code>#technology policy</code>, <code>#research</code></div>
+  
+</article>
+
+<article id="item-14">
+  <header>
+        <h2 class="item-title"><a href="https://www.technologyreview.com/2026/05/21/1137756/roundtables-can-ai-learn-to-understand-the-world/">Roundtable Debate: Can AI Learn to Understand the World?</a></h2>
+    <div class="meta">rss · MIT Technology Review · May 21, 20:41</div>
+  </header>
+    <div class="lang-blocks">
+        <section class="lang"><h3>EN</h3><div class="content">MIT Technology Review convened a roundtable with editors and reporters to debate whether artificial intelligence can learn to understand the world beyond current large language models. The discussion highlighted AI companies&#39; ambition to build systems that grasp external reality and overcome LLM limitations, with world models emerging as a key focus.<br /><br />This debate matters because understanding the world is a fundamental goal for advancing AI toward more reliable, general-purpose systems. If AI can truly model external reality, it could enable better reasoning, planning, and interaction in diverse environments, impacting fields from robotics to scientific research.<br /><br />The roundtable featured editor in chief Mat Honan, senior AI editor Will Douglas Heaven, and an AI reporter, providing diverse perspectives on the topic. While world models are gaining attention, the panel noted that current AI systems still lack robust grounding in real-world physics and common sense, limiting their understanding.<br /><br />MIT Technology Review is a reputable source covering technology trends, and the roundtable format allows experts to exchange viewpoints on cutting‐edge AI research. The discussion centers on whether AI can move beyond large language models to develop systems that genuinely understand external reality. No additional historical or technical background is provided beyond the participants&#39; comments. The piece therefore relies on the panel’s insights rather than external documentation.</div></section>
+        <section class="lang"><h3>FR</h3><div class="content">Le Technology Review du MIT a organisé une table ronde avec ses éditeurs et reporters pour débattre de la capacité de l&#39;IA à comprendre le monde au-delà des modèles de langage actuels. La discussion a souligné l&#39;ambition des entreprises d&#39;IA de créer des systèmes capables de saisir la réalité extérieure et de dépasser les limites des LLM, avec les modèles de monde devenant un sujet central.<br /><br />Ce débat est crucial car la compréhension du monde constitue un objectif fondamental pour faire progresser l&#39;IA vers des systèmes plus fiables et généralistes. Si l&#39;IA parvient à modéliser la réalité extérieure, cela pourrait améliorer le raisonnement, la planification et les interactions dans de nombreux domaines, de la robotique à la recherche scientifique.<br /><br />La table ronde a rassemblé Mat Honan, rédacteur en chef, Will Douglas Heaven, éditeur senior en IA, et un reporter en IA, offrant des points de vue variés sur le sujet. Bien que les modèles de monde suscitent un intérêt croissant, le panel a souligné que les systèmes d&#39;IA actuels manquent encore d&#39;ancrage solide en physique du monde réel et en bon sens commun, limitant leur compréhension.<br /><br />MIT Technology Review est une source réputée couvrant les tendances technologiques, et le format de table ronde permet aux experts d’échanger leurs points de vue sur la recherche d’IA de pointe. Le débat porte sur la capacité de l’IA à dépasser les modèles de langage pour développer des systèmes qui comprennent réellement la réalité extérieure. Aucun contexte historique ou technique supplémentaire n’est fourni au-delà des commentaires des participants. L’article s’appuie donc sur les insights du panel plutôt que sur des documents externes.</div></section>
+    </div>
+  <div class="tags"><code>#AI</code>, <code>#Machine Learning</code>, <code>#World Models</code>, <code>#Technology</code>, <code>#Expert Discussion</code></div>
+  
+</article>
+
+<article id="item-15">
+  <header>
+        <h2 class="item-title"><a href="https://adaptivesupport.amd.com/s/question/0D5Pd00001YQLdMKAX/why-is-vivado-20261-dropping-linux-support-for-free-tier-?language=en_US">Vivado 2026.1 removes Linux support from the free tier.</a></h2>
+    <div class="meta">hackernews · zdw · May 24, 04:14 · <a href="https://news.ycombinator.com/item?id=48254309">Discussion</a></div>
+  </header>
+    <div class="lang-blocks">
+        <section class="lang"><h3>EN</h3><div class="content">In Vivado 2026.1, the free tier no longer includes Linux support, while Windows remains available. This change was announced by AMD and affects users who rely on Linux for FPGA development.<br /><br />This decision limits. limits the ability of students, hobbyists, and developers to use Linux for FPGA design, potentially reducing adoption of AMD hardware. It also signals a shift in AMD’s strategy toward more restrictive licensing, which may affect the broader FPGA ecosystem.<br /><br />The free tier previously allowed Linux on all supported boards, but now only Windows is supported. Users must upgrade to a paid license to obtain Linux support, and the change has sparked discussion in the community about vendor lock‐in and accessibility.<br /><br />Vivado is AMD’s integrated development environment for designing and programming FPGAs. The free tier of Vivado provides basic functionality for hobbyists and students, traditionally supporting both Windows and Linux operating systems. Recent updates have shifted the free tier to Windows‐only, reflecting a broader trend in software licensing where advanced features are moved to paid tiers.</div></section>
+        <section class="lang"><h3>FR</h3><div class="content">Dans Vivado 2026.1, le support Linux n’est plus inclus dans le niveau gratuit, alors que Windows reste disponible. Cette modification a été annoncée par AMD et impacte les utilisateurs qui dépendent de Linux pour le développement FPGA.<br /><br />Cette décision restreint la capacité des étudiants, des passionnés et des développeurs à utiliser Linux pour la conception FPGA, ce qui peut réduire l’adoption du matériel AMD. Elle indique également un changement de stratégie d’AMD vers des licences plus restrictives, pouvant impacter l’écosystème FPGA plus large.<br /><br />Le niveau gratuit incluait auparavant Linux sur toutes les cartes prises en charge, mais maintenant seul Windows est supporté. Les utilisateurs doivent souscrire à une licence payante pour obtenir le support Linux, et ce changement a déclenché un débat communautaire sur le verrouillage du fournisseur et l’accessibilité.<br /><br />Vivado est l’environnement de développement intégré d’AMD pour la conception et la programmation de FPGA. Le niveau gratuit de Vivado fournit des fonctionnalités de base aux passionnés et aux étudiants, supportant à la fois Windows et Linux. Les récentes mises à jour ont limité le niveau gratuit à Windows uniquement, reflétant une tendance plus large dans la licence logicielle où les fonctionnalités avancées sont déplacées vers des versions payantes.</div></section>
+    </div>
+  <div class="tags"><code>#FPGA</code>, <code>#EDA</code>, <code>#AMD</code>, <code>#Software Licensing</code>, <code>#Developer Tools</code></div>
+  
+</article>
+
+<article id="item-16">
+  <header>
+        <h2 class="item-title"><a href="https://www.bloomberg.com/news/videos/2026-05-23/spacex-starship-successfully-lifts-off-returns-to-earth-video">SpaceX Starship Successfully Lifts Off and Returns to Earth</a></h2>
+    <div class="meta">rss · Bloomberg Technology · May 23, 00:07</div>
+  </header>
+    <div class="lang-blocks">
+        <section class="lang"><h3>EN</h3><div class="content">This launch demonstrates significant advancements in reusable launch technology, which could dramatically lower space access costs and accelerate plans for lunar and Mars missions, affecting both the commercial space industry and international space exploration efforts.<br /><br />&lt;2-3 sentences in English&gt;<br /><br />&lt;3-5 sentences in English, or empty string&gt;</div></section>
+        <section class="lang"><h3>FR</h3><div class="content">L&#39;upgrade de Starship de SpaceX a réussi à déployer des satellites factices et à retourner à la Terre principalement intact, bien que son booster se soit désintegré sur le Golfe du Mexique.<br /><br />&lt;|ref|&gt;Pourquoi cela importe-t-il?&lt;|/fr&gt;&lt;br&gt; Cette réussite est importante car elle démontre une avancée technologique majeure dans le domaine des lanceurs réutilisables, ce qui pourrait réduire considérablement les coûts d&#39;accès à l&#39;espace et influencer les projets géopolitiques spatiaux, tout en ouvrant la voie à des missions lunaires et martiennes futures. « | why_it_matters_fr »&lt;|message|&gt;<br /><br />&lt;|unk|&gt;<br /><br />&lt;|unk|&gt;</div></section>
+    </div>
+  <div class="tags"><code>#SpaceX</code>, <code>#Starship</code>, <code>#Space launch</code>, <code>#Aerospace</code>, <code>#Technology</code></div>
+  
+</article>
+</main></div>
+  </div>
+</body>
+</html>

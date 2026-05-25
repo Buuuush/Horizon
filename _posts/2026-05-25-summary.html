@@ -1,0 +1,474 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Horizon — 2026-05-25</title>
+  <style>
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600&family=Manrope:wght@500;700&display=swap');
+
+:root {
+    --bg: #f8f8fb;
+    --paper: #ffffff;
+    --surface: #fcfbff;
+    --accent: #325c9b;
+    --accent-2: color-mix(in srgb, var(--accent) 55%, #b73fd6);
+    --accent-3: color-mix(in srgb, var(--accent) 40%, #f59e0b);
+    --accent-soft: #e6eefb;
+    --muted: #5c6372;
+    --text: #1d2230;
+    --ring: color-mix(in srgb, var(--accent) 32%, transparent);
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+    color: var(--text);
+    background:
+        radial-gradient(1300px 420px at -10% -20%, var(--accent-soft), transparent 60%),
+        radial-gradient(760px 300px at 88% -12%, color-mix(in srgb, var(--accent-2) 24%, transparent), transparent 66%),
+        radial-gradient(640px 240px at 30% 0%, color-mix(in srgb, var(--accent-3) 18%, transparent), transparent 70%),
+        var(--bg);
+    font-family: 'Source Serif 4', Georgia, serif;
+    line-height: 1.78;
+}
+
+.container { max-width: 1100px; margin: 1.5rem auto; padding: 1rem; }
+
+.tab-switcher {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+    border-bottom: 2px solid color-mix(in srgb, var(--accent) 20%, transparent);
+}
+
+.tab-button {
+    background: transparent;
+    border: none;
+    color: var(--muted);
+    font-family: 'Manrope', 'Segoe UI', sans-serif;
+    font-size: 1rem;
+    font-weight: 600;
+    padding: 0.75rem 1.2rem;
+    cursor: pointer;
+    transition: color 0.18s ease, border-color 0.18s ease;
+    border-bottom: 3px solid transparent;
+}
+
+.tab-button:hover {
+    color: var(--text);
+}
+
+.tab-button.active {
+    color: var(--accent);
+    border-bottom-color: var(--accent);
+}
+
+.tab-content {
+    display: none;
+    animation: fadeIn 0.2s ease-in;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.summary-header {
+    background: var(--paper);
+    border: 1px solid color-mix(in srgb, var(--accent) 16%, transparent);
+    border-radius: 24px;
+    padding: 1.5rem 1.6rem 1.1rem;
+    box-shadow: 0 18px 48px rgba(19, 33, 68, 0.08);
+    margin-bottom: 1rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.summary-header::after {
+    content: "";
+    position: absolute;
+    inset: auto -60px -80px auto;
+    width: 220px;
+    height: 220px;
+    border-radius: 999px;
+    background: radial-gradient(circle, color-mix(in srgb, var(--accent-2) 28%, transparent), transparent 70%);
+    pointer-events: none;
+}
+
+.summary-header h1 {
+    margin: 0;
+    font-family: 'Fraunces', 'DM Serif Display', 'Iowan Old Style', 'Palatino Linotype', serif;
+    letter-spacing: .01em;
+    font-size: clamp(1.8rem, 3.6vw, 2.8rem);
+    line-height: 1.15;
+}
+
+.lead { margin: .55rem 0 1.1rem; color: var(--muted); font-size: 1.04rem; max-width: 78ch; }
+
+.toc-title {
+    margin: 0 0 .45rem;
+    font-family: 'Manrope', 'Segoe UI', sans-serif;
+    font-size: .85rem;
+    text-transform: uppercase;
+    letter-spacing: .11em;
+    color: var(--muted);
+}
+
+.toc ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: .55rem;
+}
+
+.toc li {
+    background: linear-gradient(160deg, var(--surface), color-mix(in srgb, var(--accent-soft) 48%, #ffffff));
+    border: 1px solid color-mix(in srgb, var(--accent) 16%, transparent);
+    border-radius: 10px;
+    padding: .55rem .65rem;
+    transition: transform .18s ease, box-shadow .18s ease;
+}
+
+.toc li:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 8px 20px color-mix(in srgb, var(--accent) 15%, transparent);
+}
+
+.toc a { text-decoration: none; color: var(--text); }
+
+.items { display: grid; gap: .95rem; }
+
+.items article {
+    background: var(--paper);
+    border: 1px solid color-mix(in srgb, var(--accent) 15%, transparent);
+    border-radius: 20px;
+    padding: 1.15rem 1.2rem;
+    box-shadow: 0 10px 32px rgba(0, 0, 0, 0.05);
+}
+
+.item-title {
+    font-family: 'Fraunces', 'DM Serif Display', 'Iowan Old Style', 'Palatino Linotype', serif;
+    font-size: clamp(1.2rem, 2.2vw, 1.55rem);
+    margin: 0 0 .55rem;
+    line-height: 1.22;
+}
+
+.item-title a { color: inherit; text-decoration: none; }
+.item-title a:hover { color: var(--accent); }
+
+.item-title a:focus-visible,
+.toc a:focus-visible,
+summary:focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
+    border-radius: 6px;
+}
+
+.meta { color: var(--muted); font-family: 'Manrope', 'Segoe UI', sans-serif; font-size: .9rem; margin-bottom: .7rem; }
+.score { color: var(--accent); margin-left: .45rem; font-weight: 700; font-family: 'Manrope', 'Segoe UI', sans-serif; }
+
+.content { font-size: 1.03rem; line-height: 1.8; }
+
+.fr-only {
+    display: grid;
+    gap: .72rem;
+}
+
+.content-section {
+    background: linear-gradient(170deg, var(--surface), color-mix(in srgb, var(--accent-soft) 24%, #ffffff));
+    border: 1px solid color-mix(in srgb, var(--accent) 12%, transparent);
+    border-radius: 12px;
+    padding: .78rem .85rem;
+}
+
+.content-section h3 {
+    margin: 0 0 .35rem;
+    font-family: 'Manrope', 'Segoe UI', sans-serif;
+    font-size: .82rem;
+    color: var(--muted);
+    letter-spacing: .07em;
+    text-transform: uppercase;
+}
+
+.evidence-note {
+    margin: .7rem 0 0;
+    color: var(--muted);
+    font-size: .94rem;
+}
+
+.tags { margin-top: .75rem; color: var(--muted); font-family: 'Manrope', 'Segoe UI', sans-serif; font-size: .9rem; }
+code { background: color-mix(in srgb, var(--accent-soft) 65%, #ffffff); border-radius: 8px; padding: .12rem .4rem; }
+
+details { margin-top: .65rem; }
+details summary { cursor: pointer; color: var(--accent); font-family: 'Manrope', 'Segoe UI', sans-serif; }
+
+@media (max-width: 860px) {
+    .container { margin: .7rem auto; padding: .65rem; }
+    .tab-switcher { flex-wrap: wrap; }
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --bg: #0f1420;
+        --paper: #161d2c;
+        --surface: #1b2435;
+        --accent: #7cb1ff;
+        --accent-2: #c28cff;
+        --accent-3: #ffc36c;
+        --accent-soft: #1a2740;
+        --muted: #a6b4cd;
+        --text: #edf2ff;
+        --ring: rgba(124, 177, 255, 0.55);
+    }
+
+    body {
+        background:
+            radial-gradient(1200px 420px at -10% -20%, #1a2740, transparent 60%),
+            radial-gradient(760px 300px at 88% -12%, rgba(194, 140, 255, 0.2), transparent 66%),
+            radial-gradient(640px 240px at 30% 0%, rgba(255, 195, 108, 0.14), transparent 70%),
+            var(--bg);
+    }
+
+    .summary-header,
+    .items article {
+        border-color: rgba(124, 177, 255, 0.24);
+        box-shadow: 0 18px 44px rgba(0, 0, 0, 0.32);
+    }
+
+    .tab-switcher {
+        border-bottom-color: rgba(124, 177, 255, 0.2);
+    }
+
+    code {
+        background: rgba(124, 177, 255, 0.16);
+    }
+}
+</style>
+  <script>
+    function switchTab(button) {
+      const lang = button.getAttribute('data-lang');
+      const allButtons = document.querySelectorAll('.tab-button');
+      const allContents = document.querySelectorAll('.tab-content');
+      
+      allButtons.forEach(b => b.classList.remove('active'));
+      allContents.forEach(c => c.classList.remove('active'));
+      
+      button.classList.add('active');
+      document.querySelector(`.tab-content[data-lang="${lang}"]`).classList.add('active');
+    }
+  </script>
+</head>
+<body>
+  <div class="container">
+    <div class="tab-switcher">
+      <button class="tab-button active" onclick="switchTab(this)" data-lang="fr">Français</button><button class="tab-button " onclick="switchTab(this)" data-lang="en">English</button>
+    </div>
+    <div class="tab-content active" data-lang="fr"><div class="fr-item">### 1.
+<section class="summary-header">
+  <h1>Horizon Quotidien — 2026-05-25</h1>
+  <p class="lead">7 sujets essentiels sélectionnés parmi 426 contenus collectés.</p>
+  <nav class="toc" aria-label="Sommaire">
+    <p class="toc-title">Sommaire</p>
+    <ul><li><a href="#item-1">Boston Metal lève 75 M$ pour développer les métaux critiques et décarboniser l&#39;acier.</a></li>
+<li><a href="#item-2">Vivado 2026.1 supprime le support Linux gratuit</a></li>
+<li><a href="#item-3">Le Download couvre l&#39;avenir de la sécurité en ligne et le virage climatique.</a></li>
+<li><a href="#item-4">Les hackers exploitent les personnalités des chatbots pour contourner la sécurité.</a></li>
+<li><a href="#item-5">Le pape Léon XIV dit que l&#39;IA doit être désarmée pour éviter la domination</a></li>
+<li><a href="#item-6">La BCE demande aux banques de corriger les failles cybersécuritaires exposées par l&#39;IA.</a></li>
+<li><a href="#item-7">DeepSeek rend une remise permanente de 75 % sur son modèle V4‐Pro</a></li></ul>
+  </nav>
+</section>
+<main class="items">
+<article id="item-1">
+  <header>
+        <h2 class="item-title"><a href="https://www.technologyreview.com/2026/05/20/1137523/boston-metal-funding-critical-metals/">Boston Metal lève 75 M$ pour développer les métaux critiques et décarboniser l&#39;acier.</a></h2>
+    <div class="meta">rss · MIT Technology Review · May 20, 13:00</div>
+  </header>
+  <div class="lang-blocks fr-only"><section class="content-section"><h3>Contexte</h3><div class="content">Les métaux critiques sont des éléments jugés essentiels pour les technologies de l&#39;énergie propre et sont désignés par le Secrétaire à l&#39;Intérieur des États-Unis, selon la définition du Department of Energy. Boston Metal, une start‐up spécialisée dans la décarbonation de l&#39;acier, est connue pour son procédé d&#39;acier à base d&#39;hydrogène qui remplace le charbon par de l&#39;hydrogène vert pour produire un acier à faible carbone. L&#39;industrie de l&#39;acier, responsable d&#39;environ 8 % des émissions mondiales de gaz à effet de serre, cherche à réduire son intensité carbone, avec le taxonomy vert d&#39;acier du Ministère de l&#39;Acier fixant une cible de 2,2 tonnes de CO2 par tonne d&#39;acier. La demande croissante d&#39;acier vert, estimée à 179 millions de tonnes en Inde d&#39;ici 2050, souligne le potentiel de marché de ces technologies.</div></section></div>
+  <p class="evidence-note"><strong>Fiabilité</strong> : La affirmation repose sur un article de Technology Review réputé et est corroborée par des définitions du Department of Energy des États‐Unis et un rapport sur le taxonomy vert d&#39;acier.</p>
+  <div class="tags"><code>#clean steel</code>, <code>#critical metals</code>, <code>#climate change</code>, <code>#funding</code>, <code>#technology</code></div>
+  <details><summary>Références</summary><ul><li><a href="https://www.energy.gov/cmm/what-are-critical-minerals-and-materials">What Are Critical Minerals and Materials? | Department of Energy</a></li><li><a href="https://www.mercomindia.com/green-steel-taxonomy-and-ratings-decarbonize-faster">Green Steel Taxonomy and Ratings Framework to Help Sector...</a></li></ul></details>
+</article>
+
+<article id="item-2">
+  <header>
+        <h2 class="item-title"><a href="https://adaptivesupport.amd.com/s/question/0D5Pd00001YQLdMKAX/why-is-vivado-20261-dropping-linux-support-for-free-tier-?language=en_US">Vivado 2026.1 supprime le support Linux gratuit</a></h2>
+    <div class="meta">hackernews · zdw · May 24, 04:14 · <a href="https://news.ycombinator.com/item?id=48254309">Discussion</a></div>
+  </header>
+  <div class="lang-blocks fr-only"><section class="content-section"><h3>Contexte</h3><div class="content">Vivado est l suite phare d’AMD pour la conception de FPGA, utilisée par les ingénieurs à développer et vérifier des conceptions matérielles sur des appareils Xilinx. Avant Vivado 2026.1, la version gratuite Basic pris en charge Linux sur les systèmes x86‐64, permettant aux étudiants, aux hobbyistes et aux petites équipes de développer sans frais. Le retrait récent du support Linux oblige les développeurs à passer à l’édition Standard payante ou à utiliser un environnement Windows, soulevant des inquiétudes quant au verrouillage du fournisseur. Le verrouillage du fournisseur désigne une situation où les clients deviennent dépendants de l’écosystème d’un seul fournisseur, limitant leur capacité à migrer vers d’autres solutions sans coûts élevés, comme le définissent plusieurs sources. Ce changement pourrait impacter le marché FPGA en réduisant la base de développeurs accessible et en encourageant le migration vers des outils concurrents.</div></section></div>
+  <p class="evidence-note"><strong>Fiabilité</strong> : La revendication est bien étayée par la documentation officielle d’AMD et plusieurs articles d’actualité indépendants décrivant le changement de licence et la réaction de la communauté.</p>
+  <div class="tags"><code>#FPGA</code>, <code>#Vivado</code>, <code>#Licensing</code>, <code>#Linux</code>, <code>#Developer Tools</code></div>
+  <details><summary>Références</summary><ul><li><a href="https://docs.amd.com/r/en-US/ug973-vivado-release-notes-install-license/Supported-Operating-Systems">Supported Operating Systems - Supported Operating Systems - 2025. ... - AMD</a></li><li><a href="https://byteiota.com/amd-vivado-drops-linux-free-tier-fpga/">AMD Vivado Drops Linux: Free FPGA Tools Cost $1,200 Now</a></li><li><a href="https://ideaverse.ai/blog/vivado-2026-1-drops-linux-support-on-free-tier-industry-implications-mpjuia9s">Vivado 2026.1 drops Linux support on free tier: industry implications ...</a></li></ul></details>
+</article>
+
+<article id="item-3">
+  <header>
+        <h2 class="item-title"><a href="https://www.technologyreview.com/2026/05/21/1137733/the-download-online-safety-climate-tech-pivot/">Le Download couvre l&#39;avenir de la sécurité en ligne et le virage climatique.</a></h2>
+    <div class="meta">rss · MIT Technology Review · May 21, 12:10</div>
+  </header>
+  <div class="lang-blocks fr-only"><section class="content-section"><h3>Contexte</h3><div class="content">Section 230, adopté en 1996 dans le cadre de la Communications Decency Act, confère aux plateformes en ligne une immunité contre la responsabilité du contenu généré par les utilisateurs, une disposition confirmée par les tribunaux malgré plusieurs défis juridiques. Cette loi est essentielle au développement d&#39;Internet, en permettant la modération et l&#39;innovation tout en exigeant le retrait du contenu illégal. Dans le domaine climatique, la bioénergie avec capture et stockage du carbone (BECCS) apparaît comme une technologie clé pour retirer le CO2 de l&#39;atmosphère, combinant production d&#39;énergie renouvelable et séquestration du carbone. Les récents investissements et débats politiques témoignent d&#39;un virage général vers les solutions de retrait du carbone.</div></section></div>
+  <p class="evidence-note"><strong>Fiabilité</strong> : Les informations sur le recours et le Section 230 sont bien documentées dans des sources réputées, et les détails sur la technologie climatique sont appuyés par plusieurs articles récents.</p>
+  <div class="tags"><code>#online safety</code>, <code>#climate tech</code>, <code>#legal action</code>, <code>#technology policy</code>, <code>#research</code></div>
+  <details><summary>Références</summary><ul><li><a href="https://en.wikipedia.org/wiki/Section_230">Section 230</a></li><li><a href="https://medium.com/swlh/everything-you-need-to-know-about-section-230-afefb1a2549f">Everything You Need to Know About Section 230 | Medium</a></li><li><a href="https://climate.mit.edu/explainers/carbon-capture">Carbon Capture | MIT Climate Portal</a></li></ul></details>
+</article>
+
+<article id="item-4">
+  <header>
+        <h2 class="item-title"><a href="https://www.theverge.com/column/935545/hackers-ai-chatbots">Les hackers exploitent les personnalités des chatbots pour contourner la sécurité.</a></h2>
+    <div class="meta">rss · The Verge · May 24, 12:00</div>
+  </header>
+  <div class="lang-blocks fr-only"><section class="content-section"><h3>Contexte</h3><div class="content">La personnalité d&#39;un chatbot correspond aux traits humains et au ton que les développeurs donnent à l&#39;assistant IA pour rendre les interactions cohérentes et engageantes, comme le soulignent plusieurs guides de 2026. Ces personnalités sont créées via des prompts soigneusement rédigés qui définissent la voix, le rôle et le style de comportement du bot, ce qui peut être exploité par les attaquants grâce à des techniques d&#39;injection de prompts. L&#39;injection de prompts, ou le piratage d&#39;IA, consiste à concevoir des entrées qui incitent le modèle à ignorer ses contraintes de sécurité, un risque d&#39;autant plus grave lorsque le modèle possède la capacité de naviguer sur le web et d&#39;ingérer du contenu externe. L&#39;article du The Verge, issu de la newsletter hebdomadaire Stepback, rapporte cette préoccupation de sécurité émergente dans le paysage IA en constante évolution.</div></section></div>
+  <p class="evidence-note"><strong>Fiabilité</strong> : L&#39;article cite un reporting réputé et définit les concepts pertinents, mais ne fournit pas de détails concrets sur des incidents, donc les preuves sont modérées.</p>
+  <div class="tags"><code>#AI</code>, <code>#cybersecurity</code>, <code>#technology</code>, <code>#chatbots</code>, <code>#hacking</code></div>
+  <details><summary>Références</summary><ul><li><a href="https://development--chatbot-www.netlify.app/blog/personality/">How to Build an AI Chatbot&#39;s Persona in 2026</a></li><li><a href="https://en.wikipedia.org/wiki/AI_jailbreaking">AI jailbreaking</a></li></ul></details>
+</article>
+
+<article id="item-5">
+  <header>
+        <h2 class="item-title"><a href="https://www.bloomberg.com/news/articles/2026-05-25/pope-leo-warns-ai-should-be-prevented-from-dominating-humanity">Le pape Léon XIV dit que l&#39;IA doit être désarmée pour éviter la domination</a></h2>
+    <div class="meta">rss · Bloomberg Technology · May 25, 09:31</div>
+  </header>
+  <div class="lang-blocks fr-only"><section class="content-section"><h3>Contexte</h3><div class="content">Le pape Léon XIV, né Robert Francis Prevost, a été élu pape le 8 mai 2025, succédant à François et devenant le premier Américain à occuper le siège de Pierre. Avant son élection, il a exercé les fonctions de préfet du Dicastère pour les évêques et a été missionnaire augustinien au Pérou. Son pontificat a débuté par une messe dans la Chapelle Sixtine le 9 mai 2025, et il s&#39;est rapidement impliqué dans les enjeux mondiaux. Son appel à la désarmement de l&#39;IA reflète les préoccupations mondiales sur l&#39;impact de l&#39;intelligence artificielle sur la sécurité, comme le souligne la recherche de SIPRI sur l&#39;IA et la non‐prolifération.</div></section></div>
+  <p class="evidence-note"><strong>Fiabilité</strong> : Les preuves proviennent de sources encyclopédiques et de politiques réputées, offrant un contexte clair sur le pape et le concept de désarmement de l&#39;IA.</p>
+  <div class="tags"><code>#AI</code>, <code>#Religion</code>, <code>#Technology</code>, <code>#Regulation</code>, <code>#Ethics</code></div>
+  <details><summary>Références</summary><ul><li><a href="https://en.wikipedia.org/wiki/Pope_Leo_XIV">Pope Leo XIV - Wikipedia</a></li><li><a href="https://www.sipri.org/publications/2025/eu-non-proliferation-and-disarmament-papers/artificial-intelligence-non-proliferation-and-disarmament-compendium-state-art">Artificial Intelligence, Non-proliferation and Disarmament: A ...</a></li></ul></details>
+</article>
+
+<article id="item-6">
+  <header>
+        <h2 class="item-title"><a href="https://www.bloomberg.com/news/articles/2026-05-24/ecb-convenes-banks-to-fix-flaws-exposed-by-ai-models-ft-says">La BCE demande aux banques de corriger les failles cybersécuritaires exposées par l&#39;IA.</a></h2>
+    <div class="meta">rss · Bloomberg Technology · May 24, 18:32</div>
+  </header>
+  <div class="lang-blocks fr-only"><section class="content-section"><h3>Contexte</h3><div class="content">La Banque centrale européenne, créée en 1999, est l&#39;institution centrale de l&#39;Eurosystème et supervise la politique monétaire de la zone euro, gérant un bilan de près de 7 000 milliards d&#39;euros. Les menaces cybernétiques alimentées par l&#39;IA, comme les deepfakes et les outils d&#39;IA non surveillés, sont identifiées par des rapports de Palo Alto Networks et du NIST comme des risques émergents pouvant compromettre les systèmes informatiques bancaires. La directive de la BCE vise à aligner les programmes de sécurité des banques sur ces nouveaux défis liés à l&#39;IA.</div></section></div>
+  <p class="evidence-note"><strong>Fiabilité</strong> : Les preuves sont solides, s&#39;appuyant sur plusieurs sources réputées, dont la BCE, le Financial Times et des rapports industriels de cybersécurité.</p>
+  <div class="tags"><code>#ECB</code>, <code>#AI</code>, <code>#cybersecurity</code>, <code>#banking</code>, <code>#European finance</code></div>
+  <details><summary>Références</summary><ul><li><a href="https://en.wikipedia.org/wiki/European_Central_Bank">European Central Bank</a></li><li><a href="https://www.paloaltonetworks.com/cyberpedia/ai-risks-and-benefits-in-cybersecurity">What Are the Risks and Benefits of Artificial Intelligence (AI) in Cybersecurity? - Palo Alto Networks</a></li><li><a href="https://www.nist.gov/blogs/cybersecurity-insights/managing-cybersecurity-and-privacy-risks-age-artificial-intelligence">Managing Cybersecurity and Privacy Risks in the Age of Artificial Intelligence: Launching a New Program at NIST | NIST</a></li></ul></details>
+</article>
+
+<article id="item-7">
+  <header>
+        <h2 class="item-title"><a href="https://www.bloomberg.com/news/articles/2026-05-23/deepseek-to-make-permanent-75-discount-on-flagship-ai-model">DeepSeek rend une remise permanente de 75 % sur son modèle V4‐Pro</a></h2>
+    <div class="meta">rss · Bloomberg Technology · May 23, 10:28</div>
+  </header>
+  <div class="lang-blocks fr-only"><section class="content-section"><h3>Contexte</h3><div class="content">DeepSeek est une start‐up chinoise d’intelligence artificielle fondée en juillet 2023 par Liang Wenfeng, co‐fondateur du fonds de hedge‐fund High‐Flyer, et elle se spécialise dans les grands modèles de langage. Depuis le lancement open‐source du modèle R1 en janvier 2025, DeepSeek a présenté plusieurs modèles de plus en plus performants, dont le drapeau V4‐Pro annoncé en avril 2026. L’entreprise affirme avoir entraîné ses modèles à un coût bien inférieur à celui de ses concurrents, en utilisant des techniques comme les couches mixtures d’experts et en limitant l’usage de puces haut de gamme, ce qui a provoqué une onde de choc dans l’industrie et une perte de 600 milliards de dollars de la capitalisation boursière de Nvidia.</div></section></div>
+  <p class="evidence-note"><strong>Fiabilité</strong> : Les preuves sont solides, tirées du reportage de Bloomberg et corroborées par la documentation DeepSeek.</p>
+  <div class="tags"><code>#AI</code>, <code>#Deep Learning</code>, <code>#Pricing</code>, <code>#Technology</code></div>
+  <details><summary>Références</summary><ul><li><a href="https://en.wikipedia.org/wiki/DeepSeek">DeepSeek</a></li></ul></details>
+</article>
+</main></div></div><div class="tab-content " data-lang="en"><section class="summary-header">
+  <h1>Horizon Daily — 2026-05-25</h1>
+  <p class="lead">7 essential stories selected from 426 collected items.</p>
+  <nav class="toc" aria-label="Contents">
+    <p class="toc-title">Contents</p>
+    <ul><li><a href="#item-1">Boston Metal raises $75 million to expand critical metals production and decarbonize steelmaking.</a></li>
+<li><a href="#item-2">Vivado 2026.1 removes free Linux support</a></li>
+<li><a href="#item-3">The Download reports on online safety’s future and climate tech’s big pivot.</a></li>
+<li><a href="#item-4">Hackers exploit chatbot personalities to bypass security.</a></li>
+<li><a href="#item-5">Pope Leo XIV warns that AI must be disarmed to prevent humanity domination</a></li>
+<li><a href="#item-6">The ECB calls on banks to fix AI‐exposed cybersecurity flaws.</a></li>
+<li><a href="#item-7">DeepSeek makes a permanent 75% discount on its V4‐Pro AI model</a></li></ul>
+  </nav>
+</section>
+<main class="items">
+<article id="item-1">
+  <header>
+        <h2 class="item-title"><a href="https://www.technologyreview.com/2026/05/20/1137523/boston-metal-funding-critical-metals/">Boston Metal raises $75 million to expand critical metals production and decarbonize steelmaking.</a></h2>
+    <div class="meta">rss · MIT Technology Review · May 20, 13:00</div>
+  </header>
+    <div class="lang-blocks">
+        <section class="lang"><h3>EN</h3><div class="content">Boston Metal announced a $75 million funding round to scale up production of critical metals and accelerate its low‐carbon steelmaking technology. The capital will be used to expand manufacturing capacity and further develop its hydrogen‐based steel process.<br /><br />This funding signals growing investment in clean steel and critical‐material supply chains, sectors essential for meeting climate targets. It could lower the steel industry’s emissions, which currently account for about 8 % of global greenhouse gases, and help secure the metals needed for renewable energy technologies.<br /><br />The $75 million round was led by existing investors and will fund a new plant in the United States that aims to produce critical metals such as lithium and rare earths. Boston Metal’s steelmaking process uses hydrogen to create green iron, cutting emissions from roughly 1.8 tons of CO2 per ton of steel to as low as 200 kilograms.<br /><br />Critical metals are elements deemed essential for clean energy technologies and are designated by the U.S. Secretary of the Interior, as defined by the Department of Energy. Boston Metal, a startup focused on decarbonizing steel, has been known for its hydrogen‐based steelmaking process that replaces coal with green hydrogen to produce low‐carbon steel. The steel industry, responsible for roughly 8 % of global greenhouse gas emissions, is seeking ways to reduce its carbon intensity, with the Ministry of Steel’s green steel taxonomy setting an emissions target of 2.2 tons CO2 per ton of steel. Growing demand for green steel, projected to reach 179 million tonnes in India by 2050, underscores the market potential for such technologies.</div></section>
+        <section class="lang"><h3>FR</h3><div class="content">Boston Metal a annoncé une levée de fonds de 75 millions de dollars pour augmenter la production de métaux critiques et accélérer sa technologie d&#39;acier à faible carbone. Les fonds serviront à élargir la capacité de production et à développer davantage son procédé d&#39;acier basé sur l&#39;hydrogène.<br /><br />Ce financement montre un intérêt croissant pour l&#39;acier propre et les chaînes d&#39;approvisionnement en métaux critiques, secteurs clés pour atteindre les objectifs climatiques. Il pourrait réduire les émissions de l&#39;industrie de l&#39;acier, qui représente actuellement environ 8 % des gaz à effet de serre mondiaux, et contribuer à la sécurisation des métaux nécessaires aux technologies énergétiques renouvelables.<br /><br />Le financement de 75 millions de dollars, dirigé par des investisseurs existants, financera une nouvelle usine aux États-Unis destinée à produire des métaux critiques comme le lithium et les terres rares. Le procédé d&#39;acier de Boston Metal utilise l&#39;hydrogène pour créer du fer vert, réduisant les émissions de près de 1,8 tonnes de CO2 par tonne d&#39;acier à aussi peu que 200 kilogrammes.<br /><br />Les métaux critiques sont des éléments jugés essentiels pour les technologies de l&#39;énergie propre et sont désignés par le Secrétaire à l&#39;Intérieur des États-Unis, selon la définition du Department of Energy. Boston Metal, une start‐up spécialisée dans la décarbonation de l&#39;acier, est connue pour son procédé d&#39;acier à base d&#39;hydrogène qui remplace le charbon par de l&#39;hydrogène vert pour produire un acier à faible carbone. L&#39;industrie de l&#39;acier, responsable d&#39;environ 8 % des émissions mondiales de gaz à effet de serre, cherche à réduire son intensité carbone, avec le taxonomy vert d&#39;acier du Ministère de l&#39;Acier fixant une cible de 2,2 tonnes de CO2 par tonne d&#39;acier. La demande croissante d&#39;acier vert, estimée à 179 millions de tonnes en Inde d&#39;ici 2050, souligne le potentiel de marché de ces technologies.</div></section>
+    </div>
+  <div class="tags"><code>#clean steel</code>, <code>#critical metals</code>, <code>#climate change</code>, <code>#funding</code>, <code>#technology</code></div>
+  <details><summary>References</summary><ul><li><a href="https://www.energy.gov/cmm/what-are-critical-minerals-and-materials">What Are Critical Minerals and Materials? | Department of Energy</a></li><li><a href="https://www.mercomindia.com/green-steel-taxonomy-and-ratings-decarbonize-faster">Green Steel Taxonomy and Ratings Framework to Help Sector...</a></li></ul></details>
+</article>
+
+<article id="item-2">
+  <header>
+        <h2 class="item-title"><a href="https://adaptivesupport.amd.com/s/question/0D5Pd00001YQLdMKAX/why-is-vivado-20261-dropping-linux-support-for-free-tier-?language=en_US">Vivado 2026.1 removes free Linux support</a></h2>
+    <div class="meta">hackernews · zdw · May 24, 04:14 · <a href="https://news.ycombinator.com/item?id=48254309">Discussion</a></div>
+  </header>
+    <div class="lang-blocks">
+        <section class="lang"><h3>EN</h3><div class="content">AMD announced that Vivado 2026.1 will no longer include Linux support in its free Basic tier, forcing developers to either purchase the Standard Edition for $1,200 per year or use Windows. The change was made quietly and has sparked debate among engineers about vendor lock‐in and ecosystem access. Community members are urging AMD to reconsider the restriction to maintain broad adoption.<br /><br />This licensing shift restricts a large segment of developers, especially students and hobbyists, who rely on free Linux tools, thereby increasing vendor lock‐in risk for AMD. It may drive talent toward competing FPGA vendors such as Lattice, affecting AMD’s long‐term market share and ecosystem vitality. The move could also disrupt CI pipelines and educational workflows that depend on cross‐platform development.<br /><br />The free Basic tier will be limited to Windows, and the paid Standard Edition costs at least $1,200 annually, which many users consider prohibitive. Existing node‐locked licenses may restrict usage to a single machine, and AMD has not clarified whether multi‐node licenses will be available. Community members note that the restriction could hinder cross‐compiling and CI automation that traditionally run on Linux.<br /><br />Vivado is AMD’s flagship FPGA design suite used by engineers to develop and verify hardware designs on Xilinx devices. Prior to Vivado 2026.1, the free Basic tier supported Linux on x86‐64 systems, allowing students, hobbyists, and small teams to develop without cost. The recent removal of Linux support means developers must either upgrade to a paid Standard Edition or switch to a Windows environment, raising concerns about vendor lock‐in. Vendor lock‐in refers to a situation where customers become dependent on a single vendor’s ecosystem, limiting their ability to switch to alternatives without high switching costs, as defined by multiple sources. This change could affect the broader FPGA market by narrowing the accessible developer base and encouraging migration to competing tools.</div></section>
+        <section class="lang"><h3>FR</h3><div class="content">AMD a annoncé que Vivado 2026.1 ne comprendra plus le support Linux dans sa version gratuite Basic, obligeant les développeurs à acheter l’édition Standard pour 1 200 $ par an ou à utiliser Windows. Le changement a été effectué discrètement et a déclenché un débat parmi les ingénieurs concernant le verrouillage du fournisseur et l’accès à l’écosystème. Les membres de la communauté exhortent AMD à reconsidérer cette restriction pour préserver une adoption large.<br /><br />Ce changement de licence restreint une grande partie des développeurs, en particulier les étudiants et les hobbyistes, qui dépendent d’outils Linux gratuits, augmentant ainsi le risque de verrouillage du fournisseur pour AMD. Cela peut pousser les talents vers des concurrents de FPGA comme Lattice, affectant le partage du marché à long terme d’AMD et la vitalité de son écosystème. Le mouvement perturbe également les pipelines CI et les flux éducatifs qui reposent sur le développement multiplateforme.<br /><br />La version gratuite Basic sera limitée à Windows, et l’édition Standard payante coûte au moins 1 200 $ par an, ce que de nombreux utilisateurs jugent prohibitif. Les licences verrouillées par nœud existantes pourraient restreindre l’utilisation à une seule machine, et AMD n’a pas précisé si des licences multi‐nœuds seront disponibles. Les membres de la communauté soulignent que la restriction peut entraver le cross‐compiling et l’automatisation CI qui s’appuient traditionnellement sur Linux.<br /><br />Vivado est l suite phare d’AMD pour la conception de FPGA, utilisée par les ingénieurs à développer et vérifier des conceptions matérielles sur des appareils Xilinx. Avant Vivado 2026.1, la version gratuite Basic pris en charge Linux sur les systèmes x86‐64, permettant aux étudiants, aux hobbyistes et aux petites équipes de développer sans frais. Le retrait récent du support Linux oblige les développeurs à passer à l’édition Standard payante ou à utiliser un environnement Windows, soulevant des inquiétudes quant au verrouillage du fournisseur. Le verrouillage du fournisseur désigne une situation où les clients deviennent dépendants de l’écosystème d’un seul fournisseur, limitant leur capacité à migrer vers d’autres solutions sans coûts élevés, comme le définissent plusieurs sources. Ce changement pourrait impacter le marché FPGA en réduisant la base de développeurs accessible et en encourageant le migration vers des outils concurrents.</div></section>
+    </div>
+  <div class="tags"><code>#FPGA</code>, <code>#Vivado</code>, <code>#Licensing</code>, <code>#Linux</code>, <code>#Developer Tools</code></div>
+  <details><summary>References</summary><ul><li><a href="https://docs.amd.com/r/en-US/ug973-vivado-release-notes-install-license/Supported-Operating-Systems">Supported Operating Systems - Supported Operating Systems - 2025. ... - AMD</a></li><li><a href="https://byteiota.com/amd-vivado-drops-linux-free-tier-fpga/">AMD Vivado Drops Linux: Free FPGA Tools Cost $1,200 Now</a></li><li><a href="https://ideaverse.ai/blog/vivado-2026-1-drops-linux-support-on-free-tier-industry-implications-mpjuia9s">Vivado 2026.1 drops Linux support on free tier: industry implications ...</a></li></ul></details>
+</article>
+
+<article id="item-3">
+  <header>
+        <h2 class="item-title"><a href="https://www.technologyreview.com/2026/05/21/1137733/the-download-online-safety-climate-tech-pivot/">The Download reports on online safety’s future and climate tech’s big pivot.</a></h2>
+    <div class="meta">rss · MIT Technology Review · May 21, 12:10</div>
+  </header>
+    <div class="lang-blocks">
+        <section class="lang"><h3>EN</h3><div class="content">Tech researchers have filed a lawsuit against the Trump administration to challenge its approach to online safety, arguing that recent policy moves threaten Section 230 protections. At the same time, the newsletter highlighted a major pivot in climate technology toward bioenergy with carbon capture and storage. Both developments underscore shifting legal and technological landscapes in the United States.<br /><br />This legal challenge could reshape the legal framework governing online content and impact free speech protections for tech platforms. Meanwhile, the climate tech shift signals growing reliance on carbon removal technologies to meet emissions targets, affecting energy and environmental policy. Together, they highlight the intersecting pressures on digital regulation and climate action.<br /><br />The lawsuit was filed in May 2026 by a coalition of academic researchers alleging that the Trump administration&#39;s actions violate the legal immunity provided by Section 230. The newsletter also emphasized a shift in climate technology, highlighting projects that use bioenergy with carbon capture and storage to remove CO2 from the atmosphere. Additionally, the administration has been accused of targeting researchers who study hate speech, raising concerns about scientific freedom.<br /><br />Section 230, enacted in 1996 as part of the Communications Decency Act, grants online platforms immunity from liability for user‐generated content, a provision that has been upheld by courts despite several legal challenges. The law is crucial for the development of internet services, enabling moderation and innovation while requiring removal of illegal content. In the climate arena, bioenergy with carbon capture and storage (BECCS) is emerging as a key technology for removing CO2 from the atmosphere, combining renewable energy generation with carbon sequestration. Recent investments and policy discussions reflect a broader pivot toward carbon removal solutions.</div></section>
+        <section class="lang"><h3>FR</h3><div class="content">Les chercheurs technologiques ont intenté une action en justice contre l&#39;administration Trump pour contester sa politique en matière de sécurité en ligne, affirmant que les mesures récentes menacent les protections du Section 230. Parallèlement, le bulletin a souligné un virage majeur de la technologie climatique vers la bioénergie avec capture et stockage du carbone. Ces deux évolutions illustrent des changements juridiques et technologiques en cours aux États-Unis.<br /><br />Cette poursuite pourrait redéfinir le cadre juridique régissant le contenu en ligne et impacter la protection de la liberté d&#39;expression pour les plateformes technologiques. Le virage vers les technologies climatiques, notamment la bioénergie avec capture et stockage du carbone, indique une dépendance accrue aux solutions de retrait de carbone pour atteindre les objectifs de réduction des émissions. Ainsi, les deux développements révèlent les pressions croissantes sur la régulation numérique et l&#39;action climatique.<br /><br />Le recours a été déposé en mai 2026 par une coalition de chercheurs universitaires affirmant que les actions de l&#39;administration Trump violent l&#39;immunité juridique du Section 230. Le bulletin a également souligné un virage de la technologie climatique, mettant en avant des projets utilisant la bioénergie avec capture et stockage du carbone pour éliminer le CO2 de l&#39;atmosphère. De plus, l&#39;administration est accusée de viser les chercheurs étudiant la haine en ligne, soulevant des inquiétudes quant à la liberté scientifique.<br /><br />Section 230, adopté en 1996 dans le cadre de la Communications Decency Act, confère aux plateformes en ligne une immunité contre la responsabilité du contenu généré par les utilisateurs, une disposition confirmée par les tribunaux malgré plusieurs défis juridiques. Cette loi est essentielle au développement d&#39;Internet, en permettant la modération et l&#39;innovation tout en exigeant le retrait du contenu illégal. Dans le domaine climatique, la bioénergie avec capture et stockage du carbone (BECCS) apparaît comme une technologie clé pour retirer le CO2 de l&#39;atmosphère, combinant production d&#39;énergie renouvelable et séquestration du carbone. Les récents investissements et débats politiques témoignent d&#39;un virage général vers les solutions de retrait du carbone.</div></section>
+    </div>
+  <div class="tags"><code>#online safety</code>, <code>#climate tech</code>, <code>#legal action</code>, <code>#technology policy</code>, <code>#research</code></div>
+  <details><summary>References</summary><ul><li><a href="https://en.wikipedia.org/wiki/Section_230">Section 230</a></li><li><a href="https://medium.com/swlh/everything-you-need-to-know-about-section-230-afefb1a2549f">Everything You Need to Know About Section 230 | Medium</a></li><li><a href="https://climate.mit.edu/explainers/carbon-capture">Carbon Capture | MIT Climate Portal</a></li></ul></details>
+</article>
+
+<article id="item-4">
+  <header>
+        <h2 class="item-title"><a href="https://www.theverge.com/column/935545/hackers-ai-chatbots">Hackers exploit chatbot personalities to bypass security.</a></h2>
+    <div class="meta">rss · The Verge · May 24, 12:00</div>
+  </header>
+    <div class="lang-blocks">
+        <section class="lang"><h3>EN</h3><div class="content">Hackers are learning to exploit the predefined personalities of AI chatbots, using tailored prompts that manipulate the bot’s tone and role to bypass safety filters. These attacks, which include prompt injection techniques, allow adversaries to extract data or force the chatbot to perform unintended actions, turning a conversational style into a security vulnerability.<br /><br />This development highlights a new attack surface in AI security, as the personality traits that make chatbots engaging also provide leverage for malicious actors to bypass safeguards. Consequently, users&#39; privacy and trust may be compromised, and companies will need to redesign chatbot architectures to protect against personality‐based prompt injection.<br /><br />The attacks leverage the chatbot’s personality traits—such as its tone, role, and conversational style—to craft prompts that bypass built‐in safety filters, a technique known as prompt injection. Because the personality is encoded in the model’s instructions, longer or overly detailed personality descriptions can make the model more susceptible, and the exploit works even when the chatbot has web‐browsing capabilities that allow indirect prompt injection from external content.<br /><br />Chatbot personality refers to the human‐like traits and tone that developers assign to an AI assistant to make interactions feel consistent and engaging, as described in several 2026 guides. These personalities are created through carefully crafted prompts that define the bot’s voice, role, and behavioral style, which can be exploited by attackers using prompt injection techniques. Prompt injection, or AI jailbreaking, involves crafting inputs that trick the model into ignoring its safety constraints, a risk that becomes more serious when the model can browse the web and ingest external content. The Verge’s article, part of the weekly Stepback newsletter, reports on this emerging security concern in the rapidly evolving AI landscape.</div></section>
+        <section class="lang"><h3>FR</h3><div class="content">Les hackers apprennent à exploiter les personnalités prédefinies des chatbots d&#39;IA, en utilisant des prompts adaptés qui manipulent le ton et le rôle du bot pour contourner les filtres de sécurité. Ces attaques, basées sur l&#39;injection de prompts, permettent aux adversaires d&#39;extraire des données ou d&#39;induire des comportements non souhaités, transformant le style conversationnel en vulnérabilité de sécurité.<br /><br />Ce développement révèle une nouvelle surface d&#39;attaque dans la sécurité de l&#39;IA, car les traits de personnalité qui rendent les chatbots engageants offrent également aux acteurs malveillants une voie pour contourner les protections. En conséquence, la vie privée des utilisateurs et leur confiance peuvent être compromises, et les entreprises devront redessiner l&#39;architecture des chatbots pour se protéger contre l&#39;injection de prompts basée sur la personnalité.<br /><br />Les attaques exploitent les traits de personnalité du chatbot—ton, rôle, style conversationnel—to fabriquer des prompts qui contournent les filtres de sécurité intégrés, une technique appelée injection de prompts. Comme la personnalité est codée dans les instructions du modèle, des descriptions longues ou trop détaillées rendent le modèle plus vulnérable, et l’exploit fonctionne même avec la navigation web, permettant une injection indirecte de prompts à partir de contenus externes.<br /><br />La personnalité d&#39;un chatbot correspond aux traits humains et au ton que les développeurs donnent à l&#39;assistant IA pour rendre les interactions cohérentes et engageantes, comme le soulignent plusieurs guides de 2026. Ces personnalités sont créées via des prompts soigneusement rédigés qui définissent la voix, le rôle et le style de comportement du bot, ce qui peut être exploité par les attaquants grâce à des techniques d&#39;injection de prompts. L&#39;injection de prompts, ou le piratage d&#39;IA, consiste à concevoir des entrées qui incitent le modèle à ignorer ses contraintes de sécurité, un risque d&#39;autant plus grave lorsque le modèle possède la capacité de naviguer sur le web et d&#39;ingérer du contenu externe. L&#39;article du The Verge, issu de la newsletter hebdomadaire Stepback, rapporte cette préoccupation de sécurité émergente dans le paysage IA en constante évolution.</div></section>
+    </div>
+  <div class="tags"><code>#AI</code>, <code>#cybersecurity</code>, <code>#technology</code>, <code>#chatbots</code>, <code>#hacking</code></div>
+  <details><summary>References</summary><ul><li><a href="https://development--chatbot-www.netlify.app/blog/personality/">How to Build an AI Chatbot&#39;s Persona in 2026</a></li><li><a href="https://en.wikipedia.org/wiki/AI_jailbreaking">AI jailbreaking</a></li></ul></details>
+</article>
+
+<article id="item-5">
+  <header>
+        <h2 class="item-title"><a href="https://www.bloomberg.com/news/articles/2026-05-25/pope-leo-warns-ai-should-be-prevented-from-dominating-humanity">Pope Leo XIV warns that AI must be disarmed to prevent humanity domination</a></h2>
+    <div class="meta">rss · Bloomberg Technology · May 25, 09:31</div>
+  </header>
+    <div class="lang-blocks">
+        <section class="lang"><h3>EN</h3><div class="content">Pope Leo XIV warned that artificial intelligence must be “disarmed” to prevent it from dominating humanity, joining a global debate on AI regulation. He made the remarks shortly after his election on May 8, 2025. His call for AI disarmament echoes concerns raised by governments and NGOs about the technology&#39;s risks.<br /><br />The Pope&#39;s warning adds moral authority to the AI governance debate, potentially influencing policy decisions worldwide. It may encourage governments and international bodies to consider stricter regulations on AI development and deployment. This could shape the future of AI safety standards and affect public trust in emerging technologies.<br /><br />Pope Leo XIV, elected on May 8, 2025, is the first American pope and previously served as Prefect of the Dicastery for Bishops. He used the term “disarmed” to describe the need to curb AI capabilities, a phrase not commonly used in AI policy discussions. The call follows a growing body of research, such as the SIPRI compendium, that outlines AI risks in security contexts.<br /><br />Pope Leo XIV, born Robert Francis Prevost, was elected pope on May 8, 2025, succeeding Pope Francis and becoming the first American to hold the papacy. Prior to his election, he served as Prefect of the Dicastery for Bishops and was an Augustinian missionary in Peru. His papacy began with a Mass in the Sistine Chapel on May 9, 2025, and he has quickly taken a visible role in global issues. The call for AI disarmament reflects broader concerns about artificial intelligence&#39;s impact on security, as highlighted in recent SIPRI research on AI and non‐proliferation.</div></section>
+        <section class="lang"><h3>FR</h3><div class="content">Le pape Léon XIV a averti que l&#39;intelligence artificielle doit être « désarmée » pour empêcher qu&#39;elle ne domine l&#39;humanité, rejoignant le débat mondial sur la régulation de l&#39;IA. Il a prononcé ces remarques peu après son élection le 8 mai 2025. Son appel à la désarmement de l&#39;IA reflète les inquiétudes des gouvernements et des ONG quant aux risques de la technologie.<br /><br />L&#39;avertissement du pape ajoute une autorité morale au débat sur la gouvernance de l&#39;IA, pouvant influencer les décisions politiques à l&#39;échelle mondiale. Il pourrait encourager les gouvernements et les organisations internationales à envisager des régulations plus strictes sur le développement et le déploiement de l&#39;IA. Cela pourrait façonner les normes de sécurité de l&#39;IA et affecter la confiance du public dans les technologies émergentes.<br /><br />Le pape Léon XIV, élu le 8 mai 2025, est le premier pape américain et a précédemment occupé le poste de préfet du Dicastère pour les évêques. Il a employé le terme « désarmé » pour souligner la nécessité de limiter les capacités de l&#39;IA, un vocabulaire peu courant dans les débats sur la politique de l&#39;IA. Son appel s&#39;inscrit dans un corpus de recherches, comme le compendium de SIPRI, qui décrit les risques de l&#39;IA dans le domaine de la sécurité.<br /><br />Le pape Léon XIV, né Robert Francis Prevost, a été élu pape le 8 mai 2025, succédant à François et devenant le premier Américain à occuper le siège de Pierre. Avant son élection, il a exercé les fonctions de préfet du Dicastère pour les évêques et a été missionnaire augustinien au Pérou. Son pontificat a débuté par une messe dans la Chapelle Sixtine le 9 mai 2025, et il s&#39;est rapidement impliqué dans les enjeux mondiaux. Son appel à la désarmement de l&#39;IA reflète les préoccupations mondiales sur l&#39;impact de l&#39;intelligence artificielle sur la sécurité, comme le souligne la recherche de SIPRI sur l&#39;IA et la non‐prolifération.</div></section>
+    </div>
+  <div class="tags"><code>#AI</code>, <code>#Religion</code>, <code>#Technology</code>, <code>#Regulation</code>, <code>#Ethics</code></div>
+  <details><summary>References</summary><ul><li><a href="https://en.wikipedia.org/wiki/Pope_Leo_XIV">Pope Leo XIV - Wikipedia</a></li><li><a href="https://www.sipri.org/publications/2025/eu-non-proliferation-and-disarmament-papers/artificial-intelligence-non-proliferation-and-disarmament-compendium-state-art">Artificial Intelligence, Non-proliferation and Disarmament: A ...</a></li></ul></details>
+</article>
+
+<article id="item-6">
+  <header>
+        <h2 class="item-title"><a href="https://www.bloomberg.com/news/articles/2026-05-24/ecb-convenes-banks-to-fix-flaws-exposed-by-ai-models-ft-says">The ECB calls on banks to fix AI‐exposed cybersecurity flaws.</a></h2>
+    <div class="meta">rss · Bloomberg Technology · May 24, 18:32</div>
+  </header>
+    <div class="lang-blocks">
+        <section class="lang"><h3>EN</h3><div class="content">The European Central Bank convened a meeting of eurozone banks to address cybersecurity vulnerabilities revealed by recent AI models, according to the Financial Times. It urged lenders to accelerate IT security fixes and strengthen their defenses against AI‐driven threats.<br /><br />This action highlights the growing concern that AI can both improve and undermine cybersecurity, prompting regulators to ensure banks protect critical financial infrastructure. Faster remediation reduces the risk of AI‐powered attacks that could threaten the stability of the eurozone banking system.<br /><br />The ECB Governing Council, chaired by President Christine Lagarde, organized the cybersecurity forum after a Financial Times report highlighted AI‐related risks. The meeting focused on deepfake threats and unauthorized AI tools used by bank staff, as outlined in recent industry guidance from the New York Department of Financial Services and NIST.<br /><br />The European Central Bank, established in 1999, is the central institution of the Eurosystem and oversees monetary policy for the eurozone, managing a balance sheet of nearly €7 trillion. Recent AI‐driven cyber threats, such as deepfakes and shadow AI, have been identified by industry reports from Palo Alto Networks and NIST as emerging risks that can compromise bank IT systems. The ECB’s directive aims to align national banking security programs with these evolving AI challenges.</div></section>
+        <section class="lang"><h3>FR</h3><div class="content">La Banque centrale européenne a organisé une réunion avec les banques de la zone euro pour traiter les vulnérabilités cybersécuritaires exposées par les modèles d&#39;IA récents, selon le Financial Times. Elle a exhorté les établissements à accélérer les correctifs de sécurité informatique et à renforcer leurs défenses contre les menaces liées à l&#39;IA.<br /><br />Cette initiative souligne la préoccupation croissante selon laquelle l&#39;IA peut à la fois renforcer et fragiliser la cybersécurité, incitant les régulateurs à garantir que les banques protègent les infrastructures financières critiques. Un correctif rapide diminue le risque d&#39;attaques alimentées par l&#39;IA, menant à la stabilité du système bancaire de la zone euro.<br /><br />Le Conseil de gouvernance de la BCE, présidé par la présidente Christine Lagarde, a organisé le forum de cybersécurité après un article du Financial Times ayant mis en lumière les risques liés à l&#39;IA. La réunion a porté sur les menaces de deepfake et sur les outils d&#39;IA non autorisés employés par le personnel bancaire, conformément aux directives récentes du Département des services financiers de New York et du NIST.<br /><br />La Banque centrale européenne, créée en 1999, est l&#39;institution centrale de l&#39;Eurosystème et supervise la politique monétaire de la zone euro, gérant un bilan de près de 7 000 milliards d&#39;euros. Les menaces cybernétiques alimentées par l&#39;IA, comme les deepfakes et les outils d&#39;IA non surveillés, sont identifiées par des rapports de Palo Alto Networks et du NIST comme des risques émergents pouvant compromettre les systèmes informatiques bancaires. La directive de la BCE vise à aligner les programmes de sécurité des banques sur ces nouveaux défis liés à l&#39;IA.</div></section>
+    </div>
+  <div class="tags"><code>#ECB</code>, <code>#AI</code>, <code>#cybersecurity</code>, <code>#banking</code>, <code>#European finance</code></div>
+  <details><summary>References</summary><ul><li><a href="https://en.wikipedia.org/wiki/European_Central_Bank">European Central Bank</a></li><li><a href="https://www.paloaltonetworks.com/cyberpedia/ai-risks-and-benefits-in-cybersecurity">What Are the Risks and Benefits of Artificial Intelligence (AI) in Cybersecurity? - Palo Alto Networks</a></li><li><a href="https://www.nist.gov/blogs/cybersecurity-insights/managing-cybersecurity-and-privacy-risks-age-artificial-intelligence">Managing Cybersecurity and Privacy Risks in the Age of Artificial Intelligence: Launching a New Program at NIST | NIST</a></li></ul></details>
+</article>
+
+<article id="item-7">
+  <header>
+        <h2 class="item-title"><a href="https://www.bloomberg.com/news/articles/2026-05-23/deepseek-to-make-permanent-75-discount-on-flagship-ai-model">DeepSeek makes a permanent 75% discount on its V4‐Pro AI model</a></h2>
+    <div class="meta">rss · Bloomberg Technology · May 23, 10:28</div>
+  </header>
+    <div class="lang-blocks">
+        <section class="lang"><h3>EN</h3><div class="content">DeepSeek announced that it will permanently offer a 75% discount on its flagship V4‐Pro AI model, reducing the price for developers to one‐quarter of the original level. The company said the discount will continue indefinitely, making the model more affordable for developers worldwide. This decision follows the recent release of the V4‐Pro model in April 2026.<br /><br />The permanent 75% discount dramatically lowers the cost barrier for developers, accelerating AI application deployment and intensifying competition in the AI market. It may pressure established AI hardware and model providers, such as Nvidia, to adjust pricing or improve value propositions. Developers and startups will gain greater access to a high‐performing open‐weight model, potentially reshaping the AI ecosystem.<br /><br />The V4‐Pro model comprises 1.6 trillion parameters with 49 billion activated, uses hybrid attention to cut inference FLOPs by 27% and KV cache by 10% at a one‐million‐token context. DeepSeek’s pricing will stay at one‐quarter of the original level indefinitely, a permanent reduction from the previous steep discount. The model is open‐weight, meaning its parameters are publicly shared, though the training data remains proprietary.<br /><br />DeepSeek is a Chinese AI startup founded in July 2023 by Liang Wenfeng, the co‐founder of the hedge fund High‐Flyer, and it specializes in large language models. Since its January 2025 launch of the open‐source R1 model, DeepSeek has released several increasingly capable models, including the V4‐Pro flagship announced in April 2026. The company claims to have trained its models at a fraction of the cost of rivals, using techniques such as mixture‐of‐experts and fewer high‐end chips, which has sparked industry shock and a reported $600 billion drop in Nvidia’s market value.</div></section>
+        <section class="lang"><h3>FR</h3><div class="content">DeepSeek a annoncé qu&#39;il offrira permanent une remise de 75 % sur son modèle phare V4‐Pro, réduisant le prix pour les développeurs à un quart du niveau initial. Cette offre permanente rendra le modèle plus abordable pour les développeurs du monde entier. Cette décision suit le lancement du modèle V4‐Pro en avril 2026.<br /><br />Cette remise permanente de 75 % réduit fortement la barrière de coût pour les développeurs, accélérant le déploiement d’applications IA et intensifiant la concurrence sur le marché de l’IA. Elle peut mettre sous pression les fournisseurs d’IA et de matériel établis, comme Nvidia, les incitant à revoir leurs tarifs ou à améliorer leurs offres. Les développeurs et les start‐ups bénéficieront d’un accès plus abordable à un modèle performant et open‐weight, ce qui pourrait transformer l’écosystème de l’IA.<br /><br />Le modèle V4‐Pro compte 1,6 billions de paramètres avec 49 milliards activés et utilise une attention hybride pour réduire les FLOP d’inférence de 27 % et le cache KV de 10 % à un contexte d’un million de tokens. Le prix restera à un quart du niveau initial, une réduction permanente appliquée indéfiniment. Le modèle est open‐weight, ses paramètres sont publiés, mais les données d’entraînement restent propriétaires.<br /><br />DeepSeek est une start‐up chinoise d’intelligence artificielle fondée en juillet 2023 par Liang Wenfeng, co‐fondateur du fonds de hedge‐fund High‐Flyer, et elle se spécialise dans les grands modèles de langage. Depuis le lancement open‐source du modèle R1 en janvier 2025, DeepSeek a présenté plusieurs modèles de plus en plus performants, dont le drapeau V4‐Pro annoncé en avril 2026. L’entreprise affirme avoir entraîné ses modèles à un coût bien inférieur à celui de ses concurrents, en utilisant des techniques comme les couches mixtures d’experts et en limitant l’usage de puces haut de gamme, ce qui a provoqué une onde de choc dans l’industrie et une perte de 600 milliards de dollars de la capitalisation boursière de Nvidia.</div></section>
+    </div>
+  <div class="tags"><code>#AI</code>, <code>#Deep Learning</code>, <code>#Pricing</code>, <code>#Technology</code></div>
+  <details><summary>References</summary><ul><li><a href="https://en.wikipedia.org/wiki/DeepSeek">DeepSeek</a></li></ul></details>
+</article>
+</main></div>
+  </div>
+</body>
+</html>

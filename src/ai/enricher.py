@@ -3,10 +3,10 @@
 For items that pass the score threshold, this module:
 1. Searches the web for relevant context (via DuckDuckGo)
 2. Feeds search results + item content to AI to generate grounded background knowledge
+3. Produces a full editorial HTML article (same quality as a hand-crafted news piece)
 """
 
 import asyncio
-import json
 import re
 import sys
 import os
@@ -25,37 +25,231 @@ from .utils import parse_json_response
 from ..models import ContentItem
 
 
+# ──────────────────────────────────────────────────────────────────────────────
+# HTML article template (mirrors the reference article's layout & CSS)
+# ──────────────────────────────────────────────────────────────────────────────
+
+ARTICLE_CSS = """
+body {
+    font-family: Georgia, serif;
+    max-width: 900px;
+    margin: auto;
+    padding: 40px 20px;
+    line-height: 1.8;
+    color: #222;
+    background: #fafafa;
+}
+article {
+    background: white;
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+}
+header {
+    margin-bottom: 40px;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 20px;
+}
+h1 {
+    font-size: 2.4rem;
+    margin-bottom: 10px;
+    line-height: 1.2;
+}
+.meta {
+    color: #666;
+    font-size: 0.95rem;
+}
+.lead {
+    font-size: 1.2rem;
+    color: #444;
+    margin-top: 20px;
+}
+h2 {
+    margin-top: 40px;
+    font-size: 1.7rem;
+    border-left: 4px solid #222;
+    padding-left: 12px;
+}
+blockquote {
+    margin: 30px 0;
+    padding: 20px;
+    border-left: 5px solid #555;
+    background: #f3f3f3;
+    font-style: italic;
+}
+ul {
+    padding-left: 25px;
+}
+footer {
+    margin-top: 50px;
+    border-top: 1px solid #ddd;
+    padding-top: 20px;
+    color: #666;
+    font-size: 0.95rem;
+}
+"""
+
+ARTICLE_HTML_TEMPLATE = """<!doctype html>
+<html lang="{lang}">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>{title}</title>
+<style>{css}</style>
+</head>
+<body>
+<article>
+  <header>
+    <h1>{title}</h1>
+    <p class="meta">{tags} • {year}</p>
+    <p class="lead">{lead}</p>
+  </header>
+  {sections}
+  <footer>{footer}</footer>
+</article>
+</body>
+</html>"""
+
+# ──────────────────────────────────────────────────────────────────────────────
+# Prompt asking the AI to produce a structured editorial article
+# ──────────────────────────────────────────────────────────────────────────────
+
+ARTICLE_GENERATION_SYSTEM = """You are an expert tech journalist and editor.
+Your task is to write a thorough, editorial-quality news article from the provided
+information. Return ONLY a JSON object — no preamble, no markdown fences.
+
+The JSON must have these keys:
+{
+  "title_en":   "Compelling English headline",
+  "title_fr":   "Titre français accrocheur",
+  "tags_en":    "Category • Sub-category",
+  "tags_fr":    "Catégorie • Sous-catégorie",
+  "lead_en":    "2-3 sentence editorial lead in English",
+  "lead_fr":    "Chapeau éditorial de 2-3 phrases en français",
+  "sections_en": [
+    {
+      "heading": "Section heading",
+      "body":    "2-4 paragraph prose. May contain <ul><li>...</li></ul> or <blockquote>...</blockquote>."
+    }
+  ],
+  "sections_fr": [
+    {
+      "heading": "Titre de section",
+      "body":    "2-4 paragraphes. Peut contenir <ul><li>...</li></ul> ou <blockquote>...</blockquote>."
+    }
+  ],
+  "footer_en": "Short attribution / source note",
+  "footer_fr": "Courte note d'attribution / source"
+}
+
+Rules:
+- Minimum 5 sections per language, each with a strong editorial heading.
+- Use <blockquote> for at least one key quote or insight per article.
+- Use <ul><li>…</li></ul> bullet lists where relevant (features, risks, takeaways…).
+- Prose must be substantive: explain context, give concrete examples, discuss implications.
+- Ground every claim in the provided web search results. Do not invent facts.
+- Tone: authoritative yet accessible, like a quality tech magazine.
+- Do NOT include HTML document boilerplate (no <html>, <head>, <body> tags) in the body fields.
+"""
+
+ARTICLE_GENERATION_USER = """## Item to cover
+Title: {title}
+URL:   {url}
+Score: {score}/10  Reason: {reason}
+Tags:  {tags}
+AI summary: {summary}
+
+## Original content (truncated)
+{content}
+{comments_section}
+
+## Web search context
+{web_context}
+
+Write the full bilingual editorial article JSON now.
+"""
+
+
+# ──────────────────────────────────────────────────────────────────────────────
+# Helper: build HTML from parsed AI JSON
+# ──────────────────────────────────────────────────────────────────────────────
+
+def _build_sections_html(sections: list) -> str:
+    parts = []
+    for sec in sections:
+        heading = sec.get("heading", "")
+        body = sec.get("body", "")
+        # Wrap plain paragraphs: split on double-newlines, wrap in <p>
+        paragraphs = []
+        for chunk in body.split("\n\n"):
+            chunk = chunk.strip()
+            if not chunk:
+                continue
+            # Don't double-wrap already-tagged content
+            if chunk.startswith("<"):
+                paragraphs.append(chunk)
+            else:
+                # Handle single newlines as line breaks within a paragraph
+                paragraphs.append(f"<p>{chunk.replace(chr(10), '<br>')}</p>")
+        parts.append(
+            f"<section>\n  <h2>{heading}</h2>\n  {''.join(paragraphs)}\n</section>"
+        )
+    return "\n\n".join(parts)
+
+
+def _render_article(data: dict, lang: str, year: str) -> str:
+    suffix = f"_{lang}"
+    title    = data.get(f"title{suffix}", data.get("title_en", ""))
+    tags     = data.get(f"tags{suffix}",  data.get("tags_en", ""))
+    lead     = data.get(f"lead{suffix}",  data.get("lead_en", ""))
+    sections = data.get(f"sections{suffix}", data.get("sections_en", []))
+    footer   = data.get(f"footer{suffix}", data.get("footer_en", ""))
+
+    sections_html = _build_sections_html(sections)
+
+    return ARTICLE_HTML_TEMPLATE.format(
+        lang=lang,
+        title=title,
+        css=ARTICLE_CSS,
+        tags=tags,
+        year=year,
+        lead=lead,
+        sections=sections_html,
+        footer=footer,
+    )
+
+
+# ──────────────────────────────────────────────────────────────────────────────
+# Main enricher
+# ──────────────────────────────────────────────────────────────────────────────
+
 class ContentEnricher:
-    """Enriches high-scoring content items with background knowledge."""
+    """Enriches high-scoring content items with background knowledge and full HTML articles."""
 
     def __init__(self, ai_client: AIClient):
         self.client = ai_client
         self.enriched_cache = {}  # Cache of enriched URLs to avoid re-enriching
 
-    async def enrich_batch(self, items: List[ContentItem]) -> None:
-        """Enrich items in-place with background knowledge.
+    def _get_concurrency(self) -> int:
+        config = getattr(self.client, "config", None)
+        concurrency = getattr(config, "enrichment_concurrency", 6)
+        return max(concurrency, 1)
 
-        Args:
-            items: Content items to enrich (modified in-place)
-        """
+    async def enrich_batch(self, items: List[ContentItem]) -> None:
+        """Enrich items in-place with background knowledge and HTML articles."""
         if not items:
             return
 
-        # Limit to 6 concurrent enrichments (higher concurrency on fast CPUs)
-        semaphore = asyncio.Semaphore(6)
+        semaphore = asyncio.Semaphore(self._get_concurrency())
 
-        async def enrich_with_semaphore(item):
+        async def enrich_with_semaphore(item: ContentItem) -> None:
             async with semaphore:
-                # Check cache first
                 url_key = str(item.url)
                 if url_key in self.enriched_cache:
-                    # Apply cached enrichment metadata
                     item.metadata.update(self.enriched_cache[url_key])
                     return
-                
                 try:
                     await self._enrich_item(item)
-                    # Cache the enrichment metadata
                     self.enriched_cache[url_key] = dict(item.metadata)
                 except Exception as e:
                     print(f"Erreur lors de l'enrichissement de l'élément {item.id} : {e}")
@@ -69,25 +263,20 @@ class ContentEnricher:
         ) as progress:
             task = progress.add_task("Enriching", total=len(items))
 
-            async def track_and_enrich(item):
+            async def track_and_enrich(item: ContentItem) -> None:
                 await enrich_with_semaphore(item)
                 progress.advance(task)
 
             await asyncio.gather(*[track_and_enrich(item) for item in items])
 
     async def _web_search(self, query: str, max_results: int = 5) -> list:
-        """Search the web for context via DuckDuckGo.
-
-        Returns:
-            List of dicts with keys: title, url, body
-        """
+        """Search the web for context via DuckDuckGo."""
         try:
-            # Suppress primp "Impersonate ... does not exist" stderr warning
             stderr = sys.stderr
             sys.stderr = open(os.devnull, "w")
             try:
                 ddgs = DDGS()
-                results = ddgs.text(query, max_results=max_results)
+                results = await asyncio.to_thread(ddgs.text, query, max_results=max_results)
             finally:
                 sys.stderr.close()
                 sys.stderr = stderr
@@ -101,29 +290,16 @@ class ContentEnricher:
 
     @staticmethod
     def _parse_json_response(response: str) -> Optional[dict]:
-        """Try multiple strategies to extract a JSON object from an AI response.
-
-        Returns the parsed dict, or None if all strategies fail.
-        """
         return parse_json_response(response)
 
     async def _extract_concepts(self, item: ContentItem, content_text: str) -> List[str]:
-        """Ask AI to identify concepts that need explanation.
-
-        Args:
-            item: Content item
-            content_text: Extracted content text
-
-        Returns:
-            List of search queries for concepts that need explanation
-        """
+        """Ask AI to identify concepts that need explanation (web search queries)."""
         user_prompt = CONCEPT_EXTRACTION_USER.format(
             title=item.title,
             summary=item.ai_summary or item.title,
             tags=", ".join(item.ai_tags) if item.ai_tags else "",
             content=content_text[:1000],
         )
-
         try:
             response = await self.client.complete(
                 system=CONCEPT_EXTRACTION_SYSTEM,
@@ -132,8 +308,7 @@ class ContentEnricher:
             result = self._parse_json_response(response)
             if result is None:
                 return []
-            queries = result.get("queries", [])
-            return queries[:2]
+            return result.get("queries", [])[:3]
         except Exception:
             return []
 
@@ -142,17 +317,15 @@ class ContentEnricher:
         wait=wait_exponential(min=2, max=10)
     )
     async def _enrich_item(self, item: ContentItem) -> None:
-        """Enrich a single item with background knowledge.
-
-        Steps:
-        1. Ask AI which concepts in the news need explanation
-        2. Search the web for those concepts
-        3. Ask AI to generate background based on search results
-
-        Args:
-            item: Content item to enrich (modified in-place via metadata)
+        """Enrich a single item:
+        1. Extract concepts → web search
+        2. Generate bilingual editorial JSON
+        3. Render full HTML articles (EN + FR)
+        4. Keep backward-compatible plain-text metadata fields
         """
-        # Extract content text and comments separately
+        import datetime
+
+        # ── Split content / comments ──────────────────────────────────────────
         content_text = ""
         comments_text = ""
         if item.content:
@@ -163,16 +336,15 @@ class ContentEnricher:
             else:
                 content_text = item.content[:4000]
 
-        # Step 1: AI identifies concepts to explain
+        # ── Step 1 : concept extraction → web search ─────────────────────────
         queries = await self._extract_concepts(item, content_text)
 
-        # Step 2: Search web for each concept (in parallel)
         all_results = []
         web_sections = []
         if queries:
             search_results = await asyncio.gather(
                 *[self._web_search(query) for query in queries],
-                return_exceptions=True
+                return_exceptions=True,
             )
             for query, results in zip(queries, search_results):
                 if isinstance(results, Exception):
@@ -182,12 +354,11 @@ class ContentEnricher:
                     lines = [f"- [{r['title']}]({r['url']}): {r['body']}" for r in results]
                     web_sections.append(f"**{query}:**\n" + "\n".join(lines))
         web_context = "\n\n".join(web_sections) if web_sections else ""
-
-        # Index of available URLs for citation validation
         available_urls = {r["url"]: r["title"] for r in all_results if r.get("url")}
 
-        # Step 3: AI generates background grounded in search results
-        user_prompt = CONTENT_ENRICHMENT_USER.format(
+        # ── Step 2 : generate bilingual editorial article JSON ────────────────
+        year = str(datetime.datetime.utcnow().year)
+        user_prompt = ARTICLE_GENERATION_USER.format(
             title=item.title,
             url=str(item.url),
             summary=item.ai_summary or item.title,
@@ -195,77 +366,50 @@ class ContentEnricher:
             reason=item.ai_reason or "",
             tags=", ".join(item.ai_tags) if item.ai_tags else "",
             content=content_text,
-            comments_section=f"\n**Community Comments:**\n{comments_text}" if comments_text else "",
+            comments_section=(
+                f"\n**Community Comments:**\n{comments_text}" if comments_text else ""
+            ),
             web_context=web_context or "No web search results available.",
         )
 
         response = await self.client.complete(
-            system=CONTENT_ENRICHMENT_SYSTEM,
+            system=ARTICLE_GENERATION_SYSTEM,
             user=user_prompt,
         )
 
-        # Parse JSON response with robust fallback
         result = self._parse_json_response(response)
         if result is None:
-            # Gracefully degrade: skip enrichment instead of raising
-            # (raising would trigger retries that won't help with a parse error)
-            print(f"Avertissement : impossible d'analyser la réponse d'enrichissement pour {item.id}, enrichissement ignoré")
+            print(
+                f"Avertissement : impossible d'analyser la réponse d'enrichissement "
+                f"pour {item.id}, enrichissement ignoré"
+            )
             return
 
-        # Combine structured sub-fields into per-language detailed_summary
+        # ── Step 3 : render full HTML for each language ───────────────────────
         for lang in ("en", "fr"):
-            # Title may be a dict like {"text": "..."} or a plain string
-            title_key = f"title_{lang}"
-            if title_key in result:
-                val = result.get(title_key)
-                if isinstance(val, dict):
-                    item.metadata[title_key] = val.get("text", "") or str(val)
-                else:
-                    item.metadata[title_key] = str(val or "")
+            html = _render_article(result, lang, year)
+            item.metadata[f"article_html_{lang}"] = html
 
-            # Aggregate descriptive fields into a detailed summary
-            parts = []
-            for field in ("whats_new", "why_it_matters", "key_details", "background"):
-                key = f"{field}_{lang}"
-                raw = result.get(key, "")
-                if isinstance(raw, dict):
-                    text = raw.get("text", "")
-                else:
-                    text = str(raw or "")
-                text = text.strip()
-                if text:
-                    parts.append(text)
-            if parts:
-                item.metadata[f"detailed_summary_{lang}"] = "\n\n".join(parts)
+            # Also store individual structured fields (useful for APIs / search)
+            suffix = f"_{lang}"
+            item.metadata[f"title{suffix}"]    = result.get(f"title{suffix}", "")
+            item.metadata[f"lead{suffix}"]     = result.get(f"lead{suffix}", "")
+            item.metadata[f"tags{suffix}"]     = result.get(f"tags{suffix}", "")
 
-            # Background and community discussion can also be dicts or strings
-            bg_key = f"background_{lang}"
-            if bg_key in result:
-                val = result.get(bg_key)
-                if isinstance(val, dict):
-                    item.metadata[bg_key] = val.get("text", "") or str(val)
-                else:
-                    item.metadata[bg_key] = str(val or "")
+            # Flatten sections into a plain-text detailed_summary
+            sections = result.get(f"sections{suffix}", [])
+            plain_parts = []
+            for sec in sections:
+                heading = sec.get("heading", "")
+                body = re.sub(r"<[^>]+>", " ", sec.get("body", "")).strip()
+                if heading or body:
+                    plain_parts.append(f"{heading}\n{body}".strip())
+            if plain_parts:
+                item.metadata[f"detailed_summary{suffix}"] = "\n\n".join(plain_parts)
 
-            disc_key = f"community_discussion_{lang}"
-            if disc_key in result:
-                val = result.get(disc_key)
-                if isinstance(val, dict):
-                    item.metadata[disc_key] = val.get("text", "") or str(val)
-                else:
-                    item.metadata[disc_key] = str(val or "")
+            item.metadata[f"background{suffix}"] = result.get(f"footer{suffix}", "")
 
-        # Store evidence notes.
-        for lang in ("en", "fr"):
-            note_key = f"evidence_note_{lang}"
-            if note_key in result:
-                val = result.get(note_key)
-                if isinstance(val, dict):
-                    item.metadata[note_key] = val.get("text", "") or str(val)
-                else:
-                    item.metadata[note_key] = str(val or "")
-
-        # Store citation sources — only URLs that actually came from our search results
+        # ── Step 4 : citation sources ─────────────────────────────────────────
         if result.get("sources") and available_urls:
             valid = [
                 {"url": u, "title": available_urls[u]}
@@ -277,16 +421,20 @@ class ContentEnricher:
 
         self._apply_evidence_adjustment(item, result)
 
-        # Backward-compatible fallback fields (English as default)
-        item.metadata["detailed_summary"] = item.metadata.get("detailed_summary_en", "")
-        item.metadata["background"] = item.metadata.get("background_en", "")
-        item.metadata["community_discussion"] = item.metadata.get("community_discussion_en", "")
+        # ── Backward-compatible plain-text fallbacks ──────────────────────────
+        item.metadata["detailed_summary"]   = item.metadata.get("detailed_summary_en", "")
+        item.metadata["background"]         = item.metadata.get("background_en", "")
+        item.metadata["community_discussion"] = ""        # no longer a separate field
+
+    # ──────────────────────────────────────────────────────────────────────────
+    # Evidence adjustment (unchanged from original)
+    # ──────────────────────────────────────────────────────────────────────────
 
     @staticmethod
     def _looks_sensational(title: str) -> bool:
         t = (title or "").lower()
         patterns = [
-            r"\b(shocking|you won[’']t believe|destroyed|annihilat|secret|exposed|mind[- ]blowing)\b",
+            r"\b(shocking|you won['']t believe|destroyed|annihilat|secret|exposed|mind[- ]blowing)\b",
             r"\b(incroyable|choc|scandale|révélé|hallucinant|explosif)\b",
             r"\b(breaking)\b",
         ]

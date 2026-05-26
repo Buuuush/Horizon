@@ -1,5 +1,9 @@
 """AI prompts for content analysis and summarization."""
 
+# ---------------------------------------------------------------------------
+# Deduplication
+# ---------------------------------------------------------------------------
+
 TOPIC_DEDUP_SYSTEM = """You are a news deduplication assistant. Identify groups of news items that cover the exact same real-world event, release, or announcement.
 
 Rules:
@@ -19,6 +23,10 @@ Respond with valid JSON only:
 }}
 
 If there are no duplicates at all, return: {{"duplicates": []}}"""
+
+# ---------------------------------------------------------------------------
+# Content analysis (first pass)
+# ---------------------------------------------------------------------------
 
 CONTENT_ANALYSIS_SYSTEM = """You are an expert news curator helping filter important information for broad general knowledge.
 
@@ -99,6 +107,10 @@ Respond with valid JSON only:
   "uncertainty": <number>
 }}"""
 
+# ---------------------------------------------------------------------------
+# Concept extraction (enrichment step 1)
+# ---------------------------------------------------------------------------
+
 CONCEPT_EXTRACTION_SYSTEM = """You identify concepts in news that a reader might not know.
 Given a news item, return 1-3 search queries for concepts that need explanation.
 Focus on: specialized terms, institutions, policies, scientific notions, economic mechanisms, historical references, technologies, or organizations that are not widely known.
@@ -116,6 +128,10 @@ Respond with valid JSON only:
 {{
   "queries": ["<search query 1>", "<search query 2>"]
 }}"""
+
+# ---------------------------------------------------------------------------
+# Content enrichment (second pass)
+# ---------------------------------------------------------------------------
 
 CONTENT_ENRICHMENT_SYSTEM = """You are a knowledgeable news explainer who helps readers understand important news in context.
 
@@ -144,7 +160,7 @@ Field definitions:
 
 **CRITICAL — Language rules (MUST follow):**
 - All *_en fields MUST be written in English.
-- All *_fr fields MUST be written in French. Do not mix in Chinese.
+- All *_fr fields MUST be written in French. Do not mix in other languages.
 
 Guidelines:
 - EVERY field (except community_discussion when no comments exist) must contain at least one complete sentence — no field may be empty or contain just a phrase
@@ -207,8 +223,10 @@ Respond with valid JSON only. Each _en field must be in English; each _fr field 
 # Please ensure French summary fields follow this style when the requested output language
 # is French and a list-style summary is being produced.
 
+# ---------------------------------------------------------------------------
+# Per-source scoring overrides
+# ---------------------------------------------------------------------------
 
-# Per-source scoring prompts - these override CONTENT_ANALYSIS_SYSTEM for specific sources
 SCORING_PROMPTS_BY_SOURCE = {
     "hackernews": """You are an expert tech news curator for Hacker News.
 

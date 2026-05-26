@@ -28,6 +28,8 @@ LABELS = {
         "discussion": "Discussion",
         "references": "References",
         "tags": "Tags",
+        "selected_items": "From {total} items, {selected} important content pieces were selected",
+        "empty_analyzed": "Analyzed {total} items, but none met the importance threshold.",
         "empty_body": (
             "No significant developments today. This might indicate:\n"
             "- A quiet day in your tracked sources\n"
@@ -38,14 +40,22 @@ LABELS = {
             "2. Adding more diverse information sources\n"
             "3. Checking if the AI model is working correctly\n"
         ),
+        # Article section labels
+        "whats_new": "What happened",
+        "why_it_matters": "Why it matters",
+        "key_details": "Key details",
+        "evidence": "Source reliability",
     },
     "zh": {
         "header": "Horizon 每日速递",
         "source": "来源",
+        "excerpt": "原文摘录",
         "background": "背景",
         "discussion": "社区讨论",
         "references": "参考链接",
         "tags": "标签",
+        "selected_items": "从 {total} 条内容中筛选出 {selected} 条重要资讯。",
+        "empty_analyzed": "已分析 {total} 条内容，但没有达到重要性阈值的条目。",
         "empty_body": (
             "今日暂无重要动态，可能原因：\n"
             "- 今天关注的信息源较平静\n"
@@ -56,16 +66,21 @@ LABELS = {
             "2. 添加更多多样化的信息源\n"
             "3. 检查 AI 模型是否正常工作\n"
         ),
+        "whats_new": "发生了什么",
+        "why_it_matters": "为何重要",
+        "key_details": "关键细节",
+        "evidence": "来源可靠性",
     },
     "fr": {
         "header": "Horizon Quotidien",
         "source": "Source",
-        "excerpt": "原文摘录",
         "excerpt": "Extrait de l'article",
         "background": "Contexte",
         "discussion": "Discussion",
         "references": "Références",
         "tags": "Tags",
+        "selected_items": "Parmi {total} contenus collectés, {selected} sujets essentiels ont été sélectionnés.",
+        "empty_analyzed": "Analyse de {total} contenus : aucun n'a atteint le seuil d'importance.",
         "empty_body": (
             "Aucun développement important aujourd'hui. Cela peut indiquer :\n"
             "- Une journée calme dans vos sources suivies\n"
@@ -76,12 +91,102 @@ LABELS = {
             "2. Ajouter des sources plus variées\n"
             "3. Vérifier le bon fonctionnement du modèle AI\n"
         ),
+        # Article section labels
+        "whats_new": "Ce qui s'est passé",
+        "why_it_matters": "Pourquoi c'est important",
+        "key_details": "Points clés",
+        "evidence": "Fiabilité des sources",
     },
 }
 
+# ---------------------------------------------------------------------------
+# CSS helpers
+# ---------------------------------------------------------------------------
+
+_ARTICLE_CSS = """
+/* ── Editorial article layout ─────────────────────────────────────────── */
+
+.article-lead {{
+    font-size: 1.18rem;
+    color: var(--muted);
+    line-height: 1.7;
+    margin: .3rem 0 1.4rem;
+    max-width: 72ch;
+    font-style: italic;
+}}
+
+.article-section {{
+    margin-top: 1.55rem;
+}}
+
+.article-section h3 {{
+    font-family: {ui};
+    font-size: .78rem;
+    text-transform: uppercase;
+    letter-spacing: .12em;
+    color: var(--accent);
+    margin: 0 0 .45rem;
+    padding-bottom: .25rem;
+    border-bottom: 1px solid color-mix(in srgb, var(--accent) 22%, transparent);
+}}
+
+.article-section p {{
+    margin: 0;
+    font-size: 1.03rem;
+    line-height: 1.85;
+    color: var(--text);
+}}
+
+.article-section p + p {{
+    margin-top: .8rem;
+}}
+
+.article-background {{
+    margin-top: 1.4rem;
+    padding: 1rem 1.1rem;
+    background: linear-gradient(170deg, var(--surface), color-mix(in srgb, var(--accent-soft) 30%, #fff));
+    border-left: 3px solid var(--accent);
+    border-radius: 0 10px 10px 0;
+    font-size: .98rem;
+    line-height: 1.78;
+    color: var(--text);
+}}
+
+.article-background strong {{
+    display: block;
+    font-family: {ui};
+    font-size: .78rem;
+    text-transform: uppercase;
+    letter-spacing: .1em;
+    color: var(--accent);
+    margin-bottom: .35rem;
+}}
+
+.article-discussion {{
+    margin-top: 1.2rem;
+    padding: .85rem 1rem;
+    border-left: 3px solid color-mix(in srgb, var(--muted) 40%, transparent);
+    font-style: italic;
+    font-size: .98rem;
+    color: var(--muted);
+    line-height: 1.75;
+}}
+
+.article-discussion strong {{
+    font-style: normal;
+    font-family: {ui};
+    font-size: .78rem;
+    text-transform: uppercase;
+    letter-spacing: .1em;
+    display: block;
+    margin-bottom: .3rem;
+    color: var(--muted);
+}}
+"""
+
 
 class DailySummarizer:
-    """Generates daily summaries and renders them as HTML (bilingual blocks)."""
+    """Generates daily summaries and renders them as HTML (bilingual tabs FR/EN)."""
 
     def __init__(self, ai_client=None, translator: DeepLTranslator | None = None):
         self.client = ai_client
@@ -94,11 +199,9 @@ class DailySummarizer:
             return ""
 
         text = str(content)
-        # Remove comments blocks injected by scrapers to keep the core article text.
         if "--- Top Comments ---" in text:
             text = text.split("--- Top Comments ---", 1)[0]
 
-        # Strip HTML tags and normalize whitespace.
         text = re.sub(r"<[^>]+>", " ", text)
         text = unescape(text)
         text = re.sub(r"\s+", " ", text).strip()
@@ -107,6 +210,10 @@ class DailySummarizer:
             return text
         return text[:max_len].rstrip() + "..."
 
+    # ------------------------------------------------------------------
+    # Public entry points
+    # ------------------------------------------------------------------
+
     async def generate_bilingual_summary(
         self,
         items: List[ContentItem],
@@ -114,41 +221,23 @@ class DailySummarizer:
         total_fetched: int,
         languages: List[str] = None,
     ) -> str:
-        """Generate bilingual summary with tabbed interface (FR/EN onglets).
-
-        Generates summaries for each language and renders them in a single HTML
-        document with language tabs at the top for easy switching.
-
-        Args:
-            items: High-scoring content items (already enriched)
-            date: Date string (YYYY-MM-DD)
-            total_fetched: Total number of items fetched before filtering
-            languages: List of language codes (default: ["fr", "en"])
-
-        Returns:
-            str: HTML formatted summary with language tabs
-        """
+        """Generate bilingual summary with tabbed interface (FR/EN onglets)."""
         if not languages:
             languages = ["fr", "en"]
 
         await self._translate_items_for_french_render(items)
 
-        # Generate summaries for each language
         summaries = {}
         for lang in languages:
-            summary = await self.generate_summary(
-                items, date, total_fetched, language=lang
-            )
-            # Extract body from full HTML (remove DOCTYPE, html, head, body tags)
-            body_start = summary.find("<div class=\"container\">")
+            summary = await self.generate_summary(items, date, total_fetched, language=lang)
+            body_start = summary.find('<div class="container">')
             body_end = summary.rfind("</div>")
             if body_start >= 0 and body_end > body_start:
-                body = summary[body_start + len("<div class=\"container\">") : body_end]
+                body = summary[body_start + len('<div class="container">') : body_end]
             else:
                 body = summary
             summaries[lang] = body.strip()
 
-        # Build tab buttons
         tab_buttons = []
         for i, lang in enumerate(languages):
             active = "active" if i == 0 else ""
@@ -158,13 +247,10 @@ class DailySummarizer:
             )
         tabs_html = "".join(tab_buttons)
 
-        # Build tab content
         tab_contents = []
         for i, lang in enumerate(languages):
             active = "active" if i == 0 else ""
             content_html = summaries.get(lang, "")
-            # For French output, include a light "fr-item" wrapper and a
-            # numbered-section marker (legacy expectation from tests/consumers)
             if lang == "fr":
                 content_html = f'<div class="fr-item">### 1.\n{content_html}</div>'
             tab_contents.append(
@@ -172,10 +258,7 @@ class DailySummarizer:
             )
         contents_html = "".join(tab_contents)
 
-        # Select theme from first language
         theme = self._choose_theme(languages[0], items)
-
-        # Build CSS with tab styles
         css = self._get_bilingual_css(theme)
 
         html = f"""
@@ -191,10 +274,8 @@ class DailySummarizer:
       const lang = button.getAttribute('data-lang');
       const allButtons = document.querySelectorAll('.tab-button');
       const allContents = document.querySelectorAll('.tab-content');
-      
       allButtons.forEach(b => b.classList.remove('active'));
       allContents.forEach(c => c.classList.remove('active'));
-      
       button.classList.add('active');
       document.querySelector(`.tab-content[data-lang="${{lang}}"]`).classList.add('active');
     }}
@@ -213,11 +294,7 @@ class DailySummarizer:
         return html
 
     async def _translate_items_for_french_render(self, items: List[ContentItem]) -> None:
-        """Translate selected items to French right before rendering.
-
-        The translation happens after filtering and ranking so DeepL is only
-        used for articles that will actually be published.
-        """
+        """Translate selected items to French right before rendering."""
         if not items or getattr(self.translator, "available", False) is not True:
             return
 
@@ -275,39 +352,29 @@ class DailySummarizer:
         total_fetched: int,
         language: str = "en",
     ) -> str:
-        """Generate daily summary as a standalone HTML document.
-
-        Items are rendered in score-descending order (already sorted by orchestrator).
-
-        Args:
-            items: High-scoring content items (already enriched)
-            date: Date string (YYYY-MM-DD)
-            total_fetched: Total number of items fetched before filtering
-            language: Output language, either "en", "zh" or "fr"
-
-        Returns:
-            str: HTML formatted summary
-        """
+        """Generate daily summary as a standalone HTML document."""
         labels = LABELS.get(language, LABELS["en"])
 
         if language == "fr":
             await self._translate_items_for_french_render(items)
 
-        # If no items, reuse existing flow but wrapped into simple HTML
         if not items:
             body = self._generate_empty_summary(date, total_fetched, labels)
             return self._wrap_html(date, body, language)
 
         theme = self._choose_theme(language, items)
 
-        # Table of contents (links to items)
         toc_entries = []
         for i, item in enumerate(items):
             _t = item.metadata.get(f"title_{language}") or item.title
             t = self._escape_html(str(_t).replace("[", "(").replace("]", ")"))
             if language == "zh":
                 t = _pangu(t)
-            toc_entries.append(f'<li><a href="#item-{i+1}">{t}</a></li>')
+            score = item.ai_score or "?"
+            toc_entries.append(
+                f'<li><a href="#item-{i+1}">{t}'
+                f' <span class="toc-score">⭐️ {self._escape_html(str(score))}/10</span></a></li>'
+            )
         toc_html = "\n".join(toc_entries)
 
         parts = []
@@ -317,20 +384,16 @@ class DailySummarizer:
             else:
                 parts.append(self._format_item_html(item, labels, language, i + 1))
 
-        if language == "fr":
-            lead = f"{len(items)} sujets essentiels sélectionnés parmi {total_fetched} contenus collectés."
-            toc_title = "Sommaire"
-        elif language == "zh":
-            lead = f"已从 {total_fetched} 条内容中精选 {len(items)} 条重点。"
-            toc_title = "目录"
-        else:
-            lead = f"{len(items)} essential stories selected from {total_fetched} collected items."
-            toc_title = "Contents"
+        labels_lead = labels.get("selected_items", "").format(
+            total=total_fetched, selected=len(items)
+        )
+
+        toc_title = {"fr": "Sommaire", "zh": "目录"}.get(language, "Contents")
 
         body = f"""
 <section class="summary-header">
   <h1>{self._escape_html(labels['header'])} — {self._escape_html(date)}</h1>
-  <p class="lead">{self._escape_html(lead)}</p>
+  <p class="lead">{self._escape_html(labels_lead)}</p>
   <nav class="toc" aria-label="{self._escape_html(toc_title)}">
     <p class="toc-title">{self._escape_html(toc_title)}</p>
     <ul>{toc_html}</ul>
@@ -353,25 +416,24 @@ class DailySummarizer:
         if not items:
             return self._generate_empty_summary(date, total_fetched, labels)
 
+        selected_line = labels.get("selected_items", "").format(
+            total=total_fetched, selected=len(items)
+        )
+
         if language == "zh":
-            header = (
-                f"# {labels['header']} - {date}\n\n"
-                f"> 从 {total_fetched} 条内容中筛选出 {len(items)} 条重要资讯。\n\n"
-                "下面会按新闻逐条发送详情，你可以只看感兴趣的标题。\n\n"
-            )
+            intro = "下面会按新闻逐条发送详情，你可以只看感兴趣的标题。\n\n"
         else:
-            header = (
-                f"# {labels['header']} - {date}\n\n"
-                f"> Selected {len(items)} important items from {total_fetched} fetched items.\n\n"
-                "Details will be sent item by item so you can read only the topics you care about.\n\n"
-            )
+            intro = "Details will be sent item by item so you can read only the topics you care about.\n\n"
+
+        header = f"# {labels['header']} - {date}\n\n> {selected_line}\n\n{intro}"
 
         entries = []
         for i, item in enumerate(items, start=1):
             title = str(item.metadata.get(f"title_{language}") or item.title).replace("[", "(").replace("]", ")")
             if language == "zh":
                 title = _pangu(title)
-            entries.append(f"{i}. [{title}]({item.url})")
+            score = item.ai_score or "?"
+            entries.append(f"{i}. [{title}]({item.url}) ⭐️ {score}/10")
 
         return header + "\n".join(entries)
 
@@ -386,6 +448,10 @@ class DailySummarizer:
         labels = LABELS.get(language, LABELS["en"])
         prefix = f"第 {index}/{total} 条\n\n" if language == "zh" else f"Item {index}/{total}\n\n"
         return prefix + self._format_item(item, labels, language, index).rstrip("-\n ")
+
+    # ------------------------------------------------------------------
+    # Markdown formatter (webhook)
+    # ------------------------------------------------------------------
 
     def _format_item(self, item: ContentItem, labels: dict, language: str, index: int) -> str:
         """Format a single ContentItem into Markdown."""
@@ -414,7 +480,6 @@ class DailySummarizer:
             background = _pangu(background)
             discussion = _pangu(discussion)
 
-        # Source line with parts joined by " · ", link appended at end
         source_type = item.source_type.value
         source_parts = [source_type]
         if meta.get("subreddit"):
@@ -424,9 +489,15 @@ class DailySummarizer:
         else:
             source_parts.append(item.author or "unknown")
         if item.published_at:
-            day = item.published_at.strftime("%d").lstrip("0")
-            source_parts.append(item.published_at.strftime(f"%b {day}, %H:%M"))
-        source_line = " \u00b7 ".join(source_parts)  # ·
+            if language == "zh":
+                source_parts.append(
+                    f"{item.published_at.month}月{item.published_at.day}日 "
+                    f"{item.published_at:%H:%M}"
+                )
+            else:
+                day = item.published_at.strftime("%d").lstrip("0")
+                source_parts.append(item.published_at.strftime(f"%b {day}, %H:%M"))
+        source_line = " · ".join(source_parts)
 
         discussion_url = meta.get("discussion_url")
         if discussion_url:
@@ -436,7 +507,7 @@ class DailySummarizer:
 
         lines = [
             f'<a id="item-{index}"></a>',
-            f"## [{title}]({url}) \u2b50\ufe0f {score}/10",  # ⭐️
+            f"## [{title}]({url}) ⭐️ {score}/10",
             "",
             summary,
             "",
@@ -469,58 +540,14 @@ class DailySummarizer:
 
         return "\n".join(lines) + "\n\n"
 
-    def _format_item_fr_html(self, item: ContentItem, labels: dict, index: int) -> str:
-        """Format a single ContentItem as a French-only HTML card.
+    # ------------------------------------------------------------------
+    # HTML article formatters
+    # ------------------------------------------------------------------
 
-        This avoids leaking English fallback content into the French tab.
-        """
-        meta = item.metadata
-
-        title_raw = meta.get("title_fr") or item.title
-        title = self._escape_html(str(title_raw).replace("[", "(").replace("]", ")"))
-        url = self._escape_html(str(item.url))
-
-        whats_new = (meta.get("whats_new_fr") or "").strip()
-        why_it_matters = (meta.get("why_it_matters_fr") or "").strip()
-        key_details = (meta.get("key_details_fr") or "").strip()
-        background = (meta.get("background_fr") or "").strip()
-        detailed_summary = (meta.get("detailed_summary_fr") or "").strip()
-        evidence_note = (meta.get("evidence_note_fr") or "").strip()
-
-        body_blocks = []
-        if whats_new:
-            body_blocks.append(("Ce qui est nouveau", whats_new))
-        if why_it_matters:
-            body_blocks.append(("Pourquoi c'est important", why_it_matters))
-        if key_details:
-            body_blocks.append(("Points clés", key_details))
-        if background:
-            body_blocks.append((labels["background"], background))
-
-        if not body_blocks and detailed_summary:
-            body_blocks.append(("Résumé", detailed_summary))
-
-        # If French enrichment is missing, reuse EN detailed summary first.
-        if not body_blocks:
-            detailed_summary_en = (meta.get("detailed_summary_en") or "").strip()
-            if detailed_summary_en:
-                body_blocks.append(("Résumé", detailed_summary_en))
-
-        if not body_blocks:
-            excerpt = self._clean_content_excerpt(item.content or "")
-            if excerpt:
-                body_blocks.append((labels.get("excerpt", "Extrait"), excerpt))
-            else:
-                body_blocks.append(("Résumé", "Non disponible en français pour le moment."))
-
-        content_sections_list = []
-        for section_title, section_text in body_blocks:
-            section_html = self._escape_html(section_text).replace("\n", "<br />")
-            content_sections_list.append(
-                f'<section class="content-section"><h3>{self._escape_html(section_title)}</h3><div class="content">{section_html}</div></section>'
-            )
-        content_sections = "".join(content_sections_list)
-
+    def _build_source_line_html(
+        self, item: ContentItem, labels: dict, meta: dict
+    ) -> str:
+        """Build the escaped source/meta line common to all HTML renderers."""
         source_parts = [self._escape_html(item.source_type.value)]
         if meta.get("subreddit"):
             source_parts.append(self._escape_html(f"r/{meta['subreddit']}"))
@@ -530,55 +557,250 @@ class DailySummarizer:
             source_parts.append(self._escape_html(item.author or "unknown"))
         if item.published_at:
             day = item.published_at.strftime("%d").lstrip("0")
-            source_parts.append(self._escape_html(item.published_at.strftime(f"%b {day}, %H:%M")))
-        source_line = " \u00b7 ".join(source_parts)
+            source_parts.append(
+                self._escape_html(item.published_at.strftime(f"%b {day}, %H:%M"))
+            )
+        source_line = " · ".join(source_parts)
 
         discussion_url = meta.get("discussion_url")
         if discussion_url and str(discussion_url) != str(item.url):
-            source_line += f' · <a href="{self._escape_html(str(discussion_url))}">{self._escape_html(labels["discussion"])}</a>'
+            source_line += (
+                f' · <a href="{self._escape_html(str(discussion_url))}">'
+                f'{self._escape_html(labels["discussion"])}</a>'
+            )
+        return source_line
+
+    def _build_refs_html(self, references: list, labels: dict) -> str:
+        """Build a <details> references block or empty string."""
+        if not references:
+            return ""
+        items_html = "".join(
+            f'<li><a href="{self._escape_html(s["url"])}">{self._escape_html(s["title"])}</a></li>'
+            for s in references
+        )
+        return (
+            f"<details><summary>{self._escape_html(labels['references'])}</summary>"
+            f"<ul>{items_html}</ul></details>"
+        )
+
+    def _render_article_sections(
+        self,
+        fields: list[tuple[str, str]],
+        background: str,
+        discussion: str,
+        labels: dict,
+    ) -> str:
+        """Render structured content fields as editorial article sections.
+
+        Args:
+            fields: list of (label, text) pairs for the main body sections
+            background: background/context text
+            discussion: community discussion text
+            labels: localised label dict
+        """
+        html_parts = []
+
+        # Lead paragraph = first non-empty field rendered as italic lede
+        lead_done = False
+        for section_label, text in fields:
+            if not text:
+                continue
+            escaped = self._escape_html(text).replace("\n", "</p><p>")
+            if not lead_done:
+                html_parts.append(f'<p class="article-lead">{escaped}</p>')
+                lead_done = True
+            else:
+                html_parts.append(
+                    f'<div class="article-section">'
+                    f"<h3>{self._escape_html(section_label)}</h3>"
+                    f"<p>{escaped}</p>"
+                    f"</div>"
+                )
+
+        if background:
+            esc = self._escape_html(background).replace("\n", "</p><p>")
+            html_parts.append(
+                f'<div class="article-background">'
+                f"<strong>{self._escape_html(labels.get('background', 'Background'))}</strong>"
+                f"<p>{esc}</p>"
+                f"</div>"
+            )
+
+        if discussion:
+            esc = self._escape_html(discussion).replace("\n", "</p><p>")
+            html_parts.append(
+                f'<div class="article-discussion">'
+                f"<strong>{self._escape_html(labels.get('discussion', 'Discussion'))}</strong>"
+                f"<p>{esc}</p>"
+                f"</div>"
+            )
+
+        return "".join(html_parts)
+
+    def _format_item_fr_html(self, item: ContentItem, labels: dict, index: int) -> str:
+        """Format a single ContentItem as a French-only editorial article card."""
+        meta = item.metadata
+        score = item.ai_score or "?"
+
+        title_raw = meta.get("title_fr") or item.title
+        title = self._escape_html(str(title_raw).replace("[", "(").replace("]", ")"))
+        url = self._escape_html(str(item.url))
+
+        # Gather structured fields in priority order
+        whats_new = (meta.get("whats_new_fr") or "").strip()
+        why_it_matters = (meta.get("why_it_matters_fr") or "").strip()
+        key_details = (meta.get("key_details_fr") or "").strip()
+        background = (meta.get("background_fr") or "").strip()
+        discussion = (meta.get("community_discussion_fr") or "").strip()
+        evidence_note = (meta.get("evidence_note_fr") or "").strip()
+
+        fields = [
+            (labels.get("whats_new", "Ce qui s'est passé"), whats_new),
+            (labels.get("why_it_matters", "Pourquoi c'est important"), why_it_matters),
+            (labels.get("key_details", "Points clés"), key_details),
+        ]
+
+        # Fallback chain when structured fields are absent
+        has_content = any(t for _, t in fields)
+        if not has_content:
+            detailed_summary = (meta.get("detailed_summary_fr") or "").strip()
+            if not detailed_summary:
+                detailed_summary = (meta.get("detailed_summary_en") or "").strip()
+            if not detailed_summary:
+                detailed_summary = self._clean_content_excerpt(item.content or "")
+            if not detailed_summary:
+                detailed_summary = "Non disponible en français pour le moment."
+            fields = [("Résumé", detailed_summary)]
+
+        article_body = self._render_article_sections(fields, background, discussion, labels)
+
+        source_line = self._build_source_line_html(item, labels, meta)
+        refs_html = self._build_refs_html(meta.get("sources") or [], labels)
 
         tags_html = ""
         if item.ai_tags:
             tags_html = ", ".join([f"<code>#{self._escape_html(t)}</code>" for t in item.ai_tags])
 
-        references = meta.get("sources") or []
-        refs_html = ""
-        if references:
-            items_html = "".join(
-                f'<li><a href="{self._escape_html(s["url"])}">{self._escape_html(s["title"])}</a></li>'
-                for s in references
+        evidence_html = ""
+        if evidence_note:
+            evidence_html = (
+                f'<p class="evidence-note">'
+                f'<strong>{self._escape_html(labels.get("evidence", "Fiabilité"))}</strong> : '
+                f"{self._escape_html(evidence_note)}</p>"
             )
-            refs_html = f"<details><summary>{self._escape_html(labels['references'])}</summary><ul>{items_html}</ul></details>"
+
+        return f"""
+<article id="item-{index}">
+  <header>
+    <h2 class="item-title"><a href="{url}">{title}</a>
+      <span class="score">⭐️ {self._escape_html(str(score))}/10</span>
+    </h2>
+    <div class="meta">{source_line}</div>
+  </header>
+  <div class="article-body">{article_body}</div>
+  {evidence_html}
+  <footer class="item-footer">
+    <div class="tags">{tags_html}</div>
+    {refs_html}
+  </footer>
+</article>
+"""
+
+    def _format_item_html(self, item: ContentItem, labels: dict, language: str, index: int) -> str:
+        """Format a single ContentItem as an editorial article card (EN / other languages)."""
+        meta = item.metadata
+        score = item.ai_score or "?"
+
+        title_raw = meta.get(f"title_{language}") or item.title
+        title = self._escape_html(str(title_raw).replace("[", "(").replace("]", ")"))
+        url = self._escape_html(str(item.url))
+
+        whats_new = (meta.get(f"whats_new_{language}") or "").strip()
+        why_it_matters = (meta.get(f"why_it_matters_{language}") or "").strip()
+        key_details = (meta.get(f"key_details_{language}") or "").strip()
+        background = (meta.get(f"background_{language}") or meta.get("background") or "").strip()
+        discussion = (
+            meta.get(f"community_discussion_{language}")
+            or meta.get("community_discussion")
+            or ""
+        ).strip()
+        evidence_note = (meta.get(f"evidence_note_{language}") or "").strip()
+
+        if language == "zh":
+            whats_new = _pangu(whats_new)
+            why_it_matters = _pangu(why_it_matters)
+            key_details = _pangu(key_details)
+            background = _pangu(background)
+            discussion = _pangu(discussion)
+
+        fields = [
+            (labels.get("whats_new", "What happened"), whats_new),
+            (labels.get("why_it_matters", "Why it matters"), why_it_matters),
+            (labels.get("key_details", "Key details"), key_details),
+        ]
+
+        has_content = any(t for _, t in fields)
+        if not has_content:
+            fallback = (
+                meta.get(f"detailed_summary_{language}")
+                or meta.get("detailed_summary")
+                or item.ai_summary
+                or self._clean_content_excerpt(item.content or "")
+                or "Not available."
+            )
+            if language == "zh":
+                fallback = _pangu(fallback)
+            fields = [("Summary", fallback)]
+
+        article_body = self._render_article_sections(fields, background, discussion, labels)
+
+        source_line = self._build_source_line_html(item, labels, meta)
+        refs_html = self._build_refs_html(meta.get("sources") or [], labels)
+
+        tags_html = ""
+        if item.ai_tags:
+            tags_html = ", ".join([f"<code>#{self._escape_html(t)}</code>" for t in item.ai_tags])
 
         evidence_html = ""
         if evidence_note:
             evidence_html = (
-                f'<p class="evidence-note"><strong>Fiabilité</strong> : '
+                f'<p class="evidence-note">'
+                f'<strong>{self._escape_html(labels.get("evidence", "Source reliability"))}</strong>: '
                 f"{self._escape_html(evidence_note)}</p>"
             )
 
-        html = f"""
+        return f"""
 <article id="item-{index}">
   <header>
-        <h2 class="item-title"><a href="{url}">{title}</a></h2>
+    <h2 class="item-title"><a href="{url}">{title}</a>
+      <span class="score">⭐️ {self._escape_html(str(score))}/10</span>
+    </h2>
     <div class="meta">{source_line}</div>
   </header>
-  <div class="lang-blocks fr-only">{content_sections}</div>
+  <div class="article-body">{article_body}</div>
   {evidence_html}
-  <div class="tags">{tags_html}</div>
-  {refs_html}
+  <footer class="item-footer">
+    <div class="tags">{tags_html}</div>
+    {refs_html}
+  </footer>
 </article>
 """
 
-        return html
+    # ------------------------------------------------------------------
+    # Empty state
+    # ------------------------------------------------------------------
 
     def _generate_empty_summary(self, date: str, total_fetched: int, labels: dict) -> str:
-        """Generate summary when no high-scoring items were found."""
+        analyzed_line = labels.get("empty_analyzed", "").format(total=total_fetched)
         return (
             f"# {labels['header']} - {date}\n\n"
-            f"> Analyzed {total_fetched} items, but none met the importance threshold.\n\n"
+            f"> {analyzed_line}\n\n"
             + labels["empty_body"]
         )
+
+    # ------------------------------------------------------------------
+    # Utilities
+    # ------------------------------------------------------------------
 
     def _escape_html(self, s: str) -> str:
         if s is None:
@@ -593,13 +815,12 @@ class DailySummarizer:
         )
 
     def _choose_theme(self, language: str, items: List[ContentItem]) -> dict:
-        """Return a simple theme dict based on language and content heuristics.
-
-        This is a lightweight 'AI-decides' heuristic: choose fonts and color palette
-        that suit the target language and make the output pleasant to read.
-        """
+        """Return a theme dict based on language and content heuristics."""
         text_blob = " ".join(
-            [str(getattr(item, "title", "")) + " " + " ".join(getattr(item, "ai_tags", []) or []) for item in items]
+            [
+                str(getattr(item, "title", "")) + " " + " ".join(getattr(item, "ai_tags", []) or [])
+                for item in items
+            ]
         ).lower()
         science_signals = ["science", "research", "space", "biology", "physics", "climate", "sante", "santé"]
         policy_signals = ["election", "war", "government", "court", "ukraine", "iran", "policy"]
@@ -614,60 +835,48 @@ class DailySummarizer:
 
         if science_score >= policy_score + 2:
             palette = {
-                "bg": "#f4fbfb",
-                "paper": "#ffffff",
-                "surface": "#f7fffe",
-                "accent": "#007a79",
-                "accent_soft": "#d6f3f2",
-                "muted": "#58646e",
-                "text": "#0e2a2f",
+                "bg": "#f4fbfb", "paper": "#ffffff", "surface": "#f7fffe",
+                "accent": "#007a79", "accent_soft": "#d6f3f2",
+                "muted": "#58646e", "text": "#0e2a2f",
             }
         elif policy_score > science_score:
             palette = {
-                "bg": "#f8f5f3",
-                "paper": "#ffffff",
-                "surface": "#fffbf8",
-                "accent": "#9b3d2a",
-                "accent_soft": "#f9e2dc",
-                "muted": "#6e5b54",
-                "text": "#2f211d",
+                "bg": "#f8f5f3", "paper": "#ffffff", "surface": "#fffbf8",
+                "accent": "#9b3d2a", "accent_soft": "#f9e2dc",
+                "muted": "#6e5b54", "text": "#2f211d",
             }
         elif language == "fr":
             palette = {
-                "bg": "#f8f8fb",
-                "paper": "#ffffff",
-                "surface": "#fcfbff",
-                "accent": "#325c9b",
-                "accent_soft": "#e6eefb",
-                "muted": "#5c6372",
-                "text": "#1d2230",
+                "bg": "#f8f8fb", "paper": "#ffffff", "surface": "#fcfbff",
+                "accent": "#325c9b", "accent_soft": "#e6eefb",
+                "muted": "#5c6372", "text": "#1d2230",
             }
         elif language == "zh":
             palette = {
-                "bg": "#f7fafc",
-                "paper": "#ffffff",
-                "surface": "#fbfdff",
-                "accent": "#1369a0",
-                "accent_soft": "#deedf8",
-                "muted": "#5c6670",
-                "text": "#112131",
+                "bg": "#f7fafc", "paper": "#ffffff", "surface": "#fbfdff",
+                "accent": "#1369a0", "accent_soft": "#deedf8",
+                "muted": "#5c6670", "text": "#112131",
             }
         else:
             palette = {
-                "bg": "#f8f8f6",
-                "paper": "#ffffff",
-                "surface": "#fffefb",
-                "accent": "#2f6a4f",
-                "accent_soft": "#ddf1e6",
-                "muted": "#5f665f",
-                "text": "#1e2a1f",
+                "bg": "#f8f8f6", "paper": "#ffffff", "surface": "#fffefb",
+                "accent": "#2f6a4f", "accent_soft": "#ddf1e6",
+                "muted": "#5f665f", "text": "#1e2a1f",
             }
 
         return {**base_fonts, **palette}
 
-    def _get_bilingual_css(self, theme: dict) -> str:
-        """Generate CSS for bilingual tabbed interface."""
-        css = f"""
+    # ------------------------------------------------------------------
+    # CSS generators
+    # ------------------------------------------------------------------
+
+    def _article_css(self, theme: dict) -> str:
+        """Return the editorial article CSS block, formatted with theme values."""
+        return _ARTICLE_CSS.format(ui=theme["ui"])
+
+    def _base_css(self, theme: dict) -> str:
+        """Return the shared structural/typographic CSS."""
+        return f"""
 @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600&family=Manrope:wght@500;700&display=swap');
 
 :root {{
@@ -698,49 +907,7 @@ body {{
 
 .container {{ max-width: 1100px; margin: 1.5rem auto; padding: 1rem; }}
 
-.tab-switcher {{
-    display: flex;
-    gap: 0.5rem;
-    margin-bottom: 1.5rem;
-    border-bottom: 2px solid color-mix(in srgb, var(--accent) 20%, transparent);
-}}
-
-.tab-button {{
-    background: transparent;
-    border: none;
-    color: var(--muted);
-    font-family: {theme['ui']};
-    font-size: 1rem;
-    font-weight: 600;
-    padding: 0.75rem 1.2rem;
-    cursor: pointer;
-    transition: color 0.18s ease, border-color 0.18s ease;
-    border-bottom: 3px solid transparent;
-}}
-
-.tab-button:hover {{
-    color: var(--text);
-}}
-
-.tab-button.active {{
-    color: var(--accent);
-    border-bottom-color: var(--accent);
-}}
-
-.tab-content {{
-    display: none;
-    animation: fadeIn 0.2s ease-in;
-}}
-
-.tab-content.active {{
-    display: block;
-}}
-
-@keyframes fadeIn {{
-    from {{ opacity: 0; }}
-    to {{ opacity: 1; }}
-}}
-
+/* ── Page header ─────────────────────────────────────────────────────── */
 .summary-header {{
     background: var(--paper);
     border: 1px solid color-mix(in srgb, var(--accent) 16%, transparent);
@@ -751,18 +918,15 @@ body {{
     position: relative;
     overflow: hidden;
 }}
-
 .summary-header::after {{
     content: "";
     position: absolute;
     inset: auto -60px -80px auto;
-    width: 220px;
-    height: 220px;
+    width: 220px; height: 220px;
     border-radius: 999px;
     background: radial-gradient(circle, color-mix(in srgb, var(--accent-2) 28%, transparent), transparent 70%);
     pointer-events: none;
 }}
-
 .summary-header h1 {{
     margin: 0;
     font-family: 'Fraunces', {theme['title']};
@@ -770,9 +934,9 @@ body {{
     font-size: clamp(1.8rem, 3.6vw, 2.8rem);
     line-height: 1.15;
 }}
-
 .lead {{ margin: .55rem 0 1.1rem; color: var(--muted); font-size: 1.04rem; max-width: 78ch; }}
 
+/* ── TOC ─────────────────────────────────────────────────────────────── */
 .toc-title {{
     margin: 0 0 .45rem;
     font-family: {theme['ui']};
@@ -781,16 +945,12 @@ body {{
     letter-spacing: .11em;
     color: var(--muted);
 }}
-
 .toc ul {{
-    list-style: none;
-    margin: 0;
-    padding: 0;
+    list-style: none; margin: 0; padding: 0;
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
     gap: .55rem;
 }}
-
 .toc li {{
     background: linear-gradient(160deg, var(--surface), color-mix(in srgb, var(--accent-soft) 48%, #ffffff));
     border: 1px solid color-mix(in srgb, var(--accent) 16%, transparent);
@@ -798,99 +958,64 @@ body {{
     padding: .55rem .65rem;
     transition: transform .18s ease, box-shadow .18s ease;
 }}
-
-.toc li:hover {{
-    transform: translateY(-1px);
-    box-shadow: 0 8px 20px color-mix(in srgb, var(--accent) 15%, transparent);
-}}
-
+.toc li:hover {{ transform: translateY(-1px); box-shadow: 0 8px 20px color-mix(in srgb, var(--accent) 15%, transparent); }}
 .toc a {{ text-decoration: none; color: var(--text); }}
+.toc-score {{ color: var(--accent); font-family: {theme['ui']}; font-size: .85rem; font-weight: 600; }}
 
+/* ── Article cards ───────────────────────────────────────────────────── */
 .items {{ display: grid; gap: .95rem; }}
-
 .items article {{
     background: var(--paper);
     border: 1px solid color-mix(in srgb, var(--accent) 15%, transparent);
     border-radius: 20px;
-    padding: 1.15rem 1.2rem;
+    padding: 1.4rem 1.6rem 1.1rem;
     box-shadow: 0 10px 32px rgba(0, 0, 0, 0.05);
 }}
-
 .item-title {{
     font-family: 'Fraunces', {theme['title']};
     font-size: clamp(1.2rem, 2.2vw, 1.55rem);
-    margin: 0 0 .55rem;
+    margin: 0 0 .3rem;
     line-height: 1.22;
 }}
-
 .item-title a {{ color: inherit; text-decoration: none; }}
 .item-title a:hover {{ color: var(--accent); }}
-
-.item-title a:focus-visible,
-.toc a:focus-visible,
-summary:focus-visible {{
+.item-title a:focus-visible, .toc a:focus-visible, summary:focus-visible {{
     outline: 2px solid var(--ring);
     outline-offset: 2px;
     border-radius: 6px;
 }}
+.meta {{ color: var(--muted); font-family: {theme['ui']}; font-size: .88rem; margin-bottom: .9rem; }}
+.score {{ color: var(--accent); margin-left: .45rem; font-weight: 700; font-family: {theme['ui']}; font-size: .95rem; }}
 
-.meta {{ color: var(--muted); font-family: {theme['ui']}; font-size: .9rem; margin-bottom: .7rem; }}
-.score {{ color: var(--accent); margin-left: .45rem; font-weight: 700; font-family: {theme['ui']}; }}
+.article-body {{ border-top: 1px solid color-mix(in srgb, var(--accent) 10%, transparent); padding-top: 1rem; }}
 
-.content {{ font-size: 1.03rem; line-height: 1.8; }}
-
-.fr-only {{
-    display: grid;
-    gap: .72rem;
-}}
-
-.content-section {{
-    background: linear-gradient(170deg, var(--surface), color-mix(in srgb, var(--accent-soft) 24%, #ffffff));
-    border: 1px solid color-mix(in srgb, var(--accent) 12%, transparent);
-    border-radius: 12px;
-    padding: .78rem .85rem;
-}}
-
-.content-section h3 {{
-    margin: 0 0 .35rem;
-    font-family: {theme['ui']};
-    font-size: .82rem;
-    color: var(--muted);
-    letter-spacing: .07em;
-    text-transform: uppercase;
+.item-footer {{
+    margin-top: 1rem;
+    padding-top: .65rem;
+    border-top: 1px solid color-mix(in srgb, var(--muted) 18%, transparent);
 }}
 
 .evidence-note {{
-    margin: .7rem 0 0;
+    margin: .8rem 0 0;
     color: var(--muted);
-    font-size: .94rem;
+    font-size: .92rem;
+    font-style: italic;
 }}
 
-.tags {{ margin-top: .75rem; color: var(--muted); font-family: {theme['ui']}; font-size: .9rem; }}
+.tags {{ color: var(--muted); font-family: {theme['ui']}; font-size: .88rem; margin-bottom: .45rem; }}
 code {{ background: color-mix(in srgb, var(--accent-soft) 65%, #ffffff); border-radius: 8px; padding: .12rem .4rem; }}
 
-details {{ margin-top: .65rem; }}
-details summary {{ cursor: pointer; color: var(--accent); font-family: {theme['ui']}; }}
+details {{ margin-top: .5rem; }}
+details summary {{ cursor: pointer; color: var(--accent); font-family: {theme['ui']}; font-size: .9rem; }}
 
-@media (max-width: 860px) {{
-    .container {{ margin: .7rem auto; padding: .65rem; }}
-    .tab-switcher {{ flex-wrap: wrap; }}
-}}
-
+/* ── Dark mode ───────────────────────────────────────────────────────── */
 @media (prefers-color-scheme: dark) {{
     :root {{
-        --bg: #0f1420;
-        --paper: #161d2c;
-        --surface: #1b2435;
-        --accent: #7cb1ff;
-        --accent-2: #c28cff;
-        --accent-3: #ffc36c;
-        --accent-soft: #1a2740;
-        --muted: #a6b4cd;
-        --text: #edf2ff;
+        --bg: #0f1420; --paper: #161d2c; --surface: #1b2435;
+        --accent: #7cb1ff; --accent-2: #c28cff; --accent-3: #ffc36c;
+        --accent-soft: #1a2740; --muted: #a6b4cd; --text: #edf2ff;
         --ring: rgba(124, 177, 255, 0.55);
     }}
-
     body {{
         background:
             radial-gradient(1200px 420px at -10% -20%, #1a2740, transparent 60%),
@@ -898,255 +1023,47 @@ details summary {{ cursor: pointer; color: var(--accent); font-family: {theme['u
             radial-gradient(640px 240px at 30% 0%, rgba(255, 195, 108, 0.14), transparent 70%),
             var(--bg);
     }}
+    .summary-header, .items article {{ border-color: rgba(124,177,255,.24); box-shadow: 0 18px 44px rgba(0,0,0,.32); }}
+    .toc li {{ border-color: rgba(124,177,255,.22); background: linear-gradient(170deg, #1b2435, #1f2a3f); }}
+    code {{ background: rgba(124,177,255,.16); }}
+    .article-background {{ background: linear-gradient(170deg, #1b2435, #1f2a3f); }}
+}}
 
-    .summary-header,
-    .items article {{
-        border-color: rgba(124, 177, 255, 0.24);
-        box-shadow: 0 18px 44px rgba(0, 0, 0, 0.32);
-    }}
-
-    .tab-switcher {{
-        border-bottom-color: rgba(124, 177, 255, 0.2);
-    }}
-
-    code {{
-        background: rgba(124, 177, 255, 0.16);
-    }}
+@media (max-width: 860px) {{
+    .container {{ margin: .7rem auto; padding: .65rem; }}
 }}
 """
-        return css
+
+    def _get_bilingual_css(self, theme: dict) -> str:
+        """Generate CSS for the bilingual tabbed interface."""
+        tab_css = f"""
+.tab-switcher {{
+    display: flex; gap: .5rem; margin-bottom: 1.5rem;
+    border-bottom: 2px solid color-mix(in srgb, var(--accent) 20%, transparent);
+}}
+.tab-button {{
+    background: transparent; border: none; color: var(--muted);
+    font-family: {theme['ui']}; font-size: 1rem; font-weight: 600;
+    padding: .75rem 1.2rem; cursor: pointer;
+    transition: color .18s ease, border-color .18s ease;
+    border-bottom: 3px solid transparent;
+}}
+.tab-button:hover {{ color: var(--text); }}
+.tab-button.active {{ color: var(--accent); border-bottom-color: var(--accent); }}
+.tab-content {{ display: none; animation: fadeIn .2s ease-in; }}
+.tab-content.active {{ display: block; }}
+@keyframes fadeIn {{ from {{ opacity: 0; }} to {{ opacity: 1; }} }}
+@media (max-width: 860px) {{ .tab-switcher {{ flex-wrap: wrap; }} }}
+"""
+        return self._base_css(theme) + self._article_css(theme) + tab_css
 
     def _wrap_html(self, date: str, body_html: str, language: str, theme: dict = None) -> str:
         if theme is None:
             theme = self._choose_theme(language, [])
 
-        css = f"""
-@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600&family=Manrope:wght@500;700&display=swap');
+        css = self._base_css(theme) + self._article_css(theme)
 
-:root {{
-    --bg: {theme['bg']};
-    --paper: {theme['paper']};
-    --surface: {theme['surface']};
-    --accent: {theme['accent']};
-    --accent-2: color-mix(in srgb, var(--accent) 55%, #b73fd6);
-    --accent-3: color-mix(in srgb, var(--accent) 40%, #f59e0b);
-    --accent-soft: {theme['accent_soft']};
-    --muted: {theme['muted']};
-    --text: {theme['text']};
-    --ring: color-mix(in srgb, var(--accent) 32%, transparent);
-}}
-
-* {{ box-sizing: border-box; }}
-html, body {{ margin: 0; padding: 0; }}
-body {{
-    color: var(--text);
-    background:
-        radial-gradient(1300px 420px at -10% -20%, var(--accent-soft), transparent 60%),
-        radial-gradient(760px 300px at 88% -12%, color-mix(in srgb, var(--accent-2) 24%, transparent), transparent 66%),
-        radial-gradient(640px 240px at 30% 0%, color-mix(in srgb, var(--accent-3) 18%, transparent), transparent 70%),
-        var(--bg);
-    font-family: {theme['body']};
-    line-height: 1.78;
-}}
-
-.container {{ max-width: 1100px; margin: 1.5rem auto; padding: 1rem; }}
-
-.summary-header {{
-    background: var(--paper);
-    border: 1px solid color-mix(in srgb, var(--accent) 16%, transparent);
-    border-radius: 24px;
-    padding: 1.5rem 1.6rem 1.1rem;
-    box-shadow: 0 18px 48px rgba(19, 33, 68, 0.08);
-    margin-bottom: 1rem;
-    position: relative;
-    overflow: hidden;
-}}
-
-.summary-header::after {{
-    content: "";
-    position: absolute;
-    inset: auto -60px -80px auto;
-    width: 220px;
-    height: 220px;
-    border-radius: 999px;
-    background: radial-gradient(circle, color-mix(in srgb, var(--accent-2) 28%, transparent), transparent 70%);
-    pointer-events: none;
-}}
-
-.summary-header h1 {{
-    margin: 0;
-    font-family: 'Fraunces', {theme['title']};
-    letter-spacing: .01em;
-    font-size: clamp(1.8rem, 3.6vw, 2.8rem);
-    line-height: 1.15;
-}}
-
-.lead {{ margin: .55rem 0 1.1rem; color: var(--muted); font-size: 1.04rem; max-width: 78ch; }}
-
-.toc-title {{
-    margin: 0 0 .45rem;
-    font-family: {theme['ui']};
-    font-size: .85rem;
-    text-transform: uppercase;
-    letter-spacing: .11em;
-    color: var(--muted);
-}}
-
-.toc ul {{
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-    gap: .55rem;
-}}
-
-.toc li {{
-    background: linear-gradient(160deg, var(--surface), color-mix(in srgb, var(--accent-soft) 48%, #ffffff));
-    border: 1px solid color-mix(in srgb, var(--accent) 16%, transparent);
-    border-radius: 10px;
-    padding: .55rem .65rem;
-    transition: transform .18s ease, box-shadow .18s ease;
-}}
-
-.toc li:hover {{
-    transform: translateY(-1px);
-    box-shadow: 0 8px 20px color-mix(in srgb, var(--accent) 15%, transparent);
-}}
-
-.toc a {{ text-decoration: none; color: var(--text); }}
-
-.items {{ display: grid; gap: .95rem; }}
-
-.items article {{
-    background: var(--paper);
-    border: 1px solid color-mix(in srgb, var(--accent) 15%, transparent);
-    border-radius: 20px;
-    padding: 1.15rem 1.2rem;
-    box-shadow: 0 10px 32px rgba(0, 0, 0, 0.05);
-}}
-
-.item-title {{
-    font-family: 'Fraunces', {theme['title']};
-    font-size: clamp(1.2rem, 2.2vw, 1.55rem);
-    margin: 0 0 .55rem;
-    line-height: 1.22;
-}}
-
-.item-title a {{ color: inherit; text-decoration: none; }}
-.item-title a:hover {{ color: var(--accent); }}
-
-.item-title a:focus-visible,
-.toc a:focus-visible,
-summary:focus-visible {{
-    outline: 2px solid var(--ring);
-    outline-offset: 2px;
-    border-radius: 6px;
-}}
-
-.meta {{ color: var(--muted); font-family: {theme['ui']}; font-size: .9rem; margin-bottom: .7rem; }}
-.score {{ color: var(--accent); margin-left: .45rem; font-weight: 700; font-family: {theme['ui']}; }}
-
-.lang-blocks {{ display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .75rem; }}
-
-.lang {{
-    background: linear-gradient(170deg, var(--surface), color-mix(in srgb, var(--accent-soft) 30%, #ffffff));
-    border: 1px solid color-mix(in srgb, var(--accent) 12%, transparent);
-    border-radius: 12px;
-    padding: .75rem;
-}}
-
-.lang h3 {{
-    margin: 0 0 .35rem;
-    font-family: {theme['ui']};
-    font-size: .8rem;
-    color: var(--muted);
-    letter-spacing: .08em;
-    text-transform: uppercase;
-}}
-
-.content {{ font-size: 1.03rem; line-height: 1.8; }}
-
-.fr-only {{
-    display: grid;
-    gap: .72rem;
-}}
-
-.content-section {{
-    background: linear-gradient(170deg, var(--surface), color-mix(in srgb, var(--accent-soft) 24%, #ffffff));
-    border: 1px solid color-mix(in srgb, var(--accent) 12%, transparent);
-    border-radius: 12px;
-    padding: .78rem .85rem;
-}}
-
-.content-section h3 {{
-    margin: 0 0 .35rem;
-    font-family: {theme['ui']};
-    font-size: .82rem;
-    color: var(--muted);
-    letter-spacing: .07em;
-    text-transform: uppercase;
-}}
-
-.evidence-note {{
-    margin: .7rem 0 0;
-    color: var(--muted);
-    font-size: .94rem;
-}}
-
-.tags {{ margin-top: .75rem; color: var(--muted); font-family: {theme['ui']}; font-size: .9rem; }}
-code {{ background: color-mix(in srgb, var(--accent-soft) 65%, #ffffff); border-radius: 8px; padding: .12rem .4rem; }}
-
-details {{ margin-top: .65rem; }}
-details summary {{ cursor: pointer; color: var(--accent); font-family: {theme['ui']}; }}
-
-@media (max-width: 860px) {{
-    .container {{ margin: .7rem auto; padding: .65rem; }}
-    .lang-blocks {{ grid-template-columns: 1fr; }}
-}}
-
-@media (prefers-color-scheme: dark) {{
-    :root {{
-        --bg: #0f1420;
-        --paper: #161d2c;
-        --surface: #1b2435;
-        --accent: #7cb1ff;
-        --accent-2: #c28cff;
-        --accent-3: #ffc36c;
-        --accent-soft: #1a2740;
-        --muted: #a6b4cd;
-        --text: #edf2ff;
-        --ring: rgba(124, 177, 255, 0.55);
-    }}
-
-    body {{
-        background:
-            radial-gradient(1200px 420px at -10% -20%, #1a2740, transparent 60%),
-            radial-gradient(760px 300px at 88% -12%, rgba(194, 140, 255, 0.2), transparent 66%),
-            radial-gradient(640px 240px at 30% 0%, rgba(255, 195, 108, 0.14), transparent 70%),
-            var(--bg);
-    }}
-
-    .summary-header,
-    .items article {{
-        border-color: rgba(124, 177, 255, 0.24);
-        box-shadow: 0 18px 44px rgba(0, 0, 0, 0.32);
-    }}
-
-    .toc li,
-    .lang {{
-        border-color: rgba(124, 177, 255, 0.22);
-        background: linear-gradient(170deg, #1b2435, #1f2a3f);
-    }}
-
-    code {{
-        background: rgba(124, 177, 255, 0.16);
-    }}
-}}
-"""
-
-        html = f"""
-<!doctype html>
+        return f"""<!doctype html>
 <html lang="{self._escape_html(language)}">
 <head>
   <meta charset="utf-8" />
@@ -1161,88 +1078,3 @@ details summary {{ cursor: pointer; color: var(--accent); font-family: {theme['u
 </body>
 </html>
 """
-
-        return html
-
-    def _format_item_html(self, item: ContentItem, labels: dict, language: str, index: int) -> str:
-        """Format a single ContentItem as HTML. Shows bilingual blocks when available."""
-        meta = item.metadata
-
-        title_raw = item.metadata.get(f"title_{language}") or item.title
-        title = self._escape_html(str(title_raw).replace("[", "(").replace("]", ")"))
-        url = self._escape_html(str(item.url))
-
-        # Gather summaries in EN and FR when available
-        summary_en = (
-            meta.get("detailed_summary_en")
-            or meta.get("detailed_summary")
-            or (item.ai_summary if language == "en" else None)
-            or ""
-        )
-        summary_fr = (
-            meta.get("detailed_summary_fr")
-            or meta.get("detailed_summary")
-            or (item.ai_summary if language == "fr" else None)
-            or meta.get("detailed_summary_en")
-            or (item.ai_summary if language == "en" else None)
-            or ""
-        )
-
-        if language == "zh":
-            summary_en = _pangu(summary_en)
-            summary_fr = _pangu(summary_fr)
-
-        summary_en_html = self._escape_html(summary_en).replace("\n", "<br />")
-        summary_fr_html = self._escape_html(summary_fr).replace("\n", "<br />")
-
-        # Fallback to source excerpt if AI summary is missing/too short.
-        excerpt = self._clean_content_excerpt(item.content or "")
-        if excerpt:
-            excerpt_html = self._escape_html(excerpt).replace("\n", "<br />")
-            if not summary_en_html or summary_en_html == "<em>Not available.</em>":
-                summary_en_html = excerpt_html
-            if not summary_fr_html or summary_fr_html == "<em>Non disponible.</em>":
-                summary_fr_html = excerpt_html
-
-        source_parts = [self._escape_html(item.source_type.value)]
-        if meta.get("subreddit"):
-            source_parts.append(self._escape_html(f"r/{meta['subreddit']}"))
-        if meta.get("feed_name"):
-            source_parts.append(self._escape_html(meta["feed_name"]))
-        else:
-            source_parts.append(self._escape_html(item.author or "unknown"))
-        if item.published_at:
-            day = item.published_at.strftime("%d").lstrip("0")
-            source_parts.append(self._escape_html(item.published_at.strftime(f"%b {day}, %H:%M")))
-        source_line = " \u00b7 ".join(source_parts)
-
-        discussion_url = meta.get("discussion_url")
-        if discussion_url and str(discussion_url) != str(item.url):
-            source_line += f' · <a href="{self._escape_html(str(discussion_url))}">{self._escape_html(labels["discussion"])}</a>'
-
-        tags_html = ""
-        if item.ai_tags:
-            tags_html = ", ".join([f"<code>#{self._escape_html(t)}</code>" for t in item.ai_tags])
-
-        references = meta.get("sources") or []
-        refs_html = ""
-        if references:
-            items_html = "".join(f'<li><a href="{self._escape_html(s["url"])}">{self._escape_html(s["title"])}</a></li>' for s in references)
-            refs_html = f"<details><summary>{self._escape_html(labels['references'])}</summary><ul>{items_html}</ul></details>"
-
-        html = f"""
-<article id="item-{index}">
-  <header>
-        <h2 class="item-title"><a href="{url}">{title}</a></h2>
-    <div class="meta">{source_line}</div>
-  </header>
-    <div class="lang-blocks">
-        <section class="lang"><h3>EN</h3><div class="content">{summary_en_html or '<em>Not available.</em>'}</div></section>
-        <section class="lang"><h3>FR</h3><div class="content">{summary_fr_html or '<em>Non disponible.</em>'}</div></section>
-    </div>
-  <div class="tags">{tags_html}</div>
-  {refs_html}
-</article>
-"""
-
-        return html

@@ -2,11 +2,11 @@
   "version": "1.0",
   "ai": {
     "provider": "openai",
-    "model": "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning",
+    "model": "mistralai/mistral-large-3-675b-instruct-2512 ",
     "api_key_env": "NVIDIA_API_KEY",
     "base_url": "https://integrate.api.nvidia.com/v1",
-    "temperature": 0.3,
-    "max_tokens": 12288,
+    "temperature": 0.15,
+    "max_tokens": 4096,
     "throttle_sec": 2.0,
     "languages": [
       "fr",
@@ -161,10 +161,88 @@
         "category": "history-culture"
       },
       {
+        "name": "LessWrong",
+        "url": "https://www.lesswrong.com/feed.xml?view=frontpage&karmaThreshold=30",
+        "enabled": true,
+        "category": "rationality"
+      },
+      {
+        "name": "Noema Magazine",
+        "url": "https://www.noemamag.com/feed/",
+        "enabled": true,
+        "category": "ideas"
+      },
+      {
+        "name": "The Transmitter",
+        "url": "https://www.thetransmitter.org/feed/",
+        "enabled": true,
+        "category": "neuroscience"
+      },
+      {
+        "name": "Our World in Data",
+        "url": "https://ourworldindata.org/atom.xml",
+        "enabled": true,
+        "category": "data"
+      },
+      {
+        "name": "Marginal Revolution",
+        "url": "https://marginalrevolution.com/feed",
+        "enabled": true,
+        "category": "economics"
+      },
+      {
+        "name": "99% Invisible",
+        "url": "https://feeds.99percentinvisible.org/99percentinvisible",
+        "enabled": true,
+        "category": "design"
+      },
+      {
+        "name": "Farnam Street",
+        "url": "https://fs.blog/feed/",
+        "enabled": true,
+        "category": "thinking"
+      },
+      {
+        "name": "Ploum.net",
+        "url": "https://ploum.net/feed/atom",
+        "enabled": true,
+        "category": "tech-society-fr"
+      },
+      {
         "name": "History Today",
         "url": "https://www.historytoday.com/feed",
         "enabled": false,
         "category": "history"
+      },
+      {
+        "name": "Noahpinion",
+        "url": "https://www.noahpinion.blog/feed",
+        "enabled": true,
+        "category": "economics"
+      },
+      {
+        "name": "Works in Progress",
+        "url": "https://worksinprogress.co/feed/",
+        "enabled": true,
+        "category": "ideas"
+      },
+      {
+        "name": "Asterisk Magazine",
+        "url": "https://asteriskmag.com/feed.xml",
+        "enabled": true,
+        "category": "science-policy"
+      },
+      {
+        "name": "Delayed Gratification",
+        "url": "https://www.slow-journalism.com/feed",
+        "enabled": true,
+        "category": "slow-journalism"
+      },
+      {
+        "name": "Wired",
+        "url": "https://www.wired.com/feed/rss",
+        "enabled": true,
+        "category": "tech"
       },
       {
         "name": "Our World in Data",
@@ -242,7 +320,7 @@
   },
 
   "filtering": {
-    "ai_score_threshold": 5.0,
+    "ai_score_threshold": 7.0,
     "time_window_hours": 336
   },
 

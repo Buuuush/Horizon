@@ -1,0 +1,682 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Horizon — 2026-05-26</title>
+  <style>
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600&family=Manrope:wght@500;700&display=swap');
+
+:root {
+    --bg: #f8f8fb;
+    --paper: #ffffff;
+    --surface: #fcfbff;
+    --accent: #325c9b;
+    --accent-2: color-mix(in srgb, var(--accent) 55%, #b73fd6);
+    --accent-3: color-mix(in srgb, var(--accent) 40%, #f59e0b);
+    --accent-soft: #e6eefb;
+    --muted: #5c6372;
+    --text: #1d2230;
+    --ring: color-mix(in srgb, var(--accent) 32%, transparent);
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+    color: var(--text);
+    background:
+        radial-gradient(1300px 420px at -10% -20%, var(--accent-soft), transparent 60%),
+        radial-gradient(760px 300px at 88% -12%, color-mix(in srgb, var(--accent-2) 24%, transparent), transparent 66%),
+        radial-gradient(640px 240px at 30% 0%, color-mix(in srgb, var(--accent-3) 18%, transparent), transparent 70%),
+        var(--bg);
+    font-family: 'Source Serif 4', Georgia, serif;
+    line-height: 1.78;
+}
+
+.container { max-width: 1100px; margin: 1.5rem auto; padding: 1rem; }
+
+.tab-switcher {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+    border-bottom: 2px solid color-mix(in srgb, var(--accent) 20%, transparent);
+}
+
+.tab-button {
+    background: transparent;
+    border: none;
+    color: var(--muted);
+    font-family: 'Manrope', 'Segoe UI', sans-serif;
+    font-size: 1rem;
+    font-weight: 600;
+    padding: 0.75rem 1.2rem;
+    cursor: pointer;
+    transition: color 0.18s ease, border-color 0.18s ease;
+    border-bottom: 3px solid transparent;
+}
+
+.tab-button:hover {
+    color: var(--text);
+}
+
+.tab-button.active {
+    color: var(--accent);
+    border-bottom-color: var(--accent);
+}
+
+.tab-content {
+    display: none;
+    animation: fadeIn 0.2s ease-in;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.summary-header {
+    background: var(--paper);
+    border: 1px solid color-mix(in srgb, var(--accent) 16%, transparent);
+    border-radius: 24px;
+    padding: 1.5rem 1.6rem 1.1rem;
+    box-shadow: 0 18px 48px rgba(19, 33, 68, 0.08);
+    margin-bottom: 1rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.summary-header::after {
+    content: "";
+    position: absolute;
+    inset: auto -60px -80px auto;
+    width: 220px;
+    height: 220px;
+    border-radius: 999px;
+    background: radial-gradient(circle, color-mix(in srgb, var(--accent-2) 28%, transparent), transparent 70%);
+    pointer-events: none;
+}
+
+.summary-header h1 {
+    margin: 0;
+    font-family: 'Fraunces', 'DM Serif Display', 'Iowan Old Style', 'Palatino Linotype', serif;
+    letter-spacing: .01em;
+    font-size: clamp(1.8rem, 3.6vw, 2.8rem);
+    line-height: 1.15;
+}
+
+.lead { margin: .55rem 0 1.1rem; color: var(--muted); font-size: 1.04rem; max-width: 78ch; }
+
+.toc-title {
+    margin: 0 0 .45rem;
+    font-family: 'Manrope', 'Segoe UI', sans-serif;
+    font-size: .85rem;
+    text-transform: uppercase;
+    letter-spacing: .11em;
+    color: var(--muted);
+}
+
+.toc ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: .55rem;
+}
+
+.toc li {
+    background: linear-gradient(160deg, var(--surface), color-mix(in srgb, var(--accent-soft) 48%, #ffffff));
+    border: 1px solid color-mix(in srgb, var(--accent) 16%, transparent);
+    border-radius: 10px;
+    padding: .55rem .65rem;
+    transition: transform .18s ease, box-shadow .18s ease;
+}
+
+.toc li:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 8px 20px color-mix(in srgb, var(--accent) 15%, transparent);
+}
+
+.toc a { text-decoration: none; color: var(--text); }
+
+.items { display: grid; gap: .95rem; }
+
+.items article {
+    background: var(--paper);
+    border: 1px solid color-mix(in srgb, var(--accent) 15%, transparent);
+    border-radius: 20px;
+    padding: 1.15rem 1.2rem;
+    box-shadow: 0 10px 32px rgba(0, 0, 0, 0.05);
+}
+
+.item-title {
+    font-family: 'Fraunces', 'DM Serif Display', 'Iowan Old Style', 'Palatino Linotype', serif;
+    font-size: clamp(1.2rem, 2.2vw, 1.55rem);
+    margin: 0 0 .55rem;
+    line-height: 1.22;
+}
+
+.item-title a { color: inherit; text-decoration: none; }
+.item-title a:hover { color: var(--accent); }
+
+.item-title a:focus-visible,
+.toc a:focus-visible,
+summary:focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
+    border-radius: 6px;
+}
+
+.meta { color: var(--muted); font-family: 'Manrope', 'Segoe UI', sans-serif; font-size: .9rem; margin-bottom: .7rem; }
+.score { color: var(--accent); margin-left: .45rem; font-weight: 700; font-family: 'Manrope', 'Segoe UI', sans-serif; }
+
+.content { font-size: 1.03rem; line-height: 1.8; }
+
+.fr-only {
+    display: grid;
+    gap: .72rem;
+}
+
+.content-section {
+    background: linear-gradient(170deg, var(--surface), color-mix(in srgb, var(--accent-soft) 24%, #ffffff));
+    border: 1px solid color-mix(in srgb, var(--accent) 12%, transparent);
+    border-radius: 12px;
+    padding: .78rem .85rem;
+}
+
+.content-section h3 {
+    margin: 0 0 .35rem;
+    font-family: 'Manrope', 'Segoe UI', sans-serif;
+    font-size: .82rem;
+    color: var(--muted);
+    letter-spacing: .07em;
+    text-transform: uppercase;
+}
+
+.evidence-note {
+    margin: .7rem 0 0;
+    color: var(--muted);
+    font-size: .94rem;
+}
+
+.tags { margin-top: .75rem; color: var(--muted); font-family: 'Manrope', 'Segoe UI', sans-serif; font-size: .9rem; }
+code { background: color-mix(in srgb, var(--accent-soft) 65%, #ffffff); border-radius: 8px; padding: .12rem .4rem; }
+
+details { margin-top: .65rem; }
+details summary { cursor: pointer; color: var(--accent); font-family: 'Manrope', 'Segoe UI', sans-serif; }
+
+@media (max-width: 860px) {
+    .container { margin: .7rem auto; padding: .65rem; }
+    .tab-switcher { flex-wrap: wrap; }
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --bg: #0f1420;
+        --paper: #161d2c;
+        --surface: #1b2435;
+        --accent: #7cb1ff;
+        --accent-2: #c28cff;
+        --accent-3: #ffc36c;
+        --accent-soft: #1a2740;
+        --muted: #a6b4cd;
+        --text: #edf2ff;
+        --ring: rgba(124, 177, 255, 0.55);
+    }
+
+    body {
+        background:
+            radial-gradient(1200px 420px at -10% -20%, #1a2740, transparent 60%),
+            radial-gradient(760px 300px at 88% -12%, rgba(194, 140, 255, 0.2), transparent 66%),
+            radial-gradient(640px 240px at 30% 0%, rgba(255, 195, 108, 0.14), transparent 70%),
+            var(--bg);
+    }
+
+    .summary-header,
+    .items article {
+        border-color: rgba(124, 177, 255, 0.24);
+        box-shadow: 0 18px 44px rgba(0, 0, 0, 0.32);
+    }
+
+    .tab-switcher {
+        border-bottom-color: rgba(124, 177, 255, 0.2);
+    }
+
+    code {
+        background: rgba(124, 177, 255, 0.16);
+    }
+}
+</style>
+  <script>
+    function switchTab(button) {
+      const lang = button.getAttribute('data-lang');
+      const allButtons = document.querySelectorAll('.tab-button');
+      const allContents = document.querySelectorAll('.tab-content');
+      
+      allButtons.forEach(b => b.classList.remove('active'));
+      allContents.forEach(c => c.classList.remove('active'));
+      
+      button.classList.add('active');
+      document.querySelector(`.tab-content[data-lang="${lang}"]`).classList.add('active');
+    }
+  </script>
+</head>
+<body>
+  <div class="container">
+    <div class="tab-switcher">
+      <button class="tab-button active" onclick="switchTab(this)" data-lang="fr">Français</button><button class="tab-button " onclick="switchTab(this)" data-lang="en">English</button>
+    </div>
+    <div class="tab-content active" data-lang="fr"><div class="fr-item">### 1.
+<section class="summary-header">
+  <h1>Horizon Quotidien — 2026-05-26</h1>
+  <p class="lead">15 sujets essentiels sélectionnés parmi 436 contenus collectés.</p>
+  <nav class="toc" aria-label="Sommaire">
+    <p class="toc-title">Sommaire</p>
+    <ul><li><a href="#item-1">Un contrôle de réalité sur le buzz des pertes d&#39;emplois liées à l&#39;IA est présenté.</a></li>
+<li><a href="#item-2">Les chercheurs technologiques poursuivent l&#39;administration Trump pour l&#39;avenir de la sécurité en ligne</a></li>
+<li><a href="#item-3">Police vantent d&#39;avoir piraté un VPN où les criminels se croyaient en sécurité</a></li>
+<li><a href="#item-4">CISA est marginalisée pendant que la Maison Blanche prépare une réponse IA cybersécurité.</a></li>
+<li><a href="#item-5">Il est temps d’aborder la crise imminente du travail d’entrée.</a></li>
+<li><a href="#item-6">La créativité s&#39;épanouit à l&#39;ère de l&#39;IA.</a></li>
+<li><a href="#item-7">Google I/O montre le virage du chemin de la science pilotée par l&#39;IA</a></li>
+<li><a href="#item-8">La Californie exempte Linux de sa loi d&#39;âge à venir.</a></li>
+<li><a href="#item-9">Les Enhanced Games s&#39;intègrent dans l&#39;ambiance de longévité de 2026.</a></li>
+<li><a href="#item-10">Le pape affirme que l&#39;IA doit être désarmée pour éviter de dominer l&#39;humanité.</a></li>
+<li><a href="#item-11">Ericsson déménage son siège mondial de Kista à Stockholm central.</a></li>
+<li><a href="#item-12">Les tables rondes examinent si l&#39;IA peut comprendre le monde.</a></li>
+<li><a href="#item-13">Anthropic’s Code with Claude a présenté l’avenir du codage lors d’un événement développeur à Londres.</a></li>
+<li><a href="#item-14">L&#39;infrastructure réseau est le goulot d&#39;étranglement pour la prochaine décennie de transition énergétique</a></li>
+<li><a href="#item-15">Personne ne débrise plus un livre de programmation</a></li></ul>
+  </nav>
+</section>
+<main class="items">
+<article id="item-1">
+  <header>
+        <h2 class="item-title"><a href="https://www.technologyreview.com/2026/05/26/1137855/a-reality-check-on-the-ai-jobs-hysteria/">Un contrôle de réalité sur le buzz des pertes d&#39;emplois liées à l&#39;IA est présenté.</a></h2>
+    <div class="meta">rss · MIT Technology Review · May 26, 09:00</div>
+  </header>
+  <div class="lang-blocks fr-only"><section class="content-section"><h3>Contexte</h3><div class="content">Les travailleurs du savoir sont des professionnels qui génèrent de la valeur grâce à leur expertise, à leur pensée critique et à leurs compétences relationnelles, selon les définitions d’IBM et de Wikipedia. La vague récente de licenciements dans des entreprises technologiques majeures comme Coinbase, Meta et Cisco est présentée comme le résultat de l’IA, mais les recherches d’Oxford Economics ne montrent aucune preuve claire que l’IA soit la cause principale de ces départs. Les débats antérieurs sur l’impact de l’IA sur l’emploi ont souvent été alimentés par le sensationnalisme, alors que les travaux de Peter Drucker décrivent depuis longtemps une transition vers un travail basé sur le savoir, mettant l’accent sur les fonctions mentales plutôt que physiques.</div></section></div>
+  <p class="evidence-note"><strong>Fiabilité</strong> : Les preuves sont fortes grâce à la source réputée et à l’analyse basée sur des données.</p>
+  <div class="tags"><code>#AI</code>, <code>#job market</code>, <code>#technology</code>, <code>#economics</code>, <code>#analysis</code></div>
+  <details><summary>Références</summary><ul><li><a href="https://en.wikipedia.org/wiki/Knowledge_worker">Knowledge worker</a></li><li><a href="https://grokipedia.com/page/Oxford_Economics_AI_Layoffs_Analysis">Oxford Economics AI Layoffs Analysis</a></li></ul></details>
+</article>
+
+<article id="item-2">
+  <header>
+        <h2 class="item-title"><a href="https://www.technologyreview.com/2026/05/21/1137733/the-download-online-safety-climate-tech-pivot/">Les chercheurs technologiques poursuivent l&#39;administration Trump pour l&#39;avenir de la sécurité en ligne</a></h2>
+    <div class="meta">rss · MIT Technology Review · May 21, 12:10</div>
+  </header>
+  <div class="lang-blocks fr-only"><section class="content-section"><h3>Contexte</h3><div class="content">Le Section 230 est une disposition de la Communications Decency Act de 1996 qui accorde une immunité juridique aux plateformes en ligne pour le contenu généré par les utilisateurs, suite à des poursuites judiciaires des années 1990. La Cour suprême a confirmé sa validité dans l&#39;affaire Reno v. ACLU (1997) et plusieurs décisions ultérieures ont renforcé son application, en faisant de ce texte un pilier du fonctionnement des réseaux sociaux et des services interactifs. Ces dernières années, l&#39;administration Trump a intensifié ses attaques contre les chercheurs qui étudient la haine en ligne, affirmant que le cadre juridique actuel favorise le contenu nuisible, tandis que les critiques craignent que cela menace la recherche et la liberté d&#39;expression. L&#39;action en justice intentée par les chercheurs technologiques vise à protéger la recherche sur la sécurité en ligne et la continuité de l&#39;application du Section 230.</div></section></div>
+  <p class="evidence-note"><strong>Fiabilité</strong> : Les faits proviennent de références légales reconnues et d&#39;un média d&#39;information majeur, offrant un fort soutien aux affirmations.</p>
+  <div class="tags"><code>#online safety</code>, <code>#climate tech</code>, <code>#technology policy</code>, <code>#US politics</code>, <code>#research lawsuit</code></div>
+  <details><summary>Références</summary><ul><li><a href="https://en.wikipedia.org/wiki/Section_230">Section 230</a></li><li><a href="https://www.law.cornell.edu/uscode/text/47/230">47 U.S. Code § 230 - Protection for private blocking and ...</a></li></ul></details>
+</article>
+
+<article id="item-3">
+  <header>
+        <h2 class="item-title"><a href="https://arstechnica.com/tech-policy/2026/05/police-boast-of-hacking-vpn-where-criminals-believed-themselves-to-be-safe/">Police vantent d&#39;avoir piraté un VPN où les criminels se croyaient en sécurité</a></h2>
+    <div class="meta">rss · Ars Technica · May 22, 18:43</div>
+  </header>
+  <div class="lang-blocks fr-only"><section class="content-section"><h3>Contexte</h3><div class="content">Les réseaux privés virtuels (VPN) chiffrent le trafic internet pour protéger la vie privée des utilisateurs et masquer les communications des espions. Les agences de police cherchent depuis longtemps des moyens juridiques pour contraindre les fournisseurs de VPN à décrypter le trafic, invoquant souvent une ordonnance judiciaire pour accéder au texte en clair. Des propositions législatives récentes et des affaires judiciaires, comme celles décrites dans Lawfare et le Journal de droit de McGill, illustrent la tension persistante entre les intérêts de sécurité nationale et les droits à la vie privée individuelle. Le débat sur l’accès aux portes dérobées continue, avec de nombreux experts affirmant que fragiliser le chiffrement pourrait affaiblir la cybersécurité globale.</div></section></div>
+  <p class="evidence-note"><strong>Fiabilité</strong> : L’article donne des détails concrets sur l’opération mais ne fournit pas de preuve technique de comment le VPN a été piraté.</p>
+  <div class="tags"><code>#law enforcement</code>, <code>#cybersecurity</code>, <code>#privacy</code>, <code>#VPN</code>, <code>#technology</code></div>
+  <details><summary>Références</summary><ul><li><a href="https://www.lawfaremedia.org/article/if-we-build-it-they-will-break">If We Build It (They Will Break In) | Lawfare</a></li><li><a href="https://lawjournal.mcgill.ca/article/law-enforcement-access-to-encrypted-data-legislative-responses-and-the-charter/">Law Enforcement Access to Encrypted Data: Legislative Responses...</a></li><li><a href="https://cyberlaw.stanford.edu/blog/2025/05/governments-continue-losing-efforts-to-gain-backdoor-access-to-secure-communications/">Governments continue losing efforts to gain backdoor access to...</a></li></ul></details>
+</article>
+
+<article id="item-4">
+  <header>
+        <h2 class="item-title"><a href="https://www.axios.com/2026/05/26/cisa-white-house-cybersecurity-ai">CISA est marginalisée pendant que la Maison Blanche prépare une réponse IA cybersécurité.</a></h2>
+    <div class="meta">rss · Axios · May 26, 08:50</div>
+  </header>
+  <div class="lang-blocks fr-only"><section class="content-section"><h3>Contexte</h3><div class="content">L&#39;Agence de sécurité cybernétique et d&#39;infrastructure (CISA) est une composante du Département de la Sécurité intérieure des États-Unis responsable de la protection des infrastructures critiques du pays contre les menaces cybernétiques et physiques. Créée en 2018 par la Cybersecurity and Infrastructure Security Agency Act, CISA coordonne les efforts de sécurité auprès des gouvernements fédéral, étatique et local et supervise des programmes tels que la protection du réseau 5G, la sécurité des élections et la résilience du réseau électrique. Les récents réductions budgétaires et les licenciements de personnel ont affaibli sa capacité alors que les menaces cybernétiques liées à l&#39;IA augmentent, incitant la Maison Blanche à mettre en place une équipe inter‐agences dédiée.</div></section></div>
+  <p class="evidence-note"><strong>Fiabilité</strong> : Les preuves sont solides, basées sur le reporting d&#39;Axios réputé et des déclarations corroborées d&#39;officiels et de sources web.</p>
+  <div class="tags"><code>#AI</code>, <code>#Cybersecurity</code>, <code>#U.S. Government</code>, <code>#Critical Infrastructure</code>, <code>#Policy</code></div>
+  <details><summary>Références</summary><ul><li><a href="https://en.wikipedia.org/wiki/Cybersecurity_and_Infrastructure_Security_Agency">Cybersecurity and Infrastructure Security Agency</a></li><li><a href="https://www.cisa.gov/">Home Page | CISA</a></li><li><a href="https://www.dhs.gov/employee-resources/cybersecurity-and-infrastructure-security-agency-cisa">Cybersecurity and Infrastructure Security Agency (CISA)</a></li></ul></details>
+</article>
+
+<article id="item-5">
+  <header>
+        <h2 class="item-title"><a href="https://www.technologyreview.com/2026/05/26/1137865/its-time-to-address-the-looming-crisis-in-entry-level-work/">Il est temps d’aborder la crise imminente du travail d’entrée.</a></h2>
+    <div class="meta">rss · MIT Technology Review · May 26, 09:00</div>
+  </header>
+  <div class="lang-blocks fr-only"><section class="content-section"><h3>Contexte</h3><div class="content">Les emplois d&#39;entrée de carrière sont des postes conçus pour les diplômés récents avec peu ou pas d&#39;expérience préalable, offrant généralement une formation sur le lieu de travail et constituant la première marche de l&#39;échelle de carrière. Des études récentes estiment que l&#39;IA devrait perturber une grande partie de ces postes, avec un rapport indiquant que 77 % des emplois d&#39;entrée de carrière subiront une perturbation modérée à extrême. Bien que l&#39;emploi global dans les économies développées reste stable, l&#39;érosion des opportunités d&#39;entrée de carrière pourrait remodeler les trajectoires de carrière et accroître la demande de reconversion.</div></section></div>
+  <p class="evidence-note"><strong>Fiabilité</strong> : Les preuves sont solides, s&#39;appuyant sur plusieurs sources réputées et des statistiques précises sur l&#39;impact de l&#39;IA sur les emplois d&#39;entrée de carrière.</p>
+  <div class="tags"><code>#AI</code>, <code>#labor market</code>, <code>#employment</code>, <code>#technology</code>, <code>#future of work</code></div>
+  <details><summary>Références</summary><ul><li><a href="https://en.wikipedia.org/wiki/Entry-level_job">Entry-level job - Wikipedia</a></li><li><a href="https://www.stjohns.edu/news-media/johnnies-blog/ai-impact-students-entering-job-market">How AI Impacts Students Entering the Job Market</a></li><li><a href="https://www.businessinsider.com/entry-level-jobs-more-skilled-impact-from-ai-2026-5">Your Entry-Level Job Is Getting Harder Thanks to AI - Business Insider</a></li></ul></details>
+</article>
+
+<article id="item-6">
+  <header>
+        <h2 class="item-title"><a href="https://www.technologyreview.com/2026/05/21/1137613/scaling-creativity-in-the-age-of-ai/">La créativité s&#39;épanouit à l&#39;ère de l&#39;IA.</a></h2>
+    <div class="meta">rss · MIT Technology Review · May 21, 19:16</div>
+  </header>
+  <div class="lang-blocks fr-only"><section class="content-section"><h3>Contexte</h3><div class="content">Le récit est une impulse fondamentale de l&#39;être humain qui a exprimé des idéaux, des avertissements, des espoirs et des expériences depuis la préhistoire. Les premiers humains utilisaient des pigments naturels tels que l&#39;ocre rouge, l&#39;ocre jaune, l&#39;hematite, l&#39;oxyde de manganèse et le charbon pour créer des peintures rupestres, comme le montrent les études archéologiques récentes. Le développement de l&#39;appareil photo et ensuite des médias numériques a poursuivi cette tradition de représentation de l&#39;expérience, et des articles web récents décrivent comment l&#39;IA générative assiste la recherche, la création de contenu et les récits interactifs. Ces sources, y compris des analyses de The Future of Commerce, Beautiful.ai et du MIT Sloan Management Review, illustrent le rôle évolutif de la technologie dans le récit.</div></section></div>
+  <p class="evidence-note"><strong>Fiabilité</strong> : Les preuves sont solides, s&#39;appuyant sur des sources réputées et des recherches récentes.</p>
+  <div class="tags"><code>#AI</code>, <code>#Creativity</code>, <code>#Storytelling</code>, <code>#Technology</code>, <code>#Culture</code></div>
+  <details><summary>Références</summary><ul><li><a href="https://www.the-future-of-commerce.com/2025/05/15/generative-ai-storytelling/">Generative AI storytelling: Creating compelling content via collaboration</a></li><li><a href="https://sloanreview.mit.edu/article/the-enduring-power-of-data-storytelling-in-the-generative-ai-era/">The Enduring Power of Data Storytelling in the Generative AI Era | Ganes Kesari | MIT Sloan Management Review</a></li></ul></details>
+</article>
+
+<article id="item-7">
+  <header>
+        <h2 class="item-title"><a href="https://www.technologyreview.com/2026/05/22/1137813/google-i-o-showed-how-the-path-for-ai-science-is-shifting/">Google I/O montre le virage du chemin de la science pilotée par l&#39;IA</a></h2>
+    <div class="meta">rss · MIT Technology Review · May 22, 10:00</div>
+  </header>
+  <div class="lang-blocks fr-only"><section class="content-section"><h3>Contexte</h3><div class="content">La singularité technologique est un événement hypothétique futur où l&#39;intelligence artificielle s&#39;améliore rapidement au-delà du contrôle humain, selon le modèle d&#39;explosion d&#39;intelligence d&#39;I. J. Good de 1965 et débattu par des experts comme Stephen Hawking. Les prédictions récentes varient de 2035 à 2045, bien que certains chercheurs avancent que la croissance de l&#39;IA pourrait rencontrer des rendements décroissants plutôt qu&#39;une accélération explosive.</div></section></div>
+  <p class="evidence-note"><strong>Fiabilité</strong> : L&#39;évidence est modérée, reposant sur la déclaration de Google I/O et la littérature générale sur la singularité sans preuve empirique directe de la singularité imminente.</p>
+  <div class="tags"><code>#AI</code>, <code>#Google I/O</code>, <code>#Singularity</code>, <code>#Technology</code>, <code>#Science</code></div>
+  <details><summary>Références</summary><ul><li><a href="https://en.wikipedia.org/wiki/Technological_singularity">Technological singularity</a></li><li><a href="https://scienceinsights.org/how-close-is-the-singularity-a-realistic-timeline/">How Close Is the Singularity? A Realistic Timeline</a></li><li><a href="https://www.britannica.com/technology/singularity-technology">Singularity | Benefits, Challenges &amp; Implications | Britannica</a></li></ul></details>
+</article>
+
+<article id="item-8">
+  <header>
+        <h2 class="item-title"><a href="https://www.tomshardware.com/software/linux/california-moves-to-exempt-linux-from-its-upcoming-age-verification-law-after-backlash-over-forcing-operating-systems-to-collect-users-ages-amendment-proposed-by-the-same-lawmaker-who-wrote-the-original-law">La Californie exempte Linux de sa loi d&#39;âge à venir.</a></h2>
+    <div class="meta">hackernews · rbanffy · May 25, 18:19 · <a href="https://news.ycombinator.com/item?id=48269961">Discussion</a></div>
+  </header>
+  <div class="lang-blocks fr-only"><section class="content-section"><h3>Contexte</h3><div class="content">La Digital Age Assurance Act de Californie, adoptée sous la forme du projet de loi AB 1043 fin 2025, impose que tous les systèmes d&#39;exploitation collectent un âge auto‐déclaré lors de la configuration initiale, avec mise en vigueur le 1er janvier 2027. La loi visait à déplacer la vérification d&#39;âge des sites web et des applications vers le niveau du système d&#39;exploitation, mais elle a suscité des critiques pour imposer une charge lourde aux développeurs et potentiellement violer le premier amendement. Des tentatives antérieures de vérification d&#39;âge pour les sites d&#39;adultes ont échoué à cause de problèmes budgétaires et de défis juridiques, comme le montre une vidéo YouTube et un article de Yahoo News. La controverse a déclenché une large discussion sur Hacker News et d&#39;autres forums concernant la faisabilité et les implications constitutionnelles de contraindre les fournisseurs d&#39;OS à collecter l&#39;âge des utilisateurs.</div></section></div>
+  <p class="evidence-note"><strong>Fiabilité</strong> : La revendication est bien appuyée par l&#39;article de Tom&#39;s Hardware et la couverture législative, mais certains détails sur le texte exact de l&#39;amendement restent incertains.</p>
+  <div class="tags"><code>#Policy</code>, <code>#Linux</code>, <code>#Legislation</code>, <code>#Age verification</code>, <code>#Hacker News</code></div>
+  <details><summary>Références</summary><ul><li><a href="https://www.tomshardware.com/software/linux/california-moves-to-exempt-linux-from-its-upcoming-age-verification-law-after-backlash-over-forcing-operating-systems-to-collect-users-ages-amendment-proposed-by-the-same-lawmaker-who-wrote-the-original-law">California moves to exempt Linux from its upcoming age-verification...</a></li><li><a href="https://www.phoronix.com/news/California-AB-1856">California&#39;s Age Verification Law May End Up Exempting Most Linux...</a></li></ul></details>
+</article>
+
+<article id="item-9">
+  <header>
+        <h2 class="item-title"><a href="https://www.technologyreview.com/2026/05/22/1137753/the-enhanced-games-fit-right-in-with-the-rest-of-2026s-longevity-vibes/">Les Enhanced Games s&#39;intègrent dans l&#39;ambiance de longévité de 2026.</a></h2>
+    <div class="meta">rss · MIT Technology Review · May 22, 09:00</div>
+  </header>
+  <div class="lang-blocks fr-only"><section class="content-section"><h3>Contexte</h3><div class="content">Les Enhanced Games sont une compétition multisports internationale privée financée par l&#39;entrepreneur australien Dr. Aron D&#39;Souza, qui vise à autoriser les athlètes à utiliser des substances améliorant la performance sans restriction. L&#39;événement est prévu pour 2026 et se tiendra à Las Vegas, où 42 athlètes sont attendus. Selon la page LinkedIn des Enhanced Games, l&#39;organisation est désormais cotée en bourse à la New York Stock Exchange sous le symbole $ENHA, indiquant un soutien financier plus large. Les substances améliorant la performance, définies par Wikipedia comme des agents améliorant les performances sportives ou cognitives, incluent des stéroïdes anabolisants, des stimulants et des nootropiques, et leur utilisation soulève d&#39;importantes préoccupations sanitaires et réglementaires.</div></section></div>
+  <p class="evidence-note"><strong>Fiabilité</strong> : Les preuves sont modérées ; l’événement est annoncé mais les détails sur les politiques de dopage et la participation des athlètes restent limités.</p>
+  <div class="tags"><code>#Enhanced Games</code>, <code>#Performance‐enhancing drugs</code>, <code>#Sports ethics</code>, <code>#Human performance</code>, <code>#Technology Review</code></div>
+  <details><summary>Références</summary><ul><li><a href="https://en.wikipedia.org/wiki/Enhanced_Games">Enhanced Games - Wikipedia</a></li><li><a href="https://www.linkedin.com/company/enhanced-games">Enhanced | LinkedIn</a></li><li><a href="https://en.wikipedia.org/wiki/Performance-enhancing_drugs">Performance-enhancing drugs</a></li></ul></details>
+</article>
+
+<article id="item-10">
+  <header>
+        <h2 class="item-title"><a href="https://www.bloomberg.com/news/articles/2026-05-25/pope-leo-warns-ai-should-be-prevented-from-dominating-humanity">Le pape affirme que l&#39;IA doit être désarmée pour éviter de dominer l&#39;humanité.</a></h2>
+    <div class="meta">rss · Bloomberg Technology · May 25, 09:31</div>
+  </header>
+  <div class="lang-blocks fr-only"><section class="content-section"><h3>Contexte</h3><div class="content">Le pape Léon XIV, né Robert Francis Prevost à Chicago en 1955, est devenu le chef de l’Église catholique après son élection inattendue en mai 2025, succédant à François. Il est le premier pape américain et le premier issu des Amériques, fort de son expérience missionnaire au Pérou et d’une formation en droit canon. Depuis son accession au trône, il insiste sur la synodalité, les enseignements sociaux et s’engage sur les défis technologiques comme le changement climatique et les migrations. Son avertissement récent sur l’IA s’inscrit dans le débat mondial et s’aligne sur les discussions menées par le Bureau des affaires du désarmement des Nations Unies et l’Institut international d’études de paix de Stockholm.</div></section></div>
+  <p class="evidence-note"><strong>Fiabilité</strong> : La affirmation repose sur un reportage Bloomberg citant les remarques publiques du pape, appuyée par des sources vaticanes et des organisations des Nations Unies, ce qui lui confère une forte crédibilité.</p>
+  <div class="tags"><code>#AI</code>, <code>#Religion</code>, <code>#Technology</code>, <code>#Policy</code>, <code>#International</code></div>
+  <details><summary>Références</summary><ul><li><a href="https://en.wikipedia.org/wiki/Pope_Leo_XIV">Pope Leo XIV</a></li><li><a href="https://www.vatican.va/content/leo-xiv/en.html">Leo XIV - VaticanPope Leo’s ‘Magnifica humanitas’: AI must serve humanity not ...Leo XIV | Pope, Real Name, Background, Encyclical, AI, Trump ...Pope Leo warns of AI fueling warfare in first major ... - CNNPope Leo XIV | AP NewsPope Leo Uses First Major Papal Text to Warn About Dangers of AI</a></li></ul></details>
+</article>
+
+<article id="item-11">
+  <header>
+        <h2 class="item-title"><a href="https://www.bloomberg.com/news/articles/2026-05-25/ericsson-quits-suburb-once-touted-as-sweden-s-silicon-valley">Ericsson déménage son siège mondial de Kista à Stockholm central.</a></h2>
+    <div class="meta">rss · Bloomberg Technology · May 25, 08:45</div>
+  </header>
+  <div class="lang-blocks fr-only"><section class="content-section"><h3>Contexte</h3><div class="content">Kista est un quartier situé au nord de Stockholm central, développé dans les années 1970 et présenté comme un pôle technologique, avec la Kista Science City et le Kista Convention Center. Pendant de nombreuses années, il a été vanté comme la Silicon Valley de la Suède en raison de la concentration d’entreprises technologiques et de capitaux-risque, un discours soutenu par des rapports indiquant que la Suède produit plus de sociétés technologiques valant un milliard de dollars par habitant que toute région autre que Silicon Valley. Ericsson a occupé des locaux à Kista pendant plus de vingt ans, faisant d’elle un repère visible dans le secteur, mais des difficultés économiques récentes ont poussé la société à chercher un emplacement plus central à Stockholm.</div></section></div>
+  <p class="evidence-note"><strong>Fiabilité</strong> : Les preuves sont solides, basées sur un article Bloomberg et des articles corroborants sur l’écosystème technologique suédois, même si l’état actuel de Kista est déduit de sources limitées.</p>
+  <div class="tags"><code>#Ericsson</code>, <code>#Corporate relocation</code>, <code>#Sweden</code>, <code>#Technology</code>, <code>#Kista</code></div>
+  <details><summary>Références</summary><ul><li><a href="https://www.bloomberg.com/news/articles/2026-05-25/ericsson-quits-suburb-once-touted-as-sweden-s-silicon-valley">Ericsson Quits Suburb Once Touted as Sweden’s Silicon Valley</a></li><li><a href="https://www.stockholmvalley.com/stockholm-is-quietly-becoming-the-next-silicon-valley/">Stockholm Is Quietly Becoming the Next &#39;Silicon Valley&#39;</a></li><li><a href="https://www.forbes.com/sites/alisoncoleman/2026/05/06/why-sweden-has-a-track-record-for-turning-ai-startups-into-unicorns/">Why Sweden Has A Track Record For Turning AI Startups Into ...</a></li></ul></details>
+</article>
+
+<article id="item-12">
+  <header>
+        <h2 class="item-title"><a href="https://www.technologyreview.com/2026/05/21/1137756/roundtables-can-ai-learn-to-understand-the-world/">Les tables rondes examinent si l&#39;IA peut comprendre le monde.</a></h2>
+    <div class="meta">rss · MIT Technology Review · May 21, 20:41</div>
+  </header>
+  <div class="lang-blocks fr-only"><section class="content-section"><h3>Contexte</h3><div class="content">Les grands modèles linguistiques ont dominé les récents progrès de l&#39;IA, mais ils se limitent principalement à la génération de texte à partir de modèles statistiques. Les chercheurs explorent désormais des modèles de monde qui intègrent perception, raisonnement et interaction avec l&#39;environnement pour atteindre une intelligence plus générale. Le roundtable de MIT Technology Review a réuni des experts pour discuter de ces approches émergentes et de leurs défis.</div></section></div>
+  <p class="evidence-note"><strong>Fiabilité</strong> : Les preuves ne reposent que sur l&#39;article lui-même, sans sources externes.</p>
+  <div class="tags"><code>#AI</code>, <code>#technology</code>, <code>#roundtable</code>, <code>#world models</code>, <code>#AI research</code></div>
+  
+</article>
+
+<article id="item-13">
+  <header>
+        <h2 class="item-title"><a href="https://www.technologyreview.com/2026/05/21/1137735/anthropics-code-with-claude-showed-off-codings-future-whether-you-like-it-or-not/">Anthropic’s Code with Claude a présenté l’avenir du codage lors d’un événement développeur à Londres.</a></h2>
+    <div class="meta">rss · MIT Technology Review · May 21, 14:30</div>
+  </header>
+  <div class="lang-blocks fr-only"><section class="content-section"><h3>Contexte</h3><div class="content">Une pull request est une proposition de fusion de changements de code dans un dépôt principal, permettant une révision et une discussion avant l’intégration, comme le décrit la documentation GitHub. Claude Code est l’assistant de codage agentique d’Anthropic qui peut comprendre une base de code, modifier des fichiers, exécuter des commandes et automatiser des tâches de développement. Code with Claude est une conférence destinée aux développeurs organisée par Anthropic, offrant des ateliers pratiques et des démonstrations en direct du modèle Claude et de son outil de codage. L’événement s’inscrit dans une tendance plus large où les grandes entreprises d’IA rivalisent pour intégrer une assistance au codage directement dans les chaînes d’outils des développeurs.</div></section></div>
+  <p class="evidence-note"><strong>Fiabilité</strong> : L’article et les définitions supportantes offrent des détails clairs et vérifiables sur l’événement et le concept de pull request.</p>
+  <div class="tags"><code>#AI</code>, <code>#Software Development</code>, <code>#Tech Events</code>, <code>#Anthropic</code>, <code>#Coding</code></div>
+  <details><summary>Références</summary><ul><li><a href="https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/about-pull-requests">About pull requests - GitHub Docs</a></li></ul></details>
+</article>
+
+<article id="item-14">
+  <header>
+        <h2 class="item-title"><a href="https://www.reddit.com/r/Futurology/comments/1tn5klw/the_next_decade_of_energy_transition_wont_be/">L&#39;infrastructure réseau est le goulot d&#39;étranglement pour la prochaine décennie de transition énergétique</a></h2>
+    <div class="meta">rss · r_futurology · May 25, 10:51</div>
+  </header>
+  <div class="lang-blocks fr-only"><section class="content-section"><h3>Contexte</h3><div class="content">Le réseau électrique a été historiquement conçu pour les centrales à combustible fossile centralisées, et non pour la nature distribuée et intermittente des énergies renouvelables modernes. Moderniser cette infrastructure nécessite de surmonter d&#39;importantes barrières réglementaires, des défis d&#39;acquisition de terrain et une opposition communautaire, ce qui peut allonger les délais des projets jusqu&#39;à 10 à 15 ans.</div></section></div>
+  <p class="evidence-note"><strong>Fiabilité</strong> : Les preuves sont dérivées uniquement du texte de l&#39;article Reddit, qui fournit des statistiques spécifiques et des exemples régionaux pour soutenir sa revendication sur les goulots d&#39;étranglement du réseau.</p>
+  <div class="tags"><code>#Energy transition</code>, <code>#Grid infrastructure</code>, <code>#Renewable energy</code>, <code>#Climate change</code>, <code>#Infrastructure policy</code></div>
+  
+</article>
+
+<article id="item-15">
+  <header>
+        <h2 class="item-title"><a href="https://unix.foo/posts/nobody-cracks-open-a-programming-book/">Personne ne débrise plus un livre de programmation</a></h2>
+    <div class="meta">hackernews · zdw · May 25, 23:21 · <a href="https://news.ycombinator.com/item?id=48273030">Discussion</a></div>
+  </header>
+  <div class="lang-blocks fr-only"><section class="content-section"><h3>Contexte</h3><div class="content">Les livres de programmation ont longtemps été la principale méthode pour les développeurs d&#39;apprendre les langages et les meilleures pratiques, mais l&#39;essor des moteurs de recherche, de Stack Overflow et de la documentation en ligne a modifié les habitudes d&#39;apprentissage. La facilité de l&#39;auto-édition a inondé le marché de qualités variables, rendant plus difficile pour les lecteurs d&#39;identifier des ressources fiables. Avec l&#39;évolution rapide des langages, les éditions imprimées peuvent devenir obsolètes, incitant les développeurs à se tourner vers des sources numériques à jour.</div></section></div>
+  <p class="evidence-note"><strong>Fiabilité</strong> : Les preuves reposent uniquement sur les données de ventes de l&#39;auteur et les commentaires de la communauté, sans sources externes indépendantes.</p>
+  <div class="tags"><code>#programming-education</code>, <code>#technology-trends</code>, <code>#software-development</code>, <code>#publishing</code></div>
+  
+</article>
+</main></div></div><div class="tab-content " data-lang="en"><section class="summary-header">
+  <h1>Horizon Daily — 2026-05-26</h1>
+  <p class="lead">15 essential stories selected from 436 collected items.</p>
+  <nav class="toc" aria-label="Contents">
+    <p class="toc-title">Contents</p>
+    <ul><li><a href="#item-1">A reality check on AI job loss hype is presented.</a></li>
+<li><a href="#item-2">Tech Researchers Sue Trump Administration Over Online Safety Future</a></li>
+<li><a href="#item-3">Police boast of hacking VPN where criminals believed themselves safe</a></li>
+<li><a href="#item-4">CISA is sidelined as the White House scrambles to build a new AI cyber response.</a></li>
+<li><a href="#item-5">It is time to address the looming crisis in entry-level work.</a></li>
+<li><a href="#item-6">Scaling creativity in the age of AI.</a></li>
+<li><a href="#item-7">Google I/O shows AI-driven science path shifting</a></li>
+<li><a href="#item-8">California exempts Linux from its upcoming age verification law.</a></li>
+<li><a href="#item-9">The Enhanced Games fit right in with the rest of 2026’s longevity vibes.</a></li>
+<li><a href="#item-10">Pope Says AI Should Be Disarmed to Avoid Dominating Humanity.</a></li>
+<li><a href="#item-11">Ericsson moves its headquarters from Kista to central Stockholm.</a></li>
+<li><a href="#item-12">Roundtables explore whether AI can understand the world.</a></li>
+<li><a href="#item-13">Anthropic’s Code with Claude showcased coding’s future during a London developer event.</a></li>
+<li><a href="#item-14">Grid Infrastructure is the Bottleneck for the Next Decade of Energy Transition</a></li>
+<li><a href="#item-15">Nobody cracks open a programming book anymore</a></li></ul>
+  </nav>
+</section>
+<main class="items">
+<article id="item-1">
+  <header>
+        <h2 class="item-title"><a href="https://www.technologyreview.com/2026/05/26/1137855/a-reality-check-on-the-ai-jobs-hysteria/">A reality check on AI job loss hype is presented.</a></h2>
+    <div class="meta">rss · MIT Technology Review · May 26, 09:00</div>
+  </header>
+    <div class="lang-blocks">
+        <section class="lang"><h3>EN</h3><div class="content">The article examines recent layoffs at companies such as Coinbase, Meta and Cisco, arguing that the wave of AI‐driven job cuts has been exaggerated. It cites data showing no clear evidence that artificial intelligence is the primary cause of these separations, and calls for a measured response from knowledge workers.<br /><br />This analysis helps prevent unnecessary panic among high‐skill professionals and informs policymakers about the real drivers of workforce reductions. By highlighting the lack of solid evidence linking AI to job loss, it encourages a focus on reskilling and productivity improvements rather than fearing widespread unemployment.<br /><br />The article notes that while tech giants have announced layoffs, many of these cuts are part of broader restructuring and not solely due to AI, as shown by Oxford Economics research. It also points out that smaller firms rarely publicize AI‐related layoffs, and that the tracker of AI‐attributed cuts may underrepresent the true impact.<br /><br />Knowledge workers are professionals who create value through expertise, critical thinking and interpersonal skills, as defined by IBM and Wikipedia. The recent wave of layoffs at major tech firms such as Coinbase, Meta and Cisco has been framed as a consequence of AI, but Oxford Economics research finds no clear evidence that AI is the primary driver of these job separations. Earlier debates about AI’s impact on employment have often been driven by hype, while historical shifts toward knowledge‐based work, described by Peter Drucker, show a long‐term trend toward roles that rely on mental rather than physical labor.</div></section>
+        <section class="lang"><h3>FR</h3><div class="content">L&#39;article examine les licenciements récents chez des entreprises comme Coinbase, Meta et Cisco, affirmant que la vague de pertes d&#39;emplois attribuées à l&#39;IA est exagérée. Il cite des données montrant qu&#39;aucune preuve claire ne relie l&#39;intelligence artificielle à ces départs, et invite une réponse mesurée de la part des travailleurs du savoir.<br /><br />Cette analyse prévient une panique injustifiée parmi les professionnels qualifiés et informe les décideurs sur les vraies causes des réductions de personnel. En soulignant l&#39;absence de preuves solides liant l&#39;IA à la perte d&#39;emplois, elle encourage le recours à la formation continue et à l&#39;amélioration de la productivité plutôt qu&#39;à la crainte d&#39;un chômage massif.<br /><br />L&#39;article indique que, bien que les géants technologiques aient annoncé des licenciements, bon nombre de ces réductions s&#39;inscrivent dans des restructurations plus larges et ne sont pas uniquement dues à l&#39;IA, selon les recherches d&#39;Oxford Economics. Il souligne également que les petites entreprises rarement divulguent des licenciements liés à l&#39;IA, et que le suivi des cuts attribués à l&#39;IA peut sous‐estimer l&#39;impact réel.<br /><br />Les travailleurs du savoir sont des professionnels qui génèrent de la valeur grâce à leur expertise, à leur pensée critique et à leurs compétences relationnelles, selon les définitions d’IBM et de Wikipedia. La vague récente de licenciements dans des entreprises technologiques majeures comme Coinbase, Meta et Cisco est présentée comme le résultat de l’IA, mais les recherches d’Oxford Economics ne montrent aucune preuve claire que l’IA soit la cause principale de ces départs. Les débats antérieurs sur l’impact de l’IA sur l’emploi ont souvent été alimentés par le sensationnalisme, alors que les travaux de Peter Drucker décrivent depuis longtemps une transition vers un travail basé sur le savoir, mettant l’accent sur les fonctions mentales plutôt que physiques.</div></section>
+    </div>
+  <div class="tags"><code>#AI</code>, <code>#job market</code>, <code>#technology</code>, <code>#economics</code>, <code>#analysis</code></div>
+  <details><summary>References</summary><ul><li><a href="https://en.wikipedia.org/wiki/Knowledge_worker">Knowledge worker</a></li><li><a href="https://grokipedia.com/page/Oxford_Economics_AI_Layoffs_Analysis">Oxford Economics AI Layoffs Analysis</a></li></ul></details>
+</article>
+
+<article id="item-2">
+  <header>
+        <h2 class="item-title"><a href="https://www.technologyreview.com/2026/05/21/1137733/the-download-online-safety-climate-tech-pivot/">Tech Researchers Sue Trump Administration Over Online Safety Future</a></h2>
+    <div class="meta">rss · MIT Technology Review · May 21, 12:10</div>
+  </header>
+    <div class="lang-blocks">
+        <section class="lang"><h3>EN</h3><div class="content">Tech researchers have filed a lawsuit against the Trump administration to challenge its approach to online safety and the future of Section 230. The administration has been targeting researchers who study hate speech for months, raising concerns about censorship and the legal protection afforded to online platforms.<br /><br />The lawsuit could reshape the legal framework governing online content and may limit the scope of Section 230 immunity, affecting how platforms moderate hate speech. If successful, it could deter research on hate speech and alter the balance between free expression and platform responsibility, impacting both tech companies and civil society.<br /><br />The case centers on the Trump administration&#39;s recent moves to curtail online safety protections, including attempts to modify or revoke Section 230, which grants immunity to interactive computer services for user‐generated content. Section 230 was originally enacted in 1996 and was amended in 2018 by the FOSTA‐SESTA Act to address sex‐trafficking content, and it remains a cornerstone of U.S. internet law.<br /><br />Section 230 is a provision of the Communications Decency Act of 1996 that grants legal immunity to online platforms for content posted by users, a principle established after early lawsuits in the 1990s. The law was upheld by the Supreme Court in Reno v. ACLU (1997) and has been reinforced by subsequent court decisions, making it central to the operation of social media and other interactive services. In recent years, the Trump administration has pursued aggressive actions against researchers studying hate speech, arguing that the current legal framework enables harmful content, while critics warn this threatens research and free expression. The pending lawsuit by tech researchers seeks to protect the integrity of online safety research and the continued application of Section 230.</div></section>
+        <section class="lang"><h3>FR</h3><div class="content">Les chercheurs technologiques ont intenté une action en justice contre l&#39;administration Trump pour contester sa politique en matière de sécurité en ligne et l&#39;avenir du Section 230. L&#39;administration a depuis des mois visé les chercheurs étudiant la haine en ligne, ce qui soulève des inquiétudes quant à la censure et à la protection juridique des plateformes.<br /><br />Cette action en justice pourrait redéfinir le cadre juridique régissant le contenu en ligne et potentiellement restreindre l&#39;immunité du Section 230, influençant la modération de la haine en ligne. Si elle réussit, elle pourrait décourager la recherche sur la haine en ligne et modifier l&#39;équilibre entre la liberté d&#39;expression et la responsabilité des plateformes, affectant tant les entreprises technologiques que la société civile.<br /><br />L&#39;affaire se concentre sur les récentes actions de l&#39;administration Trump visant à limiter les protections de la sécurité en ligne, notamment en cherchant à modifier ou à révoquer le Section 230, qui confère une immunité aux services informatiques interactifs pour le contenu généré par les utilisateurs. Le Section 230 a été adopté en 1996 et a été amendé en 2018 par la loi FOSTA‐SESTA pour s&#39;attaquer au contenu lié au trafic sexuel, et il reste un pilier du droit internet américain.<br /><br />Le Section 230 est une disposition de la Communications Decency Act de 1996 qui accorde une immunité juridique aux plateformes en ligne pour le contenu généré par les utilisateurs, suite à des poursuites judiciaires des années 1990. La Cour suprême a confirmé sa validité dans l&#39;affaire Reno v. ACLU (1997) et plusieurs décisions ultérieures ont renforcé son application, en faisant de ce texte un pilier du fonctionnement des réseaux sociaux et des services interactifs. Ces dernières années, l&#39;administration Trump a intensifié ses attaques contre les chercheurs qui étudient la haine en ligne, affirmant que le cadre juridique actuel favorise le contenu nuisible, tandis que les critiques craignent que cela menace la recherche et la liberté d&#39;expression. L&#39;action en justice intentée par les chercheurs technologiques vise à protéger la recherche sur la sécurité en ligne et la continuité de l&#39;application du Section 230.</div></section>
+    </div>
+  <div class="tags"><code>#online safety</code>, <code>#climate tech</code>, <code>#technology policy</code>, <code>#US politics</code>, <code>#research lawsuit</code></div>
+  <details><summary>References</summary><ul><li><a href="https://en.wikipedia.org/wiki/Section_230">Section 230</a></li><li><a href="https://www.law.cornell.edu/uscode/text/47/230">47 U.S. Code § 230 - Protection for private blocking and ...</a></li></ul></details>
+</article>
+
+<article id="item-3">
+  <header>
+        <h2 class="item-title"><a href="https://arstechnica.com/tech-policy/2026/05/police-boast-of-hacking-vpn-where-criminals-believed-themselves-to-be-safe/">Police boast of hacking VPN where criminals believed themselves safe</a></h2>
+    <div class="meta">rss · Ars Technica · May 22, 18:43</div>
+  </header>
+    <div class="lang-blocks">
+        <section class="lang"><h3>EN</h3><div class="content">Police say they intercepted traffic on a VPN service used by criminals, seized its domains and arrested the operator, claiming they broke the encryption that the criminals thought protected them. The operation demonstrates that law enforcement can access encrypted communications even when the service claims to provide strong privacy.<br /><br />This case challenges the notion that VPNs guarantee anonymity and could lead to broader legal and technical debates over encryption backdoors. It may affect users&#39; trust in privacy tools and influence policy decisions about lawful access to encrypted data.<br /><br />Authorities seized the VPN’s domain names and took the operator into custody, indicating a coordinated raid rather than a simple subpoena. The article notes that the VPN was marketed as a safe haven for criminals, highlighting the gap between advertised security and actual implementation.<br /><br />Virtual private networks (VPNs) encrypt internet traffic to protect user privacy and hide communications from eavesdroppers. Law enforcement agencies have long sought legal mechanisms to compel VPN providers to decrypt traffic, often arguing that a court order should allow access to plaintext data. Recent legislative proposals and court cases, such as those described in Lawfare and the McGill Law Journal, illustrate the ongoing tension between national security interests and individual privacy rights. The debate over backdoor access continues, with many experts warning that weakening encryption could undermine overall cybersecurity.</div></section>
+        <section class="lang"><h3>FR</h3><div class="content">La police affirme avoir intercepté le trafic d&#39;un service VPN utilisé par des criminels, saisi ses domaines et arrêté son opérateur, déclarant avoir brisé le chiffrement que les criminels estimaient sécurisant leurs communications. Cette opération montre que les forces de l&#39;ordre peuvent accéder aux communications chiffrées même si le service prétend offrir une forte confidentialité.<br /><br />Cette affaire remet en question l’idée selon laquelle les VPN assurent l’anonymat et pourrait déclencher de larges débats juridiques et techniques sur les portes dérobées à l’encryption. Elle pourrait également influencer la confiance des utilisateurs dans les outils de confidentialité et les décisions politiques concernant l’accès légal aux données chiffrées.<br /><br />Les autorités ont saisi les noms de domaine du VPN et arrêté son opérateur, montrant une raid coordonnée plutôt qu’une simple convocation. L’article souligne que le VPN était présenté comme un abri sûr pour les criminels, révélant l’écart entre la sécurité annoncée et son implémentation réelle.<br /><br />Les réseaux privés virtuels (VPN) chiffrent le trafic internet pour protéger la vie privée des utilisateurs et masquer les communications des espions. Les agences de police cherchent depuis longtemps des moyens juridiques pour contraindre les fournisseurs de VPN à décrypter le trafic, invoquant souvent une ordonnance judiciaire pour accéder au texte en clair. Des propositions législatives récentes et des affaires judiciaires, comme celles décrites dans Lawfare et le Journal de droit de McGill, illustrent la tension persistante entre les intérêts de sécurité nationale et les droits à la vie privée individuelle. Le débat sur l’accès aux portes dérobées continue, avec de nombreux experts affirmant que fragiliser le chiffrement pourrait affaiblir la cybersécurité globale.</div></section>
+    </div>
+  <div class="tags"><code>#law enforcement</code>, <code>#cybersecurity</code>, <code>#privacy</code>, <code>#VPN</code>, <code>#technology</code></div>
+  <details><summary>References</summary><ul><li><a href="https://www.lawfaremedia.org/article/if-we-build-it-they-will-break">If We Build It (They Will Break In) | Lawfare</a></li><li><a href="https://lawjournal.mcgill.ca/article/law-enforcement-access-to-encrypted-data-legislative-responses-and-the-charter/">Law Enforcement Access to Encrypted Data: Legislative Responses...</a></li><li><a href="https://cyberlaw.stanford.edu/blog/2025/05/governments-continue-losing-efforts-to-gain-backdoor-access-to-secure-communications/">Governments continue losing efforts to gain backdoor access to...</a></li></ul></details>
+</article>
+
+<article id="item-4">
+  <header>
+        <h2 class="item-title"><a href="https://www.axios.com/2026/05/26/cisa-white-house-cybersecurity-ai">CISA is sidelined as the White House scrambles to build a new AI cyber response.</a></h2>
+    <div class="meta">rss · Axios · May 26, 08:50</div>
+  </header>
+    <div class="lang-blocks">
+        <section class="lang"><h3>EN</h3><div class="content">The White House is assembling a multi‐agency team to address AI‐driven cyber threats while the Cybersecurity and Infrastructure Security Agency (CISA) sees its resources and staff cut dramatically. CISA has lost about one‐third of its workforce since early 2025 and plans to hire more than 300 new employees for mission‐critical roles. The agency also did not receive early access to Anthropic’s Mythos model, limiting its ability to share threat intelligence.<br /><br />The sidelining of CISA threatens the ability of utilities, banks and other critical infrastructure operators to defend against AI‐enhanced cyberattacks. Reduced staffing and funding put national security and defense at risk, according to Senator Gary Peters. Industry partners are uncertain who to contact for threat sharing, weakening overall cyber resilience.<br /><br />CISA has lost roughly a third of its workforce, about 766 full‐time employees, and its budget was cut by up to $707 million for fiscal year 2027. The agency plans to hire more than 300 new staff for mission‐critical roles, but it still lacks a permanent chief AI officer and did not receive early access to Anthropic’s Mythos model. These constraints make it difficult for industry partners to know which personnel to engage for threat intelligence sharing.<br /><br />The Cybersecurity and Infrastructure Security Agency (CISA) is a component of the U.S. Department of Homeland Security responsible for protecting the nation&#39;s critical infrastructure from cyber and physical threats. Established in 2018 under the Cybersecurity and Infrastructure Security Agency Act, CISA coordinates security efforts across federal, state and local governments and oversees programs such as 5G network protection, election security and power grid resilience. Recent budget reductions and staff layoffs have diminished its capacity just as AI‐driven cyber threats are rising, prompting the White House to create a new multi‐agency response team.</div></section>
+        <section class="lang"><h3>FR</h3><div class="content">La Maison Blanche constitue une équipe inter‐agences pour faire face aux menaces cybernétiques liées à l&#39;IA, tandis que l&#39;Agence de sécurité cybernétique et d&#39;infrastructure (CISA) voit ses ressources et son personnel fortement réduits. CISA a perdu environ un tiers de sa main‐d&#39;œuvre depuis le début de 2025 et prévoit d&#39;embaucher plus de 300 nouveaux employés pour des fonctions critiques. L&#39;agence n&#39;a pas non plus reçu un accès anticipé au modèle Mythos d&#39;Anthropic, ce qui limite sa capacité à partager des renseignements sur les menaces.<br /><br />Le marginalisation de la CISA compromet la capacité des utilitaires, des banques et d&#39;autres exploitants d&#39;infrastructures critiques à se défendre contre les cyberattaques renforcées par l&#39;IA. La réduction du personnel et du financement met en danger la sécurité nationale et la défense, selon le sénateur Gary Peters. Les partenaires du secteur sont incertains quant à qui contacter pour le partage de menaces, affaiblissant la résilience cybernétique globale.<br /><br />La CISA a perdu environ un tiers de son personnel, soit près de 766 employés à temps plein, et son budget a été réduit de jusqu&#39;à 707 millions de dollars pour l&#39;exercice 2027. L&#39;agence prévoit d&#39;embaucher plus de 300 nouveaux employés pour des fonctions critiques, mais elle ne possède toujours pas de directeur principal de l&#39;IA et n&#39;a pas reçu un accès anticipé au modèle Mythos d&#39;Anthropic. Ces contraintes compliquent le fait pour les partenaires du secteur de savoir à qui adresser les renseignements sur les menaces.<br /><br />L&#39;Agence de sécurité cybernétique et d&#39;infrastructure (CISA) est une composante du Département de la Sécurité intérieure des États-Unis responsable de la protection des infrastructures critiques du pays contre les menaces cybernétiques et physiques. Créée en 2018 par la Cybersecurity and Infrastructure Security Agency Act, CISA coordonne les efforts de sécurité auprès des gouvernements fédéral, étatique et local et supervise des programmes tels que la protection du réseau 5G, la sécurité des élections et la résilience du réseau électrique. Les récents réductions budgétaires et les licenciements de personnel ont affaibli sa capacité alors que les menaces cybernétiques liées à l&#39;IA augmentent, incitant la Maison Blanche à mettre en place une équipe inter‐agences dédiée.</div></section>
+    </div>
+  <div class="tags"><code>#AI</code>, <code>#Cybersecurity</code>, <code>#U.S. Government</code>, <code>#Critical Infrastructure</code>, <code>#Policy</code></div>
+  <details><summary>References</summary><ul><li><a href="https://en.wikipedia.org/wiki/Cybersecurity_and_Infrastructure_Security_Agency">Cybersecurity and Infrastructure Security Agency</a></li><li><a href="https://www.cisa.gov/">Home Page | CISA</a></li><li><a href="https://www.dhs.gov/employee-resources/cybersecurity-and-infrastructure-security-agency-cisa">Cybersecurity and Infrastructure Security Agency (CISA)</a></li></ul></details>
+</article>
+
+<article id="item-5">
+  <header>
+        <h2 class="item-title"><a href="https://www.technologyreview.com/2026/05/26/1137865/its-time-to-address-the-looming-crisis-in-entry-level-work/">It is time to address the looming crisis in entry-level work.</a></h2>
+    <div class="meta">rss · MIT Technology Review · May 26, 09:00</div>
+  </header>
+    <div class="lang-blocks">
+        <section class="lang"><h3>EN</h3><div class="content">The article notes that AI has not yet caused mass unemployment, but it is quietly eroding entry‐level job opportunities, a shift that could reshape the future of work. While overall employment remains stable, the first rung of the career ladder is weakening as AI automates routine tasks and changes employer demand.<br /><br />This trend matters because entry‐level positions are crucial for skill development and career entry, so their decline could limit upward mobility and exacerbate inequality. It also signals broader changes in the labor market as AI reshapes job design, affecting hiring practices and the need for reskilling.<br /><br />The article cites that 77 % of entry‐level roles are predicted to face moderate to extreme disruption from AI, and that in tech firms 60 % of employers using AI have increased analytical responsibilities for entry‐level workers while 54 % reduced routine task positions. It also notes that universities are racing to teach generative AI skills and strategic AI literacy to prepare students for a changing job market.<br /><br />Entry‐level jobs are positions designed for recent graduates with little or no prior experience, often providing on‐the‐job training and serving as the first step on a career ladder. Recent studies indicate that AI is predicted to disrupt a large share of these roles, with one report estimating that 77 % of entry‐level positions will experience moderate to extreme disruption. While overall employment in developed economies remains stable, the erosion of entry‐level opportunities could reshape career pathways and increase the demand for reskilling.</div></section>
+        <section class="lang"><h3>FR</h3><div class="content">L&#39;article indique que l&#39;IA n&#39;a pas encore entraîné de chômage de masse, mais qu&#39;elle affaiblit silencieusement les postes d&#39;entrée de carrière, un changement qui pourrait remodeler le futur du travail. Bien que l&#39;emploi global reste stable, l&#39;échelle initiale de la carrière s&#39;affaiblit alors que l&#39;IA automatise les tâches routinières et modifie la demande des employeurs.<br /><br />Cette tendance est importante car les postes d&#39;entrée sont essentiels pour le développement des compétences et l&#39;accès à la carrière, et leur déclin pourrait limiter la mobilité sociale et accentuer les inégalités. Elle indique également des changements plus larges du marché du travail alors que l&#39;IA redéfinit la conception des emplois, influençant les pratiques de recrutement et la nécessité de reconversion.<br /><br />L&#39;article indique que 77 % des postes d&#39;entrée de carrière sont prédits comme étant fortement perturbés par l&#39;IA, et que dans les entreprises technologiques, 60 % des employeurs ayant adopté l&#39;IA ont augmenté les responsabilités analytiques pour les travailleurs d&#39;entrée de carrière, tandis que 54 % ont réduit les postes de tâches routinières. Il souligne également que les universités accélèrent l&#39;enseignement des compétences en IA générative et de la littératie stratégique en IA pour préparer les étudiants à un marché du travail en mutation.<br /><br />Les emplois d&#39;entrée de carrière sont des postes conçus pour les diplômés récents avec peu ou pas d&#39;expérience préalable, offrant généralement une formation sur le lieu de travail et constituant la première marche de l&#39;échelle de carrière. Des études récentes estiment que l&#39;IA devrait perturber une grande partie de ces postes, avec un rapport indiquant que 77 % des emplois d&#39;entrée de carrière subiront une perturbation modérée à extrême. Bien que l&#39;emploi global dans les économies développées reste stable, l&#39;érosion des opportunités d&#39;entrée de carrière pourrait remodeler les trajectoires de carrière et accroître la demande de reconversion.</div></section>
+    </div>
+  <div class="tags"><code>#AI</code>, <code>#labor market</code>, <code>#employment</code>, <code>#technology</code>, <code>#future of work</code></div>
+  <details><summary>References</summary><ul><li><a href="https://en.wikipedia.org/wiki/Entry-level_job">Entry-level job - Wikipedia</a></li><li><a href="https://www.stjohns.edu/news-media/johnnies-blog/ai-impact-students-entering-job-market">How AI Impacts Students Entering the Job Market</a></li><li><a href="https://www.businessinsider.com/entry-level-jobs-more-skilled-impact-from-ai-2026-5">Your Entry-Level Job Is Getting Harder Thanks to AI - Business Insider</a></li></ul></details>
+</article>
+
+<article id="item-6">
+  <header>
+        <h2 class="item-title"><a href="https://www.technologyreview.com/2026/05/21/1137613/scaling-creativity-in-the-age-of-ai/">Scaling creativity in the age of AI.</a></h2>
+    <div class="meta">rss · MIT Technology Review · May 21, 19:16</div>
+  </header>
+    <div class="lang-blocks">
+        <section class="lang"><h3>EN</h3><div class="content">The article examines how generative AI is reshaping the ancient practice of storytelling, highlighting tools that assist research, content creation, and interactive narratives. It notes that AI democratizes storytelling by enabling wider participation while requiring humans to guide algorithmic communication.<br /><br />This shift matters because AI expands creative possibilities and lowers barriers to entry for storytellers across industries. It also raises questions about authorship, quality control, and the ethical use of AI in cultural production.<br /><br />The piece references historic cave paintings using charcoal and ochre as early forms of visual storytelling, linking them to modern AI tools like Beautiful.ai and ChatGPT that generate text and characters. It emphasizes that effective AI storytelling requires clear prompting, knowing what not to delegate to AI, and recognizing tasks where AI outperforms humans.<br /><br />Storytelling is a fundamental human impulse that has expressed ideals, warnings, hopes, and experiences since prehistoric times. Early humans used natural pigments such as red ochre, yellow ochre, hematite, manganese oxide, and charcoal to create cave paintings, as documented in recent archaeological studies. The development of the camera and later digital media continued this tradition of representing experience, and recent web articles describe how generative AI now assists research, content creation, and interactive narratives. These sources, including analyses from The Future of Commerce, Beautiful.ai, and MIT Sloan Management Review, illustrate the evolving role of technology in storytelling.</div></section>
+        <section class="lang"><h3>FR</h3><div class="content">L&#39;article examine comment l&#39;IA générative redéfinit la pratique ancestrale du récit, en soulignant des outils qui aident à la recherche, à la création de contenu et aux récits interactifs. Il souligne que l&#39;IA démocratise le récit en permettant une participation plus large tout en exigeant que les humains guident la communication algorithmique.<br /><br />Ce changement est important car l&#39;IA élargit les possibilités créatives et réduit les barrières à l&#39;entrée pour les conteurs dans divers secteurs. Il soulève également des questions sur l&#39;authenticité, le contrôle de la qualité et l&#39;utilisation éthique de l&#39;IA dans la production culturelle.<br /><br />L&#39;article fait référence aux peintures rupestres préhistoriques utilisant le charbon et l&#39;ocre comme formes primitives du récit visuel, les reliant aux outils modernes d&#39;IA comme Beautiful.ai et ChatGPT qui génèrent texte et personnages. Il insiste sur le fait que le récit efficace avec l&#39;IA nécessite des prompts clairs, savoir ce qui ne doit pas être délégué à l&#39;IA et reconnaître les tâches où l&#39;IA surpasse les humains.<br /><br />Le récit est une impulse fondamentale de l&#39;être humain qui a exprimé des idéaux, des avertissements, des espoirs et des expériences depuis la préhistoire. Les premiers humains utilisaient des pigments naturels tels que l&#39;ocre rouge, l&#39;ocre jaune, l&#39;hematite, l&#39;oxyde de manganèse et le charbon pour créer des peintures rupestres, comme le montrent les études archéologiques récentes. Le développement de l&#39;appareil photo et ensuite des médias numériques a poursuivi cette tradition de représentation de l&#39;expérience, et des articles web récents décrivent comment l&#39;IA générative assiste la recherche, la création de contenu et les récits interactifs. Ces sources, y compris des analyses de The Future of Commerce, Beautiful.ai et du MIT Sloan Management Review, illustrent le rôle évolutif de la technologie dans le récit.</div></section>
+    </div>
+  <div class="tags"><code>#AI</code>, <code>#Creativity</code>, <code>#Storytelling</code>, <code>#Technology</code>, <code>#Culture</code></div>
+  <details><summary>References</summary><ul><li><a href="https://www.the-future-of-commerce.com/2025/05/15/generative-ai-storytelling/">Generative AI storytelling: Creating compelling content via collaboration</a></li><li><a href="https://sloanreview.mit.edu/article/the-enduring-power-of-data-storytelling-in-the-generative-ai-era/">The Enduring Power of Data Storytelling in the Generative AI Era | Ganes Kesari | MIT Sloan Management Review</a></li></ul></details>
+</article>
+
+<article id="item-7">
+  <header>
+        <h2 class="item-title"><a href="https://www.technologyreview.com/2026/05/22/1137813/google-i-o-showed-how-the-path-for-ai-science-is-shifting/">Google I/O shows AI-driven science path shifting</a></h2>
+    <div class="meta">rss · MIT Technology Review · May 22, 10:00</div>
+  </header>
+    <div class="lang-blocks">
+        <section class="lang"><h3>EN</h3><div class="content">Demis Hassabis, CEO of Google DeepMind, declared at Google I/O that AI is at the foothills of the singularity, indicating a potential shift in AI-driven scientific progress. He emphasized that AI is approaching a point where it could rapidly improve itself beyond human control.<br /><br />This claim signals a potential acceleration in scientific discovery, as AI could rapidly self-improve and solve complex problems beyond human capability, impacting fields like medicine and climate science. It signals a possible transformation of research timelines and capabilities across multiple disciplines.<br /><br />Hassabis, a Nobel laureate in Chemistry (2024) for protein structure prediction, stated we are at the foothills of the singularity, implying AI is nearing self-improvement beyond human control. He is also a UK Government AI Adviser and a Royal Society Fellow.<br /><br />The technological singularity is a hypothetical future event where artificial intelligence rapidly self-improves beyond human control, as described in I. J. Good&#39;s 1965 intelligence explosion model and discussed by experts like Stephen Hawking and Stuart Russell. Recent predictions range from 2035 to 2045, though some researchers argue AI growth may face diminishing returns rather than explosive acceleration.</div></section>
+        <section class="lang"><h3>FR</h3><div class="content">Lors du sommet Google I/O, lors de la conférence, Demis Hassabis a déclaré que l&#39;IA se trouve au pied de la singularité, indiquant un changement potentiel dans le progrès scientifique alimenté par l&#39;IA.<br /><br />Cette affirmation indique un potentiel d&#39;accélération des découvertes scientifiques, car l&#39;IA pourrait s&#39;améliorer rapidement et résoudre des problèmes complexes au-delà des capacités humaines, impactant des domaines comme la médecine et le climat. Cela signale une possible transformation des délais et capacités de recherche dans plusieurs domaines.<br /><br />Lors du sommet Google I/O, lors de la conférence, Demis Hassabis a déclaré que l&#39;IA se trouve au pied de la singularité, indiquant un changement potentiel dans le progrès scientifique alimenté par l&#39;IA.<br /><br />La singularité technologique est un événement hypothétique futur où l&#39;intelligence artificielle s&#39;améliore rapidement au-delà du contrôle humain, selon le modèle d&#39;explosion d&#39;intelligence d&#39;I. J. Good de 1965 et débattu par des experts comme Stephen Hawking. Les prédictions récentes varient de 2035 à 2045, bien que certains chercheurs avancent que la croissance de l&#39;IA pourrait rencontrer des rendements décroissants plutôt qu&#39;une accélération explosive.</div></section>
+    </div>
+  <div class="tags"><code>#AI</code>, <code>#Google I/O</code>, <code>#Singularity</code>, <code>#Technology</code>, <code>#Science</code></div>
+  <details><summary>References</summary><ul><li><a href="https://en.wikipedia.org/wiki/Technological_singularity">Technological singularity</a></li><li><a href="https://scienceinsights.org/how-close-is-the-singularity-a-realistic-timeline/">How Close Is the Singularity? A Realistic Timeline</a></li><li><a href="https://www.britannica.com/technology/singularity-technology">Singularity | Benefits, Challenges &amp; Implications | Britannica</a></li></ul></details>
+</article>
+
+<article id="item-8">
+  <header>
+        <h2 class="item-title"><a href="https://www.tomshardware.com/software/linux/california-moves-to-exempt-linux-from-its-upcoming-age-verification-law-after-backlash-over-forcing-operating-systems-to-collect-users-ages-amendment-proposed-by-the-same-lawmaker-who-wrote-the-original-law">California exempts Linux from its upcoming age verification law.</a></h2>
+    <div class="meta">hackernews · rbanffy · May 25, 18:19 · <a href="https://news.ycombinator.com/item?id=48269961">Discussion</a></div>
+  </header>
+    <div class="lang-blocks">
+        <section class="lang"><h3>EN</h3><div class="content">California has proposed an amendment to its Digital Age Assurance Act that would exempt Linux operating systems from the requirement to collect user ages at setup. The change follows months of criticism that the law would force all operating systems, including macOS, Android, and Windows, to gather age data. The amendment was introduced by the same lawmaker who authored the original bill.<br /><br />Exempting Linux avoids forcing open‐source developers to implement cumbersome age‐collection mechanisms, preserving their freedom to modify the code and protecting first‐amendment rights. It also signals that policymakers are responsive to technical concerns, potentially reducing legal challenges and easing compliance for other OS vendors. The decision may influence how other states handle age‐verification requirements for software platforms.<br /><br />The amendment targets AB‐1856, which is currently in committee review and may be voted on by the California State Legislature in June. It would exempt the majority of Linux distributions from the requirement that operating systems collect a self‐reported age at installation, a provision that originally applied to macOS, Android and Windows as well. Critics note that the law could be deemed an unconstitutional first‐amendment violation because it compels expressive code.<br /><br />California&#39;s Digital Age Assurance Act, passed as Assembly Bill 1043 in late 2025, mandates that all operating systems collect a self‐reported age during initial setup, with the law taking effect on January 1, 2027. The legislation was intended to move age verification away from individual websites and apps toward the operating system level, but it has been criticized for imposing burdensome compliance on developers and potentially violating the First Amendment. Earlier attempts to require age verification for adult websites stalled due to budget concerns and legal challenges, as noted in a YouTube report and a Yahoo News article. The controversy sparked widespread discussion on Hacker News and other forums about the feasibility and constitutional implications of forcing OS vendors to gather user age data.</div></section>
+        <section class="lang"><h3>FR</h3><div class="content">La Californie a proposé une modification de la Digital Age Assurance Act qui exempterait les systèmes Linux de l&#39;obligation de collecter l&#39;âge des utilisateurs lors de l&#39;installation. Ce changement fait suite à de nombreuses critiques selon lesquelles la loi obligerait tous les systèmes d&#39;exploitation, y compris macOS, Android et Windows, à recueillir les données d&#39;âge. L&#39;amendement a été présenté par le même législateur qui avait rédigé la loi initiale.<br /><br />Exempter Linux évite d&#39;imposer aux développeurs open source des mécanismes de collecte d&#39;âge encombrants, préservant leur liberté de modification du code et les droits de la première amendement. Cela montre que les législateurs sont sensibles aux préoccupations techniques, ce qui pourrait réduire les défis juridiques et faciliter la conformité pour les autres éditeurs de systèmes d&#39;exploitation. La décision pourrait influencer la manière dont d&#39;autres États traitent les exigences de vérification d&#39;âge pour les plateformes logicielles.<br /><br />L&#39;amendement concerne le projet AB‐1856, actuellement en examen parlementaire et qui pourrait être voté par le législature de Californie en juin. Il exempterait la plupart des distributions Linux de l&#39;obligation pour les systèmes d&#39;exploitation de collecter un âge auto‐déclaré lors de l&#39;installation, une disposition initialement appliquée à macOS, Android et Windows. Les critiques estiment que la loi pourrait constituer une violation inconstitutionnelle de la première amendement en imposant un discours expressif.<br /><br />La Digital Age Assurance Act de Californie, adoptée sous la forme du projet de loi AB 1043 fin 2025, impose que tous les systèmes d&#39;exploitation collectent un âge auto‐déclaré lors de la configuration initiale, avec mise en vigueur le 1er janvier 2027. La loi visait à déplacer la vérification d&#39;âge des sites web et des applications vers le niveau du système d&#39;exploitation, mais elle a suscité des critiques pour imposer une charge lourde aux développeurs et potentiellement violer le premier amendement. Des tentatives antérieures de vérification d&#39;âge pour les sites d&#39;adultes ont échoué à cause de problèmes budgétaires et de défis juridiques, comme le montre une vidéo YouTube et un article de Yahoo News. La controverse a déclenché une large discussion sur Hacker News et d&#39;autres forums concernant la faisabilité et les implications constitutionnelles de contraindre les fournisseurs d&#39;OS à collecter l&#39;âge des utilisateurs.</div></section>
+    </div>
+  <div class="tags"><code>#Policy</code>, <code>#Linux</code>, <code>#Legislation</code>, <code>#Age verification</code>, <code>#Hacker News</code></div>
+  <details><summary>References</summary><ul><li><a href="https://www.tomshardware.com/software/linux/california-moves-to-exempt-linux-from-its-upcoming-age-verification-law-after-backlash-over-forcing-operating-systems-to-collect-users-ages-amendment-proposed-by-the-same-lawmaker-who-wrote-the-original-law">California moves to exempt Linux from its upcoming age-verification...</a></li><li><a href="https://www.phoronix.com/news/California-AB-1856">California&#39;s Age Verification Law May End Up Exempting Most Linux...</a></li></ul></details>
+</article>
+
+<article id="item-9">
+  <header>
+        <h2 class="item-title"><a href="https://www.technologyreview.com/2026/05/22/1137753/the-enhanced-games-fit-right-in-with-the-rest-of-2026s-longevity-vibes/">The Enhanced Games fit right in with the rest of 2026’s longevity vibes.</a></h2>
+    <div class="meta">rss · MIT Technology Review · May 22, 09:00</div>
+  </header>
+    <div class="lang-blocks">
+        <section class="lang"><h3>EN</h3><div class="content">This Sunday, 42 athletes will gather in Las Vegas for the inaugural Enhanced Games. Participants are being encouraged to take performance‐enhancing drugs to push the boundaries of human performance.<br /><br />The event raises serious health and ethical questions about doping in sport and could influence public policy and regulatory approaches to performance‐enhancing substances. It also reflects a broader trend of seeking longevity and extreme human enhancement in 2026. Stakeholders, including athletes, regulators, and the public, will need to consider the implications for fairness and health.<br /><br />The competition will feature 42 athletes competing in a multi‐sport event in Las Vegas, and the organizers have stated that only substances permitted by the Enhanced Games’ rules may be used. The Games are privately funded by Australian entrepreneur Dr. Aron D&#39;Souza and are set to be publicly traded on the NYSE under the ticker $ENHA. The inaugural event is scheduled for 2026, aligning with the year’s focus on longevity and human performance enhancement.<br /><br />The Enhanced Games is a privately funded international multi‐sport competition founded by Australian entrepreneur Dr. Aron D&#39;Souza, who aims to allow athletes to use performance‐enhancing substances without restriction. The event is scheduled for 2026 and will be held in Las Vegas, where 42 athletes are expected to compete. According to the LinkedIn page of Enhanced Games, the organization is now publicly traded on the New York Stock Exchange under the ticker $ENHA, indicating a move toward broader financial backing. Performance‐enhancing drugs, defined by Wikipedia as substances that improve athletic or cognitive performance, include anabolic steroids, stimulants, and nootropics, and their use raises significant health and regulatory concerns.</div></section>
+        <section class="lang"><h3>FR</h3><div class="content">Ce dimanche, 42 athlètes se rassembleront à Las Vegas pour les premiers Jeux Enhanced. Les participants seront encouragés à prendre des substances améliorant la performance afin de pousser les limites du potentiel humain.<br /><br />L&#39;événement soulève des questions sérieuses de santé et d&#39;éthique concernant le dopage dans le sport et pourrait influencer les politiques publiques et les réglementations sur les substances améliorant la performance. Il reflète également une tendance plus large visant la longévité et l&#39;amélioration extrême de l&#39;humain en 2026. Les parties prenantes, dont les athlètes, les régulateurs et le public, devront envisager les implications pour l&#39;équité et la santé.<br /><br />La compétition réunira 42 athlètes dans un événement multisports à Las Vegas, et les organisateurs ont indiqué que seuls les substances autorisées par les règles des Jeux Enhanced pourront être utilisées. Les Jeux sont financés par le entrepreneur australien Dr. Aron D&#39;Souza et prévoient d&#39;être cotés publiquement à la NYSE sous le symbole $ENHA. Le premier événement est prévu pour 2026, en accord avec l&#39;accent de l&#39;année sur la longévité et l&#39;amélioration des performances humaines.<br /><br />Les Enhanced Games sont une compétition multisports internationale privée financée par l&#39;entrepreneur australien Dr. Aron D&#39;Souza, qui vise à autoriser les athlètes à utiliser des substances améliorant la performance sans restriction. L&#39;événement est prévu pour 2026 et se tiendra à Las Vegas, où 42 athlètes sont attendus. Selon la page LinkedIn des Enhanced Games, l&#39;organisation est désormais cotée en bourse à la New York Stock Exchange sous le symbole $ENHA, indiquant un soutien financier plus large. Les substances améliorant la performance, définies par Wikipedia comme des agents améliorant les performances sportives ou cognitives, incluent des stéroïdes anabolisants, des stimulants et des nootropiques, et leur utilisation soulève d&#39;importantes préoccupations sanitaires et réglementaires.</div></section>
+    </div>
+  <div class="tags"><code>#Enhanced Games</code>, <code>#Performance‐enhancing drugs</code>, <code>#Sports ethics</code>, <code>#Human performance</code>, <code>#Technology Review</code></div>
+  <details><summary>References</summary><ul><li><a href="https://en.wikipedia.org/wiki/Enhanced_Games">Enhanced Games - Wikipedia</a></li><li><a href="https://www.linkedin.com/company/enhanced-games">Enhanced | LinkedIn</a></li><li><a href="https://en.wikipedia.org/wiki/Performance-enhancing_drugs">Performance-enhancing drugs</a></li></ul></details>
+</article>
+
+<article id="item-10">
+  <header>
+        <h2 class="item-title"><a href="https://www.bloomberg.com/news/articles/2026-05-25/pope-leo-warns-ai-should-be-prevented-from-dominating-humanity">Pope Says AI Should Be Disarmed to Avoid Dominating Humanity.</a></h2>
+    <div class="meta">rss · Bloomberg Technology · May 25, 09:31</div>
+  </header>
+    <div class="lang-blocks">
+        <section class="lang"><h3>EN</h3><div class="content">During his Wednesday General Audience on May 25, 2026, Pope Leo XIV warned that artificial intelligence must be “disarmed” to prevent it from dominating humanity. He called for limits on who controls the technology and urged stronger international regulation. This is his first major public statement on AI regulation since his election in May 2025.<br /><br />The Pope’s moral authority adds weight to the AI governance debate, potentially influencing policymakers and public opinion worldwide. His call for disarmament highlights the risk that unchecked AI could threaten human agency and global stability, prompting renewed calls for international regulatory frameworks. While not a policy announcement, the statement signals a shift in the Church’s stance on technology and may accelerate discussions at the UN and other bodies.<br /><br />Pope Leo XIV, the first American pope and former Cardinal Robert Prevost, made the remarks during his first major catechesis series on the Second Vatican Council. The call for AI disarmament is symbolic rather than a concrete policy proposal, and no treaty or legal framework currently exists. The statement follows a series of UN and SIPRI studies warning that AI could destabilize international security.<br /><br />Pope Leo XIV, born Robert Francis Prevost in Chicago in 1955, became the head of the Catholic Church after his unexpected election in the May 2025 conclave, succeeding Pope Francis. He is the first pope from the United States and the first from the Americas, bringing extensive missionary experience in Peru and a background in canon law. Since taking office, he has emphasized synodality, social teaching, and engagement with technological challenges, including climate change and migration. His recent warning about AI builds on earlier statements by the Vatican and aligns with global discussions on AI regulation promoted by the United Nations Office for Disarmament Affairs and the Stockholm International Peace Research Institute.</div></section>
+        <section class="lang"><h3>FR</h3><div class="content">Lors de son audience générale du mercredi le 25 mai 2026, le pape Léon XIV a déclaré que l&#39;intelligence artificielle doit être « désarmée » pour éviter qu&#39;elle ne domine l&#39;humanité. Il a demandé des limites sur ceux qui contrôlent la technologie et a appelé à une régulation internationale renforcée. C&#39;est sa première déclaration publique majeure sur la régulation de l&#39;IA depuis son élection en mai 2025.<br /><br />L’autorité morale du pape renforce le débat sur la gouvernance de l’IA, pouvant influencer les décideurs et l’opinion publique à l’échelle mondiale. Son appel à la désarmement souligne le risque que l’IA non maîtrisée menace l’agence humaine et la stabilité mondiale, incitant à des appels renouvelés en faveur de cadres réglementaires internationaux. Bien que ce ne soit pas une annonce de politique, l’énoncé marque un changement de position de l’Église vis‐à‐vis de la technologie et pourrait accélérer les discussions aux Nations Unies et ailleurs.<br /><br />Le pape Léon XIV, premier pape américain et ancien cardinal Robert Prevost, a prononcé ces remarques lors de sa première série de catéchèses sur le Second Concile Vatican. L’appel à la désarmement de l’IA reste symbolique et ne constitue pas une proposition de politique concrète, aucun traité n’étant actuellement en place. Cette prise de position fait suite à plusieurs études des Nations Unies et du SIPRI prévoyant que l’IA pourrait déstabiliser la sécurité internationale.<br /><br />Le pape Léon XIV, né Robert Francis Prevost à Chicago en 1955, est devenu le chef de l’Église catholique après son élection inattendue en mai 2025, succédant à François. Il est le premier pape américain et le premier issu des Amériques, fort de son expérience missionnaire au Pérou et d’une formation en droit canon. Depuis son accession au trône, il insiste sur la synodalité, les enseignements sociaux et s’engage sur les défis technologiques comme le changement climatique et les migrations. Son avertissement récent sur l’IA s’inscrit dans le débat mondial et s’aligne sur les discussions menées par le Bureau des affaires du désarmement des Nations Unies et l’Institut international d’études de paix de Stockholm.</div></section>
+    </div>
+  <div class="tags"><code>#AI</code>, <code>#Religion</code>, <code>#Technology</code>, <code>#Policy</code>, <code>#International</code></div>
+  <details><summary>References</summary><ul><li><a href="https://en.wikipedia.org/wiki/Pope_Leo_XIV">Pope Leo XIV</a></li><li><a href="https://www.vatican.va/content/leo-xiv/en.html">Leo XIV - VaticanPope Leo’s ‘Magnifica humanitas’: AI must serve humanity not ...Leo XIV | Pope, Real Name, Background, Encyclical, AI, Trump ...Pope Leo warns of AI fueling warfare in first major ... - CNNPope Leo XIV | AP NewsPope Leo Uses First Major Papal Text to Warn About Dangers of AI</a></li></ul></details>
+</article>
+
+<article id="item-11">
+  <header>
+        <h2 class="item-title"><a href="https://www.bloomberg.com/news/articles/2026-05-25/ericsson-quits-suburb-once-touted-as-sweden-s-silicon-valley">Ericsson moves its headquarters from Kista to central Stockholm.</a></h2>
+    <div class="meta">rss · Bloomberg Technology · May 25, 08:45</div>
+  </header>
+    <div class="lang-blocks">
+        <section class="lang"><h3>EN</h3><div class="content">Ericsson AB announced that it will relocate its global headquarters from the suburb of Kista to central Stockholm after more than two decades. The move ends the company&#39;s long‐standing presence in Kista, a district once promoted as Sweden’s Silicon Valley.<br /><br />The relocation signals a shift in Sweden’s tech hub dynamics, moving a historic anchor from a struggling suburb to the capital’s core. It may boost central Stockholm’s startup ecosystem while potentially weakening Kista’s reputation as a tech hub, affecting local investment and talent flows.<br /><br />Kista, once heralded as Sweden’s Silicon Valley, now hosts a shopping mall with 185 stores, industrial construction activity, and the Kista Science Tower, yet it has struggled with economic decline. Ericsson’s departure after more than 20 years marks a symbolic exit, while the suburb continues to develop through projects like the Kista Convention Center.<br /><br />Kista is a suburb north of central Stockholm that was developed in the 1970s and promoted as a technology hub, featuring the Kista Science City and the Kista Convention Center. For years it was marketed as Sweden’s Silicon Valley because of its concentration of tech firms and venture capital, a claim reinforced by reports that Sweden produces more billion‐dollar tech companies per capita than any region except Silicon Valley. Ericsson occupied office space in Kista for over two decades, making the company a visible anchor in the area, but recent economic challenges have led the firm to seek a more central location in Stockholm.</div></section>
+        <section class="lang"><h3>FR</h3><div class="content">Ericsson AB a annoncé qu’il va transférer son siège mondial de Kista à Stockholm central après plus de deux décennies. Ce déménagement met fin à la présence prolongée de l’entreprise dans Kista, quartier autrefois présenté comme la Silicon Valley de la Suède.<br /><br />Ce déménagement indique un changement dans la dynamique du pôle technologique suédois, déplaçant un pilier historique d’un quartier en difficulté vers le cœur de la capitale. Il pourrait dynamiser l’écosystème start‐up de Stockholm tout en fragilisant la réputation de Kista comme hub technologique, impactant l’investissement local et l’accès aux talents.<br /><br />Kista, autrefois présenté comme la Silicon Valley de la Suède, accueille aujourd’hui un centre commercial avec 185 boutiques, des activités de construction industrielle et la Kista Science Tower, mais il a connu un déclin économique. Le départ d’Ericsson après plus de 20 ans constitue une sortie symbolique, tandis que le quartier poursuit son développement via des projets comme le Kista Convention Center.<br /><br />Kista est un quartier situé au nord de Stockholm central, développé dans les années 1970 et présenté comme un pôle technologique, avec la Kista Science City et le Kista Convention Center. Pendant de nombreuses années, il a été vanté comme la Silicon Valley de la Suède en raison de la concentration d’entreprises technologiques et de capitaux-risque, un discours soutenu par des rapports indiquant que la Suède produit plus de sociétés technologiques valant un milliard de dollars par habitant que toute région autre que Silicon Valley. Ericsson a occupé des locaux à Kista pendant plus de vingt ans, faisant d’elle un repère visible dans le secteur, mais des difficultés économiques récentes ont poussé la société à chercher un emplacement plus central à Stockholm.</div></section>
+    </div>
+  <div class="tags"><code>#Ericsson</code>, <code>#Corporate relocation</code>, <code>#Sweden</code>, <code>#Technology</code>, <code>#Kista</code></div>
+  <details><summary>References</summary><ul><li><a href="https://www.bloomberg.com/news/articles/2026-05-25/ericsson-quits-suburb-once-touted-as-sweden-s-silicon-valley">Ericsson Quits Suburb Once Touted as Sweden’s Silicon Valley</a></li><li><a href="https://www.stockholmvalley.com/stockholm-is-quietly-becoming-the-next-silicon-valley/">Stockholm Is Quietly Becoming the Next &#39;Silicon Valley&#39;</a></li><li><a href="https://www.forbes.com/sites/alisoncoleman/2026/05/06/why-sweden-has-a-track-record-for-turning-ai-startups-into-unicorns/">Why Sweden Has A Track Record For Turning AI Startups Into ...</a></li></ul></details>
+</article>
+
+<article id="item-12">
+  <header>
+        <h2 class="item-title"><a href="https://www.technologyreview.com/2026/05/21/1137756/roundtables-can-ai-learn-to-understand-the-world/">Roundtables explore whether AI can understand the world.</a></h2>
+    <div class="meta">rss · MIT Technology Review · May 21, 20:41</div>
+  </header>
+    <div class="lang-blocks">
+        <section class="lang"><h3>EN</h3><div class="content">MIT Technology Review editors hosted a roundtable discussion on how AI can learn to understand the world beyond current large language models. The conversation featured editor in chief Mat Honan, senior AI editor Will Douglas Heaven, and an AI reporter, focusing on emerging world models.<br /><br />Understanding the world is a key goal for AI to move beyond text generation toward reliable reasoning and interaction. This discussion highlights research directions that could enable more robust, generalizable AI systems, affecting industries that rely on AI for complex tasks.<br /><br />AI companies aim to develop world models that go beyond the text‐only capabilities of large language models. The roundtable highlighted recent research on multimodal and embodied AI that seeks to give systems a broader perception of reality.<br /><br />Large language models have dominated recent AI progress, but they primarily generate text based on patterns in training data. Researchers are now exploring world models that incorporate perception, reasoning, and interaction with the environment to achieve more general intelligence. The MIT Technology Review roundtable gathered experts to discuss these emerging approaches and their challenges.</div></section>
+        <section class="lang"><h3>FR</h3><div class="content">Les éditeurs de MIT Technology Review ont organisé un roundtable sur la façon dont l&#39;IA peut comprendre le monde au-delà des modèles linguistiques actuels. La discussion a rassemblé le rédacteur en chef Mat Honan, le senior editor Will Douglas Heaven et un reporter IA, en se concentrant sur les modèles de monde émergents.<br /><br />Comprendre le monde est un objectif clé pour l&#39;IA afin de dépasser la simple génération de texte et d&#39;atteindre un raisonnement fiable et une interaction. Cette discussion souligne des pistes de recherche qui pourraient rendre les systèmes d&#39;IA plus robustes et généralisables, impactant ainsi les secteurs qui dépendent de l&#39;IA pour des tâches complexes.<br /><br />Les entreprises d&#39;IA souhaitent créer des modèles de monde qui dépassent les capacités textuelles des grands modèles linguistiques. Le roundtable a mis en avant des recherches récentes sur l&#39;IA multimodale et incarnée visant à donner aux systèmes une perception plus large de la réalité.<br /><br />Les grands modèles linguistiques ont dominé les récents progrès de l&#39;IA, mais ils se limitent principalement à la génération de texte à partir de modèles statistiques. Les chercheurs explorent désormais des modèles de monde qui intègrent perception, raisonnement et interaction avec l&#39;environnement pour atteindre une intelligence plus générale. Le roundtable de MIT Technology Review a réuni des experts pour discuter de ces approches émergentes et de leurs défis.</div></section>
+    </div>
+  <div class="tags"><code>#AI</code>, <code>#technology</code>, <code>#roundtable</code>, <code>#world models</code>, <code>#AI research</code></div>
+  
+</article>
+
+<article id="item-13">
+  <header>
+        <h2 class="item-title"><a href="https://www.technologyreview.com/2026/05/21/1137735/anthropics-code-with-claude-showed-off-codings-future-whether-you-like-it-or-not/">Anthropic’s Code with Claude showcased coding’s future during a London developer event.</a></h2>
+    <div class="meta">rss · MIT Technology Review · May 21, 14:30</div>
+  </header>
+    <div class="lang-blocks">
+        <section class="lang"><h3>EN</h3><div class="content">Anthropic held a two‐day developer conference in London called Code with Claude, which launched on May 19, the same day as Google’s I/O, to showcase its AI‐driven coding tool Claude Code. The event featured hands‐on workshops where developers tested the tool, which can edit files, run commands and generate pull requests.<br /><br />These demonstrations highlight the intensifying competition among major AI firms to embed coding assistance directly into developers’ workflows, which could speed up software delivery and reduce manual effort. Widespread adoption of such tools may reshape how code is written, reviewed and maintained, influencing industry standards and productivity.<br /><br />The event was a two‐day gathering in London that began on May 19, coinciding with Google I/O, and featured workshops where developers tested Claude Code, an agentic tool that can edit files, run commands and generate pull requests. Anthropic did not announce any new models at the conference, focusing instead on demonstrating existing capabilities and five previously released agent features. The showcase highlighted the tool’s ability to create complete pull requests, a core collaborative workflow in modern software development.<br /><br />A pull request is a proposal to merge code changes into a main repository, enabling review and discussion before integration, as described by GitHub and other documentation. Claude Code is Anthropic’s agentic coding assistant that can understand a codebase, edit files, run commands and automate development tasks. Code with Claude is a developer conference organized by Anthropic that provides workshops and live demos of the Claude AI model and its coding tool. The event took place amid a broader industry trend where major AI companies are competing to embed coding assistance directly into developers’ toolchains.</div></section>
+        <section class="lang"><h3>FR</h3><div class="content">Anthropic a organisé une conférence de deux jours pour développeurs à Londres nommée Code with Claude, qui a débuté le 19 mai, le même jour que le Google I/O, afin de présenter son outil de codage assisté par IA, Claude Code. Les ateliers pratiques ont permis aux participants de tester le modèle qui peut modifier des fichiers, exécuter des commandes et générer des pull requests.<br /><br />Ces démonstrations soulignent la concurrence accrue entre les grands acteurs de l&#39;IA pour intégrer une assistance au codage directement dans les flux de travail des développeurs, ce qui pourrait accélérer le delivery logiciel et réduire l&#39;effort manuel. Une adoption généralisée de ces outils pourrait transformer la façon dont le code est écrit, révisé et maintenu, influençant les normes industrielles et la productivité.<br /><br />L&#39;événement a été une rencontre de deux jours à Londres débutant le 19 mai, le même jour que le Google I/O, et a offert des ateliers pratiques où les développeurs ont testé Claude Code, un outil agentique capable de modifier des fichiers, d&#39;exécuter des commandes et de générer des pull requests. Anthropic n’a pas annoncé de nouveaux modèles lors de la conférence, se concentrant plutôt sur la démonstration des capacités existantes et des cinq fonctionnalités d’agents déjà lancées. La démonstration a mis en avant la capacité de l&#39;outil à créer des pull requests complètes, élément central du flux de travail collaboratif moderne.<br /><br />Une pull request est une proposition de fusion de changements de code dans un dépôt principal, permettant une révision et une discussion avant l’intégration, comme le décrit la documentation GitHub. Claude Code est l’assistant de codage agentique d’Anthropic qui peut comprendre une base de code, modifier des fichiers, exécuter des commandes et automatiser des tâches de développement. Code with Claude est une conférence destinée aux développeurs organisée par Anthropic, offrant des ateliers pratiques et des démonstrations en direct du modèle Claude et de son outil de codage. L’événement s’inscrit dans une tendance plus large où les grandes entreprises d’IA rivalisent pour intégrer une assistance au codage directement dans les chaînes d’outils des développeurs.</div></section>
+    </div>
+  <div class="tags"><code>#AI</code>, <code>#Software Development</code>, <code>#Tech Events</code>, <code>#Anthropic</code>, <code>#Coding</code></div>
+  <details><summary>References</summary><ul><li><a href="https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/about-pull-requests">About pull requests - GitHub Docs</a></li></ul></details>
+</article>
+
+<article id="item-14">
+  <header>
+        <h2 class="item-title"><a href="https://www.reddit.com/r/Futurology/comments/1tn5klw/the_next_decade_of_energy_transition_wont_be/">Grid Infrastructure is the Bottleneck for the Next Decade of Energy Transition</a></h2>
+    <div class="meta">rss · r_futurology · May 25, 10:51</div>
+  </header>
+    <div class="lang-blocks">
+        <section class="lang"><h3>EN</h3><div class="content">The post argues that while solar, wind, and battery storage costs have dropped significantly making renewables the cheapest new generation, the critical bottleneck is the aging electrical grid infrastructure which is slow to upgrade due to regulatory and permitting delays.<br /><br />This indicates that without significant grid upgrades, the rapid deployment of renewable energy capacity will be hindered, potentially jeopardizing climate goals and wasting investment in clean generation technologies.<br /><br />The post highlights that over 2000 GW of clean energy capacity is currently stuck in interconnection queues in the US, and similar delays are occurring in Europe, Australia, and Asia due to lengthy permitting and community opposition.<br /><br />The electrical grid was historically designed for centralized fossil fuel plants, not for the distributed, intermittent nature of modern renewables. Upgrading this infrastructure requires overcoming significant regulatory hurdles, land acquisition challenges, and community opposition, which can extend project timelines to 10-15 years.</div></section>
+        <section class="lang"><h3>FR</h3><div class="content">Le post affirme que bien que les coûts de l&#39;énergie solaire, éolienne et du stockage par batterie aient baissé, rendant les renouvelables la forme la moins chère de nouvelle génération, le véritable goulot d&#39;étranglement est l&#39;infrastructure électrique vieillissante qui est lente à être modernisée en raison des retards réglementaires et d&#39;autorisation.<br /><br />Cela indique que sans des mises à niveau significatives du réseau, le déploiement rapide de la capacité en énergie renouvelable sera entravé, risquant de compromettre les objectifs climatiques et de gaspiller les investissements dans les technologies de production propre.<br /><br />Le post souligne que plus de 2000 GW de capacité propre sont actuellement bloqués dans les files d&#39;attente d&#39;interconnexion aux États-Unis, et que des retards similaires surviennent en Europe, en Australie et en Asie en raison de processus d&#39;autorisation et d&#39;opposition communautaire prolongés.<br /><br />Le réseau électrique a été historiquement conçu pour les centrales à combustible fossile centralisées, et non pour la nature distribuée et intermittente des énergies renouvelables modernes. Moderniser cette infrastructure nécessite de surmonter d&#39;importantes barrières réglementaires, des défis d&#39;acquisition de terrain et une opposition communautaire, ce qui peut allonger les délais des projets jusqu&#39;à 10 à 15 ans.</div></section>
+    </div>
+  <div class="tags"><code>#Energy transition</code>, <code>#Grid infrastructure</code>, <code>#Renewable energy</code>, <code>#Climate change</code>, <code>#Infrastructure policy</code></div>
+  
+</article>
+
+<article id="item-15">
+  <header>
+        <h2 class="item-title"><a href="https://unix.foo/posts/nobody-cracks-open-a-programming-book/">Nobody cracks open a programming book anymore</a></h2>
+    <div class="meta">hackernews · zdw · May 25, 23:21 · <a href="https://news.ycombinator.com/item?id=48273030">Discussion</a></div>
+  </header>
+    <div class="lang-blocks">
+        <section class="lang"><h3>EN</h3><div class="content">The post reports a noticeable decline in programming book sales, citing a 13‐month sales trend that shows fluctuating numbers and a total of roughly 20,000 copies sold since 2021. Community members comment that digital resources and rapid language evolution make physical books less essential.<br /><br />This trend signals a broader shift in software development education toward digital platforms, reducing dependence on printed manuals and affecting authors, publishers, and learners. It may accelerate the adoption of online tutorials, interactive documentation, and community‐driven resources, reshaping how developers acquire and stay current with language features.<br /><br />The author of O&#39;Reilly&#39;s &quot;Learning Go&quot; provided monthly paperback sales ranging from 124 in March 2026 to 484 in November 2025, showing a general downward trend despite occasional spikes. Commentators note that while physical books remain valuable for learning language fundamentals and design patterns, the rapid evolution of languages and the abundance of online resources make printed editions less essential for many developers.<br /><br />Programming books have long been the primary way developers learn languages and best practices, but the rise of search engines, Stack Overflow, and online documentation has changed learning habits. The ease of self‐publishing has flooded the market with varying quality, making it harder for readers to identify reliable resources. As languages evolve quickly, printed editions can become outdated, prompting developers to turn to digital, up‐to‐date sources.</div></section>
+        <section class="lang"><h3>FR</h3><div class="content">Le billet signale une baisse notable des ventes de livres de programmation, en citant une tendance de 13 mois avec des chiffres fluctuants et environ 20 000 exemplaires vendus depuis 2021. Les membres de la communauté indiquent que les ressources numériques et l’évolution rapide des langages rendent les livres physiques moins essentiels.<br /><br />Cette tendance indique un virage plus large dans l&#39;éducation au développement logiciel vers les plateformes numériques, réduisant la dépendance aux manuels imprimés et impactant les auteurs, les éditeurs et les apprenants. Elle pourrait accélérer l&#39;adoption de tutoriels en ligne, de documentation interactive et de ressources communautaires, modifiant la façon dont les développeurs acquièrent et restent à jour avec les fonctionnalités des langages.<br /><br />L&#39;auteur de &quot;Learning Go&quot; d&#39;O&#39;Reilly a fourni des ventes mensuelles de poche à papier allant de 124 en mars 2026 à 484 en novembre 2025, montrant une tendance générale à la baisse malgré des pics occasionnels. Les commentateurs soulignent que, même si les livres physiques restent utiles pour apprendre les bases du langage et les modèles de conception, l&#39;évolution rapide des langages et la multitude de ressources en ligne rendent les éditions imprimées moins essentielles pour de nombreux développeurs.<br /><br />Les livres de programmation ont longtemps été la principale méthode pour les développeurs d&#39;apprendre les langages et les meilleures pratiques, mais l&#39;essor des moteurs de recherche, de Stack Overflow et de la documentation en ligne a modifié les habitudes d&#39;apprentissage. La facilité de l&#39;auto-édition a inondé le marché de qualités variables, rendant plus difficile pour les lecteurs d&#39;identifier des ressources fiables. Avec l&#39;évolution rapide des langages, les éditions imprimées peuvent devenir obsolètes, incitant les développeurs à se tourner vers des sources numériques à jour.</div></section>
+    </div>
+  <div class="tags"><code>#programming-education</code>, <code>#technology-trends</code>, <code>#software-development</code>, <code>#publishing</code></div>
+  
+</article>
+</main></div>
+  </div>
+</body>
+</html>

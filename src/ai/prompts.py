@@ -59,6 +59,7 @@ Score content on a 0-10 scale based on importance and relevance:
 
 Consider:
 - Factual significance and novelty
+- Source reliability and corroboration strength: prefer items backed by concrete evidence, named sources, or multiple independent references
 - Potential impact on society or public understanding
 - Quality of writing/presentation
 - Diversity of themes: do NOT bias toward one domain (e.g., computing)
@@ -73,6 +74,7 @@ Additionally, explicitly rate these dimensions (0-10 each):
 - uncertainty: risk of uncertainty/hallucination/weakly supported claims (10 = very uncertain)
 
 If the title/content is sensationalist without concrete evidence, reduce overall score and increase uncertainty.
+When two items are similar, prefer the one that is better sourced, more specific, and easier to explain clearly.
 """
 
 CONTENT_ANALYSIS_USER = """Analyze the following content and provide a JSON response with:
@@ -162,6 +164,13 @@ Field definitions:
 - All *_en fields MUST be written in English.
 - All *_fr fields MUST be written in French. Do not mix in other languages.
 
+Editorial quality rules:
+- Treat source reliability as a first-class criterion, not an afterthought.
+- Prefer grounded, concrete, verifiable claims over broad generalizations.
+- If evidence is mixed or weak, say so explicitly and keep the phrasing cautious.
+- Do not overstate impact unless the sources genuinely support it.
+- Give readers a useful article: clear structure, strong transitions, and enough context to understand why the item matters.
+
 Guidelines:
 - EVERY field (except community_discussion when no comments exist) must contain at least one complete sentence — no field may be empty or contain just a phrase
 - Base your explanation on the provided content and web search results — do NOT fabricate information
@@ -190,7 +199,8 @@ CONTENT_ENRICHMENT_USER = """Provide a structured bilingual analysis for the fol
 **Web Search Results (for grounding):**
 {web_context}
 
-Respond with valid JSON only. Each _en field must be in English; each _fr field MUST be in French. Every field MUST be at least one complete sentence (except community_discussion fields when no comments exist):
+Respond with valid JSON only. Each _en field must be in English; each _fr field MUST be in French. Every field MUST be at least one complete sentence (except community_discussion fields when no comments exist).
+Use the strongest evidence to shape the article: if the sources are robust, write with confidence and precision; if the evidence is thin or conflicting, narrow the claim, explain the uncertainty, and emphasize what is verified over what is speculative.
 {{
   "title_en": "<short headline in English, ≤15 words>",
   "title_fr": "<court titre en français, ≤15 mots>",

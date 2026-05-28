@@ -42,7 +42,7 @@ def test_balance_source_diversity_limits_dominant_source_family(tmp_path):
     """Even a dominant feed keeps all its items when the pool is small.
 
     With 6 items across 3 source types (RSS, HN, Reddit) and 3 sub-sources,
-    the proportional cap ceil(50/3) = 17 is larger than the 4 items from
+    the proportional cap ceil(10/3) = 4 is larger than the 4 items from
     Feed A, so every item passes.
     """
     orchestrator = _make_orchestrator(tmp_path)
@@ -57,7 +57,7 @@ def test_balance_source_diversity_limits_dominant_source_family(tmp_path):
 
     balanced = orchestrator._balance_source_diversity(items)
 
-    # All 6 items survive: the proportional cap (17) is larger than any sub-source size.
+    # All 6 items survive: the proportional cap (4) is larger than any sub-source size.
     assert len(balanced) == 6
     assert [item.id for item in balanced] == ["rss-1", "rss-2", "rss-3", "rss-4", "hn-1", "reddit-1"]
 
@@ -66,7 +66,7 @@ def test_balance_source_diversity_keeps_multiple_feeds(tmp_path):
     """With only one source type and a small pool, all items are kept.
 
     There are 3 sub-sources (Feed A, B, C), so the proportional sub-source
-    cap is ceil(50/3) = 17.  Each feed has only 2 items (< 17), so the full
+    cap is ceil(10/3) = 4.  Each feed has only 2 items (< 4), so the full
     list passes unchanged.
     """
     orchestrator = _make_orchestrator(tmp_path)
@@ -90,7 +90,7 @@ def test_balance_source_diversity_keeps_multiple_feeds(tmp_path):
 
 def test_balance_source_diversity_caps_per_sub_source_with_many_items(tmp_path):
     """With many items from a small number of feeds, each feed is capped at
-    ceil(50 / num_sub_sources) to prevent monopolisation.
+    ceil(10 / num_sub_sources) to prevent monopolisation.
     """
     orchestrator = _make_orchestrator(tmp_path)
     items = (
@@ -100,12 +100,12 @@ def test_balance_source_diversity_caps_per_sub_source_with_many_items(tmp_path):
 
     balanced = orchestrator._balance_source_diversity(items)
 
-    # 1 source type → no source-type cap; 2 sub-sources → ceil(50/2) = 25 each.
+    # 1 source type → no source-type cap; 2 sub-sources → ceil(10/2) = 5 each.
     feed_a_count = sum(1 for item in balanced if item.id.startswith("rss-a-"))
     feed_b_count = sum(1 for item in balanced if item.id.startswith("rss-b-"))
-    assert feed_a_count == 20
-    assert feed_b_count == 20
-    assert len(balanced) == 40
+    assert feed_a_count == 5
+    assert feed_b_count == 5
+    assert len(balanced) == 10
 
 
 def test_balance_source_diversity_respects_profile_limits(tmp_path):

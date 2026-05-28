@@ -20,7 +20,7 @@ pip install -e .
 pip install -e ".[dev]"  # Pour tester
 
 # Configure les API keys
-export NVIDIA_API_KEY="your_nvidia_key"
+export $NVIDIA_API_KEY="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"
 export OPENAI_API_KEY="your_openai_key"  # Si tu switches provider
 ```
 

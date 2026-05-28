@@ -2,16 +2,33 @@
   "version": "1.0",
   "ai": {
     "provider": "openai",
-    "model": "mistralai/mistral-large-3-675b-instruct-2512 ",
+    "model": "mistralai/mistral-large-3-675b-instruct-2512",
     "api_key_env": "NVIDIA_API_KEY",
     "base_url": "https://integrate.api.nvidia.com/v1",
     "temperature": 0.15,
     "max_tokens": 4096,
     "throttle_sec": 2.0,
-    "languages": [
-      "fr",
-      "en"
-    ]
+    "languages": ["fr", "en"]
+  },
+  "analysis_ai": {
+    "provider": "openai",
+    "model": "meta/llama-3.3-70b-instruct",
+    "api_key_env": "NVIDIA_API_KEY",
+    "base_url": "https://integrate.api.nvidia.com/v1",
+    "temperature": 0.15,
+    "max_tokens": 4096,
+    "throttle_sec": 4.0,
+    "languages": ["fr", "en"]
+  },
+  "enrichment_ai": {
+    "provider": "openai",
+    "model": "mistralai/mistral-large-3-675b-instruct-2512",
+    "api_key_env": "NVIDIA_API_KEY",
+    "base_url": "https://integrate.api.nvidia.com/v1",
+    "temperature": 0.15,
+    "max_tokens": 4096,
+    "throttle_sec": 4.0,
+    "languages": ["fr", "en"]
   },
 
   "sources": {
@@ -223,14 +240,38 @@
       {
         "name": "Works in Progress",
         "url": "https://worksinprogress.co/feed/",
-        "enabled": true,
+        "enabled": false,
         "category": "ideas"
       },
       {
         "name": "Asterisk Magazine",
         "url": "https://asteriskmag.com/feed.xml",
-        "enabled": true,
+        "enabled": false,
         "category": "science-policy"
+      },
+      {
+        "name": "Stanford Encyclopedia of Philosophy",
+        "url": "https://plato.stanford.edu/feeds/articles.xml",
+        "enabled": false,
+        "category": "philosophy"
+      },
+      {
+        "name": "TED Talks",
+        "url": "https://feeds.ted.com/talks_new.rss",
+        "enabled": false,
+        "category": "ideas"
+      },
+      {
+        "name": "Freakonomics Radio",
+        "url": "https://feeds.freakonomics.com/freakonomics-radio",
+        "enabled": false,
+        "category": "behavioral_economics"
+      },
+      {
+        "name": "a16z Podcast",
+        "url": "https://feeds.simplecast.com/GZSf6J5M",
+        "enabled": false,
+        "category": "tech_economy"
       },
       {
         "name": "Delayed Gratification",

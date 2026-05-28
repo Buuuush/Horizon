@@ -150,3 +150,30 @@ async def test_generate_summary_does_not_render_ai_scores_in_html():
     assert "Important Item 1" in result
     assert "<span class=\"score\">" not in result
     assert "⭐" not in result
+
+
+@pytest.mark.asyncio
+async def test_generate_summary_renders_editorial_article_structure():
+    summarizer = DailySummarizer()
+    item = _make_item(1)
+    item.metadata.update({
+        "title_fr": "Titre éditorial",
+        "whats_new_fr": "Il s'est passé quelque chose de nouveau.",
+        "why_it_matters_fr": "Cela change la donne pour plusieurs acteurs.",
+        "key_details_fr": "Voici les détails les plus concrets.",
+        "background_fr": "Un peu de contexte pour comprendre le sujet.",
+        "community_discussion_fr": "La discussion reste nuancée.",
+        "evidence_note_fr": "Les sources disponibles sont solides.",
+    })
+
+    result = await summarizer.generate_summary(
+        [item],
+        date="2026-04-25",
+        total_fetched=10,
+        language="fr",
+    )
+
+    assert "<p class=\"article-lead\">" in result
+    assert "<section class=\"article-section\">" in result
+    assert "<blockquote>" in result
+    assert "<section class=\"article-background\">" in result

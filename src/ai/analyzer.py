@@ -4,8 +4,9 @@ import asyncio
 import json
 import re
 import sys
+import random
 from typing import List, Optional
-from tenacity import RetryError, retry, stop_after_attempt, wait_exponential
+from tenacity import RetryError, retry, stop_after_attempt, retry_if_exception
 from rich.progress import Progress, SpinnerColumn, BarColumn, TextColumn, MofNCompleteColumn
 from collections import Counter
 from math import log2
@@ -17,6 +18,80 @@ from .utils import parse_json_response
 from ..models import ContentItem, Profile
 
 DEFAULT_THROTTLE_SEC = 0.0
+
+
+def _unwrap_exception(exc: Exception) -> Exception:
+    """Return the deepest cause for robust status-code detection."""
+    root = exc
+    if isinstance(root, RetryError):
+        root = root.last_attempt.exception()
+    while getattr(root, "__cause__", None) is not None:
+        root = root.__cause__
+    return root
+
+
+def _extract_status_code(exc: Exception) -> Optional[int]:
+    """Extract HTTP status code from OpenAI-compatible exceptions when available."""
+    root = _unwrap_exception(exc)
+    status_code = getattr(root, "status_code", None)
+    if isinstance(status_code, int):
+        return status_code
+
+    response = getattr(root, "response", None)
+    if response is not None:
+        response_status = getattr(response, "status_code", None)
+        if isinstance(response_status, int):
+            return response_status
+
+    return None
+
+
+def _extract_retry_after_seconds(exc: Exception) -> Optional[float]:
+    """Best-effort extraction of Retry-After header from provider response."""
+    root = _unwrap_exception(exc)
+    response = getattr(root, "response", None)
+    if response is None:
+        return None
+
+    headers = getattr(response, "headers", None)
+    if not headers:
+        return None
+
+    retry_after = headers.get("retry-after") if hasattr(headers, "get") else None
+    if retry_after is None:
+        return None
+
+    try:
+        value = float(retry_after)
+    except (TypeError, ValueError):
+        return None
+
+    if value <= 0:
+        return None
+    return value
+
+
+def _is_retryable_analysis_exception(exc: Exception) -> bool:
+    """Retry only for transient API failures (rate-limit and 5xx)."""
+    status_code = _extract_status_code(exc)
+    if status_code is None:
+        return False
+    return status_code == 429 or status_code >= 500
+
+
+def _analysis_wait_seconds(retry_state) -> float:
+    """Adaptive wait: prefer Retry-After, otherwise exponential backoff + jitter."""
+    exc = retry_state.outcome.exception() if retry_state.outcome else None
+    if exc:
+        retry_after = _extract_retry_after_seconds(exc)
+        if retry_after is not None:
+            return min(max(retry_after, 1.0), 120.0)
+
+    attempt = retry_state.attempt_number
+    # 2, 4, 8, 16, 32 ... capped at 60s, with small jitter to avoid herd effects.
+    base = min(2 ** attempt, 60)
+    jitter = random.uniform(0.0, 1.5)
+    return base + jitter
 
 
 class ContentAnalyzer:
@@ -80,12 +155,8 @@ class ContentAnalyzer:
                     await self._analyze_item(item)
                     return item
                 except Exception as e:
-                    root = e
-                    if isinstance(root, RetryError):
-                        root = root.last_attempt.exception()
-                    while getattr(root, "__cause__", None) is not None:
-                        root = root.__cause__
-                    status_code = getattr(root, "status_code", None)
+                    root = _unwrap_exception(e)
+                    status_code = _extract_status_code(e)
                     message = str(root)
                     if status_code is not None:
                         print(f"Erreur lors de l'analyse de l'élément {item.id} : {type(root).__name__} (statut {status_code}) {message}")
@@ -135,8 +206,9 @@ class ContentAnalyzer:
         return analyzed_items
 
     @retry(
-        stop=stop_after_attempt(3),
-        wait=wait_exponential(min=2, max=10)
+        stop=stop_after_attempt(7),
+        wait=_analysis_wait_seconds,
+        retry=retry_if_exception(_is_retryable_analysis_exception),
     )
     async def _analyze_item(self, item: ContentItem) -> None:
         """Analyze a single content item.

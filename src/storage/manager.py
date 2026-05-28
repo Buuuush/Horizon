@@ -97,7 +97,7 @@ class StorageManager:
             shutil.copy2(self.config_path, self.config_path.with_suffix(".json.bak"))
 
         with open(self.config_path, "w", encoding="utf-8") as f:
-            json.dump(config.model_dump(mode="json"), f, indent=2, ensure_ascii=False)
+            json.dump(config.model_dump(mode="json", exclude_none=True), f, indent=2, ensure_ascii=False)
             f.write("\n")
 
         return self.config_path

@@ -7,6 +7,7 @@ from datetime import datetime, timezone
 from typing import Any, List, Optional
 
 import httpx
+import feedparser
 
 from .base import BaseScraper
 from ..models import ContentItem, RedditConfig, RedditSubredditConfig, RedditUserConfig, SourceType
@@ -68,13 +69,81 @@ class RedditScraper(BaseScraper):
         url = f"{REDDIT_BASE}/r/{cfg.subreddit}/{cfg.sort}.json"
         data = await self._reddit_get(url, params)
         if not data:
-            return []
+            return await self._fetch_subreddit_rss(cfg, since)
 
         posts = [child["data"] for child in data.get("data", {}).get("children", [])
                  if child.get("kind") == "t3"]
         return await self._process_posts(
             posts, since, "subreddit", cfg.subreddit, cfg.min_score
         )
+
+    async def _fetch_subreddit_rss(self, cfg: RedditSubredditConfig, since: datetime) -> List[ContentItem]:
+        """Fallback for subreddits when Reddit JSON endpoints are blocked (403)."""
+        rss_url = f"{REDDIT_BASE}/r/{cfg.subreddit}/.rss"
+        try:
+            response = await self.client.get(
+                rss_url,
+                headers={
+                    "User-Agent": REDDIT_HEADERS["User-Agent"],
+                    "Accept": "application/atom+xml,application/xml,text/xml;q=0.9,*/*;q=0.8",
+                },
+                follow_redirects=True,
+            )
+            response.raise_for_status()
+        except httpx.HTTPError as e:
+            logger.warning("Reddit RSS fallback failed for %s: %s", cfg.subreddit, e)
+            return []
+
+        parsed = feedparser.parse(response.text)
+        entries = parsed.get("entries", [])[: max(cfg.fetch_limit, 1)]
+        items: List[ContentItem] = []
+
+        for entry in entries:
+            published = self._parse_rss_datetime(entry)
+            if published < since:
+                continue
+
+            link = entry.get("link")
+            if not link:
+                continue
+
+            title = (entry.get("title") or "").strip()
+            summary_raw = entry.get("summary") or entry.get("description") or ""
+            summary = re.sub(r"<[^>]+>", " ", summary_raw)
+            summary = re.sub(r"\s+", " ", summary).strip()
+
+            native_id = entry.get("id") or entry.get("guid") or str(abs(hash(link)))
+            native_id = re.sub(r"\W+", "_", str(native_id))[:120]
+
+            items.append(
+                ContentItem(
+                    id=self._generate_id("reddit", "subreddit", native_id),
+                    source_type=SourceType.REDDIT,
+                    title=title or f"r/{cfg.subreddit}",
+                    url=link,
+                    content=summary[:1800] if summary else None,
+                    author=entry.get("author") or "unknown",
+                    published_at=published,
+                    metadata={
+                        "subreddit": cfg.subreddit,
+                        "discussion_url": link,
+                        "via": "rss_fallback",
+                        "score": 0,
+                        "num_comments": 0,
+                    },
+                )
+            )
+
+        if items:
+            logger.info("Reddit RSS fallback returned %d items for r/%s", len(items), cfg.subreddit)
+        return items
+
+    @staticmethod
+    def _parse_rss_datetime(entry: Any) -> datetime:
+        struct_time = entry.get("published_parsed") or entry.get("updated_parsed")
+        if struct_time:
+            return datetime(*struct_time[:6], tzinfo=timezone.utc)
+        return datetime.now(timezone.utc)
 
     async def _fetch_user(self, cfg: RedditUserConfig, since: datetime) -> List[ContentItem]:
         params = {"limit": min(cfg.fetch_limit, 100), "sort": cfg.sort, "raw_json": 1}

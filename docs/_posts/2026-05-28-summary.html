@@ -1,0 +1,921 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Horizon — 2026-05-28</title>
+  <style>
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600&family=Manrope:wght@500;700&display=swap');
+
+:root {
+    --bg: #f4fbfb;
+    --paper: #ffffff;
+    --surface: #f7fffe;
+    --accent: #007a79;
+    --accent-2: color-mix(in srgb, var(--accent) 55%, #b73fd6);
+    --accent-3: color-mix(in srgb, var(--accent) 40%, #f59e0b);
+    --accent-soft: #d6f3f2;
+    --muted: #58646e;
+    --text: #0e2a2f;
+    --ring: color-mix(in srgb, var(--accent) 32%, transparent);
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+    color: var(--text);
+    background:
+        radial-gradient(1300px 420px at -10% -20%, var(--accent-soft), transparent 60%),
+        radial-gradient(760px 300px at 88% -12%, color-mix(in srgb, var(--accent-2) 24%, transparent), transparent 66%),
+        radial-gradient(640px 240px at 30% 0%, color-mix(in srgb, var(--accent-3) 18%, transparent), transparent 70%),
+        var(--bg);
+    font-family: 'Source Serif 4', Georgia, serif;
+    line-height: 1.78;
+}
+
+.container { max-width: 1100px; margin: 1.5rem auto; padding: 1rem; }
+
+.summary-header {
+    background: var(--paper);
+    border: 1px solid color-mix(in srgb, var(--accent) 16%, transparent);
+    border-radius: 24px;
+    padding: 1.5rem 1.6rem 1.1rem;
+    box-shadow: 0 18px 48px rgba(19, 33, 68, 0.08);
+    margin-bottom: 1rem;
+    position: relative;
+    overflow: hidden;
+}
+.summary-header h1 {
+    margin: 0;
+    font-family: 'Fraunces', 'DM Serif Display', 'Iowan Old Style', 'Palatino Linotype', serif;
+    letter-spacing: .01em;
+    font-size: clamp(1.8rem, 3.6vw, 2.8rem);
+    line-height: 1.15;
+}
+.lead { margin: .55rem 0 1.1rem; color: var(--muted); font-size: 1.04rem; max-width: 78ch; }
+.toc-title {
+    margin: 0 0 .45rem;
+    font-family: 'Manrope', 'Segoe UI', sans-serif;
+    font-size: .85rem;
+    text-transform: uppercase;
+    letter-spacing: .11em;
+    color: var(--muted);
+}
+.toc ul {
+    list-style: none; margin: 0; padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: .55rem;
+}
+.toc li {
+    background: linear-gradient(160deg, var(--surface), color-mix(in srgb, var(--accent-soft) 48%, #ffffff));
+    border: 1px solid color-mix(in srgb, var(--accent) 16%, transparent);
+    border-radius: 10px;
+    padding: .55rem .65rem;
+}
+.toc a { text-decoration: none; color: var(--text); }
+.toc-score { color: var(--accent); font-family: 'Manrope', 'Segoe UI', sans-serif; font-size: .85rem; font-weight: 600; }
+.items { display: grid; gap: .95rem; }
+.items article {
+    background: var(--paper);
+    border: 1px solid color-mix(in srgb, var(--accent) 15%, transparent);
+    border-radius: 20px;
+    padding: 1.4rem 1.6rem 1.1rem;
+    box-shadow: 0 10px 32px rgba(0, 0, 0, 0.05);
+}
+.item-title {
+    font-family: 'Fraunces', 'DM Serif Display', 'Iowan Old Style', 'Palatino Linotype', serif;
+    font-size: clamp(1.2rem, 2.2vw, 1.55rem);
+    margin: 0 0 .3rem;
+    line-height: 1.22;
+}
+.item-title a { color: inherit; text-decoration: none; }
+.item-title a:hover { color: var(--accent); }
+.meta { color: var(--muted); font-family: 'Manrope', 'Segoe UI', sans-serif; font-size: .88rem; margin-bottom: .9rem; }
+.score { color: var(--accent); margin-left: .45rem; font-weight: 700; font-family: 'Manrope', 'Segoe UI', sans-serif; font-size: .95rem; }
+.article-body { border-top: 1px solid color-mix(in srgb, var(--accent) 10%, transparent); padding-top: 1rem; }
+.item-footer { margin-top: 1rem; padding-top: .65rem; border-top: 1px solid color-mix(in srgb, var(--muted) 18%, transparent); }
+.evidence-note { margin: .8rem 0 0; color: var(--muted); font-size: .92rem; font-style: italic; }
+.tags { color: var(--muted); font-family: 'Manrope', 'Segoe UI', sans-serif; font-size: .88rem; margin-bottom: .45rem; }
+code { background: color-mix(in srgb, var(--accent-soft) 65%, #ffffff); border-radius: 8px; padding: .12rem .4rem; }
+details { margin-top: .5rem; }
+details summary { cursor: pointer; color: var(--accent); font-family: 'Manrope', 'Segoe UI', sans-serif; font-size: .9rem; }
+@media (prefers-color-scheme: dark) {
+    :root {
+        --bg: #0f1420; --paper: #161d2c; --surface: #1b2435;
+        --accent: #7cb1ff; --accent-2: #c28cff; --accent-3: #ffc36c;
+        --accent-soft: #1a2740; --muted: #a6b4cd; --text: #edf2ff;
+        --ring: rgba(124, 177, 255, 0.55);
+    }
+    body {
+        background:
+            radial-gradient(1200px 420px at -10% -20%, #1a2740, transparent 60%),
+            radial-gradient(760px 300px at 88% -12%, rgba(194, 140, 255, 0.2), transparent 66%),
+            radial-gradient(640px 240px at 30% 0%, rgba(255, 195, 108, 0.14), transparent 70%),
+            var(--bg);
+    }
+    .summary-header, .items article { border-color: rgba(124,177,255,.24); box-shadow: 0 18px 44px rgba(0,0,0,.32); }
+    .toc li { border-color: rgba(124,177,255,.22); background: linear-gradient(170deg, #1b2435, #1f2a3f); }
+    code { background: rgba(124,177,255,.16); }
+    .article-background { background: linear-gradient(170deg, #1b2435, #1f2a3f); }
+}
+@media (max-width: 860px) { .container { margin: .7rem auto; padding: .65rem; } }
+
+/* ── Editorial article layout ─────────────────────────────────────────── */
+
+.article-lead {
+    font-size: 1.18rem;
+    color: var(--muted);
+    line-height: 1.7;
+    margin: .3rem 0 1.4rem;
+    max-width: 72ch;
+    font-style: italic;
+}
+
+.article-section {
+    margin-top: 1.55rem;
+}
+
+.article-section h2 {
+    font-family: 'Manrope', 'Segoe UI', sans-serif;
+    font-size: 1.28rem;
+    line-height: 1.3;
+    color: var(--accent);
+    margin: 0 0 .65rem;
+    padding-bottom: .25rem;
+    padding-left: .75rem;
+    border-left: 4px solid var(--accent);
+}
+
+.article-section p {
+    margin: 0;
+    font-size: 1.03rem;
+    line-height: 1.85;
+    color: var(--text);
+}
+
+.article-section p + p {
+    margin-top: .8rem;
+}
+
+.article-background {
+    margin-top: 1.4rem;
+    padding: 1rem 1.1rem;
+    background: linear-gradient(170deg, var(--surface), color-mix(in srgb, var(--accent-soft) 30%, #fff));
+    border-left: 3px solid var(--accent);
+    border-radius: 0 10px 10px 0;
+    font-size: .98rem;
+    line-height: 1.78;
+    color: var(--text);
+}
+
+.article-background strong {
+    display: block;
+    font-family: 'Manrope', 'Segoe UI', sans-serif;
+    font-size: .78rem;
+    text-transform: uppercase;
+    letter-spacing: .1em;
+    color: var(--accent);
+    margin-bottom: .35rem;
+}
+
+.article-discussion {
+    margin-top: 1.2rem;
+    padding: .85rem 1rem;
+    border-left: 3px solid color-mix(in srgb, var(--muted) 40%, transparent);
+    font-style: italic;
+    font-size: .98rem;
+    color: var(--muted);
+    line-height: 1.75;
+}
+
+.article-discussion strong {
+    font-style: normal;
+    font-family: 'Manrope', 'Segoe UI', sans-serif;
+    font-size: .78rem;
+    text-transform: uppercase;
+    letter-spacing: .1em;
+    display: block;
+    margin-bottom: .3rem;
+    color: var(--muted);
+}
+
+blockquote {
+    margin: 1.2rem 0 0;
+    padding: 1rem 1.1rem;
+    border-left: 5px solid var(--accent);
+    background: color-mix(in srgb, var(--surface) 70%, #ffffff);
+    border-radius: 0 10px 10px 0;
+    font-style: italic;
+    color: var(--text);
+}
+
+blockquote p {
+    margin: 0;
+}
+
+.tab-switcher { display: flex; gap: .5rem; margin-bottom: 1.5rem; border-bottom: 2px solid color-mix(in srgb, var(--accent) 20%, transparent); }
+.tab-button {
+    background: transparent; border: none; color: var(--muted);
+    font-family: 'Manrope', 'Segoe UI', sans-serif; font-size: 1rem; font-weight: 600;
+    padding: .75rem 1.2rem; cursor: pointer;
+    border-bottom: 3px solid transparent;
+}
+.tab-button.active { color: var(--accent); border-bottom-color: var(--accent); }
+.tab-content { display: none; animation: fadeIn .2s ease-in; }
+.tab-content.active { display: block; }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@media (max-width: 860px) { .tab-switcher { flex-wrap: wrap; } }
+</style>
+  <script>
+    function switchTab(button) {
+      const lang = button.getAttribute('data-lang');
+      document.querySelectorAll('.tab-button').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+      button.classList.add('active');
+      const active = document.querySelector(`.tab-content[data-lang="${lang}"]`);
+      if (active) active.classList.add('active');
+    }
+  </script>
+</head>
+<body>
+  <div class="container">
+    <div class="tab-switcher"><button class="tab-button active" onclick="switchTab(this)" data-lang="fr">Français</button><button class="tab-button " onclick="switchTab(this)" data-lang="en">English</button></div>
+    <div class="tab-content active" data-lang="fr"><!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Horizon — 2026-05-28</title>
+  <style>
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600&family=Manrope:wght@500;700&display=swap');
+
+:root {
+    --bg: #f4fbfb;
+    --paper: #ffffff;
+    --surface: #f7fffe;
+    --accent: #007a79;
+    --accent-2: color-mix(in srgb, var(--accent) 55%, #b73fd6);
+    --accent-3: color-mix(in srgb, var(--accent) 40%, #f59e0b);
+    --accent-soft: #d6f3f2;
+    --muted: #58646e;
+    --text: #0e2a2f;
+    --ring: color-mix(in srgb, var(--accent) 32%, transparent);
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+    color: var(--text);
+    background:
+        radial-gradient(1300px 420px at -10% -20%, var(--accent-soft), transparent 60%),
+        radial-gradient(760px 300px at 88% -12%, color-mix(in srgb, var(--accent-2) 24%, transparent), transparent 66%),
+        radial-gradient(640px 240px at 30% 0%, color-mix(in srgb, var(--accent-3) 18%, transparent), transparent 70%),
+        var(--bg);
+    font-family: 'Source Serif 4', Georgia, serif;
+    line-height: 1.78;
+}
+
+.container { max-width: 1100px; margin: 1.5rem auto; padding: 1rem; }
+
+.summary-header {
+    background: var(--paper);
+    border: 1px solid color-mix(in srgb, var(--accent) 16%, transparent);
+    border-radius: 24px;
+    padding: 1.5rem 1.6rem 1.1rem;
+    box-shadow: 0 18px 48px rgba(19, 33, 68, 0.08);
+    margin-bottom: 1rem;
+    position: relative;
+    overflow: hidden;
+}
+.summary-header h1 {
+    margin: 0;
+    font-family: 'Fraunces', 'DM Serif Display', 'Iowan Old Style', 'Palatino Linotype', serif;
+    letter-spacing: .01em;
+    font-size: clamp(1.8rem, 3.6vw, 2.8rem);
+    line-height: 1.15;
+}
+.lead { margin: .55rem 0 1.1rem; color: var(--muted); font-size: 1.04rem; max-width: 78ch; }
+.toc-title {
+    margin: 0 0 .45rem;
+    font-family: 'Manrope', 'Segoe UI', sans-serif;
+    font-size: .85rem;
+    text-transform: uppercase;
+    letter-spacing: .11em;
+    color: var(--muted);
+}
+.toc ul {
+    list-style: none; margin: 0; padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: .55rem;
+}
+.toc li {
+    background: linear-gradient(160deg, var(--surface), color-mix(in srgb, var(--accent-soft) 48%, #ffffff));
+    border: 1px solid color-mix(in srgb, var(--accent) 16%, transparent);
+    border-radius: 10px;
+    padding: .55rem .65rem;
+}
+.toc a { text-decoration: none; color: var(--text); }
+.toc-score { color: var(--accent); font-family: 'Manrope', 'Segoe UI', sans-serif; font-size: .85rem; font-weight: 600; }
+.items { display: grid; gap: .95rem; }
+.items article {
+    background: var(--paper);
+    border: 1px solid color-mix(in srgb, var(--accent) 15%, transparent);
+    border-radius: 20px;
+    padding: 1.4rem 1.6rem 1.1rem;
+    box-shadow: 0 10px 32px rgba(0, 0, 0, 0.05);
+}
+.item-title {
+    font-family: 'Fraunces', 'DM Serif Display', 'Iowan Old Style', 'Palatino Linotype', serif;
+    font-size: clamp(1.2rem, 2.2vw, 1.55rem);
+    margin: 0 0 .3rem;
+    line-height: 1.22;
+}
+.item-title a { color: inherit; text-decoration: none; }
+.item-title a:hover { color: var(--accent); }
+.meta { color: var(--muted); font-family: 'Manrope', 'Segoe UI', sans-serif; font-size: .88rem; margin-bottom: .9rem; }
+.score { color: var(--accent); margin-left: .45rem; font-weight: 700; font-family: 'Manrope', 'Segoe UI', sans-serif; font-size: .95rem; }
+.article-body { border-top: 1px solid color-mix(in srgb, var(--accent) 10%, transparent); padding-top: 1rem; }
+.item-footer { margin-top: 1rem; padding-top: .65rem; border-top: 1px solid color-mix(in srgb, var(--muted) 18%, transparent); }
+.evidence-note { margin: .8rem 0 0; color: var(--muted); font-size: .92rem; font-style: italic; }
+.tags { color: var(--muted); font-family: 'Manrope', 'Segoe UI', sans-serif; font-size: .88rem; margin-bottom: .45rem; }
+code { background: color-mix(in srgb, var(--accent-soft) 65%, #ffffff); border-radius: 8px; padding: .12rem .4rem; }
+details { margin-top: .5rem; }
+details summary { cursor: pointer; color: var(--accent); font-family: 'Manrope', 'Segoe UI', sans-serif; font-size: .9rem; }
+@media (prefers-color-scheme: dark) {
+    :root {
+        --bg: #0f1420; --paper: #161d2c; --surface: #1b2435;
+        --accent: #7cb1ff; --accent-2: #c28cff; --accent-3: #ffc36c;
+        --accent-soft: #1a2740; --muted: #a6b4cd; --text: #edf2ff;
+        --ring: rgba(124, 177, 255, 0.55);
+    }
+    body {
+        background:
+            radial-gradient(1200px 420px at -10% -20%, #1a2740, transparent 60%),
+            radial-gradient(760px 300px at 88% -12%, rgba(194, 140, 255, 0.2), transparent 66%),
+            radial-gradient(640px 240px at 30% 0%, rgba(255, 195, 108, 0.14), transparent 70%),
+            var(--bg);
+    }
+    .summary-header, .items article { border-color: rgba(124,177,255,.24); box-shadow: 0 18px 44px rgba(0,0,0,.32); }
+    .toc li { border-color: rgba(124,177,255,.22); background: linear-gradient(170deg, #1b2435, #1f2a3f); }
+    code { background: rgba(124,177,255,.16); }
+    .article-background { background: linear-gradient(170deg, #1b2435, #1f2a3f); }
+}
+@media (max-width: 860px) { .container { margin: .7rem auto; padding: .65rem; } }
+
+/* ── Editorial article layout ─────────────────────────────────────────── */
+
+.article-lead {
+    font-size: 1.18rem;
+    color: var(--muted);
+    line-height: 1.7;
+    margin: .3rem 0 1.4rem;
+    max-width: 72ch;
+    font-style: italic;
+}
+
+.article-section {
+    margin-top: 1.55rem;
+}
+
+.article-section h2 {
+    font-family: 'Manrope', 'Segoe UI', sans-serif;
+    font-size: 1.28rem;
+    line-height: 1.3;
+    color: var(--accent);
+    margin: 0 0 .65rem;
+    padding-bottom: .25rem;
+    padding-left: .75rem;
+    border-left: 4px solid var(--accent);
+}
+
+.article-section p {
+    margin: 0;
+    font-size: 1.03rem;
+    line-height: 1.85;
+    color: var(--text);
+}
+
+.article-section p + p {
+    margin-top: .8rem;
+}
+
+.article-background {
+    margin-top: 1.4rem;
+    padding: 1rem 1.1rem;
+    background: linear-gradient(170deg, var(--surface), color-mix(in srgb, var(--accent-soft) 30%, #fff));
+    border-left: 3px solid var(--accent);
+    border-radius: 0 10px 10px 0;
+    font-size: .98rem;
+    line-height: 1.78;
+    color: var(--text);
+}
+
+.article-background strong {
+    display: block;
+    font-family: 'Manrope', 'Segoe UI', sans-serif;
+    font-size: .78rem;
+    text-transform: uppercase;
+    letter-spacing: .1em;
+    color: var(--accent);
+    margin-bottom: .35rem;
+}
+
+.article-discussion {
+    margin-top: 1.2rem;
+    padding: .85rem 1rem;
+    border-left: 3px solid color-mix(in srgb, var(--muted) 40%, transparent);
+    font-style: italic;
+    font-size: .98rem;
+    color: var(--muted);
+    line-height: 1.75;
+}
+
+.article-discussion strong {
+    font-style: normal;
+    font-family: 'Manrope', 'Segoe UI', sans-serif;
+    font-size: .78rem;
+    text-transform: uppercase;
+    letter-spacing: .1em;
+    display: block;
+    margin-bottom: .3rem;
+    color: var(--muted);
+}
+
+blockquote {
+    margin: 1.2rem 0 0;
+    padding: 1rem 1.1rem;
+    border-left: 5px solid var(--accent);
+    background: color-mix(in srgb, var(--surface) 70%, #ffffff);
+    border-radius: 0 10px 10px 0;
+    font-style: italic;
+    color: var(--text);
+}
+
+blockquote p {
+    margin: 0;
+}
+</style>
+</head>
+<body>
+  <div class="container">
+    
+<section class="summary-header">
+  <h1>Horizon Quotidien — 2026-05-28</h1>
+  <p class="lead">Parmi 20 contenus collectés, 7 sujets essentiels ont été sélectionnés.</p>
+  <nav class="toc" aria-label="Sommaire">
+    <p class="toc-title">Sommaire</p>
+    <ul><li><a href="#item-1">Oceanic regime shifts affect subarctic moth communities—impacts divide species into winners and losers <span class="toc-score">10.0/10</span></a></li>
+<li><a href="#item-2">Something just passed between us and a distant star <span class="toc-score">9.79335/10</span></a></li>
+<li><a href="#item-3">LLMs believe false statements even after explicit warnings that they&#39;re false <span class="toc-score">8.510250000000001/10</span></a></li>
+<li><a href="#item-4">Claude Opus 4.8 AgentsViolate EU Law <span class="toc-score">8.4/10</span></a></li>
+<li><a href="#item-5">DOJ probe targets Reid Hoffman nonprofit tied to E. Jean Carroll case <span class="toc-score">8.381625/10</span></a></li>
+<li><a href="#item-6">GSK Drug Shows Potential Cure for Chronic Hepatitis B <span class="toc-score">8.161125/10</span></a></li>
+<li><a href="#item-7">My collaborator screen-recorded our entire AI build without telling me and says he can sell my process. I&#39;m the project lead, not the engineer. What can he actually do with that? [D] <span class="toc-score">8.06925/10</span></a></li></ul>
+  </nav>
+</section>
+<main class="items">
+<article id="item-1">
+  <header>
+    <h2 class="item-title"><a href="https://phys.org/news/2026-05-oceanic-regime-shifts-affect-subarctic.html">Oceanic regime shifts affect subarctic moth communities—impacts divide species into winners and losers</a>
+    </h2>
+    <div class="meta">rss · Phys.org · May 28, 21:40</div>
+  </header>
+  <div class="article-body"><p class="article-lead">Regime shifts in the Atlantic Ocean, which have subsequently affected the Baltic Sea, are also impacting moths in Lapland, according to a new study conducted at the University of Turku in Finland. The paper is published in the journal Insect Conservation and Diversity.</p><blockquote><p>High-value content due to its novelty and relevance to environmental science, with well-sourced information from a reputable academic institution and publication. | adjustments: topic_boosts=Ecology</p></blockquote></div>
+  
+  <footer class="item-footer">
+    <div class="tags"><code>#Environmental Science</code>, <code>#Ecology</code>, <code>#Climate Change</code>, <code>#Biodiversity</code></div>
+    
+  </footer>
+</article>
+
+<article id="item-2">
+  <header>
+    <h2 class="item-title"><a href="https://phys.org/news/2026-05-distant-star.html">Something just passed between us and a distant star</a>
+    </h2>
+    <div class="meta">rss · Phys.org · May 28, 21:20</div>
+  </header>
+  <div class="article-body"><p class="article-lead">On the night of 18 December 2019, a star in our satellite galaxy, the Large Magellanic Cloud, briefly got brighter. Not dramatically nor explosively, just a smooth symmetrical rise and fall in brightness lasting about an hour, as though something had passed in front of it and bent its light toward us. Then it returned to normal and was never seen to vary again.</p><blockquote><p>High-value content due to unique astronomical event and clear explanation | adjustments: topic_boosts=Space</p></blockquote></div>
+  
+  <footer class="item-footer">
+    <div class="tags"><code>#Astronomy</code>, <code>#Space</code>, <code>#Astrophysics</code></div>
+    
+  </footer>
+</article>
+
+<article id="item-3">
+  <header>
+    <h2 class="item-title"><a href="https://arstechnica.com/ai/2026/05/llms-believe-false-statements-even-after-explicit-warnings-that-theyre-false/">LLMs believe false statements even after explicit warnings that they&#39;re false</a>
+    </h2>
+    <div class="meta">rss · Ars Technica · May 28, 21:29</div>
+  </header>
+  <div class="article-body"><p class="article-lead">Fine-tuning tests show &quot;bias ... toward confidently representing the claims as true.&quot;</p><blockquote><p>The article discusses a significant issue with LLMs believing false statements despite warnings, indicating a potential flaw in AI development, with well-structured reporting from a reputable source.</p></blockquote></div>
+  
+  <footer class="item-footer">
+    <div class="tags"><code>#AI</code>, <code>#LLMs</code>, <code>#Machine Learning</code>, <code>#Artificial Intelligence</code></div>
+    
+  </footer>
+</article>
+
+<article id="item-4">
+  <header>
+    <h2 class="item-title"><a href="https://www.lesswrong.com/posts/8JgMgyihbYEikS3Sp/claude-opus-4-8-agentsviolate-eu-law">Claude Opus 4.8 AgentsViolate EU Law</a>
+    </h2>
+    <div class="meta">rss · LessWrong · May 28, 21:26</div>
+  </header>
+  <div class="article-body"><p class="article-lead">TL;DR: Like other models including its predecessor, Opus 4.8 frequently violates provisions of both the EU AI Act and data protection laws when deployed in an agentic context where carrying out its task would break the law. Agentic alignment is challenging. When models are deployed in an agentic context, providing services to one party on behalf of another, multiple stakeholders are suddenly demanding different things, and the &quot;helpful, harmless, honest&quot; framing starts to pull models in different directions, and si...</p><blockquote><p>The article discusses a significant issue with AI models, including Claude Opus 4.8, violating EU law when deployed in an agentic context, highlighting the challenges of agentic alignment and the need for legal compliance, with well-structured arguments and references to relevant laws and standards.</p></blockquote></div>
+  
+  <footer class="item-footer">
+    <div class="tags"><code>#AI</code>, <code>#EU Law</code>, <code>#Agentic Alignment</code>, <code>#AI Ethics</code></div>
+    
+  </footer>
+</article>
+
+<article id="item-5">
+  <header>
+    <h2 class="item-title"><a href="https://www.axios.com/2026/05/28/doj-e-jean-carroll-funding-reid-hoffman-review">DOJ probe targets Reid Hoffman nonprofit tied to E. Jean Carroll case</a>
+    </h2>
+    <div class="meta">rss · Axios · May 28, 21:32</div>
+  </header>
+  <div class="article-body"><p class="article-lead">The Department of Justice is investigating the nonprofit of billionaire Reid Hoffman, which made contributions that were partially used for E. Jean Carroll&#39;s legal expenses during her civil lawsuit against President Trump , a source familiar tells Axios. Why it matters: The investigation raises concerns about a pattern of retaliation against Trump critics while testing the independence of DOJ officials. Hoffman, a LinkedIn co-founder, has donated millions to Democratic causes and the party over the years and is a l...</p><blockquote><p>The article reports on a significant investigation by the Department of Justice into a nonprofit organization tied to a high-profile case, with implications for the independence of DOJ officials and potential retaliation against Trump critics. The content is well-sourced and provides relevant context.</p></blockquote></div>
+  
+  <footer class="item-footer">
+    <div class="tags"><code>#DOJ investigation</code>, <code>#Reid Hoffman</code>, <code>#E. Jean Carroll</code>, <code>#Trump lawsuit</code></div>
+    
+  </footer>
+</article>
+
+<article id="item-6">
+  <header>
+    <h2 class="item-title"><a href="https://www.reddit.com/r/Futurology/comments/1tqhdd4/gsk_drug_shows_potential_cure_for_chronic/">GSK Drug Shows Potential Cure for Chronic Hepatitis B</a>
+    </h2>
+    <div class="meta">rss · r_futurology · May 28, 21:38</div>
+  </header>
+  <div class="article-body"><p class="article-lead">Is bepirovirsen a genuine breakthrough for hepatitis B or is it too early to celebrate a cure? submitted by /u/Substantial_Novel590 [link] [comments]</p><blockquote><p>The content discusses a potential cure for chronic hepatitis B, a significant medical breakthrough, with a link to a news article from Verity News, indicating a good level of journalistic quality and relevance to current events in the medical field.</p></blockquote></div>
+  
+  <footer class="item-footer">
+    <div class="tags"><code>#Hepatitis B</code>, <code>#Medical Breakthrough</code>, <code>#GSK</code>, <code>#Pharmaceuticals</code>, <code>#Health</code></div>
+    
+  </footer>
+</article>
+
+<article id="item-7">
+  <header>
+    <h2 class="item-title"><a href="https://www.reddit.com/r/MachineLearning/comments/1tqhdb6/my_collaborator_screenrecorded_our_entire_ai/">My collaborator screen-recorded our entire AI build without telling me and says he can sell my process. I&#39;m the project lead, not the engineer. What can he actually do with that? (D)</a>
+    </h2>
+    <div class="meta">rss · r_machinelearning · May 28, 21:37</div>
+  </header>
+  <div class="article-body"><p class="article-lead">I&#39;m looking for engineering and process guidance, not legal advice. I&#39;m a domain expert with a specialized applied behavioral background. Over the last six months, I designed the core logic and methodology for a model alignment tool essentially translating my domain reasoning into a working system. A collaborator was implementing it. His contribution was limited: roughly 40–50 hours over six months. He has no background in AI or alignment. Most of the coding was done with AI coding tools, with him running and debug...</p><blockquote><p>The content discusses a significant issue related to intellectual property and collaboration in AI development, with the project lead seeking guidance on the potential implications of their collaborator screen-recording the entire AI build process without consent. The discussion quality is high, with the author providing detailed context and clear explanations.</p></blockquote></div>
+  
+  <footer class="item-footer">
+    <div class="tags"><code>#AI development</code>, <code>#Intellectual property</code>, <code>#Collaboration</code>, <code>#Machine learning</code></div>
+    
+  </footer>
+</article>
+</main>
+
+  </div>
+</body>
+</html>
+</div><div class="tab-content " data-lang="en"><!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Horizon — 2026-05-28</title>
+  <style>
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600&family=Manrope:wght@500;700&display=swap');
+
+:root {
+    --bg: #f4fbfb;
+    --paper: #ffffff;
+    --surface: #f7fffe;
+    --accent: #007a79;
+    --accent-2: color-mix(in srgb, var(--accent) 55%, #b73fd6);
+    --accent-3: color-mix(in srgb, var(--accent) 40%, #f59e0b);
+    --accent-soft: #d6f3f2;
+    --muted: #58646e;
+    --text: #0e2a2f;
+    --ring: color-mix(in srgb, var(--accent) 32%, transparent);
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+    color: var(--text);
+    background:
+        radial-gradient(1300px 420px at -10% -20%, var(--accent-soft), transparent 60%),
+        radial-gradient(760px 300px at 88% -12%, color-mix(in srgb, var(--accent-2) 24%, transparent), transparent 66%),
+        radial-gradient(640px 240px at 30% 0%, color-mix(in srgb, var(--accent-3) 18%, transparent), transparent 70%),
+        var(--bg);
+    font-family: 'Source Serif 4', Georgia, serif;
+    line-height: 1.78;
+}
+
+.container { max-width: 1100px; margin: 1.5rem auto; padding: 1rem; }
+
+.summary-header {
+    background: var(--paper);
+    border: 1px solid color-mix(in srgb, var(--accent) 16%, transparent);
+    border-radius: 24px;
+    padding: 1.5rem 1.6rem 1.1rem;
+    box-shadow: 0 18px 48px rgba(19, 33, 68, 0.08);
+    margin-bottom: 1rem;
+    position: relative;
+    overflow: hidden;
+}
+.summary-header h1 {
+    margin: 0;
+    font-family: 'Fraunces', 'DM Serif Display', 'Iowan Old Style', 'Palatino Linotype', serif;
+    letter-spacing: .01em;
+    font-size: clamp(1.8rem, 3.6vw, 2.8rem);
+    line-height: 1.15;
+}
+.lead { margin: .55rem 0 1.1rem; color: var(--muted); font-size: 1.04rem; max-width: 78ch; }
+.toc-title {
+    margin: 0 0 .45rem;
+    font-family: 'Manrope', 'Segoe UI', sans-serif;
+    font-size: .85rem;
+    text-transform: uppercase;
+    letter-spacing: .11em;
+    color: var(--muted);
+}
+.toc ul {
+    list-style: none; margin: 0; padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: .55rem;
+}
+.toc li {
+    background: linear-gradient(160deg, var(--surface), color-mix(in srgb, var(--accent-soft) 48%, #ffffff));
+    border: 1px solid color-mix(in srgb, var(--accent) 16%, transparent);
+    border-radius: 10px;
+    padding: .55rem .65rem;
+}
+.toc a { text-decoration: none; color: var(--text); }
+.toc-score { color: var(--accent); font-family: 'Manrope', 'Segoe UI', sans-serif; font-size: .85rem; font-weight: 600; }
+.items { display: grid; gap: .95rem; }
+.items article {
+    background: var(--paper);
+    border: 1px solid color-mix(in srgb, var(--accent) 15%, transparent);
+    border-radius: 20px;
+    padding: 1.4rem 1.6rem 1.1rem;
+    box-shadow: 0 10px 32px rgba(0, 0, 0, 0.05);
+}
+.item-title {
+    font-family: 'Fraunces', 'DM Serif Display', 'Iowan Old Style', 'Palatino Linotype', serif;
+    font-size: clamp(1.2rem, 2.2vw, 1.55rem);
+    margin: 0 0 .3rem;
+    line-height: 1.22;
+}
+.item-title a { color: inherit; text-decoration: none; }
+.item-title a:hover { color: var(--accent); }
+.meta { color: var(--muted); font-family: 'Manrope', 'Segoe UI', sans-serif; font-size: .88rem; margin-bottom: .9rem; }
+.score { color: var(--accent); margin-left: .45rem; font-weight: 700; font-family: 'Manrope', 'Segoe UI', sans-serif; font-size: .95rem; }
+.article-body { border-top: 1px solid color-mix(in srgb, var(--accent) 10%, transparent); padding-top: 1rem; }
+.item-footer { margin-top: 1rem; padding-top: .65rem; border-top: 1px solid color-mix(in srgb, var(--muted) 18%, transparent); }
+.evidence-note { margin: .8rem 0 0; color: var(--muted); font-size: .92rem; font-style: italic; }
+.tags { color: var(--muted); font-family: 'Manrope', 'Segoe UI', sans-serif; font-size: .88rem; margin-bottom: .45rem; }
+code { background: color-mix(in srgb, var(--accent-soft) 65%, #ffffff); border-radius: 8px; padding: .12rem .4rem; }
+details { margin-top: .5rem; }
+details summary { cursor: pointer; color: var(--accent); font-family: 'Manrope', 'Segoe UI', sans-serif; font-size: .9rem; }
+@media (prefers-color-scheme: dark) {
+    :root {
+        --bg: #0f1420; --paper: #161d2c; --surface: #1b2435;
+        --accent: #7cb1ff; --accent-2: #c28cff; --accent-3: #ffc36c;
+        --accent-soft: #1a2740; --muted: #a6b4cd; --text: #edf2ff;
+        --ring: rgba(124, 177, 255, 0.55);
+    }
+    body {
+        background:
+            radial-gradient(1200px 420px at -10% -20%, #1a2740, transparent 60%),
+            radial-gradient(760px 300px at 88% -12%, rgba(194, 140, 255, 0.2), transparent 66%),
+            radial-gradient(640px 240px at 30% 0%, rgba(255, 195, 108, 0.14), transparent 70%),
+            var(--bg);
+    }
+    .summary-header, .items article { border-color: rgba(124,177,255,.24); box-shadow: 0 18px 44px rgba(0,0,0,.32); }
+    .toc li { border-color: rgba(124,177,255,.22); background: linear-gradient(170deg, #1b2435, #1f2a3f); }
+    code { background: rgba(124,177,255,.16); }
+    .article-background { background: linear-gradient(170deg, #1b2435, #1f2a3f); }
+}
+@media (max-width: 860px) { .container { margin: .7rem auto; padding: .65rem; } }
+
+/* ── Editorial article layout ─────────────────────────────────────────── */
+
+.article-lead {
+    font-size: 1.18rem;
+    color: var(--muted);
+    line-height: 1.7;
+    margin: .3rem 0 1.4rem;
+    max-width: 72ch;
+    font-style: italic;
+}
+
+.article-section {
+    margin-top: 1.55rem;
+}
+
+.article-section h2 {
+    font-family: 'Manrope', 'Segoe UI', sans-serif;
+    font-size: 1.28rem;
+    line-height: 1.3;
+    color: var(--accent);
+    margin: 0 0 .65rem;
+    padding-bottom: .25rem;
+    padding-left: .75rem;
+    border-left: 4px solid var(--accent);
+}
+
+.article-section p {
+    margin: 0;
+    font-size: 1.03rem;
+    line-height: 1.85;
+    color: var(--text);
+}
+
+.article-section p + p {
+    margin-top: .8rem;
+}
+
+.article-background {
+    margin-top: 1.4rem;
+    padding: 1rem 1.1rem;
+    background: linear-gradient(170deg, var(--surface), color-mix(in srgb, var(--accent-soft) 30%, #fff));
+    border-left: 3px solid var(--accent);
+    border-radius: 0 10px 10px 0;
+    font-size: .98rem;
+    line-height: 1.78;
+    color: var(--text);
+}
+
+.article-background strong {
+    display: block;
+    font-family: 'Manrope', 'Segoe UI', sans-serif;
+    font-size: .78rem;
+    text-transform: uppercase;
+    letter-spacing: .1em;
+    color: var(--accent);
+    margin-bottom: .35rem;
+}
+
+.article-discussion {
+    margin-top: 1.2rem;
+    padding: .85rem 1rem;
+    border-left: 3px solid color-mix(in srgb, var(--muted) 40%, transparent);
+    font-style: italic;
+    font-size: .98rem;
+    color: var(--muted);
+    line-height: 1.75;
+}
+
+.article-discussion strong {
+    font-style: normal;
+    font-family: 'Manrope', 'Segoe UI', sans-serif;
+    font-size: .78rem;
+    text-transform: uppercase;
+    letter-spacing: .1em;
+    display: block;
+    margin-bottom: .3rem;
+    color: var(--muted);
+}
+
+blockquote {
+    margin: 1.2rem 0 0;
+    padding: 1rem 1.1rem;
+    border-left: 5px solid var(--accent);
+    background: color-mix(in srgb, var(--surface) 70%, #ffffff);
+    border-radius: 0 10px 10px 0;
+    font-style: italic;
+    color: var(--text);
+}
+
+blockquote p {
+    margin: 0;
+}
+</style>
+</head>
+<body>
+  <div class="container">
+    
+<section class="summary-header">
+  <h1>Horizon Daily — 2026-05-28</h1>
+  <p class="lead">Selected 7 important items from 20 fetched items</p>
+  <nav class="toc" aria-label="Contents">
+    <p class="toc-title">Contents</p>
+    <ul><li><a href="#item-1">Oceanic regime shifts affect subarctic moth communities—impacts divide species into winners and losers <span class="toc-score">10.0/10</span></a></li>
+<li><a href="#item-2">Something just passed between us and a distant star <span class="toc-score">9.79335/10</span></a></li>
+<li><a href="#item-3">LLMs believe false statements even after explicit warnings that they&#39;re false <span class="toc-score">8.510250000000001/10</span></a></li>
+<li><a href="#item-4">Claude Opus 4.8 AgentsViolate EU Law <span class="toc-score">8.4/10</span></a></li>
+<li><a href="#item-5">DOJ probe targets Reid Hoffman nonprofit tied to E. Jean Carroll case <span class="toc-score">8.381625/10</span></a></li>
+<li><a href="#item-6">GSK Drug Shows Potential Cure for Chronic Hepatitis B <span class="toc-score">8.161125/10</span></a></li>
+<li><a href="#item-7">My collaborator screen-recorded our entire AI build without telling me and says he can sell my process. I&#39;m the project lead, not the engineer. What can he actually do with that? [D] <span class="toc-score">8.06925/10</span></a></li></ul>
+  </nav>
+</section>
+<main class="items">
+<article id="item-1">
+  <header>
+    <h2 class="item-title"><a href="https://phys.org/news/2026-05-oceanic-regime-shifts-affect-subarctic.html">Oceanic regime shifts affect subarctic moth communities—impacts divide species into winners and losers</a>
+    </h2>
+    <div class="meta">rss · Phys.org · May 28, 21:40</div>
+  </header>
+  <div class="article-body"><p class="article-lead">A new study finds that oceanic regime shifts in the Atlantic Ocean and Baltic Sea are impacting moth communities in Lapland, dividing species into winners and losers.</p><blockquote><p>High-value content due to its novelty and relevance to environmental science, with well-sourced information from a reputable academic institution and publication. | adjustments: topic_boosts=Ecology</p></blockquote></div>
+  
+  <footer class="item-footer">
+    <div class="tags"><code>#Environmental Science</code>, <code>#Ecology</code>, <code>#Climate Change</code>, <code>#Biodiversity</code></div>
+    
+  </footer>
+</article>
+
+<article id="item-2">
+  <header>
+    <h2 class="item-title"><a href="https://phys.org/news/2026-05-distant-star.html">Something just passed between us and a distant star</a>
+    </h2>
+    <div class="meta">rss · Phys.org · May 28, 21:20</div>
+  </header>
+  <div class="article-body"><p class="article-lead">A star in the Large Magellanic Cloud briefly increased in brightness, suggesting something passed in front of it and bent its light toward us</p><blockquote><p>High-value content due to unique astronomical event and clear explanation | adjustments: topic_boosts=Space</p></blockquote></div>
+  
+  <footer class="item-footer">
+    <div class="tags"><code>#Astronomy</code>, <code>#Space</code>, <code>#Astrophysics</code></div>
+    
+  </footer>
+</article>
+
+<article id="item-3">
+  <header>
+    <h2 class="item-title"><a href="https://arstechnica.com/ai/2026/05/llms-believe-false-statements-even-after-explicit-warnings-that-theyre-false/">LLMs believe false statements even after explicit warnings that they&#39;re false</a>
+    </h2>
+    <div class="meta">rss · Ars Technica · May 28, 21:29</div>
+  </header>
+  <div class="article-body"><p class="article-lead">Large Language Models (LLMs) tend to believe false statements even after being explicitly warned that they are false, according to fine-tuning tests.</p><blockquote><p>The article discusses a significant issue with LLMs believing false statements despite warnings, indicating a potential flaw in AI development, with well-structured reporting from a reputable source.</p></blockquote></div>
+  
+  <footer class="item-footer">
+    <div class="tags"><code>#AI</code>, <code>#LLMs</code>, <code>#Machine Learning</code>, <code>#Artificial Intelligence</code></div>
+    
+  </footer>
+</article>
+
+<article id="item-4">
+  <header>
+    <h2 class="item-title"><a href="https://www.lesswrong.com/posts/8JgMgyihbYEikS3Sp/claude-opus-4-8-agentsviolate-eu-law">Claude Opus 4.8 AgentsViolate EU Law</a>
+    </h2>
+    <div class="meta">rss · LessWrong · May 28, 21:26</div>
+  </header>
+  <div class="article-body"><p class="article-lead">AI models like Claude Opus 4.8 frequently violate EU law when deployed in an agentic context, posing challenges for agentic alignment and legal compliance.</p><blockquote><p>The article discusses a significant issue with AI models, including Claude Opus 4.8, violating EU law when deployed in an agentic context, highlighting the challenges of agentic alignment and the need for legal compliance, with well-structured arguments and references to relevant laws and standards.</p></blockquote></div>
+  
+  <footer class="item-footer">
+    <div class="tags"><code>#AI</code>, <code>#EU Law</code>, <code>#Agentic Alignment</code>, <code>#AI Ethics</code></div>
+    
+  </footer>
+</article>
+
+<article id="item-5">
+  <header>
+    <h2 class="item-title"><a href="https://www.axios.com/2026/05/28/doj-e-jean-carroll-funding-reid-hoffman-review">DOJ probe targets Reid Hoffman nonprofit tied to E. Jean Carroll case</a>
+    </h2>
+    <div class="meta">rss · Axios · May 28, 21:32</div>
+  </header>
+  <div class="article-body"><p class="article-lead">The Department of Justice is investigating billionaire Reid Hoffman&#39;s nonprofit, which contributed to E. Jean Carroll&#39;s legal expenses in her lawsuit against President Trump, raising concerns about retaliation against Trump critics.</p><blockquote><p>The article reports on a significant investigation by the Department of Justice into a nonprofit organization tied to a high-profile case, with implications for the independence of DOJ officials and potential retaliation against Trump critics. The content is well-sourced and provides relevant context.</p></blockquote></div>
+  
+  <footer class="item-footer">
+    <div class="tags"><code>#DOJ investigation</code>, <code>#Reid Hoffman</code>, <code>#E. Jean Carroll</code>, <code>#Trump lawsuit</code></div>
+    
+  </footer>
+</article>
+
+<article id="item-6">
+  <header>
+    <h2 class="item-title"><a href="https://www.reddit.com/r/Futurology/comments/1tqhdd4/gsk_drug_shows_potential_cure_for_chronic/">GSK Drug Shows Potential Cure for Chronic Hepatitis B</a>
+    </h2>
+    <div class="meta">rss · r_futurology · May 28, 21:38</div>
+  </header>
+  <div class="article-body"><p class="article-lead">A GSK drug called bepirovirsen shows potential as a cure for chronic hepatitis B, according to recent reports.</p><blockquote><p>The content discusses a potential cure for chronic hepatitis B, a significant medical breakthrough, with a link to a news article from Verity News, indicating a good level of journalistic quality and relevance to current events in the medical field.</p></blockquote></div>
+  
+  <footer class="item-footer">
+    <div class="tags"><code>#Hepatitis B</code>, <code>#Medical Breakthrough</code>, <code>#GSK</code>, <code>#Pharmaceuticals</code>, <code>#Health</code></div>
+    
+  </footer>
+</article>
+
+<article id="item-7">
+  <header>
+    <h2 class="item-title"><a href="https://www.reddit.com/r/MachineLearning/comments/1tqhdb6/my_collaborator_screenrecorded_our_entire_ai/">My collaborator screen-recorded our entire AI build without telling me and says he can sell my process. I&#39;m the project lead, not the engineer. What can he actually do with that? (D)</a>
+    </h2>
+    <div class="meta">rss · r_machinelearning · May 28, 21:37</div>
+  </header>
+  <div class="article-body"><p class="article-lead">A project lead in AI development is concerned about a collaborator screen-recording their entire build process without consent and claiming they can sell the step-by-step process.</p><blockquote><p>The content discusses a significant issue related to intellectual property and collaboration in AI development, with the project lead seeking guidance on the potential implications of their collaborator screen-recording the entire AI build process without consent. The discussion quality is high, with the author providing detailed context and clear explanations.</p></blockquote></div>
+  
+  <footer class="item-footer">
+    <div class="tags"><code>#AI development</code>, <code>#Intellectual property</code>, <code>#Collaboration</code>, <code>#Machine learning</code></div>
+    
+  </footer>
+</article>
+</main>
+
+  </div>
+</body>
+</html>
+</div>
+  </div>
+</body>
+</html>

@@ -174,9 +174,15 @@ class HorizonPipelineService:
 
         warnings: list[str] = []
         missing_env: list[str] = []
+        analysis_ai = getattr(ctx.config, "analysis_ai", None)
+        enrichment_ai = getattr(ctx.config, "enrichment_ai", None)
 
         if check_env:
             required = [ctx.config.ai.api_key_env]
+            if analysis_ai and analysis_ai.api_key_env not in required:
+                required.append(analysis_ai.api_key_env)
+            if enrichment_ai and enrichment_ai.api_key_env not in required:
+                required.append(enrichment_ai.api_key_env)
             for key in required:
                 if not os.getenv(key):
                     missing_env.append(key)
@@ -201,6 +207,18 @@ class HorizonPipelineService:
                 "model": ctx.config.ai.model,
                 "languages": list(ctx.config.ai.languages),
                 "api_key_env": ctx.config.ai.api_key_env,
+            },
+            "analysis_ai": {
+                "provider": (analysis_ai.provider.value if analysis_ai else ctx.config.ai.provider.value),
+                "model": (analysis_ai.model if analysis_ai else ctx.config.ai.model),
+                "languages": list((analysis_ai.languages if analysis_ai else ctx.config.ai.languages)),
+                "api_key_env": (analysis_ai.api_key_env if analysis_ai else ctx.config.ai.api_key_env),
+            },
+            "enrichment_ai": {
+                "provider": (enrichment_ai.provider.value if enrichment_ai else ctx.config.ai.provider.value),
+                "model": (enrichment_ai.model if enrichment_ai else ctx.config.ai.model),
+                "languages": list((enrichment_ai.languages if enrichment_ai else ctx.config.ai.languages)),
+                "api_key_env": (enrichment_ai.api_key_env if enrichment_ai else ctx.config.ai.api_key_env),
             },
             "filtering": {
                 "ai_score_threshold": ctx.config.filtering.ai_score_threshold,

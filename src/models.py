@@ -197,6 +197,8 @@ class Config(BaseModel):
 
     version: str = "1.0"
     ai: AIConfig
+    analysis_ai: Optional[AIConfig] = None
+    enrichment_ai: Optional[AIConfig] = None
     sources: SourcesConfig
     filtering: FilteringConfig
     email: Optional[EmailConfig] = None

@@ -395,6 +395,7 @@ class ContentEnricher:
             item.metadata[f"title{suffix}"]    = result.get(f"title{suffix}", "")
             item.metadata[f"lead{suffix}"]     = result.get(f"lead{suffix}", "")
             item.metadata[f"tags{suffix}"]     = result.get(f"tags{suffix}", "")
+            item.metadata[f"footer{suffix}"]   = result.get(f"footer{suffix}", "")
 
             # Flatten sections into a plain-text detailed_summary
             sections = result.get(f"sections{suffix}", [])
@@ -404,10 +405,23 @@ class ContentEnricher:
                 body = re.sub(r"<[^>]+>", " ", sec.get("body", "")).strip()
                 if heading or body:
                     plain_parts.append(f"{heading}\n{body}".strip())
+            if not plain_parts:
+                structured_fields = [
+                    result.get(f"whats_new{suffix}", ""),
+                    result.get(f"why_it_matters{suffix}", ""),
+                    result.get(f"key_details{suffix}", ""),
+                    result.get(f"background{suffix}", ""),
+                    result.get(f"community_discussion{suffix}", ""),
+                ]
+                plain_parts = [
+                    re.sub(r"\s+", " ", str(text)).strip()
+                    for text in structured_fields
+                    if str(text).strip()
+                ]
             if plain_parts:
                 item.metadata[f"detailed_summary{suffix}"] = "\n\n".join(plain_parts)
 
-            item.metadata[f"background{suffix}"] = result.get(f"footer{suffix}", "")
+            item.metadata[f"background{suffix}"] = result.get(f"background{suffix}", "")
 
         # ── Step 4 : citation sources ─────────────────────────────────────────
         if result.get("sources") and available_urls:

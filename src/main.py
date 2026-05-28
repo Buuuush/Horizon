@@ -207,6 +207,26 @@ def print_config_template():
     "temperature": 0.3,
     "max_tokens": 4096
   },
+  "analysis_ai": {
+    "provider": "openai",
+    "model": "meta/llama-3.3-70b-instruct",
+    "api_key_env": "NVIDIA_API_KEY",
+    "base_url": "https://integrate.api.nvidia.com/v1",
+    "temperature": 0.15,
+    "max_tokens": 4096,
+    "throttle_sec": 2.0,
+    "languages": ["fr", "en"]
+  },
+  "enrichment_ai": {
+    "provider": "openai",
+    "model": "mistralai/mistral-large-3-675b-instruct-2512",
+    "api_key_env": "NVIDIA_API_KEY",
+    "base_url": "https://integrate.api.nvidia.com/v1",
+    "temperature": 0.15,
+    "max_tokens": 4096,
+    "throttle_sec": 2.0,
+    "languages": ["fr", "en"]
+  },
   "sources": {
     "github": [
       {

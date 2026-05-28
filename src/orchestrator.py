@@ -34,7 +34,7 @@ class HorizonOrchestrator:
 
     # Target number of items to deliver in one briefing.  Both the balancing
     # pass and the downstream hard cap use this constant so they stay in sync.
-    _BALANCE_TARGET: int = 50
+    _BALANCE_TARGET: int = 10
 
     _THEME_ALIASES: Dict[str, str] = {
         "full informatique": "informatique",
@@ -101,6 +101,14 @@ class HorizonOrchestrator:
             self.console.print(f"📊 Profil actif: {self.profile.name} (seuil: {self.profile.ai_score_threshold})")
         else:
             self.console.print("[yellow]⚠️  Aucun profil sélectionné - utilisation des paramètres par défaut[/yellow]")
+
+    def _get_ai_config(self, purpose: str):
+        """Return the AI config for a given purpose, with backward-compatible fallback."""
+        if purpose == "analysis":
+            return getattr(self.config, "analysis_ai", None) or self.config.ai
+        if purpose == "enrichment":
+            return getattr(self.config, "enrichment_ai", None) or self.config.ai
+        return self.config.ai
 
     async def _broadcast(self, message: Dict[str, Any]) -> None:
         """Broadcast a progress message to WebSocket clients if callback is available.
@@ -331,7 +339,7 @@ class HorizonOrchestrator:
 
             # 7. Generate and save bilingual daily summary with tabbed interface (FR/EN onglets)
             today = datetime.now(timezone.utc).strftime("%Y-%m-%d")
-            ai_client = create_ai_client(self.config.ai)
+            ai_client = create_ai_client(self._get_ai_config("enrichment"))
             output_ext = "html" if summary_format not in {"md"} else "md"
 
             if output_ext == "html":
@@ -379,14 +387,14 @@ class HorizonOrchestrator:
 
                 # Send email and webhook notifications for each language
                 if self.email_manager and self.config.email and self.config.email.enabled:
-                    for lang in self.config.ai.languages:
+                    for lang in self._get_ai_config("enrichment").languages:
                         self.console.print(f"📧 Envoi du résumé par e-mail {lang.upper()}...")
                         subscribers = self.storage.load_subscribers()
                         subject = f"Horizon Summary ({lang.upper()}) - {today}"
                         self.email_manager.send_daily_summary(summary, subject, subscribers)
 
                 if self.webhook_notifier:
-                    for lang in self.config.ai.languages:
+                    for lang in self._get_ai_config("enrichment").languages:
                         # Create a summarizer instance for webhook metadata
                         summarizer_for_webhook = DailySummarizer(ai_client)
                         await self.webhook_notifier.send_daily_summary(
@@ -399,7 +407,7 @@ class HorizonOrchestrator:
                         )
             else:
                 # For Markdown format, generate one per language (legacy behavior)
-                for lang in self.config.ai.languages:
+                for lang in self._get_ai_config("enrichment").languages:
                     summarizer = DailySummarizer(ai_client)
                     summary = await summarizer.generate_summary(important_items, today, len(all_items), language=lang)
 
@@ -753,7 +761,7 @@ class HorizonOrchestrator:
         items_text = "\n\n".join(lines)
 
         try:
-            ai_client = create_ai_client(self.config.ai)
+            ai_client = create_ai_client(self._get_ai_config("analysis"))
             response = await ai_client.complete(
                 system=TOPIC_DEDUP_SYSTEM,
                 user=TOPIC_DEDUP_USER.format(items=items_text),
@@ -848,7 +856,7 @@ class HorizonOrchestrator:
         self.console.print(
             f"   Réanalyse de {len(expanded)} éléments Twitter avec le contexte des réponses...\n"
         )
-        ai_client = create_ai_client(self.config.ai)
+        ai_client = create_ai_client(self._get_ai_config("analysis"))
         analyzer = ContentAnalyzer(ai_client)
         await analyzer.analyze_batch(expanded)
 
@@ -865,7 +873,7 @@ class HorizonOrchestrator:
             return
 
         self.console.print("📚 Enrichissement avec des connaissances de base...")
-        ai_client = create_ai_client(self.config.ai)
+        ai_client = create_ai_client(self._get_ai_config("enrichment"))
         enricher = ContentEnricher(ai_client)
         await enricher.enrich_batch(items)
         self.console.print(f"   {len(items)} éléments enrichis\n")
@@ -907,7 +915,7 @@ class HorizonOrchestrator:
         """
         self.console.print("🤖 Analyse du contenu avec l'IA...")
 
-        ai_client = create_ai_client(self.config.ai)
+        ai_client = create_ai_client(self._get_ai_config("analysis"))
         analyzer = ContentAnalyzer(ai_client, profile=self.profile)
 
         return await analyzer.analyze_batch(items)
@@ -932,7 +940,7 @@ class HorizonOrchestrator:
         """
         self.console.print("📝 Génération du résumé quotidien...")
 
-        ai_client = create_ai_client(self.config.ai)
+        ai_client = create_ai_client(self._get_ai_config("enrichment"))
         summarizer = DailySummarizer(ai_client)
 
         return await summarizer.generate_summary(items, date, total_fetched, language=language)

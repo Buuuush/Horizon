@@ -2,7 +2,7 @@
   "version": "1.0",
   "ai": {
     "provider": "openai",
-    "model": "mistralai/mistral-large-3-675b-instruct-2512 ",
+    "model": "mistralai/mistral-large-3-675b-instruct-2512",
     "api_key_env": "NVIDIA_API_KEY",
     "base_url": "https://integrate.api.nvidia.com/v1",
     "temperature": 0.15,

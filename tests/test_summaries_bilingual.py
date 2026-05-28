@@ -1,17 +1,20 @@
-import re
-from pathlib import Path
+import pytest
+
+from src.ai.summarizer import DailySummarizer
 
 
-def test_bilingual_fr_contains_numbered_sections():
-    path = Path("data/summaries/horizon-2026-05-05-bilingual.html")
-    assert path.exists(), f"Missing summary file: {path}"
-    text = path.read_text(encoding="utf-8")
+@pytest.mark.asyncio
+async def test_bilingual_empty_state_renders_html_without_markdown_wrappers():
+    summarizer = DailySummarizer()
+    text = await summarizer.generate_bilingual_summary(
+        items=[],
+        date="2026-05-05",
+        total_fetched=511,
+    )
 
-    # Ensure FR tab exists
     assert '<div class="tab-content active" data-lang="fr">' in text
-
-    # Ensure at least one numbered FR section like '### 1.' is present
-    assert re.search(r"###\s*1\.", text), "No numbered FR sections found (pattern '### 1.')"
-
-    # Ensure we replaced main FR block with the fr-item wrapper
-    assert '<div class="fr-item">' in text
+    assert '<div class="tab-content " data-lang="en">' in text
+    assert '<section class="summary-header">' in text
+    assert '<article id="item-1" class="empty-state">' in text
+    assert '<div class="fr-item">' not in text
+    assert "### 1." not in text

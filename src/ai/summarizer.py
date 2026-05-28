@@ -251,8 +251,6 @@ class DailySummarizer:
         for i, lang in enumerate(languages):
             active = "active" if i == 0 else ""
             content_html = summaries.get(lang, "")
-            if lang == "fr":
-                content_html = f'<div class="fr-item">### 1.\n{content_html}</div>'
             tab_contents.append(
                 f'<div class="tab-content {active}" data-lang="{lang}">{content_html}</div>'
             )
@@ -359,7 +357,7 @@ class DailySummarizer:
             await self._translate_items_for_french_render(items)
 
         if not items:
-            body = self._generate_empty_summary(date, total_fetched, labels)
+            body = self._generate_empty_summary_html(date, total_fetched, labels)
             return self._wrap_html(date, body, language)
 
         theme = self._choose_theme(language, items)
@@ -789,6 +787,72 @@ class DailySummarizer:
     # ------------------------------------------------------------------
     # Empty state
     # ------------------------------------------------------------------
+
+    def _markdownish_to_html(self, text: str) -> str:
+        """Convert simple markdown-like bullets/numbering into HTML blocks."""
+        if not text:
+            return ""
+
+        parts: list[str] = []
+        in_ul = False
+        in_ol = False
+
+        def close_lists() -> None:
+            nonlocal in_ul, in_ol
+            if in_ul:
+                parts.append("</ul>")
+                in_ul = False
+            if in_ol:
+                parts.append("</ol>")
+                in_ol = False
+
+        for raw_line in text.splitlines():
+            line = raw_line.strip()
+            if not line:
+                close_lists()
+                continue
+
+            if line.startswith("- "):
+                if in_ol:
+                    parts.append("</ol>")
+                    in_ol = False
+                if not in_ul:
+                    parts.append("<ul>")
+                    in_ul = True
+                parts.append(f"<li>{self._escape_html(line[2:].strip())}</li>")
+                continue
+
+            ordered_match = re.match(r"^\d+\.\s+(.+)$", line)
+            if ordered_match:
+                if in_ul:
+                    parts.append("</ul>")
+                    in_ul = False
+                if not in_ol:
+                    parts.append("<ol>")
+                    in_ol = True
+                parts.append(f"<li>{self._escape_html(ordered_match.group(1).strip())}</li>")
+                continue
+
+            close_lists()
+            parts.append(f"<p>{self._escape_html(line)}</p>")
+
+        close_lists()
+        return "".join(parts)
+
+    def _generate_empty_summary_html(self, date: str, total_fetched: int, labels: dict) -> str:
+        analyzed_line = labels.get("empty_analyzed", "").format(total=total_fetched)
+        empty_html = self._markdownish_to_html(labels.get("empty_body", ""))
+        return f"""
+<section class="summary-header">
+  <h1>{self._escape_html(labels['header'])} — {self._escape_html(date)}</h1>
+  <p class="lead">{self._escape_html(analyzed_line)}</p>
+</section>
+<main class="items">
+  <article id="item-1" class="empty-state">
+    <div class="article-body">{empty_html}</div>
+  </article>
+</main>
+"""
 
     def _generate_empty_summary(self, date: str, total_fetched: int, labels: dict) -> str:
         analyzed_line = labels.get("empty_analyzed", "").format(total=total_fetched)

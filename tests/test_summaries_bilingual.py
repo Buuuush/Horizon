@@ -1,15 +1,16 @@
-import pytest
+import asyncio
 
 from src.ai.summarizer import DailySummarizer
 
 
-@pytest.mark.asyncio
-async def test_bilingual_empty_state_renders_html_without_markdown_wrappers():
+def test_bilingual_empty_state_renders_html_without_markdown_wrappers():
     summarizer = DailySummarizer()
-    text = await summarizer.generate_bilingual_summary(
-        items=[],
-        date="2026-05-05",
-        total_fetched=511,
+    text = asyncio.run(
+        summarizer.generate_bilingual_summary(
+            items=[],
+            date="2026-05-05",
+            total_fetched=511,
+        )
     )
 
     assert '<div class="tab-content active" data-lang="fr">' in text

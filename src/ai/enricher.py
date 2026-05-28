@@ -404,10 +404,25 @@ class ContentEnricher:
                 body = re.sub(r"<[^>]+>", " ", sec.get("body", "")).strip()
                 if heading or body:
                     plain_parts.append(f"{heading}\n{body}".strip())
+
+            # Legacy enrichment-schema fallback (whats_new/why_it_matters/...)
+            if not plain_parts:
+                legacy_fields = [
+                    result.get(f"whats_new{suffix}", ""),
+                    result.get(f"why_it_matters{suffix}", ""),
+                    result.get(f"key_details{suffix}", ""),
+                    result.get(f"background{suffix}", ""),
+                    result.get(f"community_discussion{suffix}", ""),
+                ]
+                plain_parts = [str(v).strip() for v in legacy_fields if str(v).strip()]
+
             if plain_parts:
                 item.metadata[f"detailed_summary{suffix}"] = "\n\n".join(plain_parts)
 
-            item.metadata[f"background{suffix}"] = result.get(f"footer{suffix}", "")
+            item.metadata[f"background{suffix}"] = (
+                result.get(f"background{suffix}")
+                or result.get(f"footer{suffix}", "")
+            )
 
         # ── Step 4 : citation sources ─────────────────────────────────────────
         if result.get("sources") and available_urls:

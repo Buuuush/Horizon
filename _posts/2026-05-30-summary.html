@@ -1,0 +1,712 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Horizon — 2026-05-30</title>
+  <style>
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600&family=Manrope:wght@500;700&display=swap');
+
+:root {
+    --bg: #f8f5f3;
+    --paper: #ffffff;
+    --surface: #fffbf8;
+    --accent: #9b3d2a;
+    --accent-2: color-mix(in srgb, var(--accent) 55%, #b73fd6);
+    --accent-3: color-mix(in srgb, var(--accent) 40%, #f59e0b);
+    --accent-soft: #f9e2dc;
+    --muted: #6e5b54;
+    --text: #2f211d;
+    --ring: color-mix(in srgb, var(--accent) 32%, transparent);
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+    color: var(--text);
+    background:
+        radial-gradient(1300px 420px at -10% -20%, var(--accent-soft), transparent 60%),
+        radial-gradient(760px 300px at 88% -12%, color-mix(in srgb, var(--accent-2) 24%, transparent), transparent 66%),
+        radial-gradient(640px 240px at 30% 0%, color-mix(in srgb, var(--accent-3) 18%, transparent), transparent 70%),
+        var(--bg);
+    font-family: 'Source Serif 4', Georgia, serif;
+    line-height: 1.78;
+}
+
+.container { max-width: 1100px; margin: 1.5rem auto; padding: 1rem; }
+
+/* ── Page header ─────────────────────────────────────────────────────── */
+.summary-header {
+    background: var(--paper);
+    border: 1px solid color-mix(in srgb, var(--accent) 16%, transparent);
+    border-radius: 24px;
+    padding: 1.5rem 1.6rem 1.1rem;
+    box-shadow: 0 18px 48px rgba(19, 33, 68, 0.08);
+    margin-bottom: 1rem;
+    position: relative;
+    overflow: hidden;
+}
+.summary-header::after {
+    content: "";
+    position: absolute;
+    inset: auto -60px -80px auto;
+    width: 220px; height: 220px;
+    border-radius: 999px;
+    background: radial-gradient(circle, color-mix(in srgb, var(--accent-2) 28%, transparent), transparent 70%);
+    pointer-events: none;
+}
+.summary-header h1 {
+    margin: 0;
+    font-family: 'Fraunces', 'DM Serif Display', 'Iowan Old Style', 'Palatino Linotype', serif;
+    letter-spacing: .01em;
+    font-size: clamp(1.8rem, 3.6vw, 2.8rem);
+    line-height: 1.15;
+}
+.lead { margin: .55rem 0 1.1rem; color: var(--muted); font-size: 1.04rem; max-width: 78ch; }
+
+/* ── TOC ─────────────────────────────────────────────────────────────── */
+.toc-title {
+    margin: 0 0 .45rem;
+    font-family: 'Manrope', 'Segoe UI', sans-serif;
+    font-size: .85rem;
+    text-transform: uppercase;
+    letter-spacing: .11em;
+    color: var(--muted);
+}
+.toc ul {
+    list-style: none; margin: 0; padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: .55rem;
+}
+.toc li {
+    background: linear-gradient(160deg, var(--surface), color-mix(in srgb, var(--accent-soft) 48%, #ffffff));
+    border: 1px solid color-mix(in srgb, var(--accent) 16%, transparent);
+    border-radius: 10px;
+    padding: .55rem .65rem;
+    transition: transform .18s ease, box-shadow .18s ease;
+}
+.toc li:hover { transform: translateY(-1px); box-shadow: 0 8px 20px color-mix(in srgb, var(--accent) 15%, transparent); }
+.toc a { text-decoration: none; color: var(--text); }
+.toc-score { color: var(--accent); font-family: 'Manrope', 'Segoe UI', sans-serif; font-size: .85rem; font-weight: 600; }
+
+/* ── Article cards ───────────────────────────────────────────────────── */
+.items { display: grid; gap: .95rem; }
+.items article {
+    background: var(--paper);
+    border: 1px solid color-mix(in srgb, var(--accent) 15%, transparent);
+    border-radius: 20px;
+    padding: 1.4rem 1.6rem 1.1rem;
+    box-shadow: 0 10px 32px rgba(0, 0, 0, 0.05);
+}
+.item-title {
+    font-family: 'Fraunces', 'DM Serif Display', 'Iowan Old Style', 'Palatino Linotype', serif;
+    font-size: clamp(1.2rem, 2.2vw, 1.55rem);
+    margin: 0 0 .3rem;
+    line-height: 1.22;
+}
+.item-title a { color: inherit; text-decoration: none; }
+.item-title a:hover { color: var(--accent); }
+.item-title a:focus-visible, .toc a:focus-visible, summary:focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
+    border-radius: 6px;
+}
+.meta { color: var(--muted); font-family: 'Manrope', 'Segoe UI', sans-serif; font-size: .88rem; margin-bottom: .9rem; }
+.score { color: var(--accent); margin-left: .45rem; font-weight: 700; font-family: 'Manrope', 'Segoe UI', sans-serif; font-size: .95rem; }
+
+.article-body { border-top: 1px solid color-mix(in srgb, var(--accent) 10%, transparent); padding-top: 1rem; }
+
+.item-footer {
+    margin-top: 1rem;
+    padding-top: .65rem;
+    border-top: 1px solid color-mix(in srgb, var(--muted) 18%, transparent);
+}
+
+.evidence-note {
+    margin: .8rem 0 0;
+    color: var(--muted);
+    font-size: .92rem;
+    font-style: italic;
+}
+
+.tags { color: var(--muted); font-family: 'Manrope', 'Segoe UI', sans-serif; font-size: .88rem; margin-bottom: .45rem; }
+code { background: color-mix(in srgb, var(--accent-soft) 65%, #ffffff); border-radius: 8px; padding: .12rem .4rem; }
+
+details { margin-top: .5rem; }
+details summary { cursor: pointer; color: var(--accent); font-family: 'Manrope', 'Segoe UI', sans-serif; font-size: .9rem; }
+
+/* ── Dark mode ───────────────────────────────────────────────────────── */
+@media (prefers-color-scheme: dark) {
+    :root {
+        --bg: #0f1420; --paper: #161d2c; --surface: #1b2435;
+        --accent: #7cb1ff; --accent-2: #c28cff; --accent-3: #ffc36c;
+        --accent-soft: #1a2740; --muted: #a6b4cd; --text: #edf2ff;
+        --ring: rgba(124, 177, 255, 0.55);
+    }
+    body {
+        background:
+            radial-gradient(1200px 420px at -10% -20%, #1a2740, transparent 60%),
+            radial-gradient(760px 300px at 88% -12%, rgba(194, 140, 255, 0.2), transparent 66%),
+            radial-gradient(640px 240px at 30% 0%, rgba(255, 195, 108, 0.14), transparent 70%),
+            var(--bg);
+    }
+    .summary-header, .items article { border-color: rgba(124,177,255,.24); box-shadow: 0 18px 44px rgba(0,0,0,.32); }
+    .toc li { border-color: rgba(124,177,255,.22); background: linear-gradient(170deg, #1b2435, #1f2a3f); }
+    code { background: rgba(124,177,255,.16); }
+    .article-background { background: linear-gradient(170deg, #1b2435, #1f2a3f); }
+}
+
+@media (max-width: 860px) {
+    .container { margin: .7rem auto; padding: .65rem; }
+}
+
+/* ── Editorial article layout ─────────────────────────────────────────── */
+
+.article-lead {
+    font-size: 1.18rem;
+    color: var(--muted);
+    line-height: 1.7;
+    margin: .3rem 0 1.4rem;
+    max-width: 72ch;
+    font-style: italic;
+}
+
+.article-section {
+    margin-top: 1.55rem;
+}
+
+.article-section h3 {
+    font-family: 'Manrope', 'Segoe UI', sans-serif;
+    font-size: .78rem;
+    text-transform: uppercase;
+    letter-spacing: .12em;
+    color: var(--accent);
+    margin: 0 0 .45rem;
+    padding-bottom: .25rem;
+    border-bottom: 1px solid color-mix(in srgb, var(--accent) 22%, transparent);
+}
+
+.article-section p {
+    margin: 0;
+    font-size: 1.03rem;
+    line-height: 1.85;
+    color: var(--text);
+}
+
+.article-section p + p {
+    margin-top: .8rem;
+}
+
+.article-background {
+    margin-top: 1.4rem;
+    padding: 1rem 1.1rem;
+    background: linear-gradient(170deg, var(--surface), color-mix(in srgb, var(--accent-soft) 30%, #fff));
+    border-left: 3px solid var(--accent);
+    border-radius: 0 10px 10px 0;
+    font-size: .98rem;
+    line-height: 1.78;
+    color: var(--text);
+}
+
+.article-background strong {
+    display: block;
+    font-family: 'Manrope', 'Segoe UI', sans-serif;
+    font-size: .78rem;
+    text-transform: uppercase;
+    letter-spacing: .1em;
+    color: var(--accent);
+    margin-bottom: .35rem;
+}
+
+.article-discussion {
+    margin-top: 1.2rem;
+    padding: .85rem 1rem;
+    border-left: 3px solid color-mix(in srgb, var(--muted) 40%, transparent);
+    font-style: italic;
+    font-size: .98rem;
+    color: var(--muted);
+    line-height: 1.75;
+}
+
+.article-discussion strong {
+    font-style: normal;
+    font-family: 'Manrope', 'Segoe UI', sans-serif;
+    font-size: .78rem;
+    text-transform: uppercase;
+    letter-spacing: .1em;
+    display: block;
+    margin-bottom: .3rem;
+    color: var(--muted);
+}
+
+.tab-switcher {
+    display: flex; gap: .5rem; margin-bottom: 1.5rem;
+    border-bottom: 2px solid color-mix(in srgb, var(--accent) 20%, transparent);
+}
+.tab-button {
+    background: transparent; border: none; color: var(--muted);
+    font-family: 'Manrope', 'Segoe UI', sans-serif; font-size: 1rem; font-weight: 600;
+    padding: .75rem 1.2rem; cursor: pointer;
+    transition: color .18s ease, border-color .18s ease;
+    border-bottom: 3px solid transparent;
+}
+.tab-button:hover { color: var(--text); }
+.tab-button.active { color: var(--accent); border-bottom-color: var(--accent); }
+.tab-content { display: none; animation: fadeIn .2s ease-in; }
+.tab-content.active { display: block; }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@media (max-width: 860px) { .tab-switcher { flex-wrap: wrap; } }
+</style>
+  <script>
+    function switchTab(button) {
+      const lang = button.getAttribute('data-lang');
+      const allButtons = document.querySelectorAll('.tab-button');
+      const allContents = document.querySelectorAll('.tab-content');
+      allButtons.forEach(b => b.classList.remove('active'));
+      allContents.forEach(c => c.classList.remove('active'));
+      button.classList.add('active');
+      document.querySelector(`.tab-content[data-lang="${lang}"]`).classList.add('active');
+    }
+  </script>
+</head>
+<body>
+  <div class="container">
+    <div class="tab-switcher">
+      <button class="tab-button active" onclick="switchTab(this)" data-lang="fr">Français</button><button class="tab-button " onclick="switchTab(this)" data-lang="en">English</button>
+    </div>
+    <div class="tab-content active" data-lang="fr"><section class="summary-header">
+  <h1>Horizon Quotidien — 2026-05-30</h1>
+  <p class="lead">Parmi 529 contenus collectés, 13 sujets essentiels ont été sélectionnés.</p>
+  <nav class="toc" aria-label="Sommaire">
+    <p class="toc-title">Sommaire</p>
+    <ul><li><a href="#item-1">The Pentagon Knew Enemies Could Track Troops’ Phones for Years. Now They Are <span class="toc-score">⭐️ 8.620500000000002/10</span></a></li>
+<li><a href="#item-2">How a new extraction process could unlock the world’s lithium <span class="toc-score">⭐️ 8.547/10</span></a></li>
+<li><a href="#item-3">Fed up with vibe coders, dev sneaks data-nuking prompt injection into their code <span class="toc-score">⭐️ 7.68075/10</span></a></li>
+<li><a href="#item-4">Google Security Engineer Arrested in Million-Dollar Polymarket Trading Scheme <span class="toc-score">⭐️ 7.68075/10</span></a></li>
+<li><a href="#item-5">Rethinking organizational design in the age of agentic AI <span class="toc-score">⭐️ 7.588875/10</span></a></li>
+<li><a href="#item-6">The Download: puncturing the AI jobs panic <span class="toc-score">⭐️ 7.588875/10</span></a></li>
+<li><a href="#item-7">How the Pope’s Magnifica Humanitas offers a template for individuals to meet the AI moment <span class="toc-score">⭐️ 7.53375/10</span></a></li>
+<li><a href="#item-8">The Download: climate tech goes public and the AI Hype Index returns <span class="toc-score">⭐️ 7.53375/10</span></a></li>
+<li><a href="#item-9">New Moms Are Returning to Coding Jobs Radically Reshaped by AI <span class="toc-score">⭐️ 7.53375/10</span></a></li>
+<li><a href="#item-10">The Download: unlocking lithium and controlling Ebola <span class="toc-score">⭐️ 7.515375000000001/10</span></a></li>
+<li><a href="#item-11">Cognitive Security as an AI Safety Cause Area <span class="toc-score">⭐️ 7.441875/10</span></a></li>
+<li><a href="#item-12">The AI Hype Index: AI gets booed in graduation season <span class="toc-score">⭐️ 6.7410000000000005/10</span></a></li>
+<li><a href="#item-13">The Download: keeping up with AI, and the future of IVF <span class="toc-score">⭐️ 6.5756250000000005/10</span></a></li></ul>
+  </nav>
+</section>
+<main class="items">
+<article id="item-1">
+  <header>
+    <h2 class="item-title"><a href="https://www.wired.com/story/the-pentagon-knew-enemies-could-track-troops-phones-for-years-now-they-are/">The Pentagon Knew Enemies Could Track Troops’ Phones for Years. Now They Are</a>
+      <span class="score">⭐️ 8.620500000000002/10</span>
+    </h2>
+    <div class="meta">rss · Wired · May 28, 16:59</div>
+  </header>
+  <div class="article-body"><p class="article-lead">The US military has long known that cheap fixes could stop location data from exposing its troops. It adopted almost none—and now says adversaries are using the data to target soldiers during a war.</p></div>
+  
+  <footer class="item-footer">
+    <div class="tags"><code>#national security</code>, <code>#military technology</code>, <code>#cybersecurity</code>, <code>#geopolitical risk</code>, <code>#government accountability</code></div>
+    
+  </footer>
+</article>
+
+<article id="item-2">
+  <header>
+    <h2 class="item-title"><a href="https://www.technologyreview.com/2026/05/28/1138096/lithium-extraction-rock-zero/">How a new extraction process could unlock the world’s lithium</a>
+      <span class="score">⭐️ 8.547/10</span>
+    </h2>
+    <div class="meta">rss · MIT Technology Review · May 28, 18:01</div>
+  </header>
+  <div class="article-body"><p class="article-lead">Researchers say they’ve found a new way to extract lithium, a crucial metal used in the lithium-ion batteries that power electric vehicles and energy storage arrays. This new technique could be more environmentally friendly and cheaper than existing ones. The research was published today in Science, and a startup called Rock Zero is working to…</p></div>
+  
+  <footer class="item-footer">
+    <div class="tags"><code>#lithium extraction</code>, <code>#renewable energy</code>, <code>#battery technology</code>, <code>#environmental innovation</code>, <code>#scientific research</code></div>
+    
+  </footer>
+</article>
+
+<article id="item-3">
+  <header>
+    <h2 class="item-title"><a href="https://arstechnica.com/security/2026/05/fed-up-with-vibe-coders-dev-sneaks-data-nuking-prompt-injection-into-their-code/">Fed up with vibe coders, dev sneaks data-nuking prompt injection into their code</a>
+      <span class="score">⭐️ 7.68075/10</span>
+    </h2>
+    <div class="meta">rss · Ars Technica · May 28, 20:29</div>
+  </header>
+  <div class="article-body"><p class="article-lead">Undisclosed addition in jqwik instructed AI coding agents to delete app output.</p></div>
+  
+  <footer class="item-footer">
+    <div class="tags"><code>#AI security</code>, <code>#software development</code>, <code>#prompt injection</code>, <code>#cybersecurity</code>, <code>#ethical hacking</code></div>
+    
+  </footer>
+</article>
+
+<article id="item-4">
+  <header>
+    <h2 class="item-title"><a href="https://www.wired.com/story/google-employee-accused-of-polymarket-one-million/">Google Security Engineer Arrested in Million-Dollar Polymarket Trading Scheme</a>
+      <span class="score">⭐️ 7.68075/10</span>
+    </h2>
+    <div class="meta">rss · Wired · May 27, 22:22</div>
+  </header>
+  <div class="article-body"><p class="article-lead">According to federal prosecutors, Michele Spagnuolo made more than $1 million on the prediction market platform using confidential information about Google Search traffic.</p></div>
+  
+  <footer class="item-footer">
+    <div class="tags"><code>#insider trading</code>, <code>#tech ethics</code>, <code>#financial regulation</code>, <code>#prediction markets</code>, <code>#corporate governance</code></div>
+    
+  </footer>
+</article>
+
+<article id="item-5">
+  <header>
+    <h2 class="item-title"><a href="https://www.technologyreview.com/2026/05/26/1137584/rethinking-organizational-design-in-the-age-of-agentic-ai/">Rethinking organizational design in the age of agentic AI</a>
+      <span class="score">⭐️ 7.588875/10</span>
+    </h2>
+    <div class="meta">rss · MIT Technology Review · May 26, 14:54</div>
+  </header>
+  <div class="article-body"><p class="article-lead">Amid rapidly growing adoption of enterprise-level AI agents, there’s a disconnect emerging between ambition and execution. Although 85% of organizations say they want to be agentic within the next three years, 76% say their current operations and infrastructure can’t support that change. They cite a lack of readiness across people, processes, and workflows. The sticky…</p></div>
+  
+  <footer class="item-footer">
+    <div class="tags"><code>#Artificial Intelligence</code>, <code>#Organizational Design</code>, <code>#Enterprise Technology</code>, <code>#Digital Transformation</code>, <code>#Future of Work</code></div>
+    
+  </footer>
+</article>
+
+<article id="item-6">
+  <header>
+    <h2 class="item-title"><a href="https://www.technologyreview.com/2026/05/26/1138028/the-download-ai-jobs-data/">The Download: puncturing the AI jobs panic</a>
+      <span class="score">⭐️ 7.588875/10</span>
+    </h2>
+    <div class="meta">rss · MIT Technology Review · May 26, 12:10</div>
+  </header>
+  <div class="article-body"><p class="article-lead">This is today’s edition of The Download, our weekday newsletter that provides a daily dose of what’s going on in the world of technology. A reality check on the AI jobs hysteria Despite the growing hysteria over AI’s threat to white-collar jobs, there’s still scant evidence that the technology has had a large-scale impact on…</p></div>
+  
+  <footer class="item-footer">
+    <div class="tags"><code>#Artificial Intelligence</code>, <code>#Labor Market</code>, <code>#Technology Impact</code>, <code>#Economic Trends</code>, <code>#Future of Work</code></div>
+    
+  </footer>
+</article>
+
+<article id="item-7">
+  <header>
+    <h2 class="item-title"><a href="https://www.technologyreview.com/2026/05/29/1138107/how-the-popes-magnifica-humanitas-offers-a-template-for-individuals-to-meet-the-ai-moment/">How the Pope’s Magnifica Humanitas offers a template for individuals to meet the AI moment</a>
+      <span class="score">⭐️ 7.53375/10</span>
+    </h2>
+    <div class="meta">rss · MIT Technology Review · May 29, 10:00</div>
+  </header>
+  <div class="article-body"><p class="article-lead">Pope Leo XIV’s new encyclical on artificial intelligence includes a statement that warrants serious attention from technologists and policymakers: “Technology is never neutral.” Magnifica Humanitas (“Magnificent Humanity”) is a clarion call to all people to act with courage and solidarity as we enter an age already being transformed by artificial intelligence, the greatest change in…</p></div>
+  
+  <footer class="item-footer">
+    <div class="tags"><code>#AI ethics</code>, <code>#religion and technology</code>, <code>#public policy</code>, <code>#philosophy</code>, <code>#tech governance</code></div>
+    
+  </footer>
+</article>
+
+<article id="item-8">
+  <header>
+    <h2 class="item-title"><a href="https://www.technologyreview.com/2026/05/28/1138085/the-download-climate-tech-ipos-ai-hype-index/">The Download: climate tech goes public and the AI Hype Index returns</a>
+      <span class="score">⭐️ 7.53375/10</span>
+    </h2>
+    <div class="meta">rss · MIT Technology Review · May 28, 12:10</div>
+  </header>
+  <div class="article-body"><p class="article-lead">This is today’s edition of The Download, our weekday newsletter that provides a daily dose of what’s going on in the world of technology. Climate tech companies are going public. What’s next? Solar and battery company Solv Energy went public in February, hitting a $6 billion valuation. X-energy, which builds small modular nuclear reactors, followed…</p></div>
+  
+  <footer class="item-footer">
+    <div class="tags"><code>#climate tech</code>, <code>#IPOs</code>, <code>#AI hype</code>, <code>#renewable energy</code>, <code>#technology trends</code></div>
+    
+  </footer>
+</article>
+
+<article id="item-9">
+  <header>
+    <h2 class="item-title"><a href="https://www.wired.com/story/women-parental-leave-return-office-ai/">New Moms Are Returning to Coding Jobs Radically Reshaped by AI</a>
+      <span class="score">⭐️ 7.53375/10</span>
+    </h2>
+    <div class="meta">rss · Wired · May 28, 11:00</div>
+  </header>
+  <div class="article-body"><p class="article-lead">New mothers working in software development are staring down an AI-pilled workplace they barely recognize.</p></div>
+  
+  <footer class="item-footer">
+    <div class="tags"><code>#AI</code>, <code>#workforce</code>, <code>#gender</code>, <code>#tech industry</code>, <code>#parental leave</code></div>
+    
+  </footer>
+</article>
+
+<article id="item-10">
+  <header>
+    <h2 class="item-title"><a href="https://www.technologyreview.com/2026/05/29/1138110/the-download-lithium-extraction-ebola-ai-pope/">The Download: unlocking lithium and controlling Ebola</a>
+      <span class="score">⭐️ 7.515375000000001/10</span>
+    </h2>
+    <div class="meta">rss · MIT Technology Review · May 29, 12:10</div>
+  </header>
+  <div class="article-body"><p class="article-lead">This is today’s edition of The Download, our weekday newsletter that provides a daily dose of what’s going on in the world of technology. How a new extraction process could unlock the world’s lithium A new method for extracting lithium could cut costs and emissions from one of the world’s most important materials for EVs…</p></div>
+  
+  <footer class="item-footer">
+    <div class="tags"><code>#lithium extraction</code>, <code>#clean energy</code>, <code>#Ebola</code>, <code>#public health</code>, <code>#technology innovation</code></div>
+    
+  </footer>
+</article>
+
+<article id="item-11">
+  <header>
+    <h2 class="item-title"><a href="https://www.lesswrong.com/posts/KGcE7eAdfxHchk25X/cognitive-security-as-an-ai-safety-cause-area">Cognitive Security as an AI Safety Cause Area</a>
+      <span class="score">⭐️ 7.441875/10</span>
+    </h2>
+    <div class="meta">rss · LessWrong · May 25, 19:27</div>
+  </header>
+  <div class="article-body"><p class="article-lead">As AI systems become more capable, the cognitive security of humans will be increasingly at risk. By cognitive security, I mean the ability of humans to maintain control over their beliefs and actions. Cognitive security could be compromised in several ways: AI could become very good at persuading people of arbitrary positions; interacting with AI could lead humans to lose touch with reality; and AIs could become very effective at blackmail or at producing extremely convincing false information. We are already seei...</p></div>
+  
+  <footer class="item-footer">
+    <div class="tags"><code>#AI safety</code>, <code>#cognitive security</code>, <code>#artificial intelligence</code>, <code>#misinformation</code>, <code>#ethics</code></div>
+    
+  </footer>
+</article>
+
+<article id="item-12">
+  <header>
+    <h2 class="item-title"><a href="https://www.technologyreview.com/2026/05/28/1138053/the-ai-hype-index-ai-gets-booed-in-graduation-season/">The AI Hype Index: AI gets booed in graduation season</a>
+      <span class="score">⭐️ 6.7410000000000005/10</span>
+    </h2>
+    <div class="meta">rss · MIT Technology Review · May 28, 09:51</div>
+  </header>
+  <div class="article-body"><p class="article-lead">It is one thing to say AI will change the world. It is another to expect the class of 2026 to applaud it. In fact, when former Google CEO Eric Schmidt told University of Arizona graduates that their task is to help shape AI, he was met with a resounding chorus of boos. “I can…</p></div>
+  
+  <footer class="item-footer">
+    <div class="tags"><code>#AI</code>, <code>#public sentiment</code>, <code>#technology criticism</code>, <code>#graduation speeches</code>, <code>#generational attitudes</code></div>
+    
+  </footer>
+</article>
+
+<article id="item-13">
+  <header>
+    <h2 class="item-title"><a href="https://www.technologyreview.com/2026/05/27/1138048/the-download-ai-future-ivf-technology/">The Download: keeping up with AI, and the future of IVF</a>
+      <span class="score">⭐️ 6.5756250000000005/10</span>
+    </h2>
+    <div class="meta">rss · MIT Technology Review · May 27, 12:10</div>
+  </header>
+  <div class="article-body"><p class="article-lead">This is today’s edition of The Download, our weekday newsletter that provides a daily dose of what’s going on in the world of technology. Stay on top of what’s going on in AI this summer Here at MIT Technology Review, we understand exactly how relentless the pace of news from the world of artificial intelligence…</p></div>
+  
+  <footer class="item-footer">
+    <div class="tags"><code>#artificial intelligence</code>, <code>#IVF</code>, <code>#technology trends</code>, <code>#newsletter</code>, <code>#biotechnology</code></div>
+    
+  </footer>
+</article>
+</main></div><div class="tab-content " data-lang="en"><section class="summary-header">
+  <h1>Horizon Daily — 2026-05-30</h1>
+  <p class="lead">From 529 items, 13 important content pieces were selected</p>
+  <nav class="toc" aria-label="Contents">
+    <p class="toc-title">Contents</p>
+    <ul><li><a href="#item-1">The Pentagon Knew Enemies Could Track Troops’ Phones for Years. Now They Are <span class="toc-score">⭐️ 8.620500000000002/10</span></a></li>
+<li><a href="#item-2">How a new extraction process could unlock the world’s lithium <span class="toc-score">⭐️ 8.547/10</span></a></li>
+<li><a href="#item-3">Fed up with vibe coders, dev sneaks data-nuking prompt injection into their code <span class="toc-score">⭐️ 7.68075/10</span></a></li>
+<li><a href="#item-4">Google Security Engineer Arrested in Million-Dollar Polymarket Trading Scheme <span class="toc-score">⭐️ 7.68075/10</span></a></li>
+<li><a href="#item-5">Rethinking organizational design in the age of agentic AI <span class="toc-score">⭐️ 7.588875/10</span></a></li>
+<li><a href="#item-6">The Download: puncturing the AI jobs panic <span class="toc-score">⭐️ 7.588875/10</span></a></li>
+<li><a href="#item-7">How the Pope’s Magnifica Humanitas offers a template for individuals to meet the AI moment <span class="toc-score">⭐️ 7.53375/10</span></a></li>
+<li><a href="#item-8">The Download: climate tech goes public and the AI Hype Index returns <span class="toc-score">⭐️ 7.53375/10</span></a></li>
+<li><a href="#item-9">New Moms Are Returning to Coding Jobs Radically Reshaped by AI <span class="toc-score">⭐️ 7.53375/10</span></a></li>
+<li><a href="#item-10">The Download: unlocking lithium and controlling Ebola <span class="toc-score">⭐️ 7.515375000000001/10</span></a></li>
+<li><a href="#item-11">Cognitive Security as an AI Safety Cause Area <span class="toc-score">⭐️ 7.441875/10</span></a></li>
+<li><a href="#item-12">The AI Hype Index: AI gets booed in graduation season <span class="toc-score">⭐️ 6.7410000000000005/10</span></a></li>
+<li><a href="#item-13">The Download: keeping up with AI, and the future of IVF <span class="toc-score">⭐️ 6.5756250000000005/10</span></a></li></ul>
+  </nav>
+</section>
+<main class="items">
+<article id="item-1">
+  <header>
+    <h2 class="item-title"><a href="https://www.wired.com/story/the-pentagon-knew-enemies-could-track-troops-phones-for-years-now-they-are/">The Pentagon Knew Enemies Could Track Troops’ Phones for Years. Now They Are</a>
+      <span class="score">⭐️ 8.620500000000002/10</span>
+    </h2>
+    <div class="meta">rss · Wired · May 28, 16:59</div>
+  </header>
+  <div class="article-body"><p class="article-lead">A Wired investigation reveals the U.S. military ignored known vulnerabilities in troop phone tracking for years, enabling adversaries to exploit location data for targeting during active conflicts.</p></div>
+  
+  <footer class="item-footer">
+    <div class="tags"><code>#national security</code>, <code>#military technology</code>, <code>#cybersecurity</code>, <code>#geopolitical risk</code>, <code>#government accountability</code></div>
+    
+  </footer>
+</article>
+
+<article id="item-2">
+  <header>
+    <h2 class="item-title"><a href="https://www.technologyreview.com/2026/05/28/1138096/lithium-extraction-rock-zero/">How a new extraction process could unlock the world’s lithium</a>
+      <span class="score">⭐️ 8.547/10</span>
+    </h2>
+    <div class="meta">rss · MIT Technology Review · May 28, 18:01</div>
+  </header>
+  <div class="article-body"><p class="article-lead">Researchers have developed a potentially more environmentally friendly and cost-effective method for lithium extraction, which could impact the supply of this critical battery metal.</p></div>
+  
+  <footer class="item-footer">
+    <div class="tags"><code>#lithium extraction</code>, <code>#renewable energy</code>, <code>#battery technology</code>, <code>#environmental innovation</code>, <code>#scientific research</code></div>
+    
+  </footer>
+</article>
+
+<article id="item-3">
+  <header>
+    <h2 class="item-title"><a href="https://arstechnica.com/security/2026/05/fed-up-with-vibe-coders-dev-sneaks-data-nuking-prompt-injection-into-their-code/">Fed up with vibe coders, dev sneaks data-nuking prompt injection into their code</a>
+      <span class="score">⭐️ 7.68075/10</span>
+    </h2>
+    <div class="meta">rss · Ars Technica · May 28, 20:29</div>
+  </header>
+  <div class="article-body"><p class="article-lead">A disgruntled developer secretly embedded a prompt injection in code that instructed AI agents to delete application output, exposing vulnerabilities in AI-assisted development tools.</p></div>
+  
+  <footer class="item-footer">
+    <div class="tags"><code>#AI security</code>, <code>#software development</code>, <code>#prompt injection</code>, <code>#cybersecurity</code>, <code>#ethical hacking</code></div>
+    
+  </footer>
+</article>
+
+<article id="item-4">
+  <header>
+    <h2 class="item-title"><a href="https://www.wired.com/story/google-employee-accused-of-polymarket-one-million/">Google Security Engineer Arrested in Million-Dollar Polymarket Trading Scheme</a>
+      <span class="score">⭐️ 7.68075/10</span>
+    </h2>
+    <div class="meta">rss · Wired · May 27, 22:22</div>
+  </header>
+  <div class="article-body"><p class="article-lead">A Google security engineer was arrested for allegedly using confidential company information to make over $1 million on the prediction market Polymarket.</p></div>
+  
+  <footer class="item-footer">
+    <div class="tags"><code>#insider trading</code>, <code>#tech ethics</code>, <code>#financial regulation</code>, <code>#prediction markets</code>, <code>#corporate governance</code></div>
+    
+  </footer>
+</article>
+
+<article id="item-5">
+  <header>
+    <h2 class="item-title"><a href="https://www.technologyreview.com/2026/05/26/1137584/rethinking-organizational-design-in-the-age-of-agentic-ai/">Rethinking organizational design in the age of agentic AI</a>
+      <span class="score">⭐️ 7.588875/10</span>
+    </h2>
+    <div class="meta">rss · MIT Technology Review · May 26, 14:54</div>
+  </header>
+  <div class="article-body"><p class="article-lead">Organizations face a significant readiness gap in adopting agentic AI, with 76% reporting their operations and infrastructure cannot support their ambitions within three years.</p></div>
+  
+  <footer class="item-footer">
+    <div class="tags"><code>#Artificial Intelligence</code>, <code>#Organizational Design</code>, <code>#Enterprise Technology</code>, <code>#Digital Transformation</code>, <code>#Future of Work</code></div>
+    
+  </footer>
+</article>
+
+<article id="item-6">
+  <header>
+    <h2 class="item-title"><a href="https://www.technologyreview.com/2026/05/26/1138028/the-download-ai-jobs-data/">The Download: puncturing the AI jobs panic</a>
+      <span class="score">⭐️ 7.588875/10</span>
+    </h2>
+    <div class="meta">rss · MIT Technology Review · May 26, 12:10</div>
+  </header>
+  <div class="article-body"><p class="article-lead">A newsletter edition examines the lack of large-scale evidence supporting fears that AI is significantly disrupting white-collar jobs.</p></div>
+  
+  <footer class="item-footer">
+    <div class="tags"><code>#Artificial Intelligence</code>, <code>#Labor Market</code>, <code>#Technology Impact</code>, <code>#Economic Trends</code>, <code>#Future of Work</code></div>
+    
+  </footer>
+</article>
+
+<article id="item-7">
+  <header>
+    <h2 class="item-title"><a href="https://www.technologyreview.com/2026/05/29/1138107/how-the-popes-magnifica-humanitas-offers-a-template-for-individuals-to-meet-the-ai-moment/">How the Pope’s Magnifica Humanitas offers a template for individuals to meet the AI moment</a>
+      <span class="score">⭐️ 7.53375/10</span>
+    </h2>
+    <div class="meta">rss · MIT Technology Review · May 29, 10:00</div>
+  </header>
+  <div class="article-body"><p class="article-lead">Pope Leo XIV’s encyclical *Magnifica Humanitas* presents an ethical framework for addressing AI’s societal impact, emphasizing that technology is never neutral and calling for courage and solidarity in its development.</p></div>
+  
+  <footer class="item-footer">
+    <div class="tags"><code>#AI ethics</code>, <code>#religion and technology</code>, <code>#public policy</code>, <code>#philosophy</code>, <code>#tech governance</code></div>
+    
+  </footer>
+</article>
+
+<article id="item-8">
+  <header>
+    <h2 class="item-title"><a href="https://www.technologyreview.com/2026/05/28/1138085/the-download-climate-tech-ipos-ai-hype-index/">The Download: climate tech goes public and the AI Hype Index returns</a>
+      <span class="score">⭐️ 7.53375/10</span>
+    </h2>
+    <div class="meta">rss · MIT Technology Review · May 28, 12:10</div>
+  </header>
+  <div class="article-body"><p class="article-lead">Climate tech companies like Solv Energy and X-energy are going public, signaling growth in the sector, while MIT Technology Review reintroduces its AI Hype Index to track industry trends.</p></div>
+  
+  <footer class="item-footer">
+    <div class="tags"><code>#climate tech</code>, <code>#IPOs</code>, <code>#AI hype</code>, <code>#renewable energy</code>, <code>#technology trends</code></div>
+    
+  </footer>
+</article>
+
+<article id="item-9">
+  <header>
+    <h2 class="item-title"><a href="https://www.wired.com/story/women-parental-leave-return-office-ai/">New Moms Are Returning to Coding Jobs Radically Reshaped by AI</a>
+      <span class="score">⭐️ 7.53375/10</span>
+    </h2>
+    <div class="meta">rss · Wired · May 28, 11:00</div>
+  </header>
+  <div class="article-body"><p class="article-lead">New mothers returning to software development jobs are navigating workplaces transformed by AI, raising questions about career adaptation and workplace equity.</p></div>
+  
+  <footer class="item-footer">
+    <div class="tags"><code>#AI</code>, <code>#workforce</code>, <code>#gender</code>, <code>#tech industry</code>, <code>#parental leave</code></div>
+    
+  </footer>
+</article>
+
+<article id="item-10">
+  <header>
+    <h2 class="item-title"><a href="https://www.technologyreview.com/2026/05/29/1138110/the-download-lithium-extraction-ebola-ai-pope/">The Download: unlocking lithium and controlling Ebola</a>
+      <span class="score">⭐️ 7.515375000000001/10</span>
+    </h2>
+    <div class="meta">rss · MIT Technology Review · May 29, 12:10</div>
+  </header>
+  <div class="article-body"><p class="article-lead">MIT Technology Review&#39;s newsletter highlights a novel lithium extraction method to reduce costs and emissions for EV production, alongside updates on Ebola control efforts.</p></div>
+  
+  <footer class="item-footer">
+    <div class="tags"><code>#lithium extraction</code>, <code>#clean energy</code>, <code>#Ebola</code>, <code>#public health</code>, <code>#technology innovation</code></div>
+    
+  </footer>
+</article>
+
+<article id="item-11">
+  <header>
+    <h2 class="item-title"><a href="https://www.lesswrong.com/posts/KGcE7eAdfxHchk25X/cognitive-security-as-an-ai-safety-cause-area">Cognitive Security as an AI Safety Cause Area</a>
+      <span class="score">⭐️ 7.441875/10</span>
+    </h2>
+    <div class="meta">rss · LessWrong · May 25, 19:27</div>
+  </header>
+  <div class="article-body"><p class="article-lead">The article argues that advanced AI systems pose growing risks to human cognitive security—such as persuasion, reality distortion, and blackmail—and urges this as a critical AI safety concern.</p></div>
+  
+  <footer class="item-footer">
+    <div class="tags"><code>#AI safety</code>, <code>#cognitive security</code>, <code>#artificial intelligence</code>, <code>#misinformation</code>, <code>#ethics</code></div>
+    
+  </footer>
+</article>
+
+<article id="item-12">
+  <header>
+    <h2 class="item-title"><a href="https://www.technologyreview.com/2026/05/28/1138053/the-ai-hype-index-ai-gets-booed-in-graduation-season/">The AI Hype Index: AI gets booed in graduation season</a>
+      <span class="score">⭐️ 6.7410000000000005/10</span>
+    </h2>
+    <div class="meta">rss · MIT Technology Review · May 28, 09:51</div>
+  </header>
+  <div class="article-body"><p class="article-lead">Graduates at the University of Arizona booed former Google CEO Eric Schmidt’s remarks about AI, highlighting growing skepticism or fatigue around AI hype among younger generations.</p></div>
+  
+  <footer class="item-footer">
+    <div class="tags"><code>#AI</code>, <code>#public sentiment</code>, <code>#technology criticism</code>, <code>#graduation speeches</code>, <code>#generational attitudes</code></div>
+    
+  </footer>
+</article>
+
+<article id="item-13">
+  <header>
+    <h2 class="item-title"><a href="https://www.technologyreview.com/2026/05/27/1138048/the-download-ai-future-ivf-technology/">The Download: keeping up with AI, and the future of IVF</a>
+      <span class="score">⭐️ 6.5756250000000005/10</span>
+    </h2>
+    <div class="meta">rss · MIT Technology Review · May 27, 12:10</div>
+  </header>
+  <div class="article-body"><p class="article-lead">MIT Technology Review&#39;s daily newsletter highlights key developments in AI and the future of IVF technology.</p></div>
+  
+  <footer class="item-footer">
+    <div class="tags"><code>#artificial intelligence</code>, <code>#IVF</code>, <code>#technology trends</code>, <code>#newsletter</code>, <code>#biotechnology</code></div>
+    
+  </footer>
+</article>
+</main></div>
+  </div>
+</body>
+</html>

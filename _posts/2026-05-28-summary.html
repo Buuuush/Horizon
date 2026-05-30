@@ -1,4 +1,3 @@
-
 <!doctype html>
 <html lang="en">
 <head>
@@ -9,15 +8,15 @@
 @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600&family=Manrope:wght@500;700&display=swap');
 
 :root {
-    --bg: #f8f8fb;
+    --bg: #f4fbfb;
     --paper: #ffffff;
-    --surface: #fcfbff;
-    --accent: #325c9b;
+    --surface: #f7fffe;
+    --accent: #007a79;
     --accent-2: color-mix(in srgb, var(--accent) 55%, #b73fd6);
     --accent-3: color-mix(in srgb, var(--accent) 40%, #f59e0b);
-    --accent-soft: #e6eefb;
-    --muted: #5c6372;
-    --text: #1d2230;
+    --accent-soft: #d6f3f2;
+    --muted: #58646e;
+    --text: #0e2a2f;
     --ring: color-mix(in srgb, var(--accent) 32%, transparent);
 }
 
@@ -36,7 +35,6 @@ body {
 
 .container { max-width: 1100px; margin: 1.5rem auto; padding: 1rem; }
 
-/* ── Page header ─────────────────────────────────────────────────────── */
 .summary-header {
     background: var(--paper);
     border: 1px solid color-mix(in srgb, var(--accent) 16%, transparent);
@@ -47,15 +45,6 @@ body {
     position: relative;
     overflow: hidden;
 }
-.summary-header::after {
-    content: "";
-    position: absolute;
-    inset: auto -60px -80px auto;
-    width: 220px; height: 220px;
-    border-radius: 999px;
-    background: radial-gradient(circle, color-mix(in srgb, var(--accent-2) 28%, transparent), transparent 70%);
-    pointer-events: none;
-}
 .summary-header h1 {
     margin: 0;
     font-family: 'Fraunces', 'DM Serif Display', 'Iowan Old Style', 'Palatino Linotype', serif;
@@ -64,8 +53,6 @@ body {
     line-height: 1.15;
 }
 .lead { margin: .55rem 0 1.1rem; color: var(--muted); font-size: 1.04rem; max-width: 78ch; }
-
-/* ── TOC ─────────────────────────────────────────────────────────────── */
 .toc-title {
     margin: 0 0 .45rem;
     font-family: 'Manrope', 'Segoe UI', sans-serif;
@@ -85,13 +72,9 @@ body {
     border: 1px solid color-mix(in srgb, var(--accent) 16%, transparent);
     border-radius: 10px;
     padding: .55rem .65rem;
-    transition: transform .18s ease, box-shadow .18s ease;
 }
-.toc li:hover { transform: translateY(-1px); box-shadow: 0 8px 20px color-mix(in srgb, var(--accent) 15%, transparent); }
 .toc a { text-decoration: none; color: var(--text); }
 .toc-score { color: var(--accent); font-family: 'Manrope', 'Segoe UI', sans-serif; font-size: .85rem; font-weight: 600; }
-
-/* ── Article cards ───────────────────────────────────────────────────── */
 .items { display: grid; gap: .95rem; }
 .items article {
     background: var(--paper);
@@ -108,36 +91,15 @@ body {
 }
 .item-title a { color: inherit; text-decoration: none; }
 .item-title a:hover { color: var(--accent); }
-.item-title a:focus-visible, .toc a:focus-visible, summary:focus-visible {
-    outline: 2px solid var(--ring);
-    outline-offset: 2px;
-    border-radius: 6px;
-}
 .meta { color: var(--muted); font-family: 'Manrope', 'Segoe UI', sans-serif; font-size: .88rem; margin-bottom: .9rem; }
 .score { color: var(--accent); margin-left: .45rem; font-weight: 700; font-family: 'Manrope', 'Segoe UI', sans-serif; font-size: .95rem; }
-
 .article-body { border-top: 1px solid color-mix(in srgb, var(--accent) 10%, transparent); padding-top: 1rem; }
-
-.item-footer {
-    margin-top: 1rem;
-    padding-top: .65rem;
-    border-top: 1px solid color-mix(in srgb, var(--muted) 18%, transparent);
-}
-
-.evidence-note {
-    margin: .8rem 0 0;
-    color: var(--muted);
-    font-size: .92rem;
-    font-style: italic;
-}
-
+.item-footer { margin-top: 1rem; padding-top: .65rem; border-top: 1px solid color-mix(in srgb, var(--muted) 18%, transparent); }
+.evidence-note { margin: .8rem 0 0; color: var(--muted); font-size: .92rem; font-style: italic; }
 .tags { color: var(--muted); font-family: 'Manrope', 'Segoe UI', sans-serif; font-size: .88rem; margin-bottom: .45rem; }
 code { background: color-mix(in srgb, var(--accent-soft) 65%, #ffffff); border-radius: 8px; padding: .12rem .4rem; }
-
 details { margin-top: .5rem; }
 details summary { cursor: pointer; color: var(--accent); font-family: 'Manrope', 'Segoe UI', sans-serif; font-size: .9rem; }
-
-/* ── Dark mode ───────────────────────────────────────────────────────── */
 @media (prefers-color-scheme: dark) {
     :root {
         --bg: #0f1420; --paper: #161d2c; --surface: #1b2435;
@@ -157,10 +119,7 @@ details summary { cursor: pointer; color: var(--accent); font-family: 'Manrope',
     code { background: rgba(124,177,255,.16); }
     .article-background { background: linear-gradient(170deg, #1b2435, #1f2a3f); }
 }
-
-@media (max-width: 860px) {
-    .container { margin: .7rem auto; padding: .65rem; }
-}
+@media (max-width: 860px) { .container { margin: .7rem auto; padding: .65rem; } }
 
 /* ── Editorial article layout ─────────────────────────────────────────── */
 
@@ -177,15 +136,15 @@ details summary { cursor: pointer; color: var(--accent); font-family: 'Manrope',
     margin-top: 1.55rem;
 }
 
-.article-section h3 {
+.article-section h2 {
     font-family: 'Manrope', 'Segoe UI', sans-serif;
-    font-size: .78rem;
-    text-transform: uppercase;
-    letter-spacing: .12em;
+    font-size: 1.28rem;
+    line-height: 1.3;
     color: var(--accent);
-    margin: 0 0 .45rem;
+    margin: 0 0 .65rem;
     padding-bottom: .25rem;
-    border-bottom: 1px solid color-mix(in srgb, var(--accent) 22%, transparent);
+    padding-left: .75rem;
+    border-left: 4px solid var(--accent);
 }
 
 .article-section p {
@@ -241,18 +200,27 @@ details summary { cursor: pointer; color: var(--accent); font-family: 'Manrope',
     color: var(--muted);
 }
 
-.tab-switcher {
-    display: flex; gap: .5rem; margin-bottom: 1.5rem;
-    border-bottom: 2px solid color-mix(in srgb, var(--accent) 20%, transparent);
+blockquote {
+    margin: 1.2rem 0 0;
+    padding: 1rem 1.1rem;
+    border-left: 5px solid var(--accent);
+    background: color-mix(in srgb, var(--surface) 70%, #ffffff);
+    border-radius: 0 10px 10px 0;
+    font-style: italic;
+    color: var(--text);
 }
+
+blockquote p {
+    margin: 0;
+}
+
+.tab-switcher { display: flex; gap: .5rem; margin-bottom: 1.5rem; border-bottom: 2px solid color-mix(in srgb, var(--accent) 20%, transparent); }
 .tab-button {
     background: transparent; border: none; color: var(--muted);
     font-family: 'Manrope', 'Segoe UI', sans-serif; font-size: 1rem; font-weight: 600;
     padding: .75rem 1.2rem; cursor: pointer;
-    transition: color .18s ease, border-color .18s ease;
     border-bottom: 3px solid transparent;
 }
-.tab-button:hover { color: var(--text); }
 .tab-button.active { color: var(--accent); border-bottom-color: var(--accent); }
 .tab-content { display: none; animation: fadeIn .2s ease-in; }
 .tab-content.active { display: block; }
@@ -262,419 +230,692 @@ details summary { cursor: pointer; color: var(--accent); font-family: 'Manrope',
   <script>
     function switchTab(button) {
       const lang = button.getAttribute('data-lang');
-      const allButtons = document.querySelectorAll('.tab-button');
-      const allContents = document.querySelectorAll('.tab-content');
-      allButtons.forEach(b => b.classList.remove('active'));
-      allContents.forEach(c => c.classList.remove('active'));
+      document.querySelectorAll('.tab-button').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
       button.classList.add('active');
-      document.querySelector(`.tab-content[data-lang="${lang}"]`).classList.add('active');
+      const active = document.querySelector(`.tab-content[data-lang="${lang}"]`);
+      if (active) active.classList.add('active');
     }
   </script>
 </head>
 <body>
   <div class="container">
-    <div class="tab-switcher">
-      <button class="tab-button active" onclick="switchTab(this)" data-lang="fr">Français</button><button class="tab-button " onclick="switchTab(this)" data-lang="en">English</button>
-    </div>
-    <div class="tab-content active" data-lang="fr"><section class="summary-header">
+    <div class="tab-switcher"><button class="tab-button active" onclick="switchTab(this)" data-lang="fr">Français</button><button class="tab-button " onclick="switchTab(this)" data-lang="en">English</button></div>
+    <div class="tab-content active" data-lang="fr"><!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Horizon — 2026-05-28</title>
+  <style>
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600&family=Manrope:wght@500;700&display=swap');
+
+:root {
+    --bg: #f4fbfb;
+    --paper: #ffffff;
+    --surface: #f7fffe;
+    --accent: #007a79;
+    --accent-2: color-mix(in srgb, var(--accent) 55%, #b73fd6);
+    --accent-3: color-mix(in srgb, var(--accent) 40%, #f59e0b);
+    --accent-soft: #d6f3f2;
+    --muted: #58646e;
+    --text: #0e2a2f;
+    --ring: color-mix(in srgb, var(--accent) 32%, transparent);
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+    color: var(--text);
+    background:
+        radial-gradient(1300px 420px at -10% -20%, var(--accent-soft), transparent 60%),
+        radial-gradient(760px 300px at 88% -12%, color-mix(in srgb, var(--accent-2) 24%, transparent), transparent 66%),
+        radial-gradient(640px 240px at 30% 0%, color-mix(in srgb, var(--accent-3) 18%, transparent), transparent 70%),
+        var(--bg);
+    font-family: 'Source Serif 4', Georgia, serif;
+    line-height: 1.78;
+}
+
+.container { max-width: 1100px; margin: 1.5rem auto; padding: 1rem; }
+
+.summary-header {
+    background: var(--paper);
+    border: 1px solid color-mix(in srgb, var(--accent) 16%, transparent);
+    border-radius: 24px;
+    padding: 1.5rem 1.6rem 1.1rem;
+    box-shadow: 0 18px 48px rgba(19, 33, 68, 0.08);
+    margin-bottom: 1rem;
+    position: relative;
+    overflow: hidden;
+}
+.summary-header h1 {
+    margin: 0;
+    font-family: 'Fraunces', 'DM Serif Display', 'Iowan Old Style', 'Palatino Linotype', serif;
+    letter-spacing: .01em;
+    font-size: clamp(1.8rem, 3.6vw, 2.8rem);
+    line-height: 1.15;
+}
+.lead { margin: .55rem 0 1.1rem; color: var(--muted); font-size: 1.04rem; max-width: 78ch; }
+.toc-title {
+    margin: 0 0 .45rem;
+    font-family: 'Manrope', 'Segoe UI', sans-serif;
+    font-size: .85rem;
+    text-transform: uppercase;
+    letter-spacing: .11em;
+    color: var(--muted);
+}
+.toc ul {
+    list-style: none; margin: 0; padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: .55rem;
+}
+.toc li {
+    background: linear-gradient(160deg, var(--surface), color-mix(in srgb, var(--accent-soft) 48%, #ffffff));
+    border: 1px solid color-mix(in srgb, var(--accent) 16%, transparent);
+    border-radius: 10px;
+    padding: .55rem .65rem;
+}
+.toc a { text-decoration: none; color: var(--text); }
+.toc-score { color: var(--accent); font-family: 'Manrope', 'Segoe UI', sans-serif; font-size: .85rem; font-weight: 600; }
+.items { display: grid; gap: .95rem; }
+.items article {
+    background: var(--paper);
+    border: 1px solid color-mix(in srgb, var(--accent) 15%, transparent);
+    border-radius: 20px;
+    padding: 1.4rem 1.6rem 1.1rem;
+    box-shadow: 0 10px 32px rgba(0, 0, 0, 0.05);
+}
+.item-title {
+    font-family: 'Fraunces', 'DM Serif Display', 'Iowan Old Style', 'Palatino Linotype', serif;
+    font-size: clamp(1.2rem, 2.2vw, 1.55rem);
+    margin: 0 0 .3rem;
+    line-height: 1.22;
+}
+.item-title a { color: inherit; text-decoration: none; }
+.item-title a:hover { color: var(--accent); }
+.meta { color: var(--muted); font-family: 'Manrope', 'Segoe UI', sans-serif; font-size: .88rem; margin-bottom: .9rem; }
+.score { color: var(--accent); margin-left: .45rem; font-weight: 700; font-family: 'Manrope', 'Segoe UI', sans-serif; font-size: .95rem; }
+.article-body { border-top: 1px solid color-mix(in srgb, var(--accent) 10%, transparent); padding-top: 1rem; }
+.item-footer { margin-top: 1rem; padding-top: .65rem; border-top: 1px solid color-mix(in srgb, var(--muted) 18%, transparent); }
+.evidence-note { margin: .8rem 0 0; color: var(--muted); font-size: .92rem; font-style: italic; }
+.tags { color: var(--muted); font-family: 'Manrope', 'Segoe UI', sans-serif; font-size: .88rem; margin-bottom: .45rem; }
+code { background: color-mix(in srgb, var(--accent-soft) 65%, #ffffff); border-radius: 8px; padding: .12rem .4rem; }
+details { margin-top: .5rem; }
+details summary { cursor: pointer; color: var(--accent); font-family: 'Manrope', 'Segoe UI', sans-serif; font-size: .9rem; }
+@media (prefers-color-scheme: dark) {
+    :root {
+        --bg: #0f1420; --paper: #161d2c; --surface: #1b2435;
+        --accent: #7cb1ff; --accent-2: #c28cff; --accent-3: #ffc36c;
+        --accent-soft: #1a2740; --muted: #a6b4cd; --text: #edf2ff;
+        --ring: rgba(124, 177, 255, 0.55);
+    }
+    body {
+        background:
+            radial-gradient(1200px 420px at -10% -20%, #1a2740, transparent 60%),
+            radial-gradient(760px 300px at 88% -12%, rgba(194, 140, 255, 0.2), transparent 66%),
+            radial-gradient(640px 240px at 30% 0%, rgba(255, 195, 108, 0.14), transparent 70%),
+            var(--bg);
+    }
+    .summary-header, .items article { border-color: rgba(124,177,255,.24); box-shadow: 0 18px 44px rgba(0,0,0,.32); }
+    .toc li { border-color: rgba(124,177,255,.22); background: linear-gradient(170deg, #1b2435, #1f2a3f); }
+    code { background: rgba(124,177,255,.16); }
+    .article-background { background: linear-gradient(170deg, #1b2435, #1f2a3f); }
+}
+@media (max-width: 860px) { .container { margin: .7rem auto; padding: .65rem; } }
+
+/* ── Editorial article layout ─────────────────────────────────────────── */
+
+.article-lead {
+    font-size: 1.18rem;
+    color: var(--muted);
+    line-height: 1.7;
+    margin: .3rem 0 1.4rem;
+    max-width: 72ch;
+    font-style: italic;
+}
+
+.article-section {
+    margin-top: 1.55rem;
+}
+
+.article-section h2 {
+    font-family: 'Manrope', 'Segoe UI', sans-serif;
+    font-size: 1.28rem;
+    line-height: 1.3;
+    color: var(--accent);
+    margin: 0 0 .65rem;
+    padding-bottom: .25rem;
+    padding-left: .75rem;
+    border-left: 4px solid var(--accent);
+}
+
+.article-section p {
+    margin: 0;
+    font-size: 1.03rem;
+    line-height: 1.85;
+    color: var(--text);
+}
+
+.article-section p + p {
+    margin-top: .8rem;
+}
+
+.article-background {
+    margin-top: 1.4rem;
+    padding: 1rem 1.1rem;
+    background: linear-gradient(170deg, var(--surface), color-mix(in srgb, var(--accent-soft) 30%, #fff));
+    border-left: 3px solid var(--accent);
+    border-radius: 0 10px 10px 0;
+    font-size: .98rem;
+    line-height: 1.78;
+    color: var(--text);
+}
+
+.article-background strong {
+    display: block;
+    font-family: 'Manrope', 'Segoe UI', sans-serif;
+    font-size: .78rem;
+    text-transform: uppercase;
+    letter-spacing: .1em;
+    color: var(--accent);
+    margin-bottom: .35rem;
+}
+
+.article-discussion {
+    margin-top: 1.2rem;
+    padding: .85rem 1rem;
+    border-left: 3px solid color-mix(in srgb, var(--muted) 40%, transparent);
+    font-style: italic;
+    font-size: .98rem;
+    color: var(--muted);
+    line-height: 1.75;
+}
+
+.article-discussion strong {
+    font-style: normal;
+    font-family: 'Manrope', 'Segoe UI', sans-serif;
+    font-size: .78rem;
+    text-transform: uppercase;
+    letter-spacing: .1em;
+    display: block;
+    margin-bottom: .3rem;
+    color: var(--muted);
+}
+
+blockquote {
+    margin: 1.2rem 0 0;
+    padding: 1rem 1.1rem;
+    border-left: 5px solid var(--accent);
+    background: color-mix(in srgb, var(--surface) 70%, #ffffff);
+    border-radius: 0 10px 10px 0;
+    font-style: italic;
+    color: var(--text);
+}
+
+blockquote p {
+    margin: 0;
+}
+</style>
+</head>
+<body>
+  <div class="container">
+    
+<section class="summary-header">
   <h1>Horizon Quotidien — 2026-05-28</h1>
-  <p class="lead">Parmi 515 contenus collectés, 12 sujets essentiels ont été sélectionnés.</p>
+  <p class="lead">Parmi 20 contenus collectés, 7 sujets essentiels ont été sélectionnés.</p>
   <nav class="toc" aria-label="Sommaire">
     <p class="toc-title">Sommaire</p>
-    <ul><li><a href="#item-1">Websites have a new way to spy on visitors: analyzing their SSD activity <span class="toc-score">⭐️ 7.68075/10</span></a></li>
-<li><a href="#item-2">Rethinking organizational design in the age of agentic AI <span class="toc-score">⭐️ 7.588875/10</span></a></li>
-<li><a href="#item-3">Roundtables: Can AI Learn to Understand the World? <span class="toc-score">⭐️ 7.552125/10</span></a></li>
-<li><a href="#item-4">Google Security Engineer Arrested in Million-Dollar Polymarket Trading Scheme <span class="toc-score">⭐️ 7.552125/10</span></a></li>
-<li><a href="#item-5">Scaling creativity in the age of AI <span class="toc-score">⭐️ 7.53375/10</span></a></li>
-<li><a href="#item-6">The Download: puncturing the AI jobs panic <span class="toc-score">⭐️ 7.497/10</span></a></li>
-<li><a href="#item-7">The Download: coding’s future, the ‘Steroid Olympics,’ and AI-driven science <span class="toc-score">⭐️ 7.460250000000001/10</span></a></li>
-<li><a href="#item-8">Google I/O showed how the path for AI-driven science is shifting <span class="toc-score">⭐️ 7.460250000000001/10</span></a></li>
-<li><a href="#item-9">Cognitive Security as an AI Safety Cause Area <span class="toc-score">⭐️ 7.405125000000001/10</span></a></li>
-<li><a href="#item-10">A reality check on the AI jobs hysteria <span class="toc-score">⭐️ 7.3500000000000005/10</span></a></li>
-<li><a href="#item-11">The Download: keeping up with AI, and the future of IVF <span class="toc-score">⭐️ 6.612375000000001/10</span></a></li>
-<li><a href="#item-12">Full automation of AI R&amp;D probably yields a large speed up even without a software-only singularity <span class="toc-score">⭐️ 6.4837500000000015/10</span></a></li></ul>
+    <ul><li><a href="#item-1">Oceanic regime shifts affect subarctic moth communities—impacts divide species into winners and losers <span class="toc-score">10.0/10</span></a></li>
+<li><a href="#item-2">Something just passed between us and a distant star <span class="toc-score">9.79335/10</span></a></li>
+<li><a href="#item-3">LLMs believe false statements even after explicit warnings that they&#39;re false <span class="toc-score">8.510250000000001/10</span></a></li>
+<li><a href="#item-4">Claude Opus 4.8 AgentsViolate EU Law <span class="toc-score">8.4/10</span></a></li>
+<li><a href="#item-5">DOJ probe targets Reid Hoffman nonprofit tied to E. Jean Carroll case <span class="toc-score">8.381625/10</span></a></li>
+<li><a href="#item-6">GSK Drug Shows Potential Cure for Chronic Hepatitis B <span class="toc-score">8.161125/10</span></a></li>
+<li><a href="#item-7">My collaborator screen-recorded our entire AI build without telling me and says he can sell my process. I&#39;m the project lead, not the engineer. What can he actually do with that? [D] <span class="toc-score">8.06925/10</span></a></li></ul>
   </nav>
 </section>
 <main class="items">
 <article id="item-1">
   <header>
-    <h2 class="item-title"><a href="https://arstechnica.com/security/2026/05/websites-have-a-new-way-to-spy-on-visitors-analyzing-their-ssd-activity/">Websites have a new way to spy on visitors: analyzing their SSD activity</a>
-      <span class="score">⭐️ 7.68075/10</span>
+    <h2 class="item-title"><a href="https://phys.org/news/2026-05-oceanic-regime-shifts-affect-subarctic.html">Oceanic regime shifts affect subarctic moth communities—impacts divide species into winners and losers</a>
     </h2>
-    <div class="meta">rss · Ars Technica · May 27, 20:56</div>
+    <div class="meta">rss · Phys.org · May 28, 21:40</div>
   </header>
-  <div class="article-body"><p class="article-lead">Telltale SSD activity can be measured in the browser using simple JavaScript.</p></div>
+  <div class="article-body"><p class="article-lead">Regime shifts in the Atlantic Ocean, which have subsequently affected the Baltic Sea, are also impacting moths in Lapland, according to a new study conducted at the University of Turku in Finland. The paper is published in the journal Insect Conservation and Diversity.</p><blockquote><p>High-value content due to its novelty and relevance to environmental science, with well-sourced information from a reputable academic institution and publication. | adjustments: topic_boosts=Ecology</p></blockquote></div>
   
   <footer class="item-footer">
-    <div class="tags"><code>#digital privacy</code>, <code>#cybersecurity</code>, <code>#browser vulnerabilities</code>, <code>#side-channel attacks</code>, <code>#technology</code></div>
+    <div class="tags"><code>#Environmental Science</code>, <code>#Ecology</code>, <code>#Climate Change</code>, <code>#Biodiversity</code></div>
     
   </footer>
 </article>
 
 <article id="item-2">
   <header>
-    <h2 class="item-title"><a href="https://www.technologyreview.com/2026/05/26/1137584/rethinking-organizational-design-in-the-age-of-agentic-ai/">Rethinking organizational design in the age of agentic AI</a>
-      <span class="score">⭐️ 7.588875/10</span>
+    <h2 class="item-title"><a href="https://phys.org/news/2026-05-distant-star.html">Something just passed between us and a distant star</a>
     </h2>
-    <div class="meta">rss · MIT Technology Review · May 26, 14:54</div>
+    <div class="meta">rss · Phys.org · May 28, 21:20</div>
   </header>
-  <div class="article-body"><p class="article-lead">Amid rapidly growing adoption of enterprise-level AI agents, there’s a disconnect emerging between ambition and execution. Although 85% of organizations say they want to be agentic within the next three years, 76% say their current operations and infrastructure can’t support that change. They cite a lack of readiness across people, processes, and workflows. The sticky…</p></div>
+  <div class="article-body"><p class="article-lead">On the night of 18 December 2019, a star in our satellite galaxy, the Large Magellanic Cloud, briefly got brighter. Not dramatically nor explosively, just a smooth symmetrical rise and fall in brightness lasting about an hour, as though something had passed in front of it and bent its light toward us. Then it returned to normal and was never seen to vary again.</p><blockquote><p>High-value content due to unique astronomical event and clear explanation | adjustments: topic_boosts=Space</p></blockquote></div>
   
   <footer class="item-footer">
-    <div class="tags"><code>#AI adoption</code>, <code>#organizational design</code>, <code>#enterprise technology</code>, <code>#workforce readiness</code>, <code>#digital transformation</code></div>
+    <div class="tags"><code>#Astronomy</code>, <code>#Space</code>, <code>#Astrophysics</code></div>
     
   </footer>
 </article>
 
 <article id="item-3">
   <header>
-    <h2 class="item-title"><a href="https://www.technologyreview.com/2026/05/21/1137756/roundtables-can-ai-learn-to-understand-the-world/">Roundtables: Can AI Learn to Understand the World?</a>
-      <span class="score">⭐️ 7.552125/10</span>
+    <h2 class="item-title"><a href="https://arstechnica.com/ai/2026/05/llms-believe-false-statements-even-after-explicit-warnings-that-theyre-false/">LLMs believe false statements even after explicit warnings that they&#39;re false</a>
     </h2>
-    <div class="meta">rss · MIT Technology Review · May 21, 20:41</div>
+    <div class="meta">rss · Ars Technica · May 28, 21:29</div>
   </header>
-  <div class="article-body"><p class="article-lead">Listen to the session or watch below AI companies want to build systems that understand the external world and overcome the limitations of LLMs. Recent developments have brought world models to the forefront of the AI discussion. Watch a conversation with editor in chief Mat Honan, senior AI editor Will Douglas Heaven, and AI reporter…</p></div>
+  <div class="article-body"><p class="article-lead">Fine-tuning tests show &quot;bias ... toward confidently representing the claims as true.&quot;</p><blockquote><p>The article discusses a significant issue with LLMs believing false statements despite warnings, indicating a potential flaw in AI development, with well-structured reporting from a reputable source.</p></blockquote></div>
   
   <footer class="item-footer">
-    <div class="tags"><code>#artificial intelligence</code>, <code>#AI world models</code>, <code>#LLMs</code>, <code>#technology trends</code>, <code>#future of AI</code></div>
+    <div class="tags"><code>#AI</code>, <code>#LLMs</code>, <code>#Machine Learning</code>, <code>#Artificial Intelligence</code></div>
     
   </footer>
 </article>
 
 <article id="item-4">
   <header>
-    <h2 class="item-title"><a href="https://www.wired.com/story/google-employee-accused-of-polymarket-one-million/">Google Security Engineer Arrested in Million-Dollar Polymarket Trading Scheme</a>
-      <span class="score">⭐️ 7.552125/10</span>
+    <h2 class="item-title"><a href="https://www.lesswrong.com/posts/8JgMgyihbYEikS3Sp/claude-opus-4-8-agentsviolate-eu-law">Claude Opus 4.8 AgentsViolate EU Law</a>
     </h2>
-    <div class="meta">rss · Wired · May 27, 22:22</div>
+    <div class="meta">rss · LessWrong · May 28, 21:26</div>
   </header>
-  <div class="article-body"><p class="article-lead">According to federal prosecutors, Michele Spagnuolo made more than $1 million on the prediction market platform using confidential information about Google Search traffic.</p></div>
+  <div class="article-body"><p class="article-lead">TL;DR: Like other models including its predecessor, Opus 4.8 frequently violates provisions of both the EU AI Act and data protection laws when deployed in an agentic context where carrying out its task would break the law. Agentic alignment is challenging. When models are deployed in an agentic context, providing services to one party on behalf of another, multiple stakeholders are suddenly demanding different things, and the &quot;helpful, harmless, honest&quot; framing starts to pull models in different directions, and si...</p><blockquote><p>The article discusses a significant issue with AI models, including Claude Opus 4.8, violating EU law when deployed in an agentic context, highlighting the challenges of agentic alignment and the need for legal compliance, with well-structured arguments and references to relevant laws and standards.</p></blockquote></div>
   
   <footer class="item-footer">
-    <div class="tags"><code>#insider trading</code>, <code>#tech ethics</code>, <code>#financial markets</code>, <code>#corporate misconduct</code>, <code>#prediction markets</code></div>
+    <div class="tags"><code>#AI</code>, <code>#EU Law</code>, <code>#Agentic Alignment</code>, <code>#AI Ethics</code></div>
     
   </footer>
 </article>
 
 <article id="item-5">
   <header>
-    <h2 class="item-title"><a href="https://www.technologyreview.com/2026/05/21/1137613/scaling-creativity-in-the-age-of-ai/">Scaling creativity in the age of AI</a>
-      <span class="score">⭐️ 7.53375/10</span>
+    <h2 class="item-title"><a href="https://www.axios.com/2026/05/28/doj-e-jean-carroll-funding-reid-hoffman-review">DOJ probe targets Reid Hoffman nonprofit tied to E. Jean Carroll case</a>
     </h2>
-    <div class="meta">rss · MIT Technology Review · May 21, 19:16</div>
+    <div class="meta">rss · Axios · May 28, 21:32</div>
   </header>
-  <div class="article-body"><p class="article-lead">Storytelling is core to humanity’s DNA, stemming from our impulse to express ideals, warnings, hopes, and experiences. Technology has always been woven through the medium and the distribution: from early humans’ innovation of natural pigments and charcoals for cave paintings to literal representation by the camera. The landscape of storytelling continues to shift under our…</p></div>
+  <div class="article-body"><p class="article-lead">The Department of Justice is investigating the nonprofit of billionaire Reid Hoffman, which made contributions that were partially used for E. Jean Carroll&#39;s legal expenses during her civil lawsuit against President Trump , a source familiar tells Axios. Why it matters: The investigation raises concerns about a pattern of retaliation against Trump critics while testing the independence of DOJ officials. Hoffman, a LinkedIn co-founder, has donated millions to Democratic causes and the party over the years and is a l...</p><blockquote><p>The article reports on a significant investigation by the Department of Justice into a nonprofit organization tied to a high-profile case, with implications for the independence of DOJ officials and potential retaliation against Trump critics. The content is well-sourced and provides relevant context.</p></blockquote></div>
   
   <footer class="item-footer">
-    <div class="tags"><code>#AI</code>, <code>#creativity</code>, <code>#technology</code>, <code>#storytelling</code>, <code>#digital culture</code></div>
+    <div class="tags"><code>#DOJ investigation</code>, <code>#Reid Hoffman</code>, <code>#E. Jean Carroll</code>, <code>#Trump lawsuit</code></div>
     
   </footer>
 </article>
 
 <article id="item-6">
   <header>
-    <h2 class="item-title"><a href="https://www.technologyreview.com/2026/05/26/1138028/the-download-ai-jobs-data/">The Download: puncturing the AI jobs panic</a>
-      <span class="score">⭐️ 7.497/10</span>
+    <h2 class="item-title"><a href="https://www.reddit.com/r/Futurology/comments/1tqhdd4/gsk_drug_shows_potential_cure_for_chronic/">GSK Drug Shows Potential Cure for Chronic Hepatitis B</a>
     </h2>
-    <div class="meta">rss · MIT Technology Review · May 26, 12:10</div>
+    <div class="meta">rss · r_futurology · May 28, 21:38</div>
   </header>
-  <div class="article-body"><p class="article-lead">This is today’s edition of The Download, our weekday newsletter that provides a daily dose of what’s going on in the world of technology. A reality check on the AI jobs hysteria Despite the growing hysteria over AI’s threat to white-collar jobs, there’s still scant evidence that the technology has had a large-scale impact on…</p></div>
+  <div class="article-body"><p class="article-lead">Is bepirovirsen a genuine breakthrough for hepatitis B or is it too early to celebrate a cure? submitted by /u/Substantial_Novel590 [link] [comments]</p><blockquote><p>The content discusses a potential cure for chronic hepatitis B, a significant medical breakthrough, with a link to a news article from Verity News, indicating a good level of journalistic quality and relevance to current events in the medical field.</p></blockquote></div>
   
   <footer class="item-footer">
-    <div class="tags"><code>#Artificial Intelligence</code>, <code>#Labor Market</code>, <code>#Technology Impact</code>, <code>#Economic Policy</code>, <code>#Future of Work</code></div>
+    <div class="tags"><code>#Hepatitis B</code>, <code>#Medical Breakthrough</code>, <code>#GSK</code>, <code>#Pharmaceuticals</code>, <code>#Health</code></div>
     
   </footer>
 </article>
 
 <article id="item-7">
   <header>
-    <h2 class="item-title"><a href="https://www.technologyreview.com/2026/05/22/1137845/the-download-coding-future-steroid-olympics-ai-science/">The Download: coding’s future, the ‘Steroid Olympics,’ and AI-driven science</a>
-      <span class="score">⭐️ 7.460250000000001/10</span>
+    <h2 class="item-title"><a href="https://www.reddit.com/r/MachineLearning/comments/1tqhdb6/my_collaborator_screenrecorded_our_entire_ai/">My collaborator screen-recorded our entire AI build without telling me and says he can sell my process. I&#39;m the project lead, not the engineer. What can he actually do with that? (D)</a>
     </h2>
-    <div class="meta">rss · MIT Technology Review · May 22, 12:10</div>
+    <div class="meta">rss · r_machinelearning · May 28, 21:37</div>
   </header>
-  <div class="article-body"><p class="article-lead">This is today’s edition of The Download, our weekday newsletter that provides a daily dose of what’s going on in the world of technology. Anthropic’s Code with Claude showed off coding’s future—whether you like it or not At Anthropic’s developer event in London this week, Code with Claude, attendees were asked if they’d shipped code…</p></div>
+  <div class="article-body"><p class="article-lead">I&#39;m looking for engineering and process guidance, not legal advice. I&#39;m a domain expert with a specialized applied behavioral background. Over the last six months, I designed the core logic and methodology for a model alignment tool essentially translating my domain reasoning into a working system. A collaborator was implementing it. His contribution was limited: roughly 40–50 hours over six months. He has no background in AI or alignment. Most of the coding was done with AI coding tools, with him running and debug...</p><blockquote><p>The content discusses a significant issue related to intellectual property and collaboration in AI development, with the project lead seeking guidance on the potential implications of their collaborator screen-recording the entire AI build process without consent. The discussion quality is high, with the author providing detailed context and clear explanations.</p></blockquote></div>
   
   <footer class="item-footer">
-    <div class="tags"><code>#AI</code>, <code>#technology trends</code>, <code>#coding</code>, <code>#sports science</code>, <code>#future of work</code></div>
+    <div class="tags"><code>#AI development</code>, <code>#Intellectual property</code>, <code>#Collaboration</code>, <code>#Machine learning</code></div>
     
   </footer>
 </article>
+</main>
 
-<article id="item-8">
-  <header>
-    <h2 class="item-title"><a href="https://www.technologyreview.com/2026/05/22/1137813/google-i-o-showed-how-the-path-for-ai-science-is-shifting/">Google I/O showed how the path for AI-driven science is shifting</a>
-      <span class="score">⭐️ 7.460250000000001/10</span>
-    </h2>
-    <div class="meta">rss · MIT Technology Review · May 22, 10:00</div>
-  </header>
-  <div class="article-body"><p class="article-lead">During Tuesday’s Google I/O keynote, Demis Hassabis, the CEO of Google DeepMind, proclaimed that we are currently “standing in the foothills of the singularity.” It was a striking statement—the singularity is the theoretical future moment when AI rapidly exceeds human intelligence and dramatically transforms the world. But what struck me as I listened in the…</p></div>
-  
-  <footer class="item-footer">
-    <div class="tags"><code>#Artificial Intelligence</code>, <code>#Singularity</code>, <code>#Google DeepMind</code>, <code>#Technology Trends</code>, <code>#Science and Technology</code></div>
-    
-  </footer>
-</article>
+  </div>
+</body>
+</html>
+</div><div class="tab-content " data-lang="en"><!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Horizon — 2026-05-28</title>
+  <style>
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600&family=Manrope:wght@500;700&display=swap');
 
-<article id="item-9">
-  <header>
-    <h2 class="item-title"><a href="https://www.lesswrong.com/posts/KGcE7eAdfxHchk25X/cognitive-security-as-an-ai-safety-cause-area">Cognitive Security as an AI Safety Cause Area</a>
-      <span class="score">⭐️ 7.405125000000001/10</span>
-    </h2>
-    <div class="meta">rss · LessWrong · May 25, 19:27</div>
-  </header>
-  <div class="article-body"><p class="article-lead">As AI systems become more capable, the cognitive security of humans will be increasingly at risk. By cognitive security, I mean the ability of humans to maintain control over their beliefs and actions. Cognitive security could be compromised in several ways: AI could become very good at persuading people of arbitrary positions; interacting with AI could lead humans to lose touch with reality; and AIs could become very effective at blackmail or at producing extremely convincing false information. We are already seei...</p></div>
-  
-  <footer class="item-footer">
-    <div class="tags"><code>#AI safety</code>, <code>#cognitive security</code>, <code>#artificial intelligence</code>, <code>#ethics</code>, <code>#emerging risks</code></div>
-    
-  </footer>
-</article>
+:root {
+    --bg: #f4fbfb;
+    --paper: #ffffff;
+    --surface: #f7fffe;
+    --accent: #007a79;
+    --accent-2: color-mix(in srgb, var(--accent) 55%, #b73fd6);
+    --accent-3: color-mix(in srgb, var(--accent) 40%, #f59e0b);
+    --accent-soft: #d6f3f2;
+    --muted: #58646e;
+    --text: #0e2a2f;
+    --ring: color-mix(in srgb, var(--accent) 32%, transparent);
+}
 
-<article id="item-10">
-  <header>
-    <h2 class="item-title"><a href="https://www.technologyreview.com/2026/05/26/1137855/a-reality-check-on-the-ai-jobs-hysteria/">A reality check on the AI jobs hysteria</a>
-      <span class="score">⭐️ 7.3500000000000005/10</span>
-    </h2>
-    <div class="meta">rss · MIT Technology Review · May 26, 09:00</div>
-  </header>
-  <div class="article-body"><p class="article-lead">Haven’t you heard? White-collar jobs are going away, decimated by AI. Waves of layoffs in the tech sector (most recently at Coinbase and Meta and Cisco) are said to presage what will soon come for all of us knowledge workers. But before you quit your job as a software developer or financial analyst—or tech journalist—and…</p></div>
-  
-  <footer class="item-footer">
-    <div class="tags"><code>#artificial intelligence</code>, <code>#labor market</code>, <code>#economic impact</code>, <code>#tech industry</code>, <code>#future of work</code></div>
-    
-  </footer>
-</article>
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+    color: var(--text);
+    background:
+        radial-gradient(1300px 420px at -10% -20%, var(--accent-soft), transparent 60%),
+        radial-gradient(760px 300px at 88% -12%, color-mix(in srgb, var(--accent-2) 24%, transparent), transparent 66%),
+        radial-gradient(640px 240px at 30% 0%, color-mix(in srgb, var(--accent-3) 18%, transparent), transparent 70%),
+        var(--bg);
+    font-family: 'Source Serif 4', Georgia, serif;
+    line-height: 1.78;
+}
 
-<article id="item-11">
-  <header>
-    <h2 class="item-title"><a href="https://www.technologyreview.com/2026/05/27/1138048/the-download-ai-future-ivf-technology/">The Download: keeping up with AI, and the future of IVF</a>
-      <span class="score">⭐️ 6.612375000000001/10</span>
-    </h2>
-    <div class="meta">rss · MIT Technology Review · May 27, 12:10</div>
-  </header>
-  <div class="article-body"><p class="article-lead">This is today’s edition of The Download, our weekday newsletter that provides a daily dose of what’s going on in the world of technology. Stay on top of what’s going on in AI this summer Here at MIT Technology Review, we understand exactly how relentless the pace of news from the world of artificial intelligence…</p></div>
-  
-  <footer class="item-footer">
-    <div class="tags"><code>#artificial intelligence</code>, <code>#IVF</code>, <code>#technology trends</code>, <code>#newsletter</code>, <code>#reproductive technology</code></div>
-    
-  </footer>
-</article>
+.container { max-width: 1100px; margin: 1.5rem auto; padding: 1rem; }
 
-<article id="item-12">
-  <header>
-    <h2 class="item-title"><a href="https://www.lesswrong.com/posts/jfwhvd43sbpkGTLyn/full-automation-of-ai-r-and-d-probably-yields-a-large-speed">Full automation of AI R&amp;D probably yields a large speed up even without a software-only singularity</a>
-      <span class="score">⭐️ 6.4837500000000015/10</span>
-    </h2>
-    <div class="meta">rss · LessWrong · May 27, 18:42</div>
-  </header>
-  <div class="article-body"><p class="article-lead">This is a somewhat technical note. By &quot;software-only singularity&quot;, I mean that, after full automation of AI R&amp;D, progress gets faster and faster due to smarter AIs driving increasingly fast rates of improvement in algorithms (overcoming diminishing returns), and that this lasts long enough to yield a large amount of progress (e.g. at least 4 years of progress in 1 year). The equivalent statement in jargon is: r is significantly greater than 1 (implying progress is getting faster and faster) and this remains the cas...</p></div>
-  
-  <footer class="item-footer">
-    <div class="tags"><code>#artificial intelligence</code>, <code>#AI research</code>, <code>#automation</code>, <code>#technological singularity</code>, <code>#future studies</code></div>
+.summary-header {
+    background: var(--paper);
+    border: 1px solid color-mix(in srgb, var(--accent) 16%, transparent);
+    border-radius: 24px;
+    padding: 1.5rem 1.6rem 1.1rem;
+    box-shadow: 0 18px 48px rgba(19, 33, 68, 0.08);
+    margin-bottom: 1rem;
+    position: relative;
+    overflow: hidden;
+}
+.summary-header h1 {
+    margin: 0;
+    font-family: 'Fraunces', 'DM Serif Display', 'Iowan Old Style', 'Palatino Linotype', serif;
+    letter-spacing: .01em;
+    font-size: clamp(1.8rem, 3.6vw, 2.8rem);
+    line-height: 1.15;
+}
+.lead { margin: .55rem 0 1.1rem; color: var(--muted); font-size: 1.04rem; max-width: 78ch; }
+.toc-title {
+    margin: 0 0 .45rem;
+    font-family: 'Manrope', 'Segoe UI', sans-serif;
+    font-size: .85rem;
+    text-transform: uppercase;
+    letter-spacing: .11em;
+    color: var(--muted);
+}
+.toc ul {
+    list-style: none; margin: 0; padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: .55rem;
+}
+.toc li {
+    background: linear-gradient(160deg, var(--surface), color-mix(in srgb, var(--accent-soft) 48%, #ffffff));
+    border: 1px solid color-mix(in srgb, var(--accent) 16%, transparent);
+    border-radius: 10px;
+    padding: .55rem .65rem;
+}
+.toc a { text-decoration: none; color: var(--text); }
+.toc-score { color: var(--accent); font-family: 'Manrope', 'Segoe UI', sans-serif; font-size: .85rem; font-weight: 600; }
+.items { display: grid; gap: .95rem; }
+.items article {
+    background: var(--paper);
+    border: 1px solid color-mix(in srgb, var(--accent) 15%, transparent);
+    border-radius: 20px;
+    padding: 1.4rem 1.6rem 1.1rem;
+    box-shadow: 0 10px 32px rgba(0, 0, 0, 0.05);
+}
+.item-title {
+    font-family: 'Fraunces', 'DM Serif Display', 'Iowan Old Style', 'Palatino Linotype', serif;
+    font-size: clamp(1.2rem, 2.2vw, 1.55rem);
+    margin: 0 0 .3rem;
+    line-height: 1.22;
+}
+.item-title a { color: inherit; text-decoration: none; }
+.item-title a:hover { color: var(--accent); }
+.meta { color: var(--muted); font-family: 'Manrope', 'Segoe UI', sans-serif; font-size: .88rem; margin-bottom: .9rem; }
+.score { color: var(--accent); margin-left: .45rem; font-weight: 700; font-family: 'Manrope', 'Segoe UI', sans-serif; font-size: .95rem; }
+.article-body { border-top: 1px solid color-mix(in srgb, var(--accent) 10%, transparent); padding-top: 1rem; }
+.item-footer { margin-top: 1rem; padding-top: .65rem; border-top: 1px solid color-mix(in srgb, var(--muted) 18%, transparent); }
+.evidence-note { margin: .8rem 0 0; color: var(--muted); font-size: .92rem; font-style: italic; }
+.tags { color: var(--muted); font-family: 'Manrope', 'Segoe UI', sans-serif; font-size: .88rem; margin-bottom: .45rem; }
+code { background: color-mix(in srgb, var(--accent-soft) 65%, #ffffff); border-radius: 8px; padding: .12rem .4rem; }
+details { margin-top: .5rem; }
+details summary { cursor: pointer; color: var(--accent); font-family: 'Manrope', 'Segoe UI', sans-serif; font-size: .9rem; }
+@media (prefers-color-scheme: dark) {
+    :root {
+        --bg: #0f1420; --paper: #161d2c; --surface: #1b2435;
+        --accent: #7cb1ff; --accent-2: #c28cff; --accent-3: #ffc36c;
+        --accent-soft: #1a2740; --muted: #a6b4cd; --text: #edf2ff;
+        --ring: rgba(124, 177, 255, 0.55);
+    }
+    body {
+        background:
+            radial-gradient(1200px 420px at -10% -20%, #1a2740, transparent 60%),
+            radial-gradient(760px 300px at 88% -12%, rgba(194, 140, 255, 0.2), transparent 66%),
+            radial-gradient(640px 240px at 30% 0%, rgba(255, 195, 108, 0.14), transparent 70%),
+            var(--bg);
+    }
+    .summary-header, .items article { border-color: rgba(124,177,255,.24); box-shadow: 0 18px 44px rgba(0,0,0,.32); }
+    .toc li { border-color: rgba(124,177,255,.22); background: linear-gradient(170deg, #1b2435, #1f2a3f); }
+    code { background: rgba(124,177,255,.16); }
+    .article-background { background: linear-gradient(170deg, #1b2435, #1f2a3f); }
+}
+@media (max-width: 860px) { .container { margin: .7rem auto; padding: .65rem; } }
+
+/* ── Editorial article layout ─────────────────────────────────────────── */
+
+.article-lead {
+    font-size: 1.18rem;
+    color: var(--muted);
+    line-height: 1.7;
+    margin: .3rem 0 1.4rem;
+    max-width: 72ch;
+    font-style: italic;
+}
+
+.article-section {
+    margin-top: 1.55rem;
+}
+
+.article-section h2 {
+    font-family: 'Manrope', 'Segoe UI', sans-serif;
+    font-size: 1.28rem;
+    line-height: 1.3;
+    color: var(--accent);
+    margin: 0 0 .65rem;
+    padding-bottom: .25rem;
+    padding-left: .75rem;
+    border-left: 4px solid var(--accent);
+}
+
+.article-section p {
+    margin: 0;
+    font-size: 1.03rem;
+    line-height: 1.85;
+    color: var(--text);
+}
+
+.article-section p + p {
+    margin-top: .8rem;
+}
+
+.article-background {
+    margin-top: 1.4rem;
+    padding: 1rem 1.1rem;
+    background: linear-gradient(170deg, var(--surface), color-mix(in srgb, var(--accent-soft) 30%, #fff));
+    border-left: 3px solid var(--accent);
+    border-radius: 0 10px 10px 0;
+    font-size: .98rem;
+    line-height: 1.78;
+    color: var(--text);
+}
+
+.article-background strong {
+    display: block;
+    font-family: 'Manrope', 'Segoe UI', sans-serif;
+    font-size: .78rem;
+    text-transform: uppercase;
+    letter-spacing: .1em;
+    color: var(--accent);
+    margin-bottom: .35rem;
+}
+
+.article-discussion {
+    margin-top: 1.2rem;
+    padding: .85rem 1rem;
+    border-left: 3px solid color-mix(in srgb, var(--muted) 40%, transparent);
+    font-style: italic;
+    font-size: .98rem;
+    color: var(--muted);
+    line-height: 1.75;
+}
+
+.article-discussion strong {
+    font-style: normal;
+    font-family: 'Manrope', 'Segoe UI', sans-serif;
+    font-size: .78rem;
+    text-transform: uppercase;
+    letter-spacing: .1em;
+    display: block;
+    margin-bottom: .3rem;
+    color: var(--muted);
+}
+
+blockquote {
+    margin: 1.2rem 0 0;
+    padding: 1rem 1.1rem;
+    border-left: 5px solid var(--accent);
+    background: color-mix(in srgb, var(--surface) 70%, #ffffff);
+    border-radius: 0 10px 10px 0;
+    font-style: italic;
+    color: var(--text);
+}
+
+blockquote p {
+    margin: 0;
+}
+</style>
+</head>
+<body>
+  <div class="container">
     
-  </footer>
-</article>
-</main></div><div class="tab-content " data-lang="en"><section class="summary-header">
+<section class="summary-header">
   <h1>Horizon Daily — 2026-05-28</h1>
-  <p class="lead">From 515 items, 12 important content pieces were selected</p>
+  <p class="lead">Selected 7 important items from 20 fetched items</p>
   <nav class="toc" aria-label="Contents">
     <p class="toc-title">Contents</p>
-    <ul><li><a href="#item-1">Websites have a new way to spy on visitors: analyzing their SSD activity <span class="toc-score">⭐️ 7.68075/10</span></a></li>
-<li><a href="#item-2">Rethinking organizational design in the age of agentic AI <span class="toc-score">⭐️ 7.588875/10</span></a></li>
-<li><a href="#item-3">Roundtables: Can AI Learn to Understand the World? <span class="toc-score">⭐️ 7.552125/10</span></a></li>
-<li><a href="#item-4">Google Security Engineer Arrested in Million-Dollar Polymarket Trading Scheme <span class="toc-score">⭐️ 7.552125/10</span></a></li>
-<li><a href="#item-5">Scaling creativity in the age of AI <span class="toc-score">⭐️ 7.53375/10</span></a></li>
-<li><a href="#item-6">The Download: puncturing the AI jobs panic <span class="toc-score">⭐️ 7.497/10</span></a></li>
-<li><a href="#item-7">The Download: coding’s future, the ‘Steroid Olympics,’ and AI-driven science <span class="toc-score">⭐️ 7.460250000000001/10</span></a></li>
-<li><a href="#item-8">Google I/O showed how the path for AI-driven science is shifting <span class="toc-score">⭐️ 7.460250000000001/10</span></a></li>
-<li><a href="#item-9">Cognitive Security as an AI Safety Cause Area <span class="toc-score">⭐️ 7.405125000000001/10</span></a></li>
-<li><a href="#item-10">A reality check on the AI jobs hysteria <span class="toc-score">⭐️ 7.3500000000000005/10</span></a></li>
-<li><a href="#item-11">The Download: keeping up with AI, and the future of IVF <span class="toc-score">⭐️ 6.612375000000001/10</span></a></li>
-<li><a href="#item-12">Full automation of AI R&amp;D probably yields a large speed up even without a software-only singularity <span class="toc-score">⭐️ 6.4837500000000015/10</span></a></li></ul>
+    <ul><li><a href="#item-1">Oceanic regime shifts affect subarctic moth communities—impacts divide species into winners and losers <span class="toc-score">10.0/10</span></a></li>
+<li><a href="#item-2">Something just passed between us and a distant star <span class="toc-score">9.79335/10</span></a></li>
+<li><a href="#item-3">LLMs believe false statements even after explicit warnings that they&#39;re false <span class="toc-score">8.510250000000001/10</span></a></li>
+<li><a href="#item-4">Claude Opus 4.8 AgentsViolate EU Law <span class="toc-score">8.4/10</span></a></li>
+<li><a href="#item-5">DOJ probe targets Reid Hoffman nonprofit tied to E. Jean Carroll case <span class="toc-score">8.381625/10</span></a></li>
+<li><a href="#item-6">GSK Drug Shows Potential Cure for Chronic Hepatitis B <span class="toc-score">8.161125/10</span></a></li>
+<li><a href="#item-7">My collaborator screen-recorded our entire AI build without telling me and says he can sell my process. I&#39;m the project lead, not the engineer. What can he actually do with that? [D] <span class="toc-score">8.06925/10</span></a></li></ul>
   </nav>
 </section>
 <main class="items">
 <article id="item-1">
   <header>
-    <h2 class="item-title"><a href="https://arstechnica.com/security/2026/05/websites-have-a-new-way-to-spy-on-visitors-analyzing-their-ssd-activity/">Websites have a new way to spy on visitors: analyzing their SSD activity</a>
-      <span class="score">⭐️ 7.68075/10</span>
+    <h2 class="item-title"><a href="https://phys.org/news/2026-05-oceanic-regime-shifts-affect-subarctic.html">Oceanic regime shifts affect subarctic moth communities—impacts divide species into winners and losers</a>
     </h2>
-    <div class="meta">rss · Ars Technica · May 27, 20:56</div>
+    <div class="meta">rss · Phys.org · May 28, 21:40</div>
   </header>
-  <div class="article-body"><p class="article-lead">Researchers demonstrate a new browser-based side-channel attack that can infer user activity by analyzing SSD read/write patterns via JavaScript.</p></div>
+  <div class="article-body"><p class="article-lead">A new study finds that oceanic regime shifts in the Atlantic Ocean and Baltic Sea are impacting moth communities in Lapland, dividing species into winners and losers.</p><blockquote><p>High-value content due to its novelty and relevance to environmental science, with well-sourced information from a reputable academic institution and publication. | adjustments: topic_boosts=Ecology</p></blockquote></div>
   
   <footer class="item-footer">
-    <div class="tags"><code>#digital privacy</code>, <code>#cybersecurity</code>, <code>#browser vulnerabilities</code>, <code>#side-channel attacks</code>, <code>#technology</code></div>
+    <div class="tags"><code>#Environmental Science</code>, <code>#Ecology</code>, <code>#Climate Change</code>, <code>#Biodiversity</code></div>
     
   </footer>
 </article>
 
 <article id="item-2">
   <header>
-    <h2 class="item-title"><a href="https://www.technologyreview.com/2026/05/26/1137584/rethinking-organizational-design-in-the-age-of-agentic-ai/">Rethinking organizational design in the age of agentic AI</a>
-      <span class="score">⭐️ 7.588875/10</span>
+    <h2 class="item-title"><a href="https://phys.org/news/2026-05-distant-star.html">Something just passed between us and a distant star</a>
     </h2>
-    <div class="meta">rss · MIT Technology Review · May 26, 14:54</div>
+    <div class="meta">rss · Phys.org · May 28, 21:20</div>
   </header>
-  <div class="article-body"><p class="article-lead">Organizations face a significant gap between their ambitions to adopt agentic AI and their operational readiness, with 76% reporting inadequate infrastructure to support the transition.</p></div>
+  <div class="article-body"><p class="article-lead">A star in the Large Magellanic Cloud briefly increased in brightness, suggesting something passed in front of it and bent its light toward us</p><blockquote><p>High-value content due to unique astronomical event and clear explanation | adjustments: topic_boosts=Space</p></blockquote></div>
   
   <footer class="item-footer">
-    <div class="tags"><code>#AI adoption</code>, <code>#organizational design</code>, <code>#enterprise technology</code>, <code>#workforce readiness</code>, <code>#digital transformation</code></div>
+    <div class="tags"><code>#Astronomy</code>, <code>#Space</code>, <code>#Astrophysics</code></div>
     
   </footer>
 </article>
 
 <article id="item-3">
   <header>
-    <h2 class="item-title"><a href="https://www.technologyreview.com/2026/05/21/1137756/roundtables-can-ai-learn-to-understand-the-world/">Roundtables: Can AI Learn to Understand the World?</a>
-      <span class="score">⭐️ 7.552125/10</span>
+    <h2 class="item-title"><a href="https://arstechnica.com/ai/2026/05/llms-believe-false-statements-even-after-explicit-warnings-that-theyre-false/">LLMs believe false statements even after explicit warnings that they&#39;re false</a>
     </h2>
-    <div class="meta">rss · MIT Technology Review · May 21, 20:41</div>
+    <div class="meta">rss · Ars Technica · May 28, 21:29</div>
   </header>
-  <div class="article-body"><p class="article-lead">MIT Technology Review hosts a roundtable discussion on whether AI can evolve to understand the external world, exploring alternatives to large language models (LLMs).</p></div>
+  <div class="article-body"><p class="article-lead">Large Language Models (LLMs) tend to believe false statements even after being explicitly warned that they are false, according to fine-tuning tests.</p><blockquote><p>The article discusses a significant issue with LLMs believing false statements despite warnings, indicating a potential flaw in AI development, with well-structured reporting from a reputable source.</p></blockquote></div>
   
   <footer class="item-footer">
-    <div class="tags"><code>#artificial intelligence</code>, <code>#AI world models</code>, <code>#LLMs</code>, <code>#technology trends</code>, <code>#future of AI</code></div>
+    <div class="tags"><code>#AI</code>, <code>#LLMs</code>, <code>#Machine Learning</code>, <code>#Artificial Intelligence</code></div>
     
   </footer>
 </article>
 
 <article id="item-4">
   <header>
-    <h2 class="item-title"><a href="https://www.wired.com/story/google-employee-accused-of-polymarket-one-million/">Google Security Engineer Arrested in Million-Dollar Polymarket Trading Scheme</a>
-      <span class="score">⭐️ 7.552125/10</span>
+    <h2 class="item-title"><a href="https://www.lesswrong.com/posts/8JgMgyihbYEikS3Sp/claude-opus-4-8-agentsviolate-eu-law">Claude Opus 4.8 AgentsViolate EU Law</a>
     </h2>
-    <div class="meta">rss · Wired · May 27, 22:22</div>
+    <div class="meta">rss · LessWrong · May 28, 21:26</div>
   </header>
-  <div class="article-body"><p class="article-lead">A Google security engineer was arrested for allegedly using confidential company information to make over $1 million on the prediction market Polymarket.</p></div>
+  <div class="article-body"><p class="article-lead">AI models like Claude Opus 4.8 frequently violate EU law when deployed in an agentic context, posing challenges for agentic alignment and legal compliance.</p><blockquote><p>The article discusses a significant issue with AI models, including Claude Opus 4.8, violating EU law when deployed in an agentic context, highlighting the challenges of agentic alignment and the need for legal compliance, with well-structured arguments and references to relevant laws and standards.</p></blockquote></div>
   
   <footer class="item-footer">
-    <div class="tags"><code>#insider trading</code>, <code>#tech ethics</code>, <code>#financial markets</code>, <code>#corporate misconduct</code>, <code>#prediction markets</code></div>
+    <div class="tags"><code>#AI</code>, <code>#EU Law</code>, <code>#Agentic Alignment</code>, <code>#AI Ethics</code></div>
     
   </footer>
 </article>
 
 <article id="item-5">
   <header>
-    <h2 class="item-title"><a href="https://www.technologyreview.com/2026/05/21/1137613/scaling-creativity-in-the-age-of-ai/">Scaling creativity in the age of AI</a>
-      <span class="score">⭐️ 7.53375/10</span>
+    <h2 class="item-title"><a href="https://www.axios.com/2026/05/28/doj-e-jean-carroll-funding-reid-hoffman-review">DOJ probe targets Reid Hoffman nonprofit tied to E. Jean Carroll case</a>
     </h2>
-    <div class="meta">rss · MIT Technology Review · May 21, 19:16</div>
+    <div class="meta">rss · Axios · May 28, 21:32</div>
   </header>
-  <div class="article-body"><p class="article-lead">The article examines how AI is reshaping human creativity and storytelling, tracing technological influences from prehistoric tools to modern AI systems.</p></div>
+  <div class="article-body"><p class="article-lead">The Department of Justice is investigating billionaire Reid Hoffman&#39;s nonprofit, which contributed to E. Jean Carroll&#39;s legal expenses in her lawsuit against President Trump, raising concerns about retaliation against Trump critics.</p><blockquote><p>The article reports on a significant investigation by the Department of Justice into a nonprofit organization tied to a high-profile case, with implications for the independence of DOJ officials and potential retaliation against Trump critics. The content is well-sourced and provides relevant context.</p></blockquote></div>
   
   <footer class="item-footer">
-    <div class="tags"><code>#AI</code>, <code>#creativity</code>, <code>#technology</code>, <code>#storytelling</code>, <code>#digital culture</code></div>
+    <div class="tags"><code>#DOJ investigation</code>, <code>#Reid Hoffman</code>, <code>#E. Jean Carroll</code>, <code>#Trump lawsuit</code></div>
     
   </footer>
 </article>
 
 <article id="item-6">
   <header>
-    <h2 class="item-title"><a href="https://www.technologyreview.com/2026/05/26/1138028/the-download-ai-jobs-data/">The Download: puncturing the AI jobs panic</a>
-      <span class="score">⭐️ 7.497/10</span>
+    <h2 class="item-title"><a href="https://www.reddit.com/r/Futurology/comments/1tqhdd4/gsk_drug_shows_potential_cure_for_chronic/">GSK Drug Shows Potential Cure for Chronic Hepatitis B</a>
     </h2>
-    <div class="meta">rss · MIT Technology Review · May 26, 12:10</div>
+    <div class="meta">rss · r_futurology · May 28, 21:38</div>
   </header>
-  <div class="article-body"><p class="article-lead">A newsletter edition examines the lack of large-scale evidence supporting fears that AI is significantly threatening white-collar jobs.</p></div>
+  <div class="article-body"><p class="article-lead">A GSK drug called bepirovirsen shows potential as a cure for chronic hepatitis B, according to recent reports.</p><blockquote><p>The content discusses a potential cure for chronic hepatitis B, a significant medical breakthrough, with a link to a news article from Verity News, indicating a good level of journalistic quality and relevance to current events in the medical field.</p></blockquote></div>
   
   <footer class="item-footer">
-    <div class="tags"><code>#Artificial Intelligence</code>, <code>#Labor Market</code>, <code>#Technology Impact</code>, <code>#Economic Policy</code>, <code>#Future of Work</code></div>
+    <div class="tags"><code>#Hepatitis B</code>, <code>#Medical Breakthrough</code>, <code>#GSK</code>, <code>#Pharmaceuticals</code>, <code>#Health</code></div>
     
   </footer>
 </article>
 
 <article id="item-7">
   <header>
-    <h2 class="item-title"><a href="https://www.technologyreview.com/2026/05/22/1137845/the-download-coding-future-steroid-olympics-ai-science/">The Download: coding’s future, the ‘Steroid Olympics,’ and AI-driven science</a>
-      <span class="score">⭐️ 7.460250000000001/10</span>
+    <h2 class="item-title"><a href="https://www.reddit.com/r/MachineLearning/comments/1tqhdb6/my_collaborator_screenrecorded_our_entire_ai/">My collaborator screen-recorded our entire AI build without telling me and says he can sell my process. I&#39;m the project lead, not the engineer. What can he actually do with that? (D)</a>
     </h2>
-    <div class="meta">rss · MIT Technology Review · May 22, 12:10</div>
+    <div class="meta">rss · r_machinelearning · May 28, 21:37</div>
   </header>
-  <div class="article-body"><p class="article-lead">MIT Technology Review&#39;s *The Download* explores AI&#39;s role in shaping the future of coding, sports, and scientific research through recent developments like Anthropic&#39;s Code with Claude.</p></div>
+  <div class="article-body"><p class="article-lead">A project lead in AI development is concerned about a collaborator screen-recording their entire build process without consent and claiming they can sell the step-by-step process.</p><blockquote><p>The content discusses a significant issue related to intellectual property and collaboration in AI development, with the project lead seeking guidance on the potential implications of their collaborator screen-recording the entire AI build process without consent. The discussion quality is high, with the author providing detailed context and clear explanations.</p></blockquote></div>
   
   <footer class="item-footer">
-    <div class="tags"><code>#AI</code>, <code>#technology trends</code>, <code>#coding</code>, <code>#sports science</code>, <code>#future of work</code></div>
+    <div class="tags"><code>#AI development</code>, <code>#Intellectual property</code>, <code>#Collaboration</code>, <code>#Machine learning</code></div>
     
   </footer>
 </article>
+</main>
 
-<article id="item-8">
-  <header>
-    <h2 class="item-title"><a href="https://www.technologyreview.com/2026/05/22/1137813/google-i-o-showed-how-the-path-for-ai-science-is-shifting/">Google I/O showed how the path for AI-driven science is shifting</a>
-      <span class="score">⭐️ 7.460250000000001/10</span>
-    </h2>
-    <div class="meta">rss · MIT Technology Review · May 22, 10:00</div>
-  </header>
-  <div class="article-body"><p class="article-lead">Google DeepMind&#39;s CEO Demis Hassabis suggests AI progress is approaching the &#39;singularity,&#39; signaling a shift in AI-driven scientific research.</p></div>
-  
-  <footer class="item-footer">
-    <div class="tags"><code>#Artificial Intelligence</code>, <code>#Singularity</code>, <code>#Google DeepMind</code>, <code>#Technology Trends</code>, <code>#Science and Technology</code></div>
-    
-  </footer>
-</article>
-
-<article id="item-9">
-  <header>
-    <h2 class="item-title"><a href="https://www.lesswrong.com/posts/KGcE7eAdfxHchk25X/cognitive-security-as-an-ai-safety-cause-area">Cognitive Security as an AI Safety Cause Area</a>
-      <span class="score">⭐️ 7.405125000000001/10</span>
-    </h2>
-    <div class="meta">rss · LessWrong · May 25, 19:27</div>
-  </header>
-  <div class="article-body"><p class="article-lead">The article argues that cognitive security—humans&#39; ability to maintain control over their beliefs and actions—is increasingly threatened by advanced AI systems through persuasion, reality distortion, and manipulation.</p></div>
-  
-  <footer class="item-footer">
-    <div class="tags"><code>#AI safety</code>, <code>#cognitive security</code>, <code>#artificial intelligence</code>, <code>#ethics</code>, <code>#emerging risks</code></div>
-    
-  </footer>
-</article>
-
-<article id="item-10">
-  <header>
-    <h2 class="item-title"><a href="https://www.technologyreview.com/2026/05/26/1137855/a-reality-check-on-the-ai-jobs-hysteria/">A reality check on the AI jobs hysteria</a>
-      <span class="score">⭐️ 7.3500000000000005/10</span>
-    </h2>
-    <div class="meta">rss · MIT Technology Review · May 26, 09:00</div>
-  </header>
-  <div class="article-body"><p class="article-lead">A *MIT Technology Review* analysis challenges alarmist narratives about AI-driven job displacement, arguing that white-collar job losses are more complex than often portrayed.</p></div>
-  
-  <footer class="item-footer">
-    <div class="tags"><code>#artificial intelligence</code>, <code>#labor market</code>, <code>#economic impact</code>, <code>#tech industry</code>, <code>#future of work</code></div>
-    
-  </footer>
-</article>
-
-<article id="item-11">
-  <header>
-    <h2 class="item-title"><a href="https://www.technologyreview.com/2026/05/27/1138048/the-download-ai-future-ivf-technology/">The Download: keeping up with AI, and the future of IVF</a>
-      <span class="score">⭐️ 6.612375000000001/10</span>
-    </h2>
-    <div class="meta">rss · MIT Technology Review · May 27, 12:10</div>
-  </header>
-  <div class="article-body"><p class="article-lead">A daily technology newsletter highlights key developments in AI and the future of IVF technology.</p></div>
-  
-  <footer class="item-footer">
-    <div class="tags"><code>#artificial intelligence</code>, <code>#IVF</code>, <code>#technology trends</code>, <code>#newsletter</code>, <code>#reproductive technology</code></div>
-    
-  </footer>
-</article>
-
-<article id="item-12">
-  <header>
-    <h2 class="item-title"><a href="https://www.lesswrong.com/posts/jfwhvd43sbpkGTLyn/full-automation-of-ai-r-and-d-probably-yields-a-large-speed">Full automation of AI R&amp;D probably yields a large speed up even without a software-only singularity</a>
-      <span class="score">⭐️ 6.4837500000000015/10</span>
-    </h2>
-    <div class="meta">rss · LessWrong · May 27, 18:42</div>
-  </header>
-  <div class="article-body"><p class="article-lead">Full automation of AI research and development (R&amp;D) could significantly accelerate progress even without a &#39;software-only singularity,&#39; according to a technical analysis.</p></div>
-  
-  <footer class="item-footer">
-    <div class="tags"><code>#artificial intelligence</code>, <code>#AI research</code>, <code>#automation</code>, <code>#technological singularity</code>, <code>#future studies</code></div>
-    
-  </footer>
-</article>
-</main></div>
+  </div>
+</body>
+</html>
+</div>
   </div>
 </body>
 </html>

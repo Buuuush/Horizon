@@ -35,7 +35,7 @@ def test_generate_webhook_overview_lists_items_without_full_details():
         language="en",
     )
 
-    assert "Selected 2 important items from 10 fetched items" in result
+    assert "From 10 items, 2 important content pieces were selected" in result
     assert "1. [Important Item 1](https://example.com/items/1)" in result
     assert "2. [Important Item 2](https://example.com/items/2)" in result
     assert "Summary for item 1." not in result
@@ -136,7 +136,7 @@ async def test_generate_summary_translates_english_fields_only_at_render_time():
 
 
 @pytest.mark.asyncio
-async def test_generate_summary_does_not_render_ai_scores_in_html():
+async def test_generate_summary_renders_ai_scores_in_html():
     summarizer = DailySummarizer()
     item = _make_item(1)
 
@@ -148,8 +148,8 @@ async def test_generate_summary_does_not_render_ai_scores_in_html():
     )
 
     assert "Important Item 1" in result
-    assert "<span class=\"score\">" not in result
-    assert "⭐" not in result
+    assert "<span class=\"score\">" in result
+    assert "⭐" in result
 
 
 @pytest.mark.asyncio

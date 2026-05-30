@@ -119,22 +119,37 @@ _ARTICLE_CSS = """
     margin-top: 1.55rem;
 }}
 
-.article-section h3 {{
+    .article-section {{
     font-family: {ui};
     font-size: .78rem;
-    text-transform: uppercase;
-    letter-spacing: .12em;
-    color: var(--accent);
+.article-section h2 {{
+.narrow {{
     margin: 0 0 .45rem;
     padding-bottom: .25rem;
     border-bottom: 1px solid color-mix(in srgb, var(--accent) 22%, transparent);
 }}
 
-.article-section p {{
-    margin: 0;
+.article-section h2 {{
+.narrow {{
     font-size: 1.03rem;
     line-height: 1.85;
     color: var(--text);
+}}
+
+.article-section p {{
+    margin: 0.25rem 0;
+}}
+
+.article-section .article-section-last {{
+    font-size: 1.08rem;
+
+.article-section h3 {{
+    margin: .35rem 0 .15rem;
+    font-size: 0.95rem;
+    color: var(--muted);
+}}
+    font-weight: 600;
+    margin-top: .45rem;
 }}
 
 .article-section p + p {{
@@ -600,6 +615,7 @@ class DailySummarizer:
 
         # Lead paragraph = first non-empty field rendered as italic lede
         lead_done = False
+        section_index = 0
         for section_label, text in fields:
             if not text:
                 continue
@@ -608,11 +624,23 @@ class DailySummarizer:
                 html_parts.append(f'<p class="article-lead">{escaped}</p>')
                 lead_done = True
             else:
+                section_index += 1
+                # Split into individual paragraphs, mark the last paragraph
+                parts = escaped.split('</p><p>') if '</p><p>' in escaped else [escaped]
+                para_html = []
+                for i, p in enumerate(parts):
+                    cls = "article-section-last" if i == len(parts) - 1 else ""
+                    if cls:
+                        para_html.append(f'<p class="{cls}">{p}</p>')
+                    else:
+                        para_html.append(f'<p>{p}</p>')
+
+                heading_tag = "h2" if section_index == 1 else "h3"
                 html_parts.append(
                     f'<div class="article-section">'
-                    f"<h3>{self._escape_html(section_label)}</h3>"
-                    f"<p>{escaped}</p>"
-                    f"</div>"
+                    + f"<{heading_tag}>{self._escape_html(section_label)}</{heading_tag}>"
+                    + "".join(para_html)
+                    + f"</div>"
                 )
 
         if background:

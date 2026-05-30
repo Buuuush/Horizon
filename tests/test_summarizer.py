@@ -174,6 +174,7 @@ async def test_generate_summary_renders_editorial_article_structure():
     )
 
     assert "<p class=\"article-lead\">" in result
-    assert "<section class=\"article-section\">" in result
-    assert "<blockquote>" in result
-    assert "<section class=\"article-background\">" in result
+    assert "<div class=\"article-section\">" in result
+    assert "<div class=\"article-discussion\">" in result
+    assert "<p class=\"evidence-note\">" in result
+    assert "<div class=\"article-background\">" in result

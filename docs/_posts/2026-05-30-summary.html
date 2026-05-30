@@ -1,0 +1,328 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Horizon — 2026-05-30</title>
+  <style>
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600&family=Manrope:wght@500;700&display=swap');
+
+:root {
+    --bg: #f8f8fb;
+    --paper: #ffffff;
+    --surface: #fcfbff;
+    --accent: #325c9b;
+    --accent-2: color-mix(in srgb, var(--accent) 55%, #b73fd6);
+    --accent-3: color-mix(in srgb, var(--accent) 40%, #f59e0b);
+    --accent-soft: #e6eefb;
+    --muted: #5c6372;
+    --text: #1d2230;
+    --ring: color-mix(in srgb, var(--accent) 32%, transparent);
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+    color: var(--text);
+    background:
+        radial-gradient(1300px 420px at -10% -20%, var(--accent-soft), transparent 60%),
+        radial-gradient(760px 300px at 88% -12%, color-mix(in srgb, var(--accent-2) 24%, transparent), transparent 66%),
+        radial-gradient(640px 240px at 30% 0%, color-mix(in srgb, var(--accent-3) 18%, transparent), transparent 70%),
+        var(--bg);
+    font-family: 'Source Serif 4', Georgia, serif;
+    line-height: 1.78;
+}
+
+.container { max-width: 1100px; margin: 1.5rem auto; padding: 1rem; }
+
+/* ── Page header ─────────────────────────────────────────────────────── */
+.summary-header {
+    background: var(--paper);
+    border: 1px solid color-mix(in srgb, var(--accent) 16%, transparent);
+    border-radius: 24px;
+    padding: 1.5rem 1.6rem 1.1rem;
+    box-shadow: 0 18px 48px rgba(19, 33, 68, 0.08);
+    margin-bottom: 1rem;
+    position: relative;
+    overflow: hidden;
+}
+.summary-header::after {
+    content: "";
+    position: absolute;
+    inset: auto -60px -80px auto;
+    width: 220px; height: 220px;
+    border-radius: 999px;
+    background: radial-gradient(circle, color-mix(in srgb, var(--accent-2) 28%, transparent), transparent 70%);
+    pointer-events: none;
+}
+.summary-header h1 {
+    margin: 0;
+    font-family: 'Fraunces', 'DM Serif Display', 'Iowan Old Style', 'Palatino Linotype', serif;
+    letter-spacing: .01em;
+    font-size: clamp(1.8rem, 3.6vw, 2.8rem);
+    line-height: 1.15;
+}
+.lead { margin: .55rem 0 1.1rem; color: var(--muted); font-size: 1.04rem; max-width: 78ch; }
+
+/* ── TOC ─────────────────────────────────────────────────────────────── */
+.toc-title {
+    margin: 0 0 .45rem;
+    font-family: 'Manrope', 'Segoe UI', sans-serif;
+    font-size: .85rem;
+    text-transform: uppercase;
+    letter-spacing: .11em;
+    color: var(--muted);
+}
+.toc ul {
+    list-style: none; margin: 0; padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: .55rem;
+}
+.toc li {
+    background: linear-gradient(160deg, var(--surface), color-mix(in srgb, var(--accent-soft) 48%, #ffffff));
+    border: 1px solid color-mix(in srgb, var(--accent) 16%, transparent);
+    border-radius: 10px;
+    padding: .55rem .65rem;
+    transition: transform .18s ease, box-shadow .18s ease;
+}
+.toc li:hover { transform: translateY(-1px); box-shadow: 0 8px 20px color-mix(in srgb, var(--accent) 15%, transparent); }
+.toc a { text-decoration: none; color: var(--text); }
+.toc-score { color: var(--accent); font-family: 'Manrope', 'Segoe UI', sans-serif; font-size: .85rem; font-weight: 600; }
+
+/* ── Article cards ───────────────────────────────────────────────────── */
+.items { display: grid; gap: .95rem; }
+.items article {
+    background: var(--paper);
+    border: 1px solid color-mix(in srgb, var(--accent) 15%, transparent);
+    border-radius: 20px;
+    padding: 1.4rem 1.6rem 1.1rem;
+    box-shadow: 0 10px 32px rgba(0, 0, 0, 0.05);
+}
+.item-title {
+    font-family: 'Fraunces', 'DM Serif Display', 'Iowan Old Style', 'Palatino Linotype', serif;
+    font-size: clamp(1.2rem, 2.2vw, 1.55rem);
+    margin: 0 0 .3rem;
+    line-height: 1.22;
+}
+.item-title a { color: inherit; text-decoration: none; }
+.item-title a:hover { color: var(--accent); }
+.item-title a:focus-visible, .toc a:focus-visible, summary:focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
+    border-radius: 6px;
+}
+.meta { color: var(--muted); font-family: 'Manrope', 'Segoe UI', sans-serif; font-size: .88rem; margin-bottom: .9rem; }
+.score { color: var(--accent); margin-left: .45rem; font-weight: 700; font-family: 'Manrope', 'Segoe UI', sans-serif; font-size: .95rem; }
+
+.article-body { border-top: 1px solid color-mix(in srgb, var(--accent) 10%, transparent); padding-top: 1rem; }
+
+.item-footer {
+    margin-top: 1rem;
+    padding-top: .65rem;
+    border-top: 1px solid color-mix(in srgb, var(--muted) 18%, transparent);
+}
+
+.evidence-note {
+    margin: .8rem 0 0;
+    color: var(--muted);
+    font-size: .92rem;
+    font-style: italic;
+}
+
+.tags { color: var(--muted); font-family: 'Manrope', 'Segoe UI', sans-serif; font-size: .88rem; margin-bottom: .45rem; }
+code { background: color-mix(in srgb, var(--accent-soft) 65%, #ffffff); border-radius: 8px; padding: .12rem .4rem; }
+
+details { margin-top: .5rem; }
+details summary { cursor: pointer; color: var(--accent); font-family: 'Manrope', 'Segoe UI', sans-serif; font-size: .9rem; }
+
+/* ── Dark mode ───────────────────────────────────────────────────────── */
+@media (prefers-color-scheme: dark) {
+    :root {
+        --bg: #0f1420; --paper: #161d2c; --surface: #1b2435;
+        --accent: #7cb1ff; --accent-2: #c28cff; --accent-3: #ffc36c;
+        --accent-soft: #1a2740; --muted: #a6b4cd; --text: #edf2ff;
+        --ring: rgba(124, 177, 255, 0.55);
+    }
+    body {
+        background:
+            radial-gradient(1200px 420px at -10% -20%, #1a2740, transparent 60%),
+            radial-gradient(760px 300px at 88% -12%, rgba(194, 140, 255, 0.2), transparent 66%),
+            radial-gradient(640px 240px at 30% 0%, rgba(255, 195, 108, 0.14), transparent 70%),
+            var(--bg);
+    }
+    .summary-header, .items article { border-color: rgba(124,177,255,.24); box-shadow: 0 18px 44px rgba(0,0,0,.32); }
+    .toc li { border-color: rgba(124,177,255,.22); background: linear-gradient(170deg, #1b2435, #1f2a3f); }
+    code { background: rgba(124,177,255,.16); }
+    .article-background { background: linear-gradient(170deg, #1b2435, #1f2a3f); }
+}
+
+@media (max-width: 860px) {
+    .container { margin: .7rem auto; padding: .65rem; }
+}
+
+/* ── Editorial article layout ─────────────────────────────────────────── */
+
+.article-lead {
+    font-size: 1.18rem;
+    color: var(--muted);
+    line-height: 1.7;
+    margin: .3rem 0 1.4rem;
+    max-width: 72ch;
+    font-style: italic;
+}
+
+.article-section {
+    margin-top: 1.55rem;
+}
+
+.article-section h3 {
+    font-family: 'Manrope', 'Segoe UI', sans-serif;
+    font-size: .78rem;
+    text-transform: uppercase;
+    letter-spacing: .12em;
+    color: var(--accent);
+    margin: 0 0 .45rem;
+    padding-bottom: .25rem;
+    border-bottom: 1px solid color-mix(in srgb, var(--accent) 22%, transparent);
+}
+
+.article-section p {
+    margin: 0;
+    font-size: 1.03rem;
+    line-height: 1.85;
+    color: var(--text);
+}
+
+.article-section p + p {
+    margin-top: .8rem;
+}
+
+.article-background {
+    margin-top: 1.4rem;
+    padding: 1rem 1.1rem;
+    background: linear-gradient(170deg, var(--surface), color-mix(in srgb, var(--accent-soft) 30%, #fff));
+    border-left: 3px solid var(--accent);
+    border-radius: 0 10px 10px 0;
+    font-size: .98rem;
+    line-height: 1.78;
+    color: var(--text);
+}
+
+.article-background strong {
+    display: block;
+    font-family: 'Manrope', 'Segoe UI', sans-serif;
+    font-size: .78rem;
+    text-transform: uppercase;
+    letter-spacing: .1em;
+    color: var(--accent);
+    margin-bottom: .35rem;
+}
+
+.article-discussion {
+    margin-top: 1.2rem;
+    padding: .85rem 1rem;
+    border-left: 3px solid color-mix(in srgb, var(--muted) 40%, transparent);
+    font-style: italic;
+    font-size: .98rem;
+    color: var(--muted);
+    line-height: 1.75;
+}
+
+.article-discussion strong {
+    font-style: normal;
+    font-family: 'Manrope', 'Segoe UI', sans-serif;
+    font-size: .78rem;
+    text-transform: uppercase;
+    letter-spacing: .1em;
+    display: block;
+    margin-bottom: .3rem;
+    color: var(--muted);
+}
+
+.tab-switcher {
+    display: flex; gap: .5rem; margin-bottom: 1.5rem;
+    border-bottom: 2px solid color-mix(in srgb, var(--accent) 20%, transparent);
+}
+.tab-button {
+    background: transparent; border: none; color: var(--muted);
+    font-family: 'Manrope', 'Segoe UI', sans-serif; font-size: 1rem; font-weight: 600;
+    padding: .75rem 1.2rem; cursor: pointer;
+    transition: color .18s ease, border-color .18s ease;
+    border-bottom: 3px solid transparent;
+}
+.tab-button:hover { color: var(--text); }
+.tab-button.active { color: var(--accent); border-bottom-color: var(--accent); }
+.tab-content { display: none; animation: fadeIn .2s ease-in; }
+.tab-content.active { display: block; }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@media (max-width: 860px) { .tab-switcher { flex-wrap: wrap; } }
+</style>
+  <script>
+    function switchTab(button) {
+      const lang = button.getAttribute('data-lang');
+      const allButtons = document.querySelectorAll('.tab-button');
+      const allContents = document.querySelectorAll('.tab-content');
+      allButtons.forEach(b => b.classList.remove('active'));
+      allContents.forEach(c => c.classList.remove('active'));
+      button.classList.add('active');
+      document.querySelector(`.tab-content[data-lang="${lang}"]`).classList.add('active');
+    }
+  </script>
+</head>
+<body>
+  <div class="container">
+    <div class="tab-switcher">
+      <button class="tab-button active" onclick="switchTab(this)" data-lang="fr">Français</button><button class="tab-button " onclick="switchTab(this)" data-lang="en">English</button>
+    </div>
+    <div class="tab-content active" data-lang="fr"><section class="summary-header">
+  <h1>Horizon Quotidien — 2026-05-30</h1>
+  <p class="lead">Parmi 6 contenus collectés, 1 sujets essentiels ont été sélectionnés.</p>
+  <nav class="toc" aria-label="Sommaire">
+    <p class="toc-title">Sommaire</p>
+    <ul><li><a href="#item-1">Contrat de 4 milliards pour SpaceX : L’ère du « Dôme d’Or » de la défense antimissile spatiale <span class="toc-score">⭐️ 7.610250000000001/10</span></a></li></ul>
+  </nav>
+</section>
+<main class="items">
+<article id="item-1">
+  <header>
+    <h2 class="item-title"><a href="https://www.theverge.com/science/940207/spacex-golden-dome-satellite-contract">Contrat de 4 milliards pour SpaceX : L’ère du « Dôme d’Or » de la défense antimissile spatiale</a>
+      <span class="score">⭐️ 7.610250000000001/10</span>
+    </h2>
+    <div class="meta">rss · The Verge · May 29, 21:48</div>
+  </header>
+  <div class="article-body"><p class="article-lead">La Naissance du « Dôme d’Or » : Un Bouclier Défensif Multicouche</p><p>Le « Dôme d’Or » n’est pas un simple programme de défense antimissile : c’est une architecture visionnaire conçue pour protéger les États-Unis contre toutes les formes de menaces aériennes. Selon Lockheed Martin, ce système vise à intégrer des intercepteurs terrestres, des radars navals et des capteurs spatiaux en un « système de systèmes » cohérent. Un document du Pentagone le décrit comme une défense contre « les attaques aériennes de tout adversaire », incluant les véhicules hypersoniques, les missiles balistiques et même les essaims de drones.</p><p></p><p>Pourquoi SpaceX ? Le Rôle Crucial de l’Orbite Basse dans la Guerre Moderne</p><p>Le choix de SpaceX pour ce contrat souligne l’importance croissante de l’orbite basse (LEO) dans la stratégie militaire. Les systèmes traditionnels de suivi de missiles reposent sur des radars terrestres, limités en portée et vulnérables aux brouillages. À l’inverse, les capteurs spatiaux offrent une vue globale et persistante, capable de détecter les lancements en temps réel, quelle que soit leur localisation. Comme l’a souligné Richard, analyste en défense cité par *SpaceNews* :  « Une meilleure technologie en orbite permettrait d’étendre la défense antimissile à davantage de phases d’une attaque, de la phase de propulsion à l’interception terminale. »</p><p></p><p>Comment Fonctionnent les Satellites de Suivi de Missiles : La Technologie Derrière le Bouclier</p><p>Les satellites de suivi de missiles détectent les signatures infrarouges des panaches de fusées lors du lancement. Une fois une menace identifiée, ils transmettent les données aux centres de commandement, qui calculent la trajectoire du missile et activent les intercepteurs. Ce processus repose sur plusieurs technologies clés :    Capteurs infrarouges :  Détectent la chaleur émise par les gaz d’échappement des missiles.   Navigation inertielle assistée par GPS :  Permet un suivi précis même en cas de brouillage des signaux.   Liens de données :  Transmettent les mises à jour en temps réel aux stations au sol et aux intercepteurs.   Le passage à un suivi spatial est essentiel, car les missiles hypersoniques – capables de manœuvrer à plus de Mach 5 – posent des défis majeurs aux systèmes radar traditionnels.</p><p></p><p>La US Space Force : Des Mèmes à une Mission Stratégique</p><p>Créée en décembre 2019, la US Space Force (USSF) a d’abord été accueillie avec scepticisme, souvent réduite à des memes sur des « marines de l’espace ». Pourtant, son rôle s’est révélé indispensable. Comme l’a expliqué un utilisateur de Reddit : « L’USSF est un fournisseur de services pour les commandements combattants, tout comme l’Armée l’est pour le Commandement européen des États-Unis. » Ses responsabilités incluent les opérations satellitaires, l’alerte antimissile et la cybersécurité – autant de domaines centraux pour le « Dôme d’Or ».  « La Space Force organise, forme et équipe le personnel pour protéger les intérêts des États-Unis et de leurs alliés dans l’espace. » — Quora, sur le mandat de l’USSF</p><p></p><p>Conséquences : Une Nouvelle Course aux Armements dans l’Espace ?</p><p>Le contrat de SpaceX marque une tendance plus large : la militarisation de l’espace. Si les États-Unis mènent dans ce domaine, des adversaires comme la Chine et la Russie développent rapidement leurs propres capacités spatiales. Le « Dôme d’Or » pourrait déclencher une course aux armements, avec des investissements dans les armes antisatellites et les contre-mesures. Cependant, ses partisans soutiennent que ces systèmes sont purement défensifs. Comme le souligne une fiche d’information du Arms Control Center, le « Dôme d’Or » est « théoriquement » conçu pour dissuader les agressions, et non pour les faciliter. Pourtant, la frontière entre défense et offensive dans l’espace reste dangereusement floue.</p></div>
+  
+  <footer class="item-footer">
+    <div class="tags"><code>#SpaceX</code>, <code>#US Space Force</code>, <code>#Defense Technology</code></div>
+    
+  </footer>
+</article>
+</main></div><div class="tab-content " data-lang="en"><section class="summary-header">
+  <h1>Horizon Daily — 2026-05-30</h1>
+  <p class="lead">From 6 items, 1 important content pieces were selected</p>
+  <nav class="toc" aria-label="Contents">
+    <p class="toc-title">Contents</p>
+    <ul><li><a href="#item-1">SpaceX’s $4 Billion &#39;Golden Dome&#39; Contract: A New Era for Missile Defense in Space <span class="toc-score">⭐️ 7.610250000000001/10</span></a></li></ul>
+  </nav>
+</section>
+<main class="items">
+<article id="item-1">
+  <header>
+    <h2 class="item-title"><a href="https://www.theverge.com/science/940207/spacex-golden-dome-satellite-contract">SpaceX’s $4 Billion &#39;Golden Dome&#39; Contract: A New Era for Missile Defense in Space</a>
+      <span class="score">⭐️ 7.610250000000001/10</span>
+    </h2>
+    <div class="meta">rss · The Verge · May 29, 21:48</div>
+  </header>
+  <div class="article-body"><p class="article-lead">The Birth of the &#39;Golden Dome&#39;: A Multi-Layered Defense Shield</p><p>The &#39;Golden Dome&#39; is not just another missile defense program—it is a visionary, multi-layered architecture designed to protect the continental United States from aerial threats of all kinds. According to Lockheed Martin, the system aims to combine ground-based interceptors, sea-based radar, and space-based sensors into a seamless &#39;system of systems.&#39; The Pentagon’s fact sheet describes it as a defense against &#39;aerial attacks from any foe,&#39; including hypersonic glide vehicles, ballistic missiles, and even emerging threats like drone swarms.</p><p></p><p>Why SpaceX? The Role of Low-Earth Orbit in Modern Warfare</p><p>SpaceX’s selection for this contract underscores the growing importance of low-Earth orbit (LEO) in military strategy. Traditional missile-tracking systems rely on ground-based radar, which has limitations in range and vulnerability to jamming. By contrast, space-based sensors offer a global, persistent view—capable of detecting launches in real time, regardless of geography. As Richard, a defense analyst cited in *SpaceNews*, noted, &#39;Better technology in orbit would allow missile defense to expand to more stages of an attack, from boost phase to terminal interception.&#39;</p><p></p><p>How Missile-Tracking Satellites Work: The Tech Behind the Shield</p><p>Missile-tracking satellites operate by detecting the infrared signatures of rocket plumes during launch. Once a threat is identified, the satellites relay data to command centers, which calculate the missile’s trajectory and cue interceptors. This process relies on a mix of technologies:    Infrared sensors:  Detect heat from missile exhaust.   GPS-aided inertial navigation:  Ensures precise tracking even if signals are jammed.   Data links:  Transmit real-time updates to ground stations and interceptors.   The shift to space-based tracking is critical, as hypersonic missiles—capable of maneuvering at speeds exceeding Mach 5—pose challenges for traditional radar systems.</p><p></p><p>The US Space Force: From Memes to Mission-Critical</p><p>Established in December 2019, the US Space Force (USSF) was initially met with skepticism, often reduced to internet memes about &#39;space marines.&#39; Yet, its role has proven indispensable. As one Reddit user explained, &#39;USSF is a service provider to the combatant commands, just like the Army is to US European Command.&#39; Its responsibilities include satellite operations, missile warning, and cybersecurity—all of which are central to the &#39;Golden Dome.&#39;  &quot;The Space Force organizes, trains, and equips personnel to protect U.S. and allied interests in space.&quot; — Quora, on the USSF’s mandate</p><p></p><p>Implications: A New Arms Race in Space?</p><p>SpaceX’s contract signals a broader trend: the militarization of space. While the US leads in this domain, adversaries like China and Russia are rapidly developing their own space-based capabilities. The *Golden Dome* could provoke an arms race, with nations investing in anti-satellite weapons and countermeasures. However, proponents argue that such systems are purely defensive. As the Arms Control Center’s fact sheet notes, the *Golden Dome* is &#39;theoretically&#39; designed to deter aggression, not enable it. Yet, the line between defense and offense in space remains perilously thin.</p></div>
+  
+  <footer class="item-footer">
+    <div class="tags"><code>#SpaceX</code>, <code>#US Space Force</code>, <code>#Defense Technology</code></div>
+    
+  </footer>
+</article>
+</main></div>
+  </div>
+</body>
+</html>

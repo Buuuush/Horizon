@@ -1,0 +1,375 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Horizon — 2026-06-01</title>
+  <style>
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600&family=Manrope:wght@500;700&display=swap');
+
+:root {
+    --bg: #f8f8fb;
+    --paper: #ffffff;
+    --surface: #fcfbff;
+    --accent: #325c9b;
+    --accent-2: color-mix(in srgb, var(--accent) 55%, #b73fd6);
+    --accent-3: color-mix(in srgb, var(--accent) 40%, #f59e0b);
+    --accent-soft: #e6eefb;
+    --muted: #5c6372;
+    --text: #1d2230;
+    --ring: color-mix(in srgb, var(--accent) 32%, transparent);
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+    color: var(--text);
+    background:
+        radial-gradient(1300px 420px at -10% -20%, var(--accent-soft), transparent 60%),
+        radial-gradient(760px 300px at 88% -12%, color-mix(in srgb, var(--accent-2) 24%, transparent), transparent 66%),
+        radial-gradient(640px 240px at 30% 0%, color-mix(in srgb, var(--accent-3) 18%, transparent), transparent 70%),
+        var(--bg);
+    font-family: 'Source Serif 4', Georgia, serif;
+    line-height: 1.78;
+}
+
+.container { max-width: 1100px; margin: 1.5rem auto; padding: 1rem; }
+
+/* ── Page header ─────────────────────────────────────────────────────── */
+.summary-header {
+    background: var(--paper);
+    border: 1px solid color-mix(in srgb, var(--accent) 16%, transparent);
+    border-radius: 24px;
+    padding: 1.5rem 1.6rem 1.1rem;
+    box-shadow: 0 18px 48px rgba(19, 33, 68, 0.08);
+    margin-bottom: 1rem;
+    position: relative;
+    overflow: hidden;
+}
+.summary-header::after {
+    content: "";
+    position: absolute;
+    inset: auto -60px -80px auto;
+    width: 220px; height: 220px;
+    border-radius: 999px;
+    background: radial-gradient(circle, color-mix(in srgb, var(--accent-2) 28%, transparent), transparent 70%);
+    pointer-events: none;
+}
+.summary-header h1 {
+    margin: 0;
+    font-family: 'Fraunces', 'DM Serif Display', 'Iowan Old Style', 'Palatino Linotype', serif;
+    letter-spacing: .01em;
+    font-size: clamp(1.8rem, 3.6vw, 2.8rem);
+    line-height: 1.15;
+}
+.lead { margin: .55rem 0 1.1rem; color: var(--muted); font-size: 1.04rem; max-width: 78ch; }
+
+/* ── TOC ─────────────────────────────────────────────────────────────── */
+.toc-title {
+    margin: 0 0 .45rem;
+    font-family: 'Manrope', 'Segoe UI', sans-serif;
+    font-size: .85rem;
+    text-transform: uppercase;
+    letter-spacing: .11em;
+    color: var(--muted);
+}
+.toc ul {
+    list-style: none; margin: 0; padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: .55rem;
+}
+.toc li {
+    background: linear-gradient(160deg, var(--surface), color-mix(in srgb, var(--accent-soft) 48%, #ffffff));
+    border: 1px solid color-mix(in srgb, var(--accent) 16%, transparent);
+    border-radius: 10px;
+    padding: .55rem .65rem;
+    transition: transform .18s ease, box-shadow .18s ease;
+}
+.toc li:hover { transform: translateY(-1px); box-shadow: 0 8px 20px color-mix(in srgb, var(--accent) 15%, transparent); }
+.toc a { text-decoration: none; color: var(--text); }
+.toc-score { color: var(--accent); font-family: 'Manrope', 'Segoe UI', sans-serif; font-size: .85rem; font-weight: 600; }
+
+/* ── Article cards ───────────────────────────────────────────────────── */
+.items { display: grid; gap: .95rem; }
+.items article {
+    background: var(--paper);
+    border: 1px solid color-mix(in srgb, var(--accent) 15%, transparent);
+    border-radius: 20px;
+    padding: 1.4rem 1.6rem 1.1rem;
+    box-shadow: 0 10px 32px rgba(0, 0, 0, 0.05);
+}
+.item-title {
+    font-family: 'Fraunces', 'DM Serif Display', 'Iowan Old Style', 'Palatino Linotype', serif;
+    font-size: clamp(1.2rem, 2.2vw, 1.55rem);
+    margin: 0 0 .3rem;
+    line-height: 1.22;
+}
+.item-title a { color: inherit; text-decoration: none; }
+.item-title a:hover { color: var(--accent); }
+.item-title a:focus-visible, .toc a:focus-visible, summary:focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
+    border-radius: 6px;
+}
+.meta { color: var(--muted); font-family: 'Manrope', 'Segoe UI', sans-serif; font-size: .88rem; margin-bottom: .9rem; }
+.score { color: var(--accent); margin-left: .45rem; font-weight: 700; font-family: 'Manrope', 'Segoe UI', sans-serif; font-size: .95rem; }
+
+.article-body { border-top: 1px solid color-mix(in srgb, var(--accent) 10%, transparent); padding-top: 1rem; }
+
+.item-footer {
+    margin-top: 1rem;
+    padding-top: .65rem;
+    border-top: 1px solid color-mix(in srgb, var(--muted) 18%, transparent);
+}
+
+.evidence-note {
+    margin: .8rem 0 0;
+    color: var(--muted);
+    font-size: .92rem;
+    font-style: italic;
+}
+
+.tags { color: var(--muted); font-family: 'Manrope', 'Segoe UI', sans-serif; font-size: .88rem; margin-bottom: .45rem; }
+code { background: color-mix(in srgb, var(--accent-soft) 65%, #ffffff); border-radius: 8px; padding: .12rem .4rem; }
+
+details { margin-top: .5rem; }
+details summary { cursor: pointer; color: var(--accent); font-family: 'Manrope', 'Segoe UI', sans-serif; font-size: .9rem; }
+
+/* ── Dark mode ───────────────────────────────────────────────────────── */
+@media (prefers-color-scheme: dark) {
+    :root {
+        --bg: #0f1420; --paper: #161d2c; --surface: #1b2435;
+        --accent: #7cb1ff; --accent-2: #c28cff; --accent-3: #ffc36c;
+        --accent-soft: #1a2740; --muted: #a6b4cd; --text: #edf2ff;
+        --ring: rgba(124, 177, 255, 0.55);
+    }
+    body {
+        background:
+            radial-gradient(1200px 420px at -10% -20%, #1a2740, transparent 60%),
+            radial-gradient(760px 300px at 88% -12%, rgba(194, 140, 255, 0.2), transparent 66%),
+            radial-gradient(640px 240px at 30% 0%, rgba(255, 195, 108, 0.14), transparent 70%),
+            var(--bg);
+    }
+    .summary-header, .items article { border-color: rgba(124,177,255,.24); box-shadow: 0 18px 44px rgba(0,0,0,.32); }
+    .toc li { border-color: rgba(124,177,255,.22); background: linear-gradient(170deg, #1b2435, #1f2a3f); }
+    code { background: rgba(124,177,255,.16); }
+    .article-background { background: linear-gradient(170deg, #1b2435, #1f2a3f); }
+}
+
+@media (max-width: 860px) {
+    .container { margin: .7rem auto; padding: .65rem; }
+}
+
+/* ── Editorial article layout ─────────────────────────────────────────── */
+
+.article-lead {
+    font-size: 1.18rem;
+    color: var(--muted);
+    line-height: 1.7;
+    margin: .3rem 0 1.4rem;
+    max-width: 72ch;
+    font-style: italic;
+}
+
+.article-section {
+    margin-top: 1.55rem;
+}
+
+    .article-section {
+    font-family: 'Manrope', 'Segoe UI', sans-serif;
+    font-size: .78rem;
+.article-section h2 {
+.narrow {
+    margin: 0 0 .45rem;
+    padding-bottom: .25rem;
+    border-bottom: 1px solid color-mix(in srgb, var(--accent) 22%, transparent);
+}
+
+.article-section h2 {
+.narrow {
+    font-size: 1.03rem;
+    line-height: 1.85;
+    color: var(--text);
+}
+
+.article-section p {
+    margin: 0.25rem 0;
+}
+
+.article-section .article-section-last {
+    font-size: 1.08rem;
+
+.article-section h3 {
+    margin: .35rem 0 .15rem;
+    font-size: 0.95rem;
+    color: var(--muted);
+}
+    font-weight: 600;
+    margin-top: .45rem;
+}
+
+.article-section p + p {
+    margin-top: .8rem;
+}
+
+.article-background {
+    margin-top: 1.4rem;
+    padding: 1rem 1.1rem;
+    background: linear-gradient(170deg, var(--surface), color-mix(in srgb, var(--accent-soft) 30%, #fff));
+    border-left: 3px solid var(--accent);
+    border-radius: 0 10px 10px 0;
+    font-size: .98rem;
+    line-height: 1.78;
+    color: var(--text);
+}
+
+.article-background strong {
+    display: block;
+    font-family: 'Manrope', 'Segoe UI', sans-serif;
+    font-size: .78rem;
+    text-transform: uppercase;
+    letter-spacing: .1em;
+    color: var(--accent);
+    margin-bottom: .35rem;
+}
+
+.article-discussion {
+    margin-top: 1.2rem;
+    padding: .85rem 1rem;
+    border-left: 3px solid color-mix(in srgb, var(--muted) 40%, transparent);
+    font-style: italic;
+    font-size: .98rem;
+    color: var(--muted);
+    line-height: 1.75;
+}
+
+.article-discussion strong {
+    font-style: normal;
+    font-family: 'Manrope', 'Segoe UI', sans-serif;
+    font-size: .78rem;
+    text-transform: uppercase;
+    letter-spacing: .1em;
+    display: block;
+    margin-bottom: .3rem;
+    color: var(--muted);
+}
+
+.tab-switcher {
+    display: flex; gap: .5rem; margin-bottom: 1.5rem;
+    border-bottom: 2px solid color-mix(in srgb, var(--accent) 20%, transparent);
+}
+.tab-button {
+    background: transparent; border: none; color: var(--muted);
+    font-family: 'Manrope', 'Segoe UI', sans-serif; font-size: 1rem; font-weight: 600;
+    padding: .75rem 1.2rem; cursor: pointer;
+    transition: color .18s ease, border-color .18s ease;
+    border-bottom: 3px solid transparent;
+}
+.tab-button:hover { color: var(--text); }
+.tab-button.active { color: var(--accent); border-bottom-color: var(--accent); }
+.tab-content { display: none; animation: fadeIn .2s ease-in; }
+.tab-content.active { display: block; }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@media (max-width: 860px) { .tab-switcher { flex-wrap: wrap; } }
+</style>
+  <script>
+    function switchTab(button) {
+      const lang = button.getAttribute('data-lang');
+      const allButtons = document.querySelectorAll('.tab-button');
+      const allContents = document.querySelectorAll('.tab-content');
+      allButtons.forEach(b => b.classList.remove('active'));
+      allContents.forEach(c => c.classList.remove('active'));
+      button.classList.add('active');
+      document.querySelector(`.tab-content[data-lang="${lang}"]`).classList.add('active');
+    }
+  </script>
+</head>
+<body>
+  <div class="container">
+    <div class="tab-switcher">
+      <button class="tab-button active" onclick="switchTab(this)" data-lang="fr">Français</button><button class="tab-button " onclick="switchTab(this)" data-lang="en">English</button>
+    </div>
+    <div class="tab-content active" data-lang="fr"><section class="summary-header">
+  <h1>Horizon Quotidien — 2026-06-01</h1>
+  <p class="lead">Parmi 521 contenus collectés, 2 sujets essentiels ont été sélectionnés.</p>
+  <nav class="toc" aria-label="Sommaire">
+    <p class="toc-title">Sommaire</p>
+    <ul><li><a href="#item-1">Attaque FROST : Comment les sites web transforment votre SSD en outil d&#39;espionnage <span class="toc-score">⭐️ 7.665375000000001/10</span></a></li>
+<li><a href="#item-2">« Magnifica Humanitas » du pape Léon XIV : une boussole morale pour l’ère de l’IA <span class="toc-score">⭐️ 7.610250000000001/10</span></a></li></ul>
+  </nav>
+</section>
+<main class="items">
+<article id="item-1">
+  <header>
+    <h2 class="item-title"><a href="https://www.wired.com/story/websites-can-now-spy-on-you-through-your-hard-drive/">Attaque FROST : Comment les sites web transforment votre SSD en outil d&#39;espionnage</a>
+      <span class="score">⭐️ 7.665375000000001/10</span>
+    </h2>
+    <div class="meta">rss · Wired · Jun 1, 09:30</div>
+  </header>
+  <div class="article-body"><p class="article-lead">La technique FROST : Une nouvelle ère d&#39;espionnage via le navigateur</p><p>Des chercheurs de l&#39;Université de technologie de Graz en Autriche ont révélé une nouvelle méthode d&#39;attaque surprenante qui transforme votre disque SSD en un dispositif de surveillance involontaire. Baptisée FROST – acronyme de Fingerprinting Remotely using OPFS-based SSD Timing – cette technique exploite les subtiles différences de timing dans la manière dont les navigateurs interagissent avec votre matériel de stockage. En mesurant les micro-délais dans les opérations d&#39;écriture du SSD, des sites web malveillants peuvent déduire une quantité surprenante d&#39;informations sur l&#39;activité de votre ordinateur, le tout sans nécessiter de permissions explicites ni d&#39;interaction de l&#39;utilisateur.</p><p></p><p>Comment FROST transforme votre SSD en outil de surveillance</p><p>L&#39;attaque fonctionne en exploitant le Origin Private File System (OPFS), une API de navigateur conçue pour donner aux applications web un accès sécurisé et sandboxé au stockage local. Voici comment elle se déroule :    Manipulation du stockage :  Le site web malveillant écrit un gros fichier sur votre SSD via l&#39;OPFS.   Mesure du timing :  Un code JavaScript mesure précisément le temps nécessaire pour compléter les opérations d&#39;écriture suivantes.   Inférence d&#39;activité :  En analysant ces schémas de timing, le site peut déterminer si d&#39;autres applications utilisent activement le SSD, révélant ainsi quels programmes vous exécutez ou quels fichiers vous consultez.    &quot;FROST représente un changement fondamental dans notre façon de penser les attaques basées sur les navigateurs. Il ne s&#39;agit plus seulement de ce que les sites web peuvent voir, mais de ce qu&#39;ils peuvent déduire du comportement physique de votre matériel.&quot; — Chercheur en sécurité à l&#39;Université de technologie de Graz</p><p></p><p>Ce que FROST peut révéler sur vous</p><p>Les implications de cette technique sont vastes. Bien que FROST ne donne pas accès direct à vos fichiers ou à vos frappes, elle peut révéler des schémas sensibles concernant vos habitudes informatiques :   Quelles applications vous utilisez (par exemple, si vous utilisez un gestionnaire de mots de passe ou un portefeuille de cryptomonnaies)  Quels types de fichiers vous consultez (documents, médias ou matériaux professionnels sensibles)  Quels autres sites web vous visitez dans différents onglets du navigateur  Si vous utilisez activement votre ordinateur ou si vous vous êtes éloigné   L&#39;attaque est particulièrement insidieuse car elle fonctionne même lorsque vous n&#39;interagissez pas activement avec le site web malveillant – le simple fait d&#39;avoir l&#39;onglet ouvert en arrière-plan suffit.</p><p></p><p>Pourquoi cette attaque est si difficile à stopper</p><p>Plusieurs facteurs rendent FROST exceptionnellement difficile à contrer :    Aucune interaction utilisateur requise :  Contrairement aux attaques de phishing qui nécessitent un clic sur un lien, FROST fonctionne silencieusement en arrière-plan.   Aucun indicateur clair :  Il n&#39;y a aucun signe évident que l&#39;activité de votre SSD est surveillée – pas de trafic réseau inhabituel, pas de processus suspects.   Basé sur le navigateur :  L&#39;attaque utilise des technologies web standard (JavaScript et OPFS) qui sont fondamentales pour les applications web modernes.   Spécifique au matériel :  Les schémas de timing exploités par FROST sont inhérents au fonctionnement des SSD, ce qui les rend difficiles à éliminer sans dégrader les performances.   L&#39;équipe de sécurité de Google a reconnu le problème mais n&#39;a pas annoncé de plans immédiats pour implémenter des protections, citant la complexité de concilier sécurité et performance.</p><p></p><p>Comment se protéger contre la surveillance basée sur les SSD</p><p>Bien qu&#39;il n&#39;existe pas de défense parfaite contre FROST, les experts en sécurité recommandent plusieurs stratégies d&#39;atténuation :    Limiter les onglets du navigateur :  Réduisez le nombre d&#39;onglets ouverts simultanément, en particulier lorsque vous visitez des sites non fiables.   Utiliser l&#39;isolation du navigateur :  Envisagez d&#39;utiliser des technologies d&#39;isolation du navigateur qui exécutent le contenu web dans des environnements virtualisés.   Désactiver JavaScript :  Bien que peu pratique pour la plupart des utilisateurs, désactiver JavaScript sur les sites non fiables peut prévenir les attaques FROST (mais peut casser de nombreux sites).   Navigation basée sur la RAM :  Certains utilisateurs avancés exécutent leur profil de navigateur entièrement depuis la RAM, ce qui élimine le canal latéral de timing du SSD.   Bloqueurs de scripts :  Des outils comme uBlock Origin peuvent aider à empêcher l&#39;exécution de scripts malveillants, bien qu&#39;ils ne capturent pas toutes les implémentations de FROST.    &quot;L&#39;attaque FROST souligne une vérité critique sur l&#39;informatique moderne : notre matériel fuit constamment des informations sur nos activités, souvent de manières que nous n&#39;avions jamais anticipées. Alors que nous évoluons vers des applications web plus puissantes, nous devons repenser la manière dont nous protégeons la vie privée des utilisateurs au niveau matériel.&quot; — Défenseur de la vie privée à l&#39;Electronic Frontier Foundation</p><p></p><p>Les implications plus larges pour la vie privée numérique</p><p>FROST représente plus qu&#39;une simple vulnérabilité de sécurité – elle signale un changement fondamental dans la manière dont les attaquants peuvent exploiter le comportement du matériel pour compromettre la vie privée. Cette attaque rejoint une liste croissante de techniques de canal auxiliaire qui exploitent les caractéristiques physiques des dispositifs informatiques :   Attaques de timing du cache CPU (comme Spectre et Meltdown)  Empreintes digitales basées sur le GPU  Attaques par imagerie thermique  Surveillance des émissions électromagnétiques   Ce qui rend FROST particulièrement préoccupant, c&#39;est son accessibilité. Contrairement aux attaques sophistiquées des États-nations qui nécessitent un accès physique aux appareils, FROST peut être déployée par n&#39;importe quel site web avec seulement quelques lignes de JavaScript. Cette démocratisation des capacités de surveillance soulève des questions sérieuses sur l&#39;avenir de la vie privée en ligne et l&#39;adéquation des modèles de sécurité actuels.</p></div>
+  
+  <footer class="item-footer">
+    <div class="tags"><code>#Cybersecurity</code>, <code>#Privacy</code>, <code>#Technology</code></div>
+    
+  </footer>
+</article>
+
+<article id="item-2">
+  <header>
+    <h2 class="item-title"><a href="https://www.technologyreview.com/2026/05/29/1138107/how-the-popes-magnifica-humanitas-offers-a-template-for-individuals-to-meet-the-ai-moment/">« Magnifica Humanitas » du pape Léon XIV : une boussole morale pour l’ère de l’IA</a>
+      <span class="score">⭐️ 7.610250000000001/10</span>
+    </h2>
+    <div class="meta">rss · MIT Technology Review · May 29, 10:00</div>
+  </header>
+  <div class="article-body"><p class="article-lead">Une encyclique papale pour l’ère numérique</p><p>Avec *Magnifica Humanitas*, le pape Léon XIV marque un tournant historique : sa première encyclique aborde explicitement l’intelligence artificielle. Les encycliques – lettres pastorales du pape adressées à l’Église catholique mondiale – traitent traditionnellement de questions doctrinales ou morales, mais rarement de technologies de pointe.  « Une encyclique est une lettre pastorale écrite par le pape, principalement adressée aux évêques mais aussi aux catholiques et à tous les hommes, reflétant généralement les enseignements de l’Église et suggérant des moyens de les appliquer aux enjeux modernes »,  précise le guide d’*EWTN News* sur les documents pontificaux. En plaçant l’IA au cœur de *Magnifica Humanitas*, Léon XIV élève le débat au-delà de la faisabilité technique pour en faire une question de dignité humaine, perpétuant ainsi le rôle de l’Église dans la réflexion éthique sur les technologies émergentes, des armes nucléaires au génie génétique.</p><p></p><p>Le pape qui unit les continents et les idéologies</p><p>Le parcours de Léon XIV en fait une figure unique pour aborder les implications mondiales de l’IA. Né Robert Francis Prevost à Chicago en 1955, il est devenu le premier pape américain de l’histoire tout en conservant la nationalité péruvienne, fruit de décennies de travail missionnaire en Amérique latine. Son pontificat s’est distingué par un engagement en faveur de la justice sociale, des droits des migrants et, désormais, de l’éthique technologique.  « Il est le premier citoyen des États-Unis à être élu pape et le premier citoyen du Pérou à accéder à cette fonction »,  souligne *Britannica*, soulignant sa perspective transnationale. Cette double identité inspire *Magnifica Humanitas*, qui appelle à une coopération internationale pour garantir que l’IA serve le bien commun, et non seulement les intérêts des entreprises ou des États.</p><p></p><p>Démystifier le mythe de la neutralité technologique</p><p>Au cœur de *Magnifica Humanitas* se trouve le rejet de l’idée selon laquelle la technologie serait moralement neutre. L’affirmation de Léon XIV, « la technologie n’est jamais neutre », remet en cause une hypothèse largement répandue dans la Silicon Valley et les cercles politiques : celle selon laquelle des outils comme l’IA seraient dépourvus de valeurs intrinsèques, leur éthique dépendant uniquement de leurs utilisateurs.  « La neutralité est souvent associée à l’objectivité pour minimiser les biais. Elle peut aussi être décrite comme ‘une valeur démocratique qui élimine les préjugés’ »,  écrit l’historienne Dr. Jane Romero, tout en soulignant que cette vision ignore comment les choix de conception intègrent des valeurs dans la technologie. Par exemple, les algorithmes de reconnaissance faciale, entraînés majoritairement sur des visages à la peau claire, présentent des biais raciaux, tandis que les systèmes de recommandation privilégient l’engagement au détriment de la vérité, amplifiant la désinformation. L’encyclique exhorte les développeurs à reconnaître ces biais inhérents et à concevoir des systèmes d’IA qui promeuvent activement la justice et l’inclusion.</p><p></p><p>Un appel au courage et à la solidarité</p><p>*Magnifica Humanitas* n’est pas seulement une critique, mais un appel à l’action. Léon XIV présente la révolution de l’IA comme un test de solidarité humaine, exhortant les individus à exiger transparence, responsabilité et accès équitable à la technologie. L’encyclique énonce trois principes clés pour naviguer dans l’ère de l’IA :    Dignité humaine :  L’IA doit renforcer, et non éroder, la valeur intrinsèque de chaque personne, en particulier des plus marginalisés.   Bien commun :  Le progrès technologique doit servir la société dans son ensemble, et non seulement les élites économiques ou les régimes autoritaires.   Principe de précaution :  Les conséquences imprévues de l’IA – déplacement d’emplois, surveillance, deepfakes – doivent être anticipées et atténuées de manière proactive.   Ces principes rejoignent des initiatives plus larges, comme le *AI Act* de l’UE ou l’*Appel de Rome pour l’éthique de l’IA* lancé par le Vatican en 2020, mais l’encyclique de Léon XIV personnalise les enjeux, présentant l’éthique de l’IA comme un devoir moral pour chaque individu, et non seulement pour les institutions.</p><p></p><p>De la doctrine à la pratique : quelles suites ?</p><p>La publication de *Magnifica Humanitas* coïncide avec un moment charnière dans le développement de l’IA. Alors que les gouvernements et les entreprises se précipitent pour déployer des systèmes d’IA générative, des armes autonomes et des outils de police prédictive, l’encyclique rappelle opportunément la nécessité de garde-fous éthiques.  « Le pape Léon XIV et le cofondateur de l’entreprise d’intelligence artificielle Anthropic lanceront la première encyclique du pontife le 25 mai, un document sur la préservation de la dignité humaine à l’ère de l’IA »,  rapporte le *diocèse catholique romain de Syracuse*, signalant l’intention de l’Église de collaborer avec les technologues pour traduire les principes moraux en actions concrètes. Ce partenariat pourrait déboucher sur des résultats tangibles, comme des normes industrielles pour la transparence algorithmique, des traités internationaux sur l’IA dans la guerre, ou des campagnes de sensibilisation du public aux impacts sociétaux de l’IA. En définitive, *Magnifica Humanitas* pose une question cruciale : façonnerons-nous l’IA, ou sera-ce l’IA qui nous façonnera ?</p></div>
+  
+  <footer class="item-footer">
+    <div class="tags"><code>#Artificial Intelligence</code>, <code>#Ethics</code>, <code>#Technology</code>, <code>#Religion</code></div>
+    
+  </footer>
+</article>
+</main></div><div class="tab-content " data-lang="en"><section class="summary-header">
+  <h1>Horizon Daily — 2026-06-01</h1>
+  <p class="lead">From 521 items, 2 important content pieces were selected</p>
+  <nav class="toc" aria-label="Contents">
+    <p class="toc-title">Contents</p>
+    <ul><li><a href="#item-1">FROST Attack: How Websites Are Turning Your SSD Into a Spy Tool <span class="toc-score">⭐️ 7.665375000000001/10</span></a></li>
+<li><a href="#item-2">Pope Leo XIV’s ‘Magnifica Humanitas’: A Moral Compass for the Age of AI <span class="toc-score">⭐️ 7.610250000000001/10</span></a></li></ul>
+  </nav>
+</section>
+<main class="items">
+<article id="item-1">
+  <header>
+    <h2 class="item-title"><a href="https://www.wired.com/story/websites-can-now-spy-on-you-through-your-hard-drive/">FROST Attack: How Websites Are Turning Your SSD Into a Spy Tool</a>
+      <span class="score">⭐️ 7.665375000000001/10</span>
+    </h2>
+    <div class="meta">rss · Wired · Jun 1, 09:30</div>
+  </header>
+  <div class="article-body"><p class="article-lead">The FROST Technique: A New Frontier in Browser-Based Espionage</p><p>Researchers at Graz University of Technology in Austria have unveiled a startling new attack vector that turns your solid-state drive (SSD) into an unwitting surveillance device. Dubbed FROST—short for Fingerprinting Remotely using OPFS-based SSD Timing—this technique exploits subtle timing differences in how browsers interact with your storage hardware. By measuring micro-delays in SSD write operations, malicious websites can infer a surprising amount of information about your computer&#39;s activity, all without requiring any explicit permissions or user interaction.</p><p></p><p>How FROST Turns Your SSD Into a Surveillance Device</p><p>The attack works by leveraging the Origin Private File System (OPFS), a browser API designed to give web applications secure, sandboxed access to local storage. Here&#39;s how it unfolds:    Storage Manipulation:  The malicious website writes a large file to your SSD through the OPFS.   Timing Measurement:  JavaScript code precisely measures how long subsequent write operations take to complete.   Activity Inference:  By analyzing these timing patterns, the site can determine whether other applications are actively using the SSD, revealing which programs you&#39;re running or which files you&#39;re accessing.    &quot;FROST represents a fundamental shift in how we think about browser-based attacks. It&#39;s no longer just about what websites can see—it&#39;s about what they can infer from the physical behavior of your hardware.&quot; — Security Researcher at Graz University of Technology</p><p></p><p>What FROST Can Reveal About You</p><p>The implications of this technique are far-reaching. While FROST doesn&#39;t provide direct access to your files or keystrokes, it can reveal sensitive patterns about your computing habits:   Which applications you&#39;re running (e.g., whether you&#39;re using a password manager or cryptocurrency wallet)  What types of files you&#39;re accessing (documents, media, or sensitive work materials)  Which other websites you&#39;re visiting in different browser tabs  Whether you&#39;re actively using your computer or have stepped away   The attack is particularly insidious because it works even when you&#39;re not actively interacting with the malicious website—simply having the tab open in the background is sufficient.</p><p></p><p>Why This Attack Is So Difficult to Stop</p><p>Several factors make FROST exceptionally challenging to defend against:    No User Interaction Required:  Unlike phishing attacks that require you to click a link, FROST works silently in the background.   No Clear Indicators:  There are no obvious signs that your SSD activity is being monitored—no unusual network traffic, no suspicious processes.   Browser-Based:  The attack uses standard web technologies (JavaScript and OPFS) that are fundamental to modern web applications.   Hardware-Specific:  The timing patterns exploited by FROST are inherent to how SSDs operate, making them difficult to eliminate without degrading performance.   Google&#39;s security team has acknowledged the issue but has not announced any immediate plans to implement protections, citing the complexity of balancing security with performance.</p><p></p><p>How to Protect Yourself from SSD-Based Surveillance</p><p>While there&#39;s no perfect defense against FROST, security experts recommend several mitigation strategies:    Limit Browser Tabs:  Reduce the number of tabs you keep open simultaneously, particularly when visiting untrusted websites.   Use Browser Isolation:  Consider using browser isolation technologies that run web content in virtualized environments.   Disable JavaScript:  While impractical for most users, disabling JavaScript on untrusted sites can prevent FROST attacks (though it may break many websites).   RAM-Based Browsing:  Some advanced users run their entire browser profile from RAM, which eliminates the SSD timing side channel.   Script Blockers:  Tools like uBlock Origin can help prevent malicious scripts from running, though they may not catch all FROST implementations.    &quot;The FROST attack underscores a critical truth about modern computing: our hardware is constantly leaking information about our activities, often in ways we never anticipated. As we move toward more powerful web applications, we must rethink how we protect user privacy at the hardware level.&quot; — Privacy Advocate at the Electronic Frontier Foundation</p><p></p><p>The Broader Implications for Digital Privacy</p><p>FROST represents more than just another security vulnerability—it signals a fundamental shift in how attackers can exploit hardware behavior to compromise privacy. This attack joins a growing list of side-channel techniques that leverage physical characteristics of computing devices:   CPU cache timing attacks (like Spectre and Meltdown)  GPU-based fingerprinting  Thermal imaging attacks  Electromagnetic emissions monitoring   What makes FROST particularly concerning is its accessibility. Unlike sophisticated nation-state attacks that require physical access to devices, FROST can be deployed by any website with just a few lines of JavaScript. This democratization of surveillance capabilities raises serious questions about the future of online privacy and the adequacy of current security models.</p></div>
+  
+  <footer class="item-footer">
+    <div class="tags"><code>#Cybersecurity</code>, <code>#Privacy</code>, <code>#Technology</code></div>
+    
+  </footer>
+</article>
+
+<article id="item-2">
+  <header>
+    <h2 class="item-title"><a href="https://www.technologyreview.com/2026/05/29/1138107/how-the-popes-magnifica-humanitas-offers-a-template-for-individuals-to-meet-the-ai-moment/">Pope Leo XIV’s ‘Magnifica Humanitas’: A Moral Compass for the Age of AI</a>
+      <span class="score">⭐️ 7.610250000000001/10</span>
+    </h2>
+    <div class="meta">rss · MIT Technology Review · May 29, 10:00</div>
+  </header>
+  <div class="article-body"><p class="article-lead">A Papal Encyclical for the Digital Age</p><p>Pope Leo XIV’s *Magnifica Humanitas* marks a historic moment: the first encyclical explicitly addressing artificial intelligence. Encyclicals—pastoral letters from the pope to the global Catholic Church—traditionally tackle doctrinal or moral issues, but rarely engage with cutting-edge technology.  “An encyclical is a pastoral letter written by the pope, primarily addressed to bishops but also to Catholics and all people, typically reflecting on Church teachings and suggesting ways to apply them to modern issues,”  explains the *EWTN News* guide to papal documents. By centering AI in *Magnifica Humanitas*, Leo XIV elevates the debate beyond technical feasibility to a question of human dignity, echoing the Church’s long-standing role in shaping ethical discourse on emerging technologies, from nuclear weapons to genetic engineering.</p><p></p><p>The Pope Who Bridges Continents and Ideologies</p><p>Leo XIV’s background makes him uniquely positioned to address AI’s global implications. Born Robert Francis Prevost in Chicago in 1955, he became the first American pope in history while retaining Peruvian citizenship, reflecting his decades of missionary work in Latin America. His papacy has been defined by a commitment to social justice, immigrant rights, and—now—technological ethics.  “He is the first ever United States citizen to be voted Pope and the first citizen of Peru to be elected Pope,”  notes *Britannica*, highlighting his transnational perspective. This dual identity informs *Magnifica Humanitas*, which calls for international cooperation to ensure AI serves the common good, not just corporate or national interests.</p><p></p><p>Debunking the Myth of Technological Neutrality</p><p>At the heart of *Magnifica Humanitas* is a rejection of the idea that technology is morally neutral. Leo XIV’s assertion that “technology is never neutral” challenges a long-held assumption in Silicon Valley and policy circles—that tools like AI are inherently value-free, with ethics determined solely by their users.  “Neutrality is also commonly linked to objectivity to minimize bias. Neutrality can also be described as ‘a democratic value that eliminates bias,’”  writes historian Dr. Jane Romero, yet she argues this framing ignores how design choices embed values into technology. For example, facial recognition algorithms trained predominantly on light-skinned faces exhibit racial bias, while recommendation systems prioritize engagement over truth, amplifying misinformation. The encyclical urges developers to acknowledge these inherent biases and design AI systems that actively promote justice and inclusion.</p><p></p><p>A Call to Courage and Solidarity</p><p>*Magnifica Humanitas* is not merely a critique but a call to action. Leo XIV frames the AI revolution as a test of human solidarity, urging individuals to demand transparency, accountability, and equitable access to technology. The encyclical outlines three key principles for navigating the AI era:    Human dignity:  AI must enhance, not erode, the inherent worth of every person, particularly the marginalized.   Common good:  Technological progress should serve society as a whole, not just economic elites or authoritarian regimes.   Precautionary principle:  Unintended consequences of AI—job displacement, surveillance, deepfakes—must be anticipated and mitigated proactively.   These principles align with broader movements, such as the EU’s AI Act and the Vatican’s 2020 *Rome Call for AI Ethics*, but Leo XIV’s encyclical personalizes the stakes, framing AI ethics as a moral duty for every individual, not just institutions.</p><p></p><p>From Doctrine to Practice: What Comes Next?</p><p>The release of *Magnifica Humanitas* coincides with a pivotal moment in AI development. As governments and corporations race to deploy generative AI, autonomous weapons, and predictive policing systems, the encyclical serves as a timely reminder of the need for ethical guardrails.  “Pope Leo XIV and the co-founder of artificial intelligence company Anthropic will launch the pontiff’s first encyclical on May 25, a document on the care of human dignity in the era of AI,”  reports the *Roman Catholic Diocese of Syracuse*, signaling the Church’s intent to collaborate with technologists to translate moral principles into practice. This partnership could yield concrete outcomes, such as industry standards for algorithmic transparency, global treaties on AI in warfare, or grassroots campaigns to educate the public about AI’s societal impacts. Ultimately, *Magnifica Humanitas* challenges readers to ask: Will we shape AI, or will AI shape us?</p></div>
+  
+  <footer class="item-footer">
+    <div class="tags"><code>#Artificial Intelligence</code>, <code>#Ethics</code>, <code>#Technology</code>, <code>#Religion</code></div>
+    
+  </footer>
+</article>
+</main></div>
+  </div>
+</body>
+</html>

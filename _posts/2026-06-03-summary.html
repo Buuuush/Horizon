@@ -1,0 +1,567 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Horizon — 2026-06-03</title>
+  <style>
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600&family=Manrope:wght@500;700&display=swap');
+
+:root {
+    --bg: #f8f8fb;
+    --paper: #ffffff;
+    --surface: #fcfbff;
+    --accent: #325c9b;
+    --accent-2: color-mix(in srgb, var(--accent) 55%, #b73fd6);
+    --accent-3: color-mix(in srgb, var(--accent) 40%, #f59e0b);
+    --accent-soft: #e6eefb;
+    --muted: #5c6372;
+    --text: #1d2230;
+    --ring: color-mix(in srgb, var(--accent) 32%, transparent);
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+    color: var(--text);
+    background:
+        radial-gradient(1300px 420px at -10% -20%, var(--accent-soft), transparent 60%),
+        radial-gradient(760px 300px at 88% -12%, color-mix(in srgb, var(--accent-2) 24%, transparent), transparent 66%),
+        radial-gradient(640px 240px at 30% 0%, color-mix(in srgb, var(--accent-3) 18%, transparent), transparent 70%),
+        var(--bg);
+    font-family: 'Source Serif 4', Georgia, serif;
+    line-height: 1.78;
+}
+
+.container { max-width: 1100px; margin: 1.5rem auto; padding: 1rem; }
+
+/* ── Page header ─────────────────────────────────────────────────────── */
+.summary-header {
+    background: var(--paper);
+    border: 1px solid color-mix(in srgb, var(--accent) 16%, transparent);
+    border-radius: 24px;
+    padding: 1.5rem 1.6rem 1.1rem;
+    box-shadow: 0 18px 48px rgba(19, 33, 68, 0.08);
+    margin-bottom: 1rem;
+    position: relative;
+    overflow: hidden;
+}
+.summary-header::after {
+    content: "";
+    position: absolute;
+    inset: auto -60px -80px auto;
+    width: 220px; height: 220px;
+    border-radius: 999px;
+    background: radial-gradient(circle, color-mix(in srgb, var(--accent-2) 28%, transparent), transparent 70%);
+    pointer-events: none;
+}
+.summary-header h1 {
+    margin: 0;
+    font-family: 'Fraunces', 'DM Serif Display', 'Iowan Old Style', 'Palatino Linotype', serif;
+    letter-spacing: .01em;
+    font-size: clamp(1.8rem, 3.6vw, 2.8rem);
+    line-height: 1.15;
+}
+.lead { margin: .55rem 0 1.1rem; color: var(--muted); font-size: 1.04rem; max-width: 78ch; }
+
+/* ── TOC ─────────────────────────────────────────────────────────────── */
+.toc-title {
+    margin: 0 0 .45rem;
+    font-family: 'Manrope', 'Segoe UI', sans-serif;
+    font-size: .85rem;
+    text-transform: uppercase;
+    letter-spacing: .11em;
+    color: var(--muted);
+}
+.toc ul {
+    list-style: none; margin: 0; padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: .55rem;
+}
+.toc li {
+    background: linear-gradient(160deg, var(--surface), color-mix(in srgb, var(--accent-soft) 48%, #ffffff));
+    border: 1px solid color-mix(in srgb, var(--accent) 16%, transparent);
+    border-radius: 10px;
+    padding: .55rem .65rem;
+    transition: transform .18s ease, box-shadow .18s ease;
+}
+.toc li:hover { transform: translateY(-1px); box-shadow: 0 8px 20px color-mix(in srgb, var(--accent) 15%, transparent); }
+.toc a { text-decoration: none; color: var(--text); }
+.toc-score { color: var(--accent); font-family: 'Manrope', 'Segoe UI', sans-serif; font-size: .85rem; font-weight: 600; }
+
+/* ── Article cards ───────────────────────────────────────────────────── */
+.items { display: grid; gap: .95rem; }
+.items article {
+    background: var(--paper);
+    border: 1px solid color-mix(in srgb, var(--accent) 15%, transparent);
+    border-radius: 20px;
+    padding: 1.4rem 1.6rem 1.1rem;
+    box-shadow: 0 10px 32px rgba(0, 0, 0, 0.05);
+}
+.item-title {
+    font-family: 'Fraunces', 'DM Serif Display', 'Iowan Old Style', 'Palatino Linotype', serif;
+    font-size: clamp(1.2rem, 2.2vw, 1.55rem);
+    margin: 0 0 .3rem;
+    line-height: 1.22;
+}
+.item-title a { color: inherit; text-decoration: none; }
+.item-title a:hover { color: var(--accent); }
+.item-title a:focus-visible, .toc a:focus-visible, summary:focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
+    border-radius: 6px;
+}
+.meta { color: var(--muted); font-family: 'Manrope', 'Segoe UI', sans-serif; font-size: .88rem; margin-bottom: .9rem; }
+.score { color: var(--accent); margin-left: .45rem; font-weight: 700; font-family: 'Manrope', 'Segoe UI', sans-serif; font-size: .95rem; }
+
+.article-body { border-top: 1px solid color-mix(in srgb, var(--accent) 10%, transparent); padding-top: 1rem; }
+
+.item-footer {
+    margin-top: 1rem;
+    padding-top: .65rem;
+    border-top: 1px solid color-mix(in srgb, var(--muted) 18%, transparent);
+}
+
+.evidence-note {
+    margin: .8rem 0 0;
+    color: var(--muted);
+    font-size: .92rem;
+    font-style: italic;
+}
+
+.tags { color: var(--muted); font-family: 'Manrope', 'Segoe UI', sans-serif; font-size: .88rem; margin-bottom: .45rem; }
+code { background: color-mix(in srgb, var(--accent-soft) 65%, #ffffff); border-radius: 8px; padding: .12rem .4rem; }
+
+details { margin-top: .5rem; }
+details summary { cursor: pointer; color: var(--accent); font-family: 'Manrope', 'Segoe UI', sans-serif; font-size: .9rem; }
+
+/* ── Dark mode ───────────────────────────────────────────────────────── */
+@media (prefers-color-scheme: dark) {
+    :root {
+        --bg: #0f1420; --paper: #161d2c; --surface: #1b2435;
+        --accent: #7cb1ff; --accent-2: #c28cff; --accent-3: #ffc36c;
+        --accent-soft: #1a2740; --muted: #a6b4cd; --text: #edf2ff;
+        --ring: rgba(124, 177, 255, 0.55);
+    }
+    body {
+        background:
+            radial-gradient(1200px 420px at -10% -20%, #1a2740, transparent 60%),
+            radial-gradient(760px 300px at 88% -12%, rgba(194, 140, 255, 0.2), transparent 66%),
+            radial-gradient(640px 240px at 30% 0%, rgba(255, 195, 108, 0.14), transparent 70%),
+            var(--bg);
+    }
+    .summary-header, .items article { border-color: rgba(124,177,255,.24); box-shadow: 0 18px 44px rgba(0,0,0,.32); }
+    .toc li { border-color: rgba(124,177,255,.22); background: linear-gradient(170deg, #1b2435, #1f2a3f); }
+    code { background: rgba(124,177,255,.16); }
+    .article-background { background: linear-gradient(170deg, #1b2435, #1f2a3f); }
+}
+
+@media (max-width: 860px) {
+    .container { margin: .7rem auto; padding: .65rem; }
+}
+
+/* ── Editorial article layout ─────────────────────────────────────────── */
+
+.article-lead {
+    font-size: 1.18rem;
+    color: var(--muted);
+    line-height: 1.7;
+    margin: .3rem 0 1.4rem;
+    max-width: 72ch;
+    font-style: italic;
+}
+
+.article-section {
+    margin-top: 1.55rem;
+}
+
+    .article-section {
+    font-family: 'Manrope', 'Segoe UI', sans-serif;
+    font-size: .78rem;
+.article-section h2 {
+.narrow {
+    margin: 0 0 .45rem;
+    padding-bottom: .25rem;
+    border-bottom: 1px solid color-mix(in srgb, var(--accent) 22%, transparent);
+}
+
+.article-section h2 {
+.narrow {
+    font-size: 1.03rem;
+    line-height: 1.85;
+    color: var(--text);
+}
+
+.article-section p {
+    margin: 0.25rem 0;
+}
+
+.article-section .article-section-last {
+    font-size: 1.08rem;
+
+.article-section h3 {
+    margin: .35rem 0 .15rem;
+    font-size: 0.95rem;
+    color: var(--muted);
+}
+    font-weight: 600;
+    margin-top: .45rem;
+}
+
+.article-section p + p {
+    margin-top: .8rem;
+}
+
+.article-background {
+    margin-top: 1.4rem;
+    padding: 1rem 1.1rem;
+    background: linear-gradient(170deg, var(--surface), color-mix(in srgb, var(--accent-soft) 30%, #fff));
+    border-left: 3px solid var(--accent);
+    border-radius: 0 10px 10px 0;
+    font-size: .98rem;
+    line-height: 1.78;
+    color: var(--text);
+}
+
+.article-background strong {
+    display: block;
+    font-family: 'Manrope', 'Segoe UI', sans-serif;
+    font-size: .78rem;
+    text-transform: uppercase;
+    letter-spacing: .1em;
+    color: var(--accent);
+    margin-bottom: .35rem;
+}
+
+.article-discussion {
+    margin-top: 1.2rem;
+    padding: .85rem 1rem;
+    border-left: 3px solid color-mix(in srgb, var(--muted) 40%, transparent);
+    font-style: italic;
+    font-size: .98rem;
+    color: var(--muted);
+    line-height: 1.75;
+}
+
+.article-discussion strong {
+    font-style: normal;
+    font-family: 'Manrope', 'Segoe UI', sans-serif;
+    font-size: .78rem;
+    text-transform: uppercase;
+    letter-spacing: .1em;
+    display: block;
+    margin-bottom: .3rem;
+    color: var(--muted);
+}
+
+.tab-switcher {
+    display: flex; gap: .5rem; margin-bottom: 1.5rem;
+    border-bottom: 2px solid color-mix(in srgb, var(--accent) 20%, transparent);
+}
+.tab-button {
+    background: transparent; border: none; color: var(--muted);
+    font-family: 'Manrope', 'Segoe UI', sans-serif; font-size: 1rem; font-weight: 600;
+    padding: .75rem 1.2rem; cursor: pointer;
+    transition: color .18s ease, border-color .18s ease;
+    border-bottom: 3px solid transparent;
+}
+.tab-button:hover { color: var(--text); }
+.tab-button.active { color: var(--accent); border-bottom-color: var(--accent); }
+.tab-content { display: none; animation: fadeIn .2s ease-in; }
+.tab-content.active { display: block; }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@media (max-width: 860px) { .tab-switcher { flex-wrap: wrap; } }
+</style>
+  <script>
+    function switchTab(button) {
+      const lang = button.getAttribute('data-lang');
+      const allButtons = document.querySelectorAll('.tab-button');
+      const allContents = document.querySelectorAll('.tab-content');
+      allButtons.forEach(b => b.classList.remove('active'));
+      allContents.forEach(c => c.classList.remove('active'));
+      button.classList.add('active');
+      document.querySelector(`.tab-content[data-lang="${lang}"]`).classList.add('active');
+    }
+  </script>
+</head>
+<body>
+  <div class="container">
+    <div class="tab-switcher">
+      <button class="tab-button active" onclick="switchTab(this)" data-lang="fr">Français</button><button class="tab-button " onclick="switchTab(this)" data-lang="en">English</button>
+    </div>
+    <div class="tab-content active" data-lang="fr"><section class="summary-header">
+  <h1>Horizon Quotidien — 2026-06-03</h1>
+  <p class="lead">Parmi 517 contenus collectés, 8 sujets essentiels ont été sélectionnés.</p>
+  <nav class="toc" aria-label="Sommaire">
+    <p class="toc-title">Sommaire</p>
+    <ul><li><a href="#item-1">China has approved the world’s first invasive brain-computer chip—here’s what’s next <span class="toc-score">⭐️ 9.339750000000002/10</span></a></li>
+<li><a href="#item-2">Websites Can Now Spy on You Through Your Hard Drive <span class="toc-score">⭐️ 8.565375000000001/10</span></a></li>
+<li><a href="#item-3">Getting disability benefits got harder after the Social Security Administration’s staff was slashed and program rules were changed by Trump <span class="toc-score">⭐️ 8.510250000000001/10</span></a></li>
+<li><a href="#item-4">Rehumanizing global health care with agentic AI <span class="toc-score">⭐️ 8.510250000000001/10</span></a></li>
+<li><a href="#item-5">Trump hobbled top cyber agency just as AI learned to hack <span class="toc-score">⭐️ 8.510250000000001/10</span></a></li>
+<li><a href="#item-6">1-Click GitHub Token Stealing via a VSCode Bug <span class="toc-score">⭐️ 8.491875/10</span></a></li>
+<li><a href="#item-7">Fidonet: Technology, Use, Tools, and History (1993) <span class="toc-score">⭐️ 8.1795/10</span></a></li>
+<li><a href="#item-8">Use your Nvidia GPU&#39;s VRAM as swap space on Linux <span class="toc-score">⭐️ 7.830375000000001/10</span></a></li></ul>
+  </nav>
+</section>
+<main class="items">
+<article id="item-1">
+  <header>
+    <h2 class="item-title"><a href="https://www.technologyreview.com/2026/06/01/1138133/china-world-first-brain-chip/">China has approved the world’s first invasive brain-computer chip—here’s what’s next</a>
+      <span class="score">⭐️ 9.339750000000002/10</span>
+    </h2>
+    <div class="meta">rss · MIT Technology Review · Jun 1, 09:09</div>
+  </header>
+  <div class="article-body"><p class="article-lead">One day last October, sitting in the courtyard of his house in China’s Henan province, Dong Hui decided to see if he could hold a pen to write. Dong, 39, had sustained spinal cord injuries in a car accident six years earlier that left him paralyzed from the neck down. Slowly but determinedly, he wrote… --- From rss --- This is today’s edition of The Download, our weekday newsletter that provides a daily dose of what’s going on in the world of technology. China has approved the world’s first invasive brain-computer...</p></div>
+  
+  <footer class="item-footer">
+    <div class="tags"><code>#Brain-Computer Interface</code>, <code>#Medical Technology</code>, <code>#Neuroscience</code>, <code>#China</code></div>
+    
+  </footer>
+</article>
+
+<article id="item-2">
+  <header>
+    <h2 class="item-title"><a href="https://www.wired.com/story/websites-can-now-spy-on-you-through-your-hard-drive/">Websites Can Now Spy on You Through Your Hard Drive</a>
+      <span class="score">⭐️ 8.565375000000001/10</span>
+    </h2>
+    <div class="meta">rss · Wired · Jun 1, 09:30</div>
+  </header>
+  <div class="article-body"><p class="article-lead">Thanks to the newly detailed FROST technique, telltale SSD activity can be measured in the browser using simple JavaScript.</p></div>
+  
+  <footer class="item-footer">
+    <div class="tags"><code>#privacy</code>, <code>#security</code>, <code>#technology</code></div>
+    
+  </footer>
+</article>
+
+<article id="item-3">
+  <header>
+    <h2 class="item-title"><a href="https://theconversation.com/getting-disability-benefits-got-harder-after-the-social-security-administrations-staff-was-slashed-and-program-rules-were-changed-by-trump-279434">Getting disability benefits got harder after the Social Security Administration’s staff was slashed and program rules were changed by Trump</a>
+      <span class="score">⭐️ 8.510250000000001/10</span>
+    </h2>
+    <div class="meta">rss · The Conversation · Jun 1, 12:24</div>
+  </header>
+  <div class="article-body"><p class="article-lead">Researchers learned from dozens of interviews that the usual ways of resolving complex cases, escalating issues and holding the authorities accountable no longer work.</p></div>
+  
+  <footer class="item-footer">
+    <div class="tags"><code>#Social Security</code>, <code>#Disability Benefits</code>, <code>#Trump Administration</code>, <code>#US Policy</code></div>
+    
+  </footer>
+</article>
+
+<article id="item-4">
+  <header>
+    <h2 class="item-title"><a href="https://www.technologyreview.com/2026/06/02/1137827/rehumanizing-global-health-care-with-agentic-ai/">Rehumanizing global health care with agentic AI</a>
+      <span class="score">⭐️ 8.510250000000001/10</span>
+    </h2>
+    <div class="meta">rss · MIT Technology Review · Jun 2, 11:23</div>
+  </header>
+  <div class="article-body"><p class="article-lead">The global health care sector is under increasing strain. Decades of chronic underinvestment and constraints in recruitment have coincided with a surge in demand for services for aging populations. Gaps in provision are already taking a toll, with fragmented access to care and high rates of stress and burnout among staff. And it’s getting worse.…</p></div>
+  
+  <footer class="item-footer">
+    <div class="tags"><code>#global health care</code>, <code>#agentic AI</code>, <code>#health technology</code></div>
+    
+  </footer>
+</article>
+
+<article id="item-5">
+  <header>
+    <h2 class="item-title"><a href="https://www.axios.com/2026/05/26/cisa-white-house-cybersecurity-ai">Trump hobbled top cyber agency just as AI learned to hack</a>
+      <span class="score">⭐️ 8.510250000000001/10</span>
+    </h2>
+    <div class="meta">rss · Axios · May 26, 08:50</div>
+  </header>
+  <div class="article-body"><p class="article-lead">The U.S. government&#39;s lead civilian cyber agency is heading into the AI era with shrinking resources and a diminished role as Washington scrambles to assemble a multi-agency response to emerging AI cyber threats. Why it matters: Former officials and industry leaders fear the Cybersecurity and Infrastructure Security Agency no longer has the capacity to help utilities, banks and other critical infrastructure operators prepare for a coming wave of AI-fueled cyberattacks. The agency is at its weakest just when it&#39;s ne...</p></div>
+  
+  <footer class="item-footer">
+    <div class="tags"><code>#Cybersecurity</code>, <code>#AI</code>, <code>#US Government</code></div>
+    
+  </footer>
+</article>
+
+<article id="item-6">
+  <header>
+    <h2 class="item-title"><a href="https://blog.ammaraskar.com/github-token-stealing/">1-Click GitHub Token Stealing via a VSCode Bug</a>
+      <span class="score">⭐️ 8.491875/10</span>
+    </h2>
+    <div class="meta">hackernews · ammar2 · Jun 2, 15:29 · <a href="https://news.ycombinator.com/item?id=48371562">Discussion</a></div>
+  </header>
+  <div class="article-body"><p class="article-lead">Non disponible en français pour le moment.</p></div>
+  
+  <footer class="item-footer">
+    <div class="tags"><code>#security</code>, <code>#VSCode</code>, <code>#GitHub</code>, <code>#vulnerability</code></div>
+    
+  </footer>
+</article>
+
+<article id="item-7">
+  <header>
+    <h2 class="item-title"><a href="https://www.fidonet.org/inet92_Randy_Bush.txt">Fidonet: Technology, Use, Tools, and History (1993)</a>
+      <span class="score">⭐️ 8.1795/10</span>
+    </h2>
+    <div class="meta">hackernews · BruceEel · Jun 2, 13:53 · <a href="https://news.ycombinator.com/item?id=48370291">Discussion</a></div>
+  </header>
+  <div class="article-body"><p class="article-lead">Non disponible en français pour le moment.</p></div>
+  
+  <footer class="item-footer">
+    <div class="tags"><code>#Fidonet</code>, <code>#Networking</code>, <code>#History of Computing</code>, <code>#Social Media</code>, <code>#Surveillance</code></div>
+    
+  </footer>
+</article>
+
+<article id="item-8">
+  <header>
+    <h2 class="item-title"><a href="https://github.com/c0dejedi/nbd-vram">Use your Nvidia GPU&#39;s VRAM as swap space on Linux</a>
+      <span class="score">⭐️ 7.830375000000001/10</span>
+    </h2>
+    <div class="meta">hackernews · tanelpoder · Jun 2, 22:55 · <a href="https://news.ycombinator.com/item?id=48377404">Discussion</a></div>
+  </header>
+  <div class="article-body"><p class="article-lead">Non disponible en français pour le moment.</p></div>
+  
+  <footer class="item-footer">
+    <div class="tags"><code>#Linux</code>, <code>#Nvidia</code>, <code>#GPU</code>, <code>#Swap Space</code>, <code>#VRAM</code></div>
+    
+  </footer>
+</article>
+</main></div><div class="tab-content " data-lang="en"><section class="summary-header">
+  <h1>Horizon Daily — 2026-06-03</h1>
+  <p class="lead">From 517 items, 8 important content pieces were selected</p>
+  <nav class="toc" aria-label="Contents">
+    <p class="toc-title">Contents</p>
+    <ul><li><a href="#item-1">China has approved the world’s first invasive brain-computer chip—here’s what’s next <span class="toc-score">⭐️ 9.339750000000002/10</span></a></li>
+<li><a href="#item-2">Websites Can Now Spy on You Through Your Hard Drive <span class="toc-score">⭐️ 8.565375000000001/10</span></a></li>
+<li><a href="#item-3">Getting disability benefits got harder after the Social Security Administration’s staff was slashed and program rules were changed by Trump <span class="toc-score">⭐️ 8.510250000000001/10</span></a></li>
+<li><a href="#item-4">Rehumanizing global health care with agentic AI <span class="toc-score">⭐️ 8.510250000000001/10</span></a></li>
+<li><a href="#item-5">Trump hobbled top cyber agency just as AI learned to hack <span class="toc-score">⭐️ 8.510250000000001/10</span></a></li>
+<li><a href="#item-6">1-Click GitHub Token Stealing via a VSCode Bug <span class="toc-score">⭐️ 8.491875/10</span></a></li>
+<li><a href="#item-7">Fidonet: Technology, Use, Tools, and History (1993) <span class="toc-score">⭐️ 8.1795/10</span></a></li>
+<li><a href="#item-8">Use your Nvidia GPU&#39;s VRAM as swap space on Linux <span class="toc-score">⭐️ 7.830375000000001/10</span></a></li></ul>
+  </nav>
+</section>
+<main class="items">
+<article id="item-1">
+  <header>
+    <h2 class="item-title"><a href="https://www.technologyreview.com/2026/06/01/1138133/china-world-first-brain-chip/">China has approved the world’s first invasive brain-computer chip—here’s what’s next</a>
+      <span class="score">⭐️ 9.339750000000002/10</span>
+    </h2>
+    <div class="meta">rss · MIT Technology Review · Jun 1, 09:09</div>
+  </header>
+  <div class="article-body"><p class="article-lead">China has approved the world&#39;s first invasive brain-computer chip, which has already shown promising results in helping a paralyzed man write with a pen</p></div>
+  
+  <footer class="item-footer">
+    <div class="tags"><code>#Brain-Computer Interface</code>, <code>#Medical Technology</code>, <code>#Neuroscience</code>, <code>#China</code></div>
+    
+  </footer>
+</article>
+
+<article id="item-2">
+  <header>
+    <h2 class="item-title"><a href="https://www.wired.com/story/websites-can-now-spy-on-you-through-your-hard-drive/">Websites Can Now Spy on You Through Your Hard Drive</a>
+      <span class="score">⭐️ 8.565375000000001/10</span>
+    </h2>
+    <div class="meta">rss · Wired · Jun 1, 09:30</div>
+  </header>
+  <div class="article-body"><p class="article-lead">Websites can now use the FROST technique to spy on users through their hard drive using simple JavaScript, measuring telltale SSD activity in the browser</p></div>
+  
+  <footer class="item-footer">
+    <div class="tags"><code>#privacy</code>, <code>#security</code>, <code>#technology</code></div>
+    
+  </footer>
+</article>
+
+<article id="item-3">
+  <header>
+    <h2 class="item-title"><a href="https://theconversation.com/getting-disability-benefits-got-harder-after-the-social-security-administrations-staff-was-slashed-and-program-rules-were-changed-by-trump-279434">Getting disability benefits got harder after the Social Security Administration’s staff was slashed and program rules were changed by Trump</a>
+      <span class="score">⭐️ 8.510250000000001/10</span>
+    </h2>
+    <div class="meta">rss · The Conversation · Jun 1, 12:24</div>
+  </header>
+  <div class="article-body"><p class="article-lead">The Social Security Administration&#39;s staff reduction and program rule changes under Trump have made it harder for people to get disability benefits, according to research from dozens of interviews.</p></div>
+  
+  <footer class="item-footer">
+    <div class="tags"><code>#Social Security</code>, <code>#Disability Benefits</code>, <code>#Trump Administration</code>, <code>#US Policy</code></div>
+    
+  </footer>
+</article>
+
+<article id="item-4">
+  <header>
+    <h2 class="item-title"><a href="https://www.technologyreview.com/2026/06/02/1137827/rehumanizing-global-health-care-with-agentic-ai/">Rehumanizing global health care with agentic AI</a>
+      <span class="score">⭐️ 8.510250000000001/10</span>
+    </h2>
+    <div class="meta">rss · MIT Technology Review · Jun 2, 11:23</div>
+  </header>
+  <div class="article-body"><p class="article-lead">The global health care sector is under strain due to underinvestment and increasing demand, and agentic AI may offer a solution to rehumanize care.</p></div>
+  
+  <footer class="item-footer">
+    <div class="tags"><code>#global health care</code>, <code>#agentic AI</code>, <code>#health technology</code></div>
+    
+  </footer>
+</article>
+
+<article id="item-5">
+  <header>
+    <h2 class="item-title"><a href="https://www.axios.com/2026/05/26/cisa-white-house-cybersecurity-ai">Trump hobbled top cyber agency just as AI learned to hack</a>
+      <span class="score">⭐️ 8.510250000000001/10</span>
+    </h2>
+    <div class="meta">rss · Axios · May 26, 08:50</div>
+  </header>
+  <div class="article-body"><p class="article-lead">The US Cybersecurity and Infrastructure Security Agency is facing reduced resources and a diminished role just as AI-powered cyber threats are emerging.</p></div>
+  
+  <footer class="item-footer">
+    <div class="tags"><code>#Cybersecurity</code>, <code>#AI</code>, <code>#US Government</code></div>
+    
+  </footer>
+</article>
+
+<article id="item-6">
+  <header>
+    <h2 class="item-title"><a href="https://blog.ammaraskar.com/github-token-stealing/">1-Click GitHub Token Stealing via a VSCode Bug</a>
+      <span class="score">⭐️ 8.491875/10</span>
+    </h2>
+    <div class="meta">hackernews · ammar2 · Jun 2, 15:29 · <a href="https://news.ycombinator.com/item?id=48371562">Discussion</a></div>
+  </header>
+  <div class="article-body"><p class="article-lead">A security vulnerability in VSCode allows for 1-click GitHub token stealing, highlighting the risks of embedded editors and extension trust levels.</p></div>
+  
+  <footer class="item-footer">
+    <div class="tags"><code>#security</code>, <code>#VSCode</code>, <code>#GitHub</code>, <code>#vulnerability</code></div>
+    
+  </footer>
+</article>
+
+<article id="item-7">
+  <header>
+    <h2 class="item-title"><a href="https://www.fidonet.org/inet92_Randy_Bush.txt">Fidonet: Technology, Use, Tools, and History (1993)</a>
+      <span class="score">⭐️ 8.1795/10</span>
+    </h2>
+    <div class="meta">hackernews · BruceEel · Jun 2, 13:53 · <a href="https://news.ycombinator.com/item?id=48370291">Discussion</a></div>
+  </header>
+  <div class="article-body"><p class="article-lead">The article explores the technology, use, tools, and history of Fidonet, a network that was a precursor to the modern internet and social media.</p></div>
+  
+  <footer class="item-footer">
+    <div class="tags"><code>#Fidonet</code>, <code>#Networking</code>, <code>#History of Computing</code>, <code>#Social Media</code>, <code>#Surveillance</code></div>
+    
+  </footer>
+</article>
+
+<article id="item-8">
+  <header>
+    <h2 class="item-title"><a href="https://github.com/c0dejedi/nbd-vram">Use your Nvidia GPU&#39;s VRAM as swap space on Linux</a>
+      <span class="score">⭐️ 7.830375000000001/10</span>
+    </h2>
+    <div class="meta">hackernews · tanelpoder · Jun 2, 22:55 · <a href="https://news.ycombinator.com/item?id=48377404">Discussion</a></div>
+  </header>
+  <div class="article-body"><p class="article-lead">A GitHub project allows using Nvidia GPU&#39;s VRAM as swap space on Linux, potentially benefiting laptops with limited RAM and no upgrade path.</p></div>
+  
+  <footer class="item-footer">
+    <div class="tags"><code>#Linux</code>, <code>#Nvidia</code>, <code>#GPU</code>, <code>#Swap Space</code>, <code>#VRAM</code></div>
+    
+  </footer>
+</article>
+</main></div>
+  </div>
+</body>
+</html>

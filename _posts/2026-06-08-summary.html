@@ -1,0 +1,439 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Horizon — 2026-06-08</title>
+  <style>
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600&family=Manrope:wght@500;700&display=swap');
+
+:root {
+    --bg: #f8f5f3;
+    --paper: #ffffff;
+    --surface: #fffbf8;
+    --accent: #9b3d2a;
+    --accent-2: color-mix(in srgb, var(--accent) 55%, #b73fd6);
+    --accent-3: color-mix(in srgb, var(--accent) 40%, #f59e0b);
+    --accent-soft: #f9e2dc;
+    --muted: #6e5b54;
+    --text: #2f211d;
+    --ring: color-mix(in srgb, var(--accent) 32%, transparent);
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+    color: var(--text);
+    background:
+        radial-gradient(1300px 420px at -10% -20%, var(--accent-soft), transparent 60%),
+        radial-gradient(760px 300px at 88% -12%, color-mix(in srgb, var(--accent-2) 24%, transparent), transparent 66%),
+        radial-gradient(640px 240px at 30% 0%, color-mix(in srgb, var(--accent-3) 18%, transparent), transparent 70%),
+        var(--bg);
+    font-family: 'Source Serif 4', Georgia, serif;
+    line-height: 1.78;
+}
+
+.container { max-width: 1100px; margin: 1.5rem auto; padding: 1rem; }
+
+/* ── Page header ─────────────────────────────────────────────────────── */
+.summary-header {
+    background: var(--paper);
+    border: 1px solid color-mix(in srgb, var(--accent) 16%, transparent);
+    border-radius: 24px;
+    padding: 1.5rem 1.6rem 1.1rem;
+    box-shadow: 0 18px 48px rgba(19, 33, 68, 0.08);
+    margin-bottom: 1rem;
+    position: relative;
+    overflow: hidden;
+}
+.summary-header::after {
+    content: "";
+    position: absolute;
+    inset: auto -60px -80px auto;
+    width: 220px; height: 220px;
+    border-radius: 999px;
+    background: radial-gradient(circle, color-mix(in srgb, var(--accent-2) 28%, transparent), transparent 70%);
+    pointer-events: none;
+}
+.summary-header h1 {
+    margin: 0;
+    font-family: 'Fraunces', 'DM Serif Display', 'Iowan Old Style', 'Palatino Linotype', serif;
+    letter-spacing: .01em;
+    font-size: clamp(1.8rem, 3.6vw, 2.8rem);
+    line-height: 1.15;
+}
+.lead { margin: .55rem 0 1.1rem; color: var(--muted); font-size: 1.04rem; max-width: 78ch; }
+
+/* ── TOC ─────────────────────────────────────────────────────────────── */
+.toc-title {
+    margin: 0 0 .45rem;
+    font-family: 'Manrope', 'Segoe UI', sans-serif;
+    font-size: .85rem;
+    text-transform: uppercase;
+    letter-spacing: .11em;
+    color: var(--muted);
+}
+.toc ul {
+    list-style: none; margin: 0; padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: .55rem;
+}
+.toc li {
+    background: linear-gradient(160deg, var(--surface), color-mix(in srgb, var(--accent-soft) 48%, #ffffff));
+    border: 1px solid color-mix(in srgb, var(--accent) 16%, transparent);
+    border-radius: 10px;
+    padding: .55rem .65rem;
+    transition: transform .18s ease, box-shadow .18s ease;
+}
+.toc li:hover { transform: translateY(-1px); box-shadow: 0 8px 20px color-mix(in srgb, var(--accent) 15%, transparent); }
+.toc a { text-decoration: none; color: var(--text); }
+.toc-score { color: var(--accent); font-family: 'Manrope', 'Segoe UI', sans-serif; font-size: .85rem; font-weight: 600; }
+
+/* ── Article cards ───────────────────────────────────────────────────── */
+.items { display: grid; gap: .95rem; }
+.items article {
+    background: var(--paper);
+    border: 1px solid color-mix(in srgb, var(--accent) 15%, transparent);
+    border-radius: 20px;
+    padding: 1.4rem 1.6rem 1.1rem;
+    box-shadow: 0 10px 32px rgba(0, 0, 0, 0.05);
+}
+.item-title {
+    font-family: 'Fraunces', 'DM Serif Display', 'Iowan Old Style', 'Palatino Linotype', serif;
+    font-size: clamp(1.2rem, 2.2vw, 1.55rem);
+    margin: 0 0 .3rem;
+    line-height: 1.22;
+}
+.item-title a { color: inherit; text-decoration: none; }
+.item-title a:hover { color: var(--accent); }
+.item-title a:focus-visible, .toc a:focus-visible, summary:focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
+    border-radius: 6px;
+}
+.meta { color: var(--muted); font-family: 'Manrope', 'Segoe UI', sans-serif; font-size: .88rem; margin-bottom: .9rem; }
+.score { color: var(--accent); margin-left: .45rem; font-weight: 700; font-family: 'Manrope', 'Segoe UI', sans-serif; font-size: .95rem; }
+
+.article-body { border-top: 1px solid color-mix(in srgb, var(--accent) 10%, transparent); padding-top: 1rem; }
+
+.item-footer {
+    margin-top: 1rem;
+    padding-top: .65rem;
+    border-top: 1px solid color-mix(in srgb, var(--muted) 18%, transparent);
+}
+
+.evidence-note {
+    margin: .8rem 0 0;
+    color: var(--muted);
+    font-size: .92rem;
+    font-style: italic;
+}
+
+.tags { color: var(--muted); font-family: 'Manrope', 'Segoe UI', sans-serif; font-size: .88rem; margin-bottom: .45rem; }
+code { background: color-mix(in srgb, var(--accent-soft) 65%, #ffffff); border-radius: 8px; padding: .12rem .4rem; }
+
+details { margin-top: .5rem; }
+details summary { cursor: pointer; color: var(--accent); font-family: 'Manrope', 'Segoe UI', sans-serif; font-size: .9rem; }
+
+/* ── Dark mode ───────────────────────────────────────────────────────── */
+@media (prefers-color-scheme: dark) {
+    :root {
+        --bg: #0f1420; --paper: #161d2c; --surface: #1b2435;
+        --accent: #7cb1ff; --accent-2: #c28cff; --accent-3: #ffc36c;
+        --accent-soft: #1a2740; --muted: #a6b4cd; --text: #edf2ff;
+        --ring: rgba(124, 177, 255, 0.55);
+    }
+    body {
+        background:
+            radial-gradient(1200px 420px at -10% -20%, #1a2740, transparent 60%),
+            radial-gradient(760px 300px at 88% -12%, rgba(194, 140, 255, 0.2), transparent 66%),
+            radial-gradient(640px 240px at 30% 0%, rgba(255, 195, 108, 0.14), transparent 70%),
+            var(--bg);
+    }
+    .summary-header, .items article { border-color: rgba(124,177,255,.24); box-shadow: 0 18px 44px rgba(0,0,0,.32); }
+    .toc li { border-color: rgba(124,177,255,.22); background: linear-gradient(170deg, #1b2435, #1f2a3f); }
+    code { background: rgba(124,177,255,.16); }
+    .article-background { background: linear-gradient(170deg, #1b2435, #1f2a3f); }
+}
+
+@media (max-width: 860px) {
+    .container { margin: .7rem auto; padding: .65rem; }
+}
+
+/* ── Editorial article layout ─────────────────────────────────────────── */
+
+.article-lead {
+    font-size: 1.18rem;
+    color: var(--muted);
+    line-height: 1.7;
+    margin: .3rem 0 1.4rem;
+    max-width: 72ch;
+    font-style: italic;
+}
+
+.article-section {
+    margin-top: 1.55rem;
+}
+
+    .article-section {
+    font-family: 'Manrope', 'Segoe UI', sans-serif;
+    font-size: .78rem;
+.article-section h2 {
+.narrow {
+    margin: 0 0 .45rem;
+    padding-bottom: .25rem;
+    border-bottom: 1px solid color-mix(in srgb, var(--accent) 22%, transparent);
+}
+
+.article-section h2 {
+.narrow {
+    font-size: 1.03rem;
+    line-height: 1.85;
+    color: var(--text);
+}
+
+.article-section p {
+    margin: 0.25rem 0;
+}
+
+.article-section .article-section-last {
+    font-size: 1.08rem;
+
+.article-section h3 {
+    margin: .35rem 0 .15rem;
+    font-size: 0.95rem;
+    color: var(--muted);
+}
+    font-weight: 600;
+    margin-top: .45rem;
+}
+
+.article-section p + p {
+    margin-top: .8rem;
+}
+
+.article-background {
+    margin-top: 1.4rem;
+    padding: 1rem 1.1rem;
+    background: linear-gradient(170deg, var(--surface), color-mix(in srgb, var(--accent-soft) 30%, #fff));
+    border-left: 3px solid var(--accent);
+    border-radius: 0 10px 10px 0;
+    font-size: .98rem;
+    line-height: 1.78;
+    color: var(--text);
+}
+
+.article-background strong {
+    display: block;
+    font-family: 'Manrope', 'Segoe UI', sans-serif;
+    font-size: .78rem;
+    text-transform: uppercase;
+    letter-spacing: .1em;
+    color: var(--accent);
+    margin-bottom: .35rem;
+}
+
+.article-discussion {
+    margin-top: 1.2rem;
+    padding: .85rem 1rem;
+    border-left: 3px solid color-mix(in srgb, var(--muted) 40%, transparent);
+    font-style: italic;
+    font-size: .98rem;
+    color: var(--muted);
+    line-height: 1.75;
+}
+
+.article-discussion strong {
+    font-style: normal;
+    font-family: 'Manrope', 'Segoe UI', sans-serif;
+    font-size: .78rem;
+    text-transform: uppercase;
+    letter-spacing: .1em;
+    display: block;
+    margin-bottom: .3rem;
+    color: var(--muted);
+}
+
+.tab-switcher {
+    display: flex; gap: .5rem; margin-bottom: 1.5rem;
+    border-bottom: 2px solid color-mix(in srgb, var(--accent) 20%, transparent);
+}
+.tab-button {
+    background: transparent; border: none; color: var(--muted);
+    font-family: 'Manrope', 'Segoe UI', sans-serif; font-size: 1rem; font-weight: 600;
+    padding: .75rem 1.2rem; cursor: pointer;
+    transition: color .18s ease, border-color .18s ease;
+    border-bottom: 3px solid transparent;
+}
+.tab-button:hover { color: var(--text); }
+.tab-button.active { color: var(--accent); border-bottom-color: var(--accent); }
+.tab-content { display: none; animation: fadeIn .2s ease-in; }
+.tab-content.active { display: block; }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@media (max-width: 860px) { .tab-switcher { flex-wrap: wrap; } }
+</style>
+  <script>
+    function switchTab(button) {
+      const lang = button.getAttribute('data-lang');
+      const allButtons = document.querySelectorAll('.tab-button');
+      const allContents = document.querySelectorAll('.tab-content');
+      allButtons.forEach(b => b.classList.remove('active'));
+      allContents.forEach(c => c.classList.remove('active'));
+      button.classList.add('active');
+      document.querySelector(`.tab-content[data-lang="${lang}"]`).classList.add('active');
+    }
+  </script>
+</head>
+<body>
+  <div class="container">
+    <div class="tab-switcher">
+      <button class="tab-button active" onclick="switchTab(this)" data-lang="fr">Français</button><button class="tab-button " onclick="switchTab(this)" data-lang="en">English</button>
+    </div>
+    <div class="tab-content active" data-lang="fr"><section class="summary-header">
+  <h1>Horizon Quotidien — 2026-06-08</h1>
+  <p class="lead">Parmi 507 contenus collectés, 4 sujets essentiels ont été sélectionnés.</p>
+  <nav class="toc" aria-label="Sommaire">
+    <p class="toc-title">Sommaire</p>
+    <ul><li><a href="#item-1">Centrales électriques virtuelles : La révolution énergétique qui alimente les centres de données <span class="toc-score">⭐️ 9.0336825/10</span></a></li>
+<li><a href="#item-2">Réductions de personnel et réformes sous Trump : l’accès aux prestations d’invalidité de la Sécurité sociale se complique <span class="toc-score">⭐️ 7.610250000000001/10</span></a></li>
+<li><a href="#item-3">Exploits « zéro-clic » : comment une enceinte USB peut pirater votre PC sans interaction <span class="toc-score">⭐️ 7.518375000000001/10</span></a></li>
+<li><a href="#item-4">Le dossier lost+found sous Linux : Le héros méconnu de la récupération de fichiers <span class="toc-score">⭐️ 6.321375/10</span></a></li></ul>
+  </nav>
+</section>
+<main class="items">
+<article id="item-1">
+  <header>
+    <h2 class="item-title"><a href="https://www.technologyreview.com/2026/06/03/1138350/virtual-power-plants-data-centers/">Centrales électriques virtuelles : La révolution énergétique qui alimente les centres de données</a>
+      <span class="score">⭐️ 9.0336825/10</span>
+    </h2>
+    <div class="meta">rss · MIT Technology Review · Jun 3, 16:51</div>
+  </header>
+  <div class="article-body"><p class="article-lead">Qu’est-ce qu’une centrale électrique virtuelle ?</p><p>Une centrale électrique virtuelle (VPP) n’est pas une installation physique, mais un réseau numérique qui agrège des ressources énergétiques distribuées (DER) — comme des panneaux solaires sur les toits, des systèmes de stockage par batterie, des contrôles de charge industrielle, voire des bornes de recharge pour véhicules électriques — pour en faire un actif unifié et réactif au réseau. Grâce à des logiciels avancés, les VPP coordonnent ces ressources pour équilibrer l’offre et la demande en temps réel, tout en participant aux marchés de l’énergie comme le ferait une centrale traditionnelle.</p><p></p><p>Pourquoi les centres de données se tournent vers les VPP</p><p>Les centres de données figurent parmi les installations les plus énergivores au monde. En 2023, les centres de données américains ont consommé 176 térawattheures (TWh) d’électricité, soit environ 4,4 % de la consommation totale du pays. Selon les projections, ce chiffre pourrait tripler d’ici 2028 en raison de l’essor de l’IA. Les solutions traditionnelles, comme la construction de nouvelles centrales ou l’expansion des infrastructures réseau, sont coûteuses, lentes et souvent polluantes. Les VPP offrent une alternative plus rapide et plus propre en exploitant les ressources existantes pour répondre aux pics de demande sans recourir aux combustibles fossiles.  &quot;Les centrales électriques virtuelles représentent un changement de paradigme : au lieu de nous demander comment produire plus d’énergie, nous nous demandons comment utiliser plus intelligemment celle que nous avons déjà.&quot; — Département de l’Énergie des États-Unis</p><p></p><p>Google et Voltus : Un partenariat historique</p><p>L’accord récent entre Google et Voltus marque une étape importante dans l’adoption des VPP pour les centres de données. Dans le cadre de cet accord, Voltus agrègera des ressources de réponse à la demande — comme des utilisateurs industriels et commerciaux qui acceptent de réduire temporairement leur consommation d’électricité en échange d’incitations financières. Ces réductions aideront à alimenter les centres de données de Google pendant les périodes de pointe, transformant ainsi un réseau d’actifs distribués en une centrale électrique virtuelle.    Scalabilité :  La plateforme alimentée par l’IA de Voltus peut gérer des milliers de DER dans plusieurs États, ce qui en fait une solution idéale pour les centres de données hyperscale.   Économies de coûts :  En évitant les tarifs de pointe et les frais de congestion du réseau, Google pourrait réduire ses coûts énergétiques jusqu’à 20 %.   Durabilité :  Le partenariat s’aligne sur l’objectif de Google d’exploiter une énergie 100 % décarbonée 24h/24 et 7j/7 d’ici 2030, car les VPP facilitent l’intégration des énergies renouvelables.</p><p></p><p>Comment fonctionnent les VPP en pratique</p><p>Le fonctionnement d’une VPP est d’une simplicité trompeuse. Lorsque le réseau est sous tension — par exemple lors d’une canicule ou d’une panne imprévue — la plateforme de Voltus envoie des signaux aux participants inscrits, leur demandant de réduire leur consommation d’électricité pendant une courte période. Cela peut signifier atténuer l’éclairage non essentiel, ajuster les paramètres de climatisation ou retarder la recharge des batteries. En contrepartie, les participants reçoivent des paiements, généralement compris entre 50 et 200 dollars par kilowattheure réduit, selon les conditions du marché. Pour les centres de données, les avantages sont doubles : ils sécurisent une alimentation électrique fiable et peu coûteuse tout en contribuant à la stabilité du réseau.  &quot;La beauté des VPP réside dans le fait qu’elles transforment les consommateurs d’énergie en actifs pour le réseau. Chaque entreprise disposant d’un générateur de secours ou d’un thermostat intelligent devient partie prenante de la solution.&quot; — Next Kraftwerke, opérateur européen de VPP</p><p></p><p>Défis et perspectives d’avenir</p><p>Malgré leurs promesses, les VPP rencontrent des obstacles. Les cadres réglementaires varient d’un État à l’autre, certains marchés favorisant encore les centrales traditionnelles au détriment des ressources distribuées. De plus, la participation nécessite une certaine confiance : les entreprises doivent accepter de céder une partie du contrôle de leur consommation d’énergie à un opérateur tiers. Cependant, la dynamique est indéniable. Le Département de l’Énergie des États-Unis estime que les VPP pourraient répondre jusqu’à 20 % de la demande de pointe d’ici 2030, évitant ainsi la nécessité de construire 80 gigawatts de nouvelles capacités fossiles. Pour les centres de données, le message est clair : l’avenir de l’énergie n’est pas seulement renouvelable — il est distribué, dynamique et numérique.</p></div>
+  
+  <footer class="item-footer">
+    <div class="tags"><code>#Energy</code>, <code>#Technology</code>, <code>#Sustainability</code>, <code>#Data Centers</code></div>
+    
+  </footer>
+</article>
+
+<article id="item-2">
+  <header>
+    <h2 class="item-title"><a href="https://theconversation.com/getting-disability-benefits-got-harder-after-the-social-security-administrations-staff-was-slashed-and-program-rules-were-changed-by-trump-279434">Réductions de personnel et réformes sous Trump : l’accès aux prestations d’invalidité de la Sécurité sociale se complique</a>
+      <span class="score">⭐️ 7.610250000000001/10</span>
+    </h2>
+    <div class="meta">rss · The Conversation · Jun 1, 12:24</div>
+  </header>
+  <div class="article-body"><p class="article-lead">La Sécurité sociale aux États-Unis : un filet de sécurité essentiel</p><p>La Social Security Administration (SSA) est l’une des agences fédérales les plus importantes des États-Unis, chargée de gérer deux programmes clés d’invalidité : l’assurance invalidité de la Sécurité sociale (SSDI) et le revenu de sécurité supplémentaire (SSI). Créée en vertu de la loi sur la Sécurité sociale de 1935, la SSA a été conçue pour offrir un soutien financier aux personnes dont les conditions médicales les empêchent de travailler. Le SSDI, financé par les cotisations sociales, soutient ceux qui ont cotisé au système, tandis que le SSI aide les personnes à faible revenu souffrant de handicaps, indépendamment de leur historique de travail.</p><p></p><p>Un système sous pression : les réformes de l’ère Trump</p><p>Entre 2017 et 2021, la SSA a subi une série de changements administratifs et politiques qui ont profondément transformé la manière dont les demandes d’invalidité sont traitées. Selon une étude publiée dans *The Conversation*, ces réformes incluaient des réductions de personnel, des ajustements procéduraux et des critères d’éligibilité plus stricts, rendant l’accès aux prestations beaucoup plus difficile. Des entretiens avec des demandeurs, des défenseurs des droits et d’anciens employés de la SSA révèlent un système où les voies traditionnelles pour résoudre les cas complexes, escalader les problèmes et tenir les autorités responsables ont été démantelées.</p><p></p><p>Le coût humain : retards, refus et désespoir</p><p>Les conséquences de ces changements sont dramatiques. Le processus d’évaluation en cinq étapes de la SSA, déjà réputé pour sa complexité, est devenu encore plus intimidant. Les demandeurs doivent désormais naviguer dans un dédale d’exigences en matière de preuves médicales, de périodes d’attente prolongées et de taux de refus plus élevés. Par exemple, les demandes initiales sont souvent rejetées, obligeant les demandeurs à entamer un processus d’appel qui peut s’étendre sur des années.  « Les moyens habituels de résoudre les cas complexes, d’escalader les problèmes et de tenir les autorités responsables ne fonctionnent plus », ont constaté les chercheurs après avoir mené des dizaines d’entretiens avec les parties prenantes.  Résultat : un nombre croissant d’Américains en situation de handicap se retrouvent sans soutien financier essentiel, aggravant la pauvreté et les inégalités en matière de santé.</p><p></p><p>Les modifications réglementaires et leurs répercussions</p><p>Plusieurs changements politiques clés sous l’administration Trump ont contribué à cette crise :    Exigences médicales plus strictes :  Les demandeurs doivent désormais fournir des documents plus détaillés, souvent nécessitant des évaluations médicales coûteuses.   Réduction du personnel :  La SSA a perdu des milliers d’employés, entraînant des délais de traitement plus longs et moins de ressources pour les demandeurs.   Critères d’éligibilité restreints :  Certaines conditions qui qualifiaient auparavant pour des prestations sont désormais soumises à un examen plus rigoureux, augmentant les taux de refus.   Processus d’appel simplifié :  Bien que destiné à réduire les arriérés, ces changements ont créé des goulots d’étranglement, en particulier au niveau des audiences.   Présentées comme des mesures d’efficacité, ces réformes ont, selon les critiques, disproportionnellement nui aux populations vulnérables, notamment les personnes âgées et celles souffrant de handicaps sévères.</p><p></p><p>Un système brisé : quelles solutions pour les défenseurs et les demandeurs ?</p><p>Les répercussions de ces changements continuent de se faire sentir. Les groupes de défense des droits, les organisations d’aide juridique et les législateurs appellent à des réformes pour rétablir l’équité et la transparence dans les programmes d’invalidité de la SSA. Parmi les propositions figurent l’augmentation des financements pour le personnel, l’annulation des règles d’éligibilité restrictives et l’amélioration de la sensibilisation des communautés mal desservies. Cependant, avec la polarisation politique et les contraintes budgétaires, un changement significatif reste difficile à atteindre.  « La proposition de la Sécurité sociale de l’administration Trump répéterait l’une des erreurs les plus dommageables de Ronald Reagan », mettait en garde un éditorial du *New York Times* en 2020, soulignant les risques de démanteler davantage le filet de sécurité sociale.  Pour l’instant, des millions d’Américains doivent naviguer dans un système plus difficile d’accès que jamais.</p></div>
+  
+  <footer class="item-footer">
+    <div class="tags"><code>#Disability Benefits</code>, <code>#Social Security Administration</code>, <code>#Trump Administration</code>, <code>#Healthcare Policy</code></div>
+    
+  </footer>
+</article>
+
+<article id="item-3">
+  <header>
+    <h2 class="item-title"><a href="https://arstechnica.com/security/2026/06/highly-reviewed-speaker-can-be-hacked-over-the-air-to-infect-connected-devices/">Exploits « zéro-clic » : comment une enceinte USB peut pirater votre PC sans interaction</a>
+      <span class="score">⭐️ 7.518375000000001/10</span>
+    </h2>
+    <div class="meta">rss · Ars Technica · Jun 5, 21:00</div>
+  </header>
+  <div class="article-body"><p class="article-lead">Une menace silencieuse : qu’est-ce qu’un exploit « zéro-clic » ?</p><p>Les exploits « zéro-clic » figurent parmi les formes d’attaques cybernétiques les plus sournoises, car ils ne nécessitent aucune action de la part de la victime. Pas de lien de phishing cliqué, pas de pièce jointe malveillante téléchargée, pas de pop-up suspect ignoré. Au lieu de cela, les attaquants exploitent des vulnérabilités dans les logiciels ou les micrologiciels pour accéder illégalement à un appareil simplement en envoyant un paquet de données spécialement conçu, souvent via Wi-Fi, Bluetooth ou même les réseaux cellulaires.</p><p></p><p>Étude de cas : la vulnérabilité de la Sound Blaster Katana V2X</p><p>La Sound Blaster Katana V2X, une enceinte USB haut de gamme de Creative, est le dernier appareil en date à être victime d’une telle attaque. Des chercheurs en sécurité ont découvert que le micrologiciel de l’enceinte pouvait être manipulé à distance via des mises à jour over-the-air (OTA), permettant aux attaquants d’exécuter du code malveillant sur tout PC connecté à l’appareil.  « Il ne s’agit pas d’un risque théorique, mais d’un vecteur d’attaque réel qui pourrait être exploité dès qu’un utilisateur branche l’enceinte », a déclaré un analyste en cybersécurité familier des découvertes.</p><p></p><p>Comment les attaques over-the-air contournent les défenses traditionnelles</p><p>Les mises à jour OTA sont une arme à double tranchant dans la technologie moderne. Bien qu’elles permettent des améliorations fluides des micrologiciels pour les appareils comme les smartphones, les gadgets IoT et, oui, les enceintes USB, elles créent également une porte dérobée potentielle pour les attaquants. Dans le cas de la Katana V2X, la connectivité Bluetooth et Wi-Fi de l’enceinte a permis à des acteurs malveillants d’intercepter et de modifier les mises à jour de micrologiciel avant qu’elles n’atteignent l’appareil.</p><p></p><p>Réponse du fabricant : un déni dangereux</p><p>Peut-être plus alarmant encore est la réponse de Creative face à cette vulnérabilité. L’entreprise aurait minimisé le problème, arguant que ce comportement ne constitue pas une faille de sécurité. Cette position reflète une tendance inquiétante dans l’industrie technologique, où les fabricants de matériel minimisent les risques pour éviter des dommages à leur réputation ou des rappels coûteux.    Manque de transparence :  Sans reconnaissance du problème, les utilisateurs restent dans l’ignorance des risques.   Aucun correctif en vue :  Les vulnérabilités non résolues peuvent persister pendant des années.   Risques liés à la chaîne d’approvisionnement :  Des appareils infectés pourraient propager des logiciels malveillants avant même d’atteindre les consommateurs.</p><p></p><p>Se protéger : atténuer les risques des exploits « zéro-clic »</p><p>Bien que les exploits « zéro-clic » soient difficiles à contrer, les utilisateurs peuvent prendre des mesures pour réduire leur exposition :    Désactiver les connexions inutilisées :  Éteindre le Bluetooth et le Wi-Fi sur les appareils lorsqu’ils ne sont pas utilisés.   Vérifier les sources des micrologiciels :  N’accepter que les mises à jour provenant de canaux officiels du fabricant.   Isoler les appareils critiques :  Utiliser la segmentation réseau pour limiter l’impact d’éventuelles infections.   Surveiller les anomalies :  Un trafic réseau ou un comportement inhabituel de l’appareil peut signaler une attaque.   Pour les entreprises, la découverte de la vulnérabilité de la Katana V2X devrait servir d’avertissement pour auditer tout le matériel connecté—des périphériques aux appareils IoT—afin d’identifier des risques similaires.</p><p></p><p>Le tableau d’ensemble : pourquoi les exploits « zéro-clic » sont en hausse</p><p>Le cas de la Katana V2X n’est pas un incident isolé. Les exploits « zéro-clic » ont été utilisés dans des attaques très médiatisées, comme le scandale du logiciel espion Pegasus en 2021, où des iPhones ont été compromis sans aucune interaction de l’utilisateur. À mesure que davantage d’appareils deviennent connectés à Internet, la surface d’attaque pour de tels exploits s’élargit.  « L’ère où l’on pouvait assurer la sécurité par l’obscurité est révolue. Chaque appareil connecté, aussi anodin soit-il, doit être considéré comme un point d’entrée potentiel », a averti un chercheur en cybersécurité.</p></div>
+  
+  <footer class="item-footer">
+    <div class="tags"><code>#Cybersecurity</code>, <code>#Technology</code>, <code>#Vulnerabilities</code></div>
+    
+  </footer>
+</article>
+
+<article id="item-4">
+  <header>
+    <h2 class="item-title"><a href="https://unix.stackexchange.com/questions/18154/what-is-the-purpose-of-the-lostfound-folder-in-linux-and-unix">Le dossier lost+found sous Linux : Le héros méconnu de la récupération de fichiers</a>
+      <span class="score">⭐️ 6.321375/10</span>
+    </h2>
+    <div class="meta">hackernews · tosh · Jun 5, 08:08 · <a href="https://news.ycombinator.com/item?id=48409474">Discussion</a></div>
+  </header>
+  <div class="article-body"><p class="article-lead">Les origines : Un vestige de l&#39;ère pré-journalisation</p><p>Le dossier `lost+found` est un élément incontournable des systèmes de fichiers Unix depuis les années 1980, bien avant l&#39;avènement des technologies de journalisation modernes. Comme l&#39;explique  le livre *Unix for Super-Users* d&#39;Eric Foxley (1985) , ce répertoire était conçu pour stocker les fichiers récupérés par `fsck` (File System Consistency Check) lors de réparations système. Sans journalisation, les coupures de courant brutales ou les plantages pouvaient laisser les systèmes de fichiers dans un état incohérent, avec des inodes pointant vers des blocs de données mais sans entrées de répertoire associées—des fichiers dits &quot;orphelins&quot;.</p><p></p><p>Comment fsck sauve les fichiers orphelins</p><p>Lorsqu&#39;un système Linux redémarre après un arrêt incorrect, `fsck` analyse le système de fichiers à la recherche d&#39;incohérences. S&#39;il rencontre un inode contenant des données valides mais sans répertoire parent, il déplace le fichier dans `lost+found` et lui attribue un nom numérique (par exemple, `#12345`). Ce processus évite la perte de données en garantissant que les fichiers récupérés restent accessibles, même si leur chemin d&#39;origine est inconnu.  &quot;Le dossier lost+found nous a sauvés une fois lorsque notre NAS de 1 To a planté. Après un fsck de plusieurs heures, tous les répertoires étaient vides—jusqu&#39;à ce que nous vérifiions lost+found, où tous les fichiers et sous-répertoires avaient été préservés.&quot;  —Schnitz, contributeur Unix Stack Exchange</p><p></p><p>Quand lost+found reste vide (ou disparaît)</p><p>Malgré son rôle crucial, de nombreux administrateurs n&#39;ont jamais trouvé de fichiers dans `lost+found`. Comme le souligne  FerretFred , des décennies d&#39;utilisation de Linux peuvent s&#39;écouler sans qu&#39;un seul fichier orphelin n&#39;apparaisse. Cependant, supprimer ce dossier peut avoir des conséquences graves :   **Échecs de fsck** : Sans `lost+found`, `fsck` peut interrompre les réparations, laissant le système de fichiers dans un état instable.  **Perte de données** : Les fichiers orphelins sans répertoire de destination sont supprimés, effaçant des données potentiellement récupérables.    L&#39;expérience d&#39;un utilisateur avec un système DEC Ultrix  illustre ce risque : après avoir supprimé accidentellement `lost+found`, le redémarrage suivant a déclenché un échec catastrophique de `fsck`.</p><p></p><p>Systèmes de fichiers modernes : lost+found est-il obsolète ?</p><p>Les systèmes de fichiers journalisés comme XFS, Btrfs et ZFS ont réduit la dépendance à `lost+found` en suivant les modifications dans un journal pour prévenir la corruption. Ces systèmes gèrent les fichiers orphelins différemment :    Ext4  : Utilise toujours `lost+found`, mais le complète avec une fonctionnalité de &quot;fichier orphelin&quot; pour suivre les inodes non liés.   Btrfs/ZFS  : Récupèrent les fichiers orphelins via des mécanismes basés sur les snapshots, contournant `lost+found`.   Pourtant, ext4 reste omniprésent, garantissant la pertinence continue de `lost+found` pour la plupart des installations Linux.</p><p></p><p>Bonnes pratiques pour les administrateurs</p><p>Pour tirer parti de `lost+found` efficacement :    Pré-dimensionner le répertoire  : Les anciens systèmes nécessitaient une allocation manuelle (par exemple, `mklost+found`). Les outils modernes gèrent cela automatiquement, mais vérifiez son existence après la création de nouveaux systèmes de fichiers.   Vérifier après un crash  : Si `fsck` s&#39;exécute au démarrage, inspectez `lost+found` pour les fichiers récupérés—surtout si des répertoires semblent vides.   Documenter les récupérations  : Les fichiers orphelins manquent de métadonnées (par exemple, noms d&#39;origine), utilisez donc des horodatages ou une analyse du contenu pour les réattribuer.   Bien que la journalisation ait réduit sa fréquence d&#39;utilisation, `lost+found` reste un outil vital pour la résilience des données dans les environnements legacy et basés sur ext4.</p></div>
+  
+  <footer class="item-footer">
+    <div class="tags"><code>#Linux</code>, <code>#Unix</code>, <code>#File Systems</code>, <code>#fsck</code></div>
+    
+  </footer>
+</article>
+</main></div><div class="tab-content " data-lang="en"><section class="summary-header">
+  <h1>Horizon Daily — 2026-06-08</h1>
+  <p class="lead">From 507 items, 4 important content pieces were selected</p>
+  <nav class="toc" aria-label="Contents">
+    <p class="toc-title">Contents</p>
+    <ul><li><a href="#item-1">Virtual Power Plants: The Game-Changer Powering Data Centers Sustainably <span class="toc-score">⭐️ 9.0336825/10</span></a></li>
+<li><a href="#item-2">Trump-Era Cuts and Rule Changes Made Social Security Disability Benefits Harder to Obtain <span class="toc-score">⭐️ 7.610250000000001/10</span></a></li>
+<li><a href="#item-3">Zero-Click Exploits Strike Again: How a USB Speaker Can Hack Your PC Without a Single Click <span class="toc-score">⭐️ 7.518375000000001/10</span></a></li>
+<li><a href="#item-4">Linux’s lost+found Folder: The Unsung Hero of File System Recovery <span class="toc-score">⭐️ 6.321375/10</span></a></li></ul>
+  </nav>
+</section>
+<main class="items">
+<article id="item-1">
+  <header>
+    <h2 class="item-title"><a href="https://www.technologyreview.com/2026/06/03/1138350/virtual-power-plants-data-centers/">Virtual Power Plants: The Game-Changer Powering Data Centers Sustainably</a>
+      <span class="score">⭐️ 9.0336825/10</span>
+    </h2>
+    <div class="meta">rss · MIT Technology Review · Jun 3, 16:51</div>
+  </header>
+  <div class="article-body"><p class="article-lead">What Is a Virtual Power Plant?</p><p>A virtual power plant (VPP) is not a physical facility but a digital network that aggregates distributed energy resources (DERs)—such as rooftop solar panels, battery storage systems, industrial load controls, and even electric vehicle chargers—into a unified, grid-responsive asset. By coordinating these resources via advanced software, VPPs can mimic the behavior of a traditional power plant, balancing supply and demand in real time while participating in wholesale energy markets.</p><p></p><p>Why Data Centers Are Turning to VPPs</p><p>Data centers are among the most energy-intensive facilities on the planet. In 2023, U.S. data centers consumed 176 terawatt-hours (TWh) of electricity—roughly 4.4% of the nation’s total consumption—and projections suggest this figure could triple by 2028 due to the AI boom. Traditional solutions, such as building new power plants or expanding grid infrastructure, are costly, slow, and often carbon-intensive. VPPs offer a faster, cleaner alternative by leveraging existing resources to meet demand spikes without additional fossil fuel reliance.  &quot;Virtual power plants represent a paradigm shift: instead of asking how we can generate more power, we’re asking how we can use what we already have more intelligently.&quot; — U.S. Department of Energy</p><p></p><p>Google and Voltus: A Landmark Partnership</p><p>Google’s recent deal with Voltus marks a significant milestone in the adoption of VPPs for data center operations. Under the agreement, Voltus will aggregate demand response resources—such as commercial and industrial energy users who agree to temporarily reduce their electricity consumption—in exchange for financial incentives. These reductions will help power Google’s data centers during peak demand periods, effectively turning a network of distributed assets into a virtual power plant.    Scalability:  Voltus’s AI-driven platform can manage thousands of DERs across multiple states, making it ideal for hyperscale data centers.   Cost Savings:  By avoiding peak pricing and grid congestion fees, Google stands to reduce its energy costs by up to 20%.   Sustainability:  The partnership aligns with Google’s goal of operating on 24/7 carbon-free energy by 2030, as VPPs enable greater integration of renewables.</p><p></p><p>How VPPs Work in Practice</p><p>The mechanics of a VPP are deceptively simple. When the grid is under stress—such as during a heatwave or unexpected outage—Voltus’s platform sends signals to enrolled participants, asking them to reduce their electricity use for a short period. This could mean dimming non-essential lighting, adjusting HVAC settings, or delaying battery charging. In return, participants receive payments, typically ranging from $50 to $200 per kilowatt-hour reduced, depending on market conditions. For data centers, the benefits are twofold: they secure reliable, low-cost power while contributing to grid stability.  &quot;The beauty of VPPs is that they turn energy consumers into grid assets. Every business with a backup generator or a smart thermostat becomes part of the solution.&quot; — Next Kraftwerke, European VPP Operator</p><p></p><p>Challenges and Future Outlook</p><p>Despite their promise, VPPs face hurdles. Regulatory frameworks vary by state, with some markets still favoring traditional power plants over distributed resources. Additionally, participation requires trust: businesses must be willing to cede some control over their energy use to a third-party operator. However, the momentum is undeniable. The U.S. Department of Energy estimates that VPPs could meet up to 20% of peak demand by 2030, displacing the need for 80 gigawatts of new fossil fuel capacity. For data centers, the message is clear: the future of energy is not just renewable—it’s distributed, dynamic, and digital.</p></div>
+  
+  <footer class="item-footer">
+    <div class="tags"><code>#Energy</code>, <code>#Technology</code>, <code>#Sustainability</code>, <code>#Data Centers</code></div>
+    
+  </footer>
+</article>
+
+<article id="item-2">
+  <header>
+    <h2 class="item-title"><a href="https://theconversation.com/getting-disability-benefits-got-harder-after-the-social-security-administrations-staff-was-slashed-and-program-rules-were-changed-by-trump-279434">Trump-Era Cuts and Rule Changes Made Social Security Disability Benefits Harder to Obtain</a>
+      <span class="score">⭐️ 7.610250000000001/10</span>
+    </h2>
+    <div class="meta">rss · The Conversation · Jun 1, 12:24</div>
+  </header>
+  <div class="article-body"><p class="article-lead">The Backbone of America’s Safety Net: How SSA Administers Disability Benefits</p><p>The Social Security Administration (SSA) stands as one of the federal government’s most critical agencies, tasked with administering two key disability programs: Social Security Disability Insurance (SSDI) and Supplemental Security Income (SSI). Established under the Social Security Act of 1935, the SSA was designed to provide a financial lifeline to individuals whose medical conditions prevent them from working. SSDI, funded through payroll taxes, supports those who have paid into the system, while SSI assists low-income individuals with disabilities, regardless of work history.</p><p></p><p>A System Under Strain: The Trump Administration’s Overhaul</p><p>Between 2017 and 2021, the SSA underwent a rapid series of administrative and policy changes that fundamentally altered how disability claims are processed. According to research published in *The Conversation*, these changes included staff reductions, procedural adjustments, and stricter eligibility criteria—all of which have made it significantly harder for applicants to secure benefits. Interviews with claimants, advocates, and former SSA employees reveal a system where traditional avenues for resolving complex cases, escalating issues, and holding authorities accountable have been dismantled.</p><p></p><p>The Human Cost: Delays, Denials, and Desperation</p><p>The consequences of these changes are stark. The SSA’s five-step disability evaluation process—already notorious for its complexity—has become even more daunting. Applicants must now navigate a gauntlet of medical evidence requirements, prolonged waiting periods, and higher denial rates. For example, initial claims are frequently rejected, forcing applicants into a lengthy appeals process that can stretch for years.  &quot;The usual ways of resolving complex cases, escalating issues, and holding the authorities accountable no longer work,&quot; researchers found after conducting dozens of interviews with stakeholders.  The result? A growing number of Americans with disabilities are left without critical financial support, exacerbating poverty and health disparities.</p><p></p><p>Rule Changes and Their Ripple Effects</p><p>Several key policy shifts under the Trump administration have contributed to this crisis. Among them:    Stricter Medical Evidence Requirements:  Applicants must now provide more extensive documentation, often requiring costly medical evaluations.   Reduced Staffing:  The SSA lost thousands of employees, leading to longer processing times and fewer resources for claimants.   Narrowed Eligibility Criteria:  Certain conditions that previously qualified for benefits are now subject to stricter scrutiny, increasing denial rates.   Streamlined Appeals Process:  While intended to reduce backlogs, the changes have instead created bottlenecks, particularly at the hearing level.   These adjustments were framed as efficiency measures, but critics argue they disproportionately harm vulnerable populations, including older adults and those with severe disabilities.</p><p></p><p>A Broken System: What’s Next for Disability Advocates and Claimants?</p><p>The fallout from these changes continues to reverberate. Advocacy groups, legal aid organizations, and lawmakers are calling for reforms to restore fairness and transparency to the SSA’s disability programs. Proposals include increasing funding for staffing, reversing restrictive eligibility rules, and improving outreach to underserved communities. However, with political polarization and budget constraints, meaningful change remains elusive.  &quot;The Trump administration’s Social Security proposal would repeat one of Ronald Reagan’s most damaging mistakes,&quot; warned a *New York Times* editorial in 2020, highlighting the risks of further dismantling the safety net.  For now, millions of Americans must navigate a system that is harder to access than ever before.</p></div>
+  
+  <footer class="item-footer">
+    <div class="tags"><code>#Disability Benefits</code>, <code>#Social Security Administration</code>, <code>#Trump Administration</code>, <code>#Healthcare Policy</code></div>
+    
+  </footer>
+</article>
+
+<article id="item-3">
+  <header>
+    <h2 class="item-title"><a href="https://arstechnica.com/security/2026/06/highly-reviewed-speaker-can-be-hacked-over-the-air-to-infect-connected-devices/">Zero-Click Exploits Strike Again: How a USB Speaker Can Hack Your PC Without a Single Click</a>
+      <span class="score">⭐️ 7.518375000000001/10</span>
+    </h2>
+    <div class="meta">rss · Ars Technica · Jun 5, 21:00</div>
+  </header>
+  <div class="article-body"><p class="article-lead">The Silent Threat: What Is a Zero-Click Exploit?</p><p>Zero-click exploits represent one of the most insidious forms of cyberattack, as they require no action from the victim—no phishing link clicked, no malicious attachment downloaded, and no suspicious pop-up dismissed. Instead, attackers exploit vulnerabilities in software or firmware to gain unauthorized access to a device simply by sending a crafted data packet, often over Wi-Fi, Bluetooth, or even cellular networks.</p><p></p><p>A Case Study: The Sound Blaster Katana V2X Vulnerability</p><p>The Sound Blaster Katana V2X, a premium USB-connected speaker from Creative, has become the latest high-profile device to fall victim to such an attack. Security researchers discovered that the speaker’s firmware could be remotely manipulated via over-the-air (OTA) updates, allowing attackers to execute malicious code on any PC connected to the device.  &quot;This isn’t just a theoretical risk—it’s a real-world attack vector that could be exploited the moment a user plugs in the speaker,&quot; said a cybersecurity analyst familiar with the findings.</p><p></p><p>How Over-the-Air Attacks Bypass Traditional Defenses</p><p>OTA updates are a double-edged sword in modern technology. While they enable seamless firmware improvements for devices like smartphones, IoT gadgets, and—yes—USB speakers, they also create a potential backdoor for attackers. In the case of the Katana V2X, the speaker’s Bluetooth and Wi-Fi connectivity allowed malicious actors to intercept and alter firmware updates before they reached the device.</p><p></p><p>Manufacturer Response: A Dangerous Dismissal</p><p>Perhaps most alarming is Creative’s response to the vulnerability. The company has reportedly dismissed the issue, arguing that the behavior does not constitute a security flaw. This stance mirrors a troubling trend in the tech industry, where hardware manufacturers downplay risks to avoid reputational damage or costly recalls.    Lack of Transparency:  Without acknowledgment, users remain unaware of the risks.   No Patch in Sight:  Unaddressed vulnerabilities can persist for years.   Supply Chain Risks:  Infected devices could spread malware before reaching consumers.</p><p></p><p>Protecting Yourself: Mitigating Zero-Click Risks</p><p>While zero-click exploits are difficult to defend against, users can take steps to reduce their exposure:    Disable Unused Connectivity:  Turn off Bluetooth and Wi-Fi on devices when not in use.   Verify Firmware Sources:  Only accept updates from official manufacturer channels.   Isolate Critical Devices:  Use network segmentation to limit the impact of potential infections.   Monitor for Anomalies:  Unusual network traffic or device behavior may signal an attack.   For enterprises, the discovery of the Katana V2X vulnerability should serve as a wake-up call to audit all connected hardware—from peripherals to IoT devices—for similar risks.</p><p></p><p>The Bigger Picture: Why Zero-Click Exploits Are on the Rise</p><p>The Katana V2X case is not an isolated incident. Zero-click exploits have been used in high-profile attacks, including the 2021 Pegasus spyware scandal, where iPhones were compromised without any user interaction. As more devices become internet-connected, the attack surface for such exploits expands.  &quot;The era of assuming security through obscurity is over. Every connected device, no matter how innocuous, must be treated as a potential entry point,&quot; warned a cybersecurity researcher.</p></div>
+  
+  <footer class="item-footer">
+    <div class="tags"><code>#Cybersecurity</code>, <code>#Technology</code>, <code>#Vulnerabilities</code></div>
+    
+  </footer>
+</article>
+
+<article id="item-4">
+  <header>
+    <h2 class="item-title"><a href="https://unix.stackexchange.com/questions/18154/what-is-the-purpose-of-the-lostfound-folder-in-linux-and-unix">Linux’s lost+found Folder: The Unsung Hero of File System Recovery</a>
+      <span class="score">⭐️ 6.321375/10</span>
+    </h2>
+    <div class="meta">hackernews · tosh · Jun 5, 08:08 · <a href="https://news.ycombinator.com/item?id=48409474">Discussion</a></div>
+  </header>
+  <div class="article-body"><p class="article-lead">The Origins: A Relic of Pre-Journaling Era</p><p>The `lost+found` directory has been a staple of Unix file systems since the 1980s, predating modern journaling technologies. As  Eric Foxley’s 1985 book *Unix for Super-Users*  explains, this directory was designed to store files recovered by `fsck` (File System Consistency Check) during system repairs. Without journaling, abrupt power losses or crashes could leave file systems in inconsistent states, with inodes pointing to data blocks but no directory entries linking to them—so-called &quot;orphaned&quot; files.</p><p></p><p>How fsck Rescues Orphaned Files</p><p>When a Linux system boots after an unclean shutdown, `fsck` scans the file system for inconsistencies. If it encounters an inode with valid data but no parent directory, it moves the file to `lost+found` and assigns it a numeric name (e.g., `#12345`). This process prevents data loss by ensuring recovered files remain accessible, even if their original paths are unknown.  &quot;The lost+found folder saved our backs once when a 1TB NAS crashed. After a multi-hour fsck, all directories were empty—until we checked lost+found, where every file and subdirectory had been preserved.&quot;  —Schnitz, Unix Stack Exchange contributor</p><p></p><p>When lost+found Comes Up Empty (or Missing)</p><p>Despite its critical role, many administrators never encounter files in `lost+found`. As  FerretFred notes , decades of Linux use can pass without a single orphaned file appearing. However, deleting the directory can have dire consequences:   **fsck failures**: Without `lost+found`, `fsck` may abort repairs, leaving the file system in an unstable state.  **Data loss**: Orphaned files with no destination directory are discarded, erasing potentially recoverable data.    One user’s experience  with a DEC Ultrix system illustrates this risk: after accidentally removing `lost+found`, the next reboot triggered a catastrophic `fsck` failure.</p><p></p><p>Modern File Systems: Is lost+found Obsolete?</p><p>Journaling file systems like XFS, Btrfs, and ZFS have reduced reliance on `lost+found` by tracking changes in a log (journal) to prevent corruption. These systems handle orphaned files differently:    Ext4 : Still uses `lost+found` but supplements it with an &quot;orphan file&quot; feature to track unlinked inodes.   Btrfs/ZFS : Recover orphaned files via snapshot-based mechanisms, bypassing `lost+found` entirely.   Yet, ext4 remains ubiquitous, ensuring `lost+found`’s continued relevance for most Linux installations.</p><p></p><p>Best Practices for Administrators</p><p>To leverage `lost+found` effectively:    Pre-size the directory : Older systems required manual allocation (e.g., `mklost+found`). Modern tools handle this automatically, but verify its existence after creating new file systems.   Check after crashes : If `fsck` runs at boot, inspect `lost+found` for recovered files—especially if directories appear empty.   Document recoveries : Orphaned files lack metadata (e.g., original names), so use timestamps or content analysis to reassign them.   While journaling has diminished its frequency of use, `lost+found` remains a vital tool for data resilience in legacy and ext4-based environments.</p></div>
+  
+  <footer class="item-footer">
+    <div class="tags"><code>#Linux</code>, <code>#Unix</code>, <code>#File Systems</code>, <code>#fsck</code></div>
+    
+  </footer>
+</article>
+</main></div>
+  </div>
+</body>
+</html>

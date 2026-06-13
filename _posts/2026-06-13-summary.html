@@ -1,0 +1,535 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Horizon — 2026-06-13</title>
+  <style>
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600&family=Manrope:wght@500;700&display=swap');
+
+:root {
+    --bg: #f8f5f3;
+    --paper: #ffffff;
+    --surface: #fffbf8;
+    --accent: #9b3d2a;
+    --accent-2: color-mix(in srgb, var(--accent) 55%, #b73fd6);
+    --accent-3: color-mix(in srgb, var(--accent) 40%, #f59e0b);
+    --accent-soft: #f9e2dc;
+    --muted: #6e5b54;
+    --text: #2f211d;
+    --ring: color-mix(in srgb, var(--accent) 32%, transparent);
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+    color: var(--text);
+    background:
+        radial-gradient(1300px 420px at -10% -20%, var(--accent-soft), transparent 60%),
+        radial-gradient(760px 300px at 88% -12%, color-mix(in srgb, var(--accent-2) 24%, transparent), transparent 66%),
+        radial-gradient(640px 240px at 30% 0%, color-mix(in srgb, var(--accent-3) 18%, transparent), transparent 70%),
+        var(--bg);
+    font-family: 'Source Serif 4', Georgia, serif;
+    line-height: 1.78;
+}
+
+.container { max-width: 1100px; margin: 1.5rem auto; padding: 1rem; }
+
+/* ── Page header ─────────────────────────────────────────────────────── */
+.summary-header {
+    background: var(--paper);
+    border: 1px solid color-mix(in srgb, var(--accent) 16%, transparent);
+    border-radius: 24px;
+    padding: 1.5rem 1.6rem 1.1rem;
+    box-shadow: 0 18px 48px rgba(19, 33, 68, 0.08);
+    margin-bottom: 1rem;
+    position: relative;
+    overflow: hidden;
+}
+.summary-header::after {
+    content: "";
+    position: absolute;
+    inset: auto -60px -80px auto;
+    width: 220px; height: 220px;
+    border-radius: 999px;
+    background: radial-gradient(circle, color-mix(in srgb, var(--accent-2) 28%, transparent), transparent 70%);
+    pointer-events: none;
+}
+.summary-header h1 {
+    margin: 0;
+    font-family: 'Fraunces', 'DM Serif Display', 'Iowan Old Style', 'Palatino Linotype', serif;
+    letter-spacing: .01em;
+    font-size: clamp(1.8rem, 3.6vw, 2.8rem);
+    line-height: 1.15;
+}
+.lead { margin: .55rem 0 1.1rem; color: var(--muted); font-size: 1.04rem; max-width: 78ch; }
+
+/* ── TOC ─────────────────────────────────────────────────────────────── */
+.toc-title {
+    margin: 0 0 .45rem;
+    font-family: 'Manrope', 'Segoe UI', sans-serif;
+    font-size: .85rem;
+    text-transform: uppercase;
+    letter-spacing: .11em;
+    color: var(--muted);
+}
+.toc ul {
+    list-style: none; margin: 0; padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: .55rem;
+}
+.toc li {
+    background: linear-gradient(160deg, var(--surface), color-mix(in srgb, var(--accent-soft) 48%, #ffffff));
+    border: 1px solid color-mix(in srgb, var(--accent) 16%, transparent);
+    border-radius: 10px;
+    padding: .55rem .65rem;
+    transition: transform .18s ease, box-shadow .18s ease;
+}
+.toc li:hover { transform: translateY(-1px); box-shadow: 0 8px 20px color-mix(in srgb, var(--accent) 15%, transparent); }
+.toc a { text-decoration: none; color: var(--text); }
+.toc-score { color: var(--accent); font-family: 'Manrope', 'Segoe UI', sans-serif; font-size: .85rem; font-weight: 600; }
+
+/* ── Article cards ───────────────────────────────────────────────────── */
+.items { display: grid; gap: .95rem; }
+.items article {
+    background: var(--paper);
+    border: 1px solid color-mix(in srgb, var(--accent) 15%, transparent);
+    border-radius: 20px;
+    padding: 1.4rem 1.6rem 1.1rem;
+    box-shadow: 0 10px 32px rgba(0, 0, 0, 0.05);
+}
+.item-title {
+    font-family: 'Fraunces', 'DM Serif Display', 'Iowan Old Style', 'Palatino Linotype', serif;
+    font-size: clamp(1.2rem, 2.2vw, 1.55rem);
+    margin: 0 0 .3rem;
+    line-height: 1.22;
+}
+.item-title a { color: inherit; text-decoration: none; }
+.item-title a:hover { color: var(--accent); }
+.item-title a:focus-visible, .toc a:focus-visible, summary:focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
+    border-radius: 6px;
+}
+.meta { color: var(--muted); font-family: 'Manrope', 'Segoe UI', sans-serif; font-size: .88rem; margin-bottom: .9rem; }
+.score { color: var(--accent); margin-left: .45rem; font-weight: 700; font-family: 'Manrope', 'Segoe UI', sans-serif; font-size: .95rem; }
+
+.article-body { border-top: 1px solid color-mix(in srgb, var(--accent) 10%, transparent); padding-top: 1rem; }
+
+.item-footer {
+    margin-top: 1rem;
+    padding-top: .65rem;
+    border-top: 1px solid color-mix(in srgb, var(--muted) 18%, transparent);
+}
+
+.evidence-note {
+    margin: .8rem 0 0;
+    color: var(--muted);
+    font-size: .92rem;
+    font-style: italic;
+}
+
+.tags { color: var(--muted); font-family: 'Manrope', 'Segoe UI', sans-serif; font-size: .88rem; margin-bottom: .45rem; }
+code { background: color-mix(in srgb, var(--accent-soft) 65%, #ffffff); border-radius: 8px; padding: .12rem .4rem; }
+
+details { margin-top: .5rem; }
+details summary { cursor: pointer; color: var(--accent); font-family: 'Manrope', 'Segoe UI', sans-serif; font-size: .9rem; }
+
+/* ── Dark mode ───────────────────────────────────────────────────────── */
+@media (prefers-color-scheme: dark) {
+    :root {
+        --bg: #0f1420; --paper: #161d2c; --surface: #1b2435;
+        --accent: #7cb1ff; --accent-2: #c28cff; --accent-3: #ffc36c;
+        --accent-soft: #1a2740; --muted: #a6b4cd; --text: #edf2ff;
+        --ring: rgba(124, 177, 255, 0.55);
+    }
+    body {
+        background:
+            radial-gradient(1200px 420px at -10% -20%, #1a2740, transparent 60%),
+            radial-gradient(760px 300px at 88% -12%, rgba(194, 140, 255, 0.2), transparent 66%),
+            radial-gradient(640px 240px at 30% 0%, rgba(255, 195, 108, 0.14), transparent 70%),
+            var(--bg);
+    }
+    .summary-header, .items article { border-color: rgba(124,177,255,.24); box-shadow: 0 18px 44px rgba(0,0,0,.32); }
+    .toc li { border-color: rgba(124,177,255,.22); background: linear-gradient(170deg, #1b2435, #1f2a3f); }
+    code { background: rgba(124,177,255,.16); }
+    .article-background { background: linear-gradient(170deg, #1b2435, #1f2a3f); }
+}
+
+@media (max-width: 860px) {
+    .container { margin: .7rem auto; padding: .65rem; }
+}
+
+/* ── Editorial article layout ─────────────────────────────────────────── */
+
+.article-lead {
+    font-size: 1.18rem;
+    color: var(--muted);
+    line-height: 1.7;
+    margin: .3rem 0 1.4rem;
+    max-width: 72ch;
+    font-style: italic;
+}
+
+.article-section {
+    margin-top: 1.55rem;
+}
+
+    .article-section {
+    font-family: 'Manrope', 'Segoe UI', sans-serif;
+    font-size: .78rem;
+.article-section h2 {
+.narrow {
+    margin: 0 0 .45rem;
+    padding-bottom: .25rem;
+    border-bottom: 1px solid color-mix(in srgb, var(--accent) 22%, transparent);
+}
+
+.article-section h2 {
+.narrow {
+    font-size: 1.03rem;
+    line-height: 1.85;
+    color: var(--text);
+}
+
+.article-section p {
+    margin: 0.25rem 0;
+}
+
+.article-section .article-section-last {
+    font-size: 1.08rem;
+
+.article-section h3 {
+    margin: .35rem 0 .15rem;
+    font-size: 0.95rem;
+    color: var(--muted);
+}
+    font-weight: 600;
+    margin-top: .45rem;
+}
+
+.article-section p + p {
+    margin-top: .8rem;
+}
+
+.article-background {
+    margin-top: 1.4rem;
+    padding: 1rem 1.1rem;
+    background: linear-gradient(170deg, var(--surface), color-mix(in srgb, var(--accent-soft) 30%, #fff));
+    border-left: 3px solid var(--accent);
+    border-radius: 0 10px 10px 0;
+    font-size: .98rem;
+    line-height: 1.78;
+    color: var(--text);
+}
+
+.article-background strong {
+    display: block;
+    font-family: 'Manrope', 'Segoe UI', sans-serif;
+    font-size: .78rem;
+    text-transform: uppercase;
+    letter-spacing: .1em;
+    color: var(--accent);
+    margin-bottom: .35rem;
+}
+
+.article-discussion {
+    margin-top: 1.2rem;
+    padding: .85rem 1rem;
+    border-left: 3px solid color-mix(in srgb, var(--muted) 40%, transparent);
+    font-style: italic;
+    font-size: .98rem;
+    color: var(--muted);
+    line-height: 1.75;
+}
+
+.article-discussion strong {
+    font-style: normal;
+    font-family: 'Manrope', 'Segoe UI', sans-serif;
+    font-size: .78rem;
+    text-transform: uppercase;
+    letter-spacing: .1em;
+    display: block;
+    margin-bottom: .3rem;
+    color: var(--muted);
+}
+
+.tab-switcher {
+    display: flex; gap: .5rem; margin-bottom: 1.5rem;
+    border-bottom: 2px solid color-mix(in srgb, var(--accent) 20%, transparent);
+}
+.tab-button {
+    background: transparent; border: none; color: var(--muted);
+    font-family: 'Manrope', 'Segoe UI', sans-serif; font-size: 1rem; font-weight: 600;
+    padding: .75rem 1.2rem; cursor: pointer;
+    transition: color .18s ease, border-color .18s ease;
+    border-bottom: 3px solid transparent;
+}
+.tab-button:hover { color: var(--text); }
+.tab-button.active { color: var(--accent); border-bottom-color: var(--accent); }
+.tab-content { display: none; animation: fadeIn .2s ease-in; }
+.tab-content.active { display: block; }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@media (max-width: 860px) { .tab-switcher { flex-wrap: wrap; } }
+</style>
+  <script>
+    function switchTab(button) {
+      const lang = button.getAttribute('data-lang');
+      const allButtons = document.querySelectorAll('.tab-button');
+      const allContents = document.querySelectorAll('.tab-content');
+      allButtons.forEach(b => b.classList.remove('active'));
+      allContents.forEach(c => c.classList.remove('active'));
+      button.classList.add('active');
+      document.querySelector(`.tab-content[data-lang="${lang}"]`).classList.add('active');
+    }
+  </script>
+</head>
+<body>
+  <div class="container">
+    <div class="tab-switcher">
+      <button class="tab-button active" onclick="switchTab(this)" data-lang="fr">Français</button><button class="tab-button " onclick="switchTab(this)" data-lang="en">English</button>
+    </div>
+    <div class="tab-content active" data-lang="fr"><section class="summary-header">
+  <h1>Horizon Quotidien — 2026-06-13</h1>
+  <p class="lead">Parmi 472 contenus collectés, 7 sujets essentiels ont été sélectionnés.</p>
+  <nav class="toc" aria-label="Sommaire">
+    <p class="toc-title">Sommaire</p>
+    <ul><li><a href="#item-1">PeopleSoft 0-day affecting hundreds of organizations steals gigabytes of data <span class="toc-score">⭐️ 9.339750000000002/10</span></a></li>
+<li><a href="#item-2">The Download: soccer’s data renaissance and China’s big nuclear plans <span class="toc-score">⭐️ 8.911507499999999/10</span></a></li>
+<li><a href="#item-3">The Download: the “steroid olympics” and a safer Mythos <span class="toc-score">⭐️ 8.5212225/10</span></a></li>
+<li><a href="#item-4">Anthropic says Mythos can turn software patches into exploits in minutes <span class="toc-score">⭐️ 8.510250000000001/10</span></a></li>
+<li><a href="#item-5">Short Timelines Favor Control, Long Timelines Favor Infrastructure Security <span class="toc-score">⭐️ 8.344875/10</span></a></li>
+<li><a href="#item-6">Trump’s AI security order acknowledges risks but stops short of regulating industry <span class="toc-score">⭐️ 8.253/10</span></a></li>
+<li><a href="#item-7">How much more software do we really need? <span class="toc-score">⭐️ 7.478625/10</span></a></li></ul>
+  </nav>
+</section>
+<main class="items">
+<article id="item-1">
+  <header>
+    <h2 class="item-title"><a href="https://arstechnica.com/security/2026/06/peoplesoft-0-day-affecting-hundreds-of-organizations-steals-gigabytes-of-data/">PeopleSoft 0-day affecting hundreds of organizations steals gigabytes of data</a>
+      <span class="score">⭐️ 9.339750000000002/10</span>
+    </h2>
+    <div class="meta">rss · Ars Technica · Jun 12, 19:26</div>
+  </header>
+  <div class="article-body"><p class="article-lead">Vulnerability in the Oracle-owned PeopleSoft software is about as critical as they come.</p></div>
+  
+  <footer class="item-footer">
+    <div class="tags"><code>#Cybersecurity</code>, <code>#Oracle</code>, <code>#PeopleSoft</code>, <code>#Zero-Day Vulnerability</code></div>
+    
+  </footer>
+</article>
+
+<article id="item-2">
+  <header>
+    <h2 class="item-title"><a href="https://www.technologyreview.com/2026/06/11/1138809/the-download-soccer-football-data-analytics-china-nuclear-power/">The Download: soccer’s data renaissance and China’s big nuclear plans</a>
+      <span class="score">⭐️ 8.911507499999999/10</span>
+    </h2>
+    <div class="meta">rss · MIT Technology Review · Jun 11, 12:10</div>
+  </header>
+  <div class="article-body"><p class="article-lead">This is today’s edition of The Download, our weekday newsletter that provides a daily dose of what’s going on in the world of technology. Inside soccer’s data renaissance Imagine tuning in to the opening kickoff of a World Cup match and seeing a player intentionally kick the ball out of bounds. You may question the…</p></div>
+  
+  <footer class="item-footer">
+    <div class="tags"><code>#technology</code>, <code>#sports</code>, <code>#energy</code>, <code>#data analytics</code></div>
+    
+  </footer>
+</article>
+
+<article id="item-3">
+  <header>
+    <h2 class="item-title"><a href="https://www.technologyreview.com/2026/06/10/1138739/the-download-steroid-olympics-enhanced-games-anthropic-mythos/">The Download: the “steroid olympics” and a safer Mythos</a>
+      <span class="score">⭐️ 8.5212225/10</span>
+    </h2>
+    <div class="meta">rss · MIT Technology Review · Jun 10, 12:10</div>
+  </header>
+  <div class="article-body"><p class="article-lead">This is today’s edition of The Download, our weekday newsletter that provides a daily dose of what’s going on in the world of technology. The “steroid olympics” were a circus—and a window into our culture —Amit Katwala A couple of weeks ago, at a $50 million arena built in a casino parking lot in Las…</p></div>
+  
+  <footer class="item-footer">
+    <div class="tags"><code>#Technology</code>, <code>#Culture</code>, <code>#Society</code>, <code>#Enhancement</code></div>
+    
+  </footer>
+</article>
+
+<article id="item-4">
+  <header>
+    <h2 class="item-title"><a href="https://www.axios.com/2026/06/08/exclusive-anthropics-mythos-can-exploit-new-flaws-in-hours">Anthropic says Mythos can turn software patches into exploits in minutes</a>
+      <span class="score">⭐️ 8.510250000000001/10</span>
+    </h2>
+    <div class="meta">rss · Axios · Jun 8, 17:00</div>
+  </header>
+  <div class="article-body"><p class="article-lead">Anthropic&#39;s Mythos Preview can now turn newly disclosed software vulnerabilities into working exploits in hours instead of weeks, according to new Anthropic research shared first with Axios. Why it matters: AI&#39;s ability to find new bugs has been getting most of the attention. But Anthropic&#39;s findings suggest advanced models may be just as effective at rapidly weaponizing flaws that defenders already know about. That could dramatically shrink the &quot;patch gap&quot; between a vulnerability&#39;s disclosure and widespread patchi...</p></div>
+  
+  <footer class="item-footer">
+    <div class="tags"><code>#cybersecurity</code>, <code>#AI</code>, <code>#software vulnerabilities</code></div>
+    
+  </footer>
+</article>
+
+<article id="item-5">
+  <header>
+    <h2 class="item-title"><a href="https://www.lesswrong.com/posts/LCT7wK8q4QLBodQ4F/short-timelines-favor-control-long-timelines-favor">Short Timelines Favor Control, Long Timelines Favor Infrastructure Security</a>
+      <span class="score">⭐️ 8.344875/10</span>
+    </h2>
+    <div class="meta">rss · LessWrong · Jun 13, 00:22</div>
+  </header>
+  <div class="article-body"><p class="article-lead">TL:DR, A common assumption is that extending AGI timelines reduces risk straightforwardly by giving alignment researchers more time. I suspect the relationship is more complicated. Longer timelines may reduce accidental misalignment risk while simultaneously increasing risks from deliberate misuse and sabotage [1] . If so, extending timelines changes which interventions have the highest expected value rather than uniformly reducing risk. -- My background is in vulnerability research and critical infrastructure secu...</p></div>
+  
+  <footer class="item-footer">
+    <div class="tags"><code>#AI Safety</code>, <code>#AGI Timelines</code>, <code>#Infrastructure Security</code>, <code>#Risk Analysis</code></div>
+    
+  </footer>
+</article>
+
+<article id="item-6">
+  <header>
+    <h2 class="item-title"><a href="https://theconversation.com/trumps-ai-security-order-acknowledges-risks-but-stops-short-of-regulating-industry-284495">Trump’s AI security order acknowledges risks but stops short of regulating industry</a>
+      <span class="score">⭐️ 8.253/10</span>
+    </h2>
+    <div class="meta">rss · The Conversation · Jun 12, 12:21</div>
+  </header>
+  <div class="article-body"><p class="article-lead">The executive order is voluntary for AI companies but aligns with AI safety experts on the potential for harm.</p></div>
+  
+  <footer class="item-footer">
+    <div class="tags"><code>#AI</code>, <code>#Cybersecurity</code>, <code>#Regulation</code>, <code>#Technology</code></div>
+    
+  </footer>
+</article>
+
+<article id="item-7">
+  <header>
+    <h2 class="item-title"><a href="https://www.noahpinion.blog/p/how-much-more-software-do-we-really">How much more software do we really need?</a>
+      <span class="score">⭐️ 7.478625/10</span>
+    </h2>
+    <div class="meta">rss · Noahpinion · Jun 2, 09:31</div>
+  </header>
+  <div class="article-body"><p class="article-lead">Probably a lot, but not necessarily the kinds people have made money on so far.</p></div>
+  
+  <footer class="item-footer">
+    <div class="tags"><code>#Software Development</code>, <code>#Technology</code>, <code>#Innovation</code>, <code>#Economics</code></div>
+    
+  </footer>
+</article>
+</main></div><div class="tab-content " data-lang="en"><section class="summary-header">
+  <h1>Horizon Daily — 2026-06-13</h1>
+  <p class="lead">From 472 items, 7 important content pieces were selected</p>
+  <nav class="toc" aria-label="Contents">
+    <p class="toc-title">Contents</p>
+    <ul><li><a href="#item-1">PeopleSoft 0-day affecting hundreds of organizations steals gigabytes of data <span class="toc-score">⭐️ 9.339750000000002/10</span></a></li>
+<li><a href="#item-2">The Download: soccer’s data renaissance and China’s big nuclear plans <span class="toc-score">⭐️ 8.911507499999999/10</span></a></li>
+<li><a href="#item-3">The Download: the “steroid olympics” and a safer Mythos <span class="toc-score">⭐️ 8.5212225/10</span></a></li>
+<li><a href="#item-4">Anthropic says Mythos can turn software patches into exploits in minutes <span class="toc-score">⭐️ 8.510250000000001/10</span></a></li>
+<li><a href="#item-5">Short Timelines Favor Control, Long Timelines Favor Infrastructure Security <span class="toc-score">⭐️ 8.344875/10</span></a></li>
+<li><a href="#item-6">Trump’s AI security order acknowledges risks but stops short of regulating industry <span class="toc-score">⭐️ 8.253/10</span></a></li>
+<li><a href="#item-7">How much more software do we really need? <span class="toc-score">⭐️ 7.478625/10</span></a></li></ul>
+  </nav>
+</section>
+<main class="items">
+<article id="item-1">
+  <header>
+    <h2 class="item-title"><a href="https://arstechnica.com/security/2026/06/peoplesoft-0-day-affecting-hundreds-of-organizations-steals-gigabytes-of-data/">PeopleSoft 0-day affecting hundreds of organizations steals gigabytes of data</a>
+      <span class="score">⭐️ 9.339750000000002/10</span>
+    </h2>
+    <div class="meta">rss · Ars Technica · Jun 12, 19:26</div>
+  </header>
+  <div class="article-body"><p class="article-lead">A 0-day vulnerability in Oracle&#39;s PeopleSoft software is affecting hundreds of organizations, leading to the theft of gigabytes of data.</p></div>
+  
+  <footer class="item-footer">
+    <div class="tags"><code>#Cybersecurity</code>, <code>#Oracle</code>, <code>#PeopleSoft</code>, <code>#Zero-Day Vulnerability</code></div>
+    
+  </footer>
+</article>
+
+<article id="item-2">
+  <header>
+    <h2 class="item-title"><a href="https://www.technologyreview.com/2026/06/11/1138809/the-download-soccer-football-data-analytics-china-nuclear-power/">The Download: soccer’s data renaissance and China’s big nuclear plans</a>
+      <span class="score">⭐️ 8.911507499999999/10</span>
+    </h2>
+    <div class="meta">rss · MIT Technology Review · Jun 11, 12:10</div>
+  </header>
+  <div class="article-body"><p class="article-lead">The Download newsletter covers soccer&#39;s data renaissance and China&#39;s big nuclear plans, highlighting the growing importance of technology in these fields.</p></div>
+  
+  <footer class="item-footer">
+    <div class="tags"><code>#technology</code>, <code>#sports</code>, <code>#energy</code>, <code>#data analytics</code></div>
+    
+  </footer>
+</article>
+
+<article id="item-3">
+  <header>
+    <h2 class="item-title"><a href="https://www.technologyreview.com/2026/06/10/1138739/the-download-steroid-olympics-enhanced-games-anthropic-mythos/">The Download: the “steroid olympics” and a safer Mythos</a>
+      <span class="score">⭐️ 8.5212225/10</span>
+    </h2>
+    <div class="meta">rss · MIT Technology Review · Jun 10, 12:10</div>
+  </header>
+  <div class="article-body"><p class="article-lead">The &#39;steroid olympics&#39; event provides a window into our culture and its obsession with enhancement and technology</p></div>
+  
+  <footer class="item-footer">
+    <div class="tags"><code>#Technology</code>, <code>#Culture</code>, <code>#Society</code>, <code>#Enhancement</code></div>
+    
+  </footer>
+</article>
+
+<article id="item-4">
+  <header>
+    <h2 class="item-title"><a href="https://www.axios.com/2026/06/08/exclusive-anthropics-mythos-can-exploit-new-flaws-in-hours">Anthropic says Mythos can turn software patches into exploits in minutes</a>
+      <span class="score">⭐️ 8.510250000000001/10</span>
+    </h2>
+    <div class="meta">rss · Axios · Jun 8, 17:00</div>
+  </header>
+  <div class="article-body"><p class="article-lead">Anthropic&#39;s Mythos Preview can turn newly disclosed software vulnerabilities into working exploits in hours, potentially shrinking the time gap between vulnerability disclosure and patching</p></div>
+  
+  <footer class="item-footer">
+    <div class="tags"><code>#cybersecurity</code>, <code>#AI</code>, <code>#software vulnerabilities</code></div>
+    
+  </footer>
+</article>
+
+<article id="item-5">
+  <header>
+    <h2 class="item-title"><a href="https://www.lesswrong.com/posts/LCT7wK8q4QLBodQ4F/short-timelines-favor-control-long-timelines-favor">Short Timelines Favor Control, Long Timelines Favor Infrastructure Security</a>
+      <span class="score">⭐️ 8.344875/10</span>
+    </h2>
+    <div class="meta">rss · LessWrong · Jun 13, 00:22</div>
+  </header>
+  <div class="article-body"><p class="article-lead">Extending AGI timelines may not uniformly reduce risk, but instead shift the focus of high-value interventions from control to infrastructure security.</p></div>
+  
+  <footer class="item-footer">
+    <div class="tags"><code>#AI Safety</code>, <code>#AGI Timelines</code>, <code>#Infrastructure Security</code>, <code>#Risk Analysis</code></div>
+    
+  </footer>
+</article>
+
+<article id="item-6">
+  <header>
+    <h2 class="item-title"><a href="https://theconversation.com/trumps-ai-security-order-acknowledges-risks-but-stops-short-of-regulating-industry-284495">Trump’s AI security order acknowledges risks but stops short of regulating industry</a>
+      <span class="score">⭐️ 8.253/10</span>
+    </h2>
+    <div class="meta">rss · The Conversation · Jun 12, 12:21</div>
+  </header>
+  <div class="article-body"><p class="article-lead">Trump&#39;s AI security order acknowledges potential risks but does not regulate the industry, instead relying on voluntary compliance from AI companies.</p></div>
+  
+  <footer class="item-footer">
+    <div class="tags"><code>#AI</code>, <code>#Cybersecurity</code>, <code>#Regulation</code>, <code>#Technology</code></div>
+    
+  </footer>
+</article>
+
+<article id="item-7">
+  <header>
+    <h2 class="item-title"><a href="https://www.noahpinion.blog/p/how-much-more-software-do-we-really">How much more software do we really need?</a>
+      <span class="score">⭐️ 7.478625/10</span>
+    </h2>
+    <div class="meta">rss · Noahpinion · Jun 2, 09:31</div>
+  </header>
+  <div class="article-body"><p class="article-lead">The article questions the need for more software and suggests that future development should focus on different areas than those that have been profitable so far.</p></div>
+  
+  <footer class="item-footer">
+    <div class="tags"><code>#Software Development</code>, <code>#Technology</code>, <code>#Innovation</code>, <code>#Economics</code></div>
+    
+  </footer>
+</article>
+</main></div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,343 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Horizon — 2026-06-15</title>
+  <style>
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600&family=Manrope:wght@500;700&display=swap');
+
+:root {
+    --bg: #f8f5f3;
+    --paper: #ffffff;
+    --surface: #fffbf8;
+    --accent: #9b3d2a;
+    --accent-2: color-mix(in srgb, var(--accent) 55%, #b73fd6);
+    --accent-3: color-mix(in srgb, var(--accent) 40%, #f59e0b);
+    --accent-soft: #f9e2dc;
+    --muted: #6e5b54;
+    --text: #2f211d;
+    --ring: color-mix(in srgb, var(--accent) 32%, transparent);
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+    color: var(--text);
+    background:
+        radial-gradient(1300px 420px at -10% -20%, var(--accent-soft), transparent 60%),
+        radial-gradient(760px 300px at 88% -12%, color-mix(in srgb, var(--accent-2) 24%, transparent), transparent 66%),
+        radial-gradient(640px 240px at 30% 0%, color-mix(in srgb, var(--accent-3) 18%, transparent), transparent 70%),
+        var(--bg);
+    font-family: 'Source Serif 4', Georgia, serif;
+    line-height: 1.78;
+}
+
+.container { max-width: 1100px; margin: 1.5rem auto; padding: 1rem; }
+
+/* ── Page header ─────────────────────────────────────────────────────── */
+.summary-header {
+    background: var(--paper);
+    border: 1px solid color-mix(in srgb, var(--accent) 16%, transparent);
+    border-radius: 24px;
+    padding: 1.5rem 1.6rem 1.1rem;
+    box-shadow: 0 18px 48px rgba(19, 33, 68, 0.08);
+    margin-bottom: 1rem;
+    position: relative;
+    overflow: hidden;
+}
+.summary-header::after {
+    content: "";
+    position: absolute;
+    inset: auto -60px -80px auto;
+    width: 220px; height: 220px;
+    border-radius: 999px;
+    background: radial-gradient(circle, color-mix(in srgb, var(--accent-2) 28%, transparent), transparent 70%);
+    pointer-events: none;
+}
+.summary-header h1 {
+    margin: 0;
+    font-family: 'Fraunces', 'DM Serif Display', 'Iowan Old Style', 'Palatino Linotype', serif;
+    letter-spacing: .01em;
+    font-size: clamp(1.8rem, 3.6vw, 2.8rem);
+    line-height: 1.15;
+}
+.lead { margin: .55rem 0 1.1rem; color: var(--muted); font-size: 1.04rem; max-width: 78ch; }
+
+/* ── TOC ─────────────────────────────────────────────────────────────── */
+.toc-title {
+    margin: 0 0 .45rem;
+    font-family: 'Manrope', 'Segoe UI', sans-serif;
+    font-size: .85rem;
+    text-transform: uppercase;
+    letter-spacing: .11em;
+    color: var(--muted);
+}
+.toc ul {
+    list-style: none; margin: 0; padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: .55rem;
+}
+.toc li {
+    background: linear-gradient(160deg, var(--surface), color-mix(in srgb, var(--accent-soft) 48%, #ffffff));
+    border: 1px solid color-mix(in srgb, var(--accent) 16%, transparent);
+    border-radius: 10px;
+    padding: .55rem .65rem;
+    transition: transform .18s ease, box-shadow .18s ease;
+}
+.toc li:hover { transform: translateY(-1px); box-shadow: 0 8px 20px color-mix(in srgb, var(--accent) 15%, transparent); }
+.toc a { text-decoration: none; color: var(--text); }
+.toc-score { color: var(--accent); font-family: 'Manrope', 'Segoe UI', sans-serif; font-size: .85rem; font-weight: 600; }
+
+/* ── Article cards ───────────────────────────────────────────────────── */
+.items { display: grid; gap: .95rem; }
+.items article {
+    background: var(--paper);
+    border: 1px solid color-mix(in srgb, var(--accent) 15%, transparent);
+    border-radius: 20px;
+    padding: 1.4rem 1.6rem 1.1rem;
+    box-shadow: 0 10px 32px rgba(0, 0, 0, 0.05);
+}
+.item-title {
+    font-family: 'Fraunces', 'DM Serif Display', 'Iowan Old Style', 'Palatino Linotype', serif;
+    font-size: clamp(1.2rem, 2.2vw, 1.55rem);
+    margin: 0 0 .3rem;
+    line-height: 1.22;
+}
+.item-title a { color: inherit; text-decoration: none; }
+.item-title a:hover { color: var(--accent); }
+.item-title a:focus-visible, .toc a:focus-visible, summary:focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
+    border-radius: 6px;
+}
+.meta { color: var(--muted); font-family: 'Manrope', 'Segoe UI', sans-serif; font-size: .88rem; margin-bottom: .9rem; }
+.score { color: var(--accent); margin-left: .45rem; font-weight: 700; font-family: 'Manrope', 'Segoe UI', sans-serif; font-size: .95rem; }
+
+.article-body { border-top: 1px solid color-mix(in srgb, var(--accent) 10%, transparent); padding-top: 1rem; }
+
+.item-footer {
+    margin-top: 1rem;
+    padding-top: .65rem;
+    border-top: 1px solid color-mix(in srgb, var(--muted) 18%, transparent);
+}
+
+.evidence-note {
+    margin: .8rem 0 0;
+    color: var(--muted);
+    font-size: .92rem;
+    font-style: italic;
+}
+
+.tags { color: var(--muted); font-family: 'Manrope', 'Segoe UI', sans-serif; font-size: .88rem; margin-bottom: .45rem; }
+code { background: color-mix(in srgb, var(--accent-soft) 65%, #ffffff); border-radius: 8px; padding: .12rem .4rem; }
+
+details { margin-top: .5rem; }
+details summary { cursor: pointer; color: var(--accent); font-family: 'Manrope', 'Segoe UI', sans-serif; font-size: .9rem; }
+
+/* ── Dark mode ───────────────────────────────────────────────────────── */
+@media (prefers-color-scheme: dark) {
+    :root {
+        --bg: #0f1420; --paper: #161d2c; --surface: #1b2435;
+        --accent: #7cb1ff; --accent-2: #c28cff; --accent-3: #ffc36c;
+        --accent-soft: #1a2740; --muted: #a6b4cd; --text: #edf2ff;
+        --ring: rgba(124, 177, 255, 0.55);
+    }
+    body {
+        background:
+            radial-gradient(1200px 420px at -10% -20%, #1a2740, transparent 60%),
+            radial-gradient(760px 300px at 88% -12%, rgba(194, 140, 255, 0.2), transparent 66%),
+            radial-gradient(640px 240px at 30% 0%, rgba(255, 195, 108, 0.14), transparent 70%),
+            var(--bg);
+    }
+    .summary-header, .items article { border-color: rgba(124,177,255,.24); box-shadow: 0 18px 44px rgba(0,0,0,.32); }
+    .toc li { border-color: rgba(124,177,255,.22); background: linear-gradient(170deg, #1b2435, #1f2a3f); }
+    code { background: rgba(124,177,255,.16); }
+    .article-background { background: linear-gradient(170deg, #1b2435, #1f2a3f); }
+}
+
+@media (max-width: 860px) {
+    .container { margin: .7rem auto; padding: .65rem; }
+}
+
+/* ── Editorial article layout ─────────────────────────────────────────── */
+
+.article-lead {
+    font-size: 1.18rem;
+    color: var(--muted);
+    line-height: 1.7;
+    margin: .3rem 0 1.4rem;
+    max-width: 72ch;
+    font-style: italic;
+}
+
+.article-section {
+    margin-top: 1.55rem;
+}
+
+    .article-section {
+    font-family: 'Manrope', 'Segoe UI', sans-serif;
+    font-size: .78rem;
+.article-section h2 {
+.narrow {
+    margin: 0 0 .45rem;
+    padding-bottom: .25rem;
+    border-bottom: 1px solid color-mix(in srgb, var(--accent) 22%, transparent);
+}
+
+.article-section h2 {
+.narrow {
+    font-size: 1.03rem;
+    line-height: 1.85;
+    color: var(--text);
+}
+
+.article-section p {
+    margin: 0.25rem 0;
+}
+
+.article-section .article-section-last {
+    font-size: 1.08rem;
+
+.article-section h3 {
+    margin: .35rem 0 .15rem;
+    font-size: 0.95rem;
+    color: var(--muted);
+}
+    font-weight: 600;
+    margin-top: .45rem;
+}
+
+.article-section p + p {
+    margin-top: .8rem;
+}
+
+.article-background {
+    margin-top: 1.4rem;
+    padding: 1rem 1.1rem;
+    background: linear-gradient(170deg, var(--surface), color-mix(in srgb, var(--accent-soft) 30%, #fff));
+    border-left: 3px solid var(--accent);
+    border-radius: 0 10px 10px 0;
+    font-size: .98rem;
+    line-height: 1.78;
+    color: var(--text);
+}
+
+.article-background strong {
+    display: block;
+    font-family: 'Manrope', 'Segoe UI', sans-serif;
+    font-size: .78rem;
+    text-transform: uppercase;
+    letter-spacing: .1em;
+    color: var(--accent);
+    margin-bottom: .35rem;
+}
+
+.article-discussion {
+    margin-top: 1.2rem;
+    padding: .85rem 1rem;
+    border-left: 3px solid color-mix(in srgb, var(--muted) 40%, transparent);
+    font-style: italic;
+    font-size: .98rem;
+    color: var(--muted);
+    line-height: 1.75;
+}
+
+.article-discussion strong {
+    font-style: normal;
+    font-family: 'Manrope', 'Segoe UI', sans-serif;
+    font-size: .78rem;
+    text-transform: uppercase;
+    letter-spacing: .1em;
+    display: block;
+    margin-bottom: .3rem;
+    color: var(--muted);
+}
+
+.tab-switcher {
+    display: flex; gap: .5rem; margin-bottom: 1.5rem;
+    border-bottom: 2px solid color-mix(in srgb, var(--accent) 20%, transparent);
+}
+.tab-button {
+    background: transparent; border: none; color: var(--muted);
+    font-family: 'Manrope', 'Segoe UI', sans-serif; font-size: 1rem; font-weight: 600;
+    padding: .75rem 1.2rem; cursor: pointer;
+    transition: color .18s ease, border-color .18s ease;
+    border-bottom: 3px solid transparent;
+}
+.tab-button:hover { color: var(--text); }
+.tab-button.active { color: var(--accent); border-bottom-color: var(--accent); }
+.tab-content { display: none; animation: fadeIn .2s ease-in; }
+.tab-content.active { display: block; }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@media (max-width: 860px) { .tab-switcher { flex-wrap: wrap; } }
+</style>
+  <script>
+    function switchTab(button) {
+      const lang = button.getAttribute('data-lang');
+      const allButtons = document.querySelectorAll('.tab-button');
+      const allContents = document.querySelectorAll('.tab-content');
+      allButtons.forEach(b => b.classList.remove('active'));
+      allContents.forEach(c => c.classList.remove('active'));
+      button.classList.add('active');
+      document.querySelector(`.tab-content[data-lang="${lang}"]`).classList.add('active');
+    }
+  </script>
+</head>
+<body>
+  <div class="container">
+    <div class="tab-switcher">
+      <button class="tab-button active" onclick="switchTab(this)" data-lang="fr">Français</button><button class="tab-button " onclick="switchTab(this)" data-lang="en">English</button>
+    </div>
+    <div class="tab-content active" data-lang="fr"><section class="summary-header">
+  <h1>Horizon Quotidien — 2026-06-15</h1>
+  <p class="lead">Parmi 475 contenus collectés, 1 sujets essentiels ont été sélectionnés.</p>
+  <nav class="toc" aria-label="Sommaire">
+    <p class="toc-title">Sommaire</p>
+    <ul><li><a href="#item-1">Violences sexuelles sur les enfants : le rapport de la Ciivise révèle l’inaction du gouvernement <span class="toc-score">⭐️ 7.610250000000001/10</span></a></li></ul>
+  </nav>
+</section>
+<main class="items">
+<article id="item-1">
+  <header>
+    <h2 class="item-title"><a href="https://www.mediapart.fr/journal/france/150626/violences-sexuelles-sur-les-enfants-un-rapport-de-la-ciivise-etrille-le-bilan-du-gouvernement">Violences sexuelles sur les enfants : le rapport de la Ciivise révèle l’inaction du gouvernement</a>
+      <span class="score">⭐️ 7.610250000000001/10</span>
+    </h2>
+    <div class="meta">rss · Mediapart · Jun 15, 11:21</div>
+  </header>
+  <div class="article-body"><p class="article-lead">La Ciivise : une commission née de l’urgence</p><p>La Commission indépendante sur l’inceste et les violences sexuelles faites aux enfants (Ciivise) a été créée en 2021, inspirée par l’enquête sur les abus sexuels au sein de l’Église catholique. Sa mission : enquêter sur l’ampleur des violences sexuelles contre les enfants en France, proposer des solutions concrètes et briser le silence entourant ces crimes.  « Le travail de la Commission ne se limite pas aux statistiques : il s’agit de rendre leur dignité aux victimes et de faire entendre leur voix », a déclaré un porte-parole de la Ciivise.  Pourtant, trois ans après sa création, les conclusions de la Ciivise dressent un tableau alarmant de l’inaction gouvernementale. Malgré ses appels à des réformes ambitieuses – amélioration des mécanismes de détection, protections judiciaires –, seule une infime partie de ses recommandations a été mise en œuvre.</p><p></p><p>Un gouvernement critiqué de toutes parts</p><p>Le rapport de la Ciivise, publié ce mois-ci, révèle que seulement trois de ses 17 mesures d’urgence ont été pleinement appliquées. Parmi elles, des mesures modestes comme la formation des professionnels en contact avec les enfants, mais des réformes essentielles – comme l’obligation pour les médecins de signaler les abus ou le renforcement des protections juridiques pour les victimes – restent au point mort.   **Lacunes dans la détection** : Les médecins, souvent les premiers à suspecter des abus, ne sont toujours pas tenus de les signaler.  **Retards judiciaires** : Les victimes font face à des procédures longues, et de nombreux dossiers sont classés sans suite.  **Échecs de la prévention** : Les écoles et les services sociaux manquent de protocoles standardisés pour identifier et réagir aux abus.   La réponse du gouvernement a été qualifiée de « confuse » par la Ciivise, certaines recommandations ayant été purement et simplement rejetées par l’exécutif.</p><p></p><p>L’affaire Lyhanna : symbole d’un système défaillant</p><p>Le meurtre de Lyhanna, une jeune fille dont la mort en 2023 a bouleversé la France, est devenu un symbole pour les défenseurs des droits de l’enfant. Les investigations ont révélé que Lyhanna avait subi des violences prolongées, sans que les autorités n’interviennent malgré de multiples signaux d’alerte.  « L’affaire Lyhanna n’est pas une tragédie isolée : c’est le résultat d’un système défaillant qui privilégie la bureaucratie aux vies d’enfants », a déclaré un militant de la protection de l’enfance.  Le rapport de la Ciivise souligne que de telles défaillances ne sont pas des exceptions, mais les symptômes d’une crise plus large. Sans action urgente, les experts craignent que d’autres enfants ne tombent dans l’oubli.</p><p></p><p>Des lacunes juridiques et des barrières culturelles</p><p>Le cadre juridique français en matière d’inceste et de violences sexuelles sur mineurs est depuis longtemps critiqué pour son insuffisance. Jusqu’en 2016, le terme « inceste » n’apparaissait même pas dans le code pénal, et aujourd’hui, il reste une qualification secondaire pour des crimes comme le viol ou l’agression sexuelle. Les victimes doivent encore prouver qu’elles n’étaient pas consentantes – une charge qui pèse sur les enfants.   **Lois sur le consentement** : L’âge légal de consentement (15 ans) ne s’applique pas en cas d’inceste ou d’abus par une figure d’autorité.  **Prescription** : De nombreuses victimes ne peuvent obtenir justice en raison des délais de prescription.  **Stigmatisation** : Les survivants sont souvent confrontés à l’incrédulité ou à la culpabilisation, ce qui les dissuade de porter plainte.   Le président Emmanuel Macron a promis de renforcer les lois, mais les critiques soulignent que les changements législatifs restent vains sans application et sans moyens.</p><p></p><p>Et maintenant ? Les défenseurs réclament des actes</p><p>Le mandat de la Ciivise a été prolongé jusqu’en octobre 2026, offrant une lueur d’espoir pour des avancées. Cependant, les défenseurs insistent sur le fait que le véritable changement nécessite une volonté politique. Parmi les principales revendications :   **Signalement obligatoire** : Imposer aux professionnels de signaler les soupçons d’abus.  **Réparations pour les victimes** : Soutien financier et psychologique pour les survivants.  **Campagnes de sensibilisation** : Éduquer les communautés pour reconnaître et prévenir les abus.    « L’inaction du gouvernement est une trahison envers les enfants qu’il prétend protéger. Nous avons besoin d’actes, pas seulement de paroles », a déclaré un membre de la Ciivise.  Alors que la France fait face à sa crise de protection de l’enfance, le rapport de la Ciivise sert à la fois d’avertissement et de feuille de route pour des réformes – si le gouvernement choisit d’écouter.</p></div>
+  
+  <footer class="item-footer">
+    <div class="tags"><code>#child protection</code>, <code>#sexual violence</code>, <code>#government accountability</code>, <code>#France</code></div>
+    
+  </footer>
+</article>
+</main></div><div class="tab-content " data-lang="en"><section class="summary-header">
+  <h1>Horizon Daily — 2026-06-15</h1>
+  <p class="lead">From 475 items, 1 important content pieces were selected</p>
+  <nav class="toc" aria-label="Contents">
+    <p class="toc-title">Contents</p>
+    <ul><li><a href="#item-1">France’s Failure on Child Sexual Violence: Ciivise Report Exposes Government Inaction <span class="toc-score">⭐️ 7.610250000000001/10</span></a></li></ul>
+  </nav>
+</section>
+<main class="items">
+<article id="item-1">
+  <header>
+    <h2 class="item-title"><a href="https://www.mediapart.fr/journal/france/150626/violences-sexuelles-sur-les-enfants-un-rapport-de-la-ciivise-etrille-le-bilan-du-gouvernement">France’s Failure on Child Sexual Violence: Ciivise Report Exposes Government Inaction</a>
+      <span class="score">⭐️ 7.610250000000001/10</span>
+    </h2>
+    <div class="meta">rss · Mediapart · Jun 15, 11:21</div>
+  </header>
+  <div class="article-body"><p class="article-lead">Ciivise: A Commission Born of Urgency</p><p>The Independent Commission on Incest and Child Sexual Violence (Ciivise) was established in 2021, modeled after the inquiry into sexual abuse within the Catholic Church. Its mandate: to investigate the scale of child sexual violence in France, propose concrete solutions, and break the silence surrounding these crimes.  &quot;The Commission’s work is not just about statistics—it’s about restoring dignity to victims and ensuring their voices are heard,&quot; said a spokesperson for Ciivise.  Yet, three years into its mission, Ciivise’s findings paint a grim picture of governmental inertia. Despite its calls for sweeping reforms—from improved detection mechanisms to judicial protections—only a fraction of its recommendations have been acted upon.</p><p></p><p>A Government Under Fire</p><p>The Ciivise report, published this month, highlights that just three of its 17 urgent measures have been fully implemented. These include modest steps like training for professionals working with children, but critical reforms—such as mandatory reporting of abuse by doctors and stronger legal protections for victims—remain stalled.   **Detection gaps**: Doctors, often the first to suspect abuse, are still not required to report cases.  **Judicial delays**: Victims face lengthy legal battles, with many cases dismissed due to procedural hurdles.  **Prevention failures**: Schools and social services lack standardized protocols for identifying and responding to abuse.   The government’s response has been criticized as &quot;confused&quot; by Ciivise, with some recommendations outright rejected by the executive branch.</p><p></p><p>The Lyhanna Case: A Symbol of Systemic Failure</p><p>The murder of Lyhanna, a young girl whose death in 2023 shocked France, has become a rallying cry for advocates demanding change. Investigations revealed that Lyhanna had been subjected to prolonged abuse, yet authorities failed to intervene despite multiple red flags.  &quot;Lyhanna’s case is not an isolated tragedy—it’s the result of a broken system that prioritizes bureaucracy over children’s lives,&quot; said a child protection advocate.  The Ciivise report underscores how such failures are not exceptions but symptoms of a broader crisis. Without urgent action, experts warn, more children will fall through the cracks.</p><p></p><p>Legal Loopholes and Cultural Barriers</p><p>France’s legal framework on incest and child sexual violence has long been criticized as inadequate. Until 2016, the term &quot;incest&quot; did not even appear in the penal code, and today, it remains a secondary qualification for crimes like rape or assault. Victims must still prove they did not consent—a burden that shifts blame onto children.   **Consent laws**: France’s legal age of consent (15) does not apply in cases of incest or abuse by authority figures.  **Statute of limitations**: Many victims are unable to seek justice due to time limits on reporting.  **Cultural stigma**: Survivors often face disbelief or victim-blaming, discouraging them from coming forward.   President Emmanuel Macron has pledged to tighten laws, but critics argue that legislative changes alone are meaningless without enforcement and resources.</p><p></p><p>What’s Next? Advocates Demand Action</p><p>Ciivise’s mandate has been extended until October 2026, offering a glimmer of hope for progress. However, advocates stress that real change requires political will. Key demands include:   **Mandatory reporting**: Requiring professionals to report suspected abuse.  **Victim reparations**: Financial and psychological support for survivors.  **Public awareness campaigns**: Educating communities to recognize and prevent abuse.    &quot;The government’s inaction is a betrayal of the children it claims to protect,&quot; said a Ciivise commissioner. &quot;We need deeds, not just words.&quot;  As France grapples with its child protection crisis, the Ciivise report serves as both a wake-up call and a roadmap for reform—if the government chooses to listen.</p></div>
+  
+  <footer class="item-footer">
+    <div class="tags"><code>#child protection</code>, <code>#sexual violence</code>, <code>#government accountability</code>, <code>#France</code></div>
+    
+  </footer>
+</article>
+</main></div>
+  </div>
+</body>
+</html>

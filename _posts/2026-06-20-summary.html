@@ -1,0 +1,375 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Horizon — 2026-06-20</title>
+  <style>
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600&family=Manrope:wght@500;700&display=swap');
+
+:root {
+    --bg: #f8f8fb;
+    --paper: #ffffff;
+    --surface: #fcfbff;
+    --accent: #325c9b;
+    --accent-2: color-mix(in srgb, var(--accent) 55%, #b73fd6);
+    --accent-3: color-mix(in srgb, var(--accent) 40%, #f59e0b);
+    --accent-soft: #e6eefb;
+    --muted: #5c6372;
+    --text: #1d2230;
+    --ring: color-mix(in srgb, var(--accent) 32%, transparent);
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+    color: var(--text);
+    background:
+        radial-gradient(1300px 420px at -10% -20%, var(--accent-soft), transparent 60%),
+        radial-gradient(760px 300px at 88% -12%, color-mix(in srgb, var(--accent-2) 24%, transparent), transparent 66%),
+        radial-gradient(640px 240px at 30% 0%, color-mix(in srgb, var(--accent-3) 18%, transparent), transparent 70%),
+        var(--bg);
+    font-family: 'Source Serif 4', Georgia, serif;
+    line-height: 1.78;
+}
+
+.container { max-width: 1100px; margin: 1.5rem auto; padding: 1rem; }
+
+/* ── Page header ─────────────────────────────────────────────────────── */
+.summary-header {
+    background: var(--paper);
+    border: 1px solid color-mix(in srgb, var(--accent) 16%, transparent);
+    border-radius: 24px;
+    padding: 1.5rem 1.6rem 1.1rem;
+    box-shadow: 0 18px 48px rgba(19, 33, 68, 0.08);
+    margin-bottom: 1rem;
+    position: relative;
+    overflow: hidden;
+}
+.summary-header::after {
+    content: "";
+    position: absolute;
+    inset: auto -60px -80px auto;
+    width: 220px; height: 220px;
+    border-radius: 999px;
+    background: radial-gradient(circle, color-mix(in srgb, var(--accent-2) 28%, transparent), transparent 70%);
+    pointer-events: none;
+}
+.summary-header h1 {
+    margin: 0;
+    font-family: 'Fraunces', 'DM Serif Display', 'Iowan Old Style', 'Palatino Linotype', serif;
+    letter-spacing: .01em;
+    font-size: clamp(1.8rem, 3.6vw, 2.8rem);
+    line-height: 1.15;
+}
+.lead { margin: .55rem 0 1.1rem; color: var(--muted); font-size: 1.04rem; max-width: 78ch; }
+
+/* ── TOC ─────────────────────────────────────────────────────────────── */
+.toc-title {
+    margin: 0 0 .45rem;
+    font-family: 'Manrope', 'Segoe UI', sans-serif;
+    font-size: .85rem;
+    text-transform: uppercase;
+    letter-spacing: .11em;
+    color: var(--muted);
+}
+.toc ul {
+    list-style: none; margin: 0; padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: .55rem;
+}
+.toc li {
+    background: linear-gradient(160deg, var(--surface), color-mix(in srgb, var(--accent-soft) 48%, #ffffff));
+    border: 1px solid color-mix(in srgb, var(--accent) 16%, transparent);
+    border-radius: 10px;
+    padding: .55rem .65rem;
+    transition: transform .18s ease, box-shadow .18s ease;
+}
+.toc li:hover { transform: translateY(-1px); box-shadow: 0 8px 20px color-mix(in srgb, var(--accent) 15%, transparent); }
+.toc a { text-decoration: none; color: var(--text); }
+.toc-score { color: var(--accent); font-family: 'Manrope', 'Segoe UI', sans-serif; font-size: .85rem; font-weight: 600; }
+
+/* ── Article cards ───────────────────────────────────────────────────── */
+.items { display: grid; gap: .95rem; }
+.items article {
+    background: var(--paper);
+    border: 1px solid color-mix(in srgb, var(--accent) 15%, transparent);
+    border-radius: 20px;
+    padding: 1.4rem 1.6rem 1.1rem;
+    box-shadow: 0 10px 32px rgba(0, 0, 0, 0.05);
+}
+.item-title {
+    font-family: 'Fraunces', 'DM Serif Display', 'Iowan Old Style', 'Palatino Linotype', serif;
+    font-size: clamp(1.2rem, 2.2vw, 1.55rem);
+    margin: 0 0 .3rem;
+    line-height: 1.22;
+}
+.item-title a { color: inherit; text-decoration: none; }
+.item-title a:hover { color: var(--accent); }
+.item-title a:focus-visible, .toc a:focus-visible, summary:focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
+    border-radius: 6px;
+}
+.meta { color: var(--muted); font-family: 'Manrope', 'Segoe UI', sans-serif; font-size: .88rem; margin-bottom: .9rem; }
+.score { color: var(--accent); margin-left: .45rem; font-weight: 700; font-family: 'Manrope', 'Segoe UI', sans-serif; font-size: .95rem; }
+
+.article-body { border-top: 1px solid color-mix(in srgb, var(--accent) 10%, transparent); padding-top: 1rem; }
+
+.item-footer {
+    margin-top: 1rem;
+    padding-top: .65rem;
+    border-top: 1px solid color-mix(in srgb, var(--muted) 18%, transparent);
+}
+
+.evidence-note {
+    margin: .8rem 0 0;
+    color: var(--muted);
+    font-size: .92rem;
+    font-style: italic;
+}
+
+.tags { color: var(--muted); font-family: 'Manrope', 'Segoe UI', sans-serif; font-size: .88rem; margin-bottom: .45rem; }
+code { background: color-mix(in srgb, var(--accent-soft) 65%, #ffffff); border-radius: 8px; padding: .12rem .4rem; }
+
+details { margin-top: .5rem; }
+details summary { cursor: pointer; color: var(--accent); font-family: 'Manrope', 'Segoe UI', sans-serif; font-size: .9rem; }
+
+/* ── Dark mode ───────────────────────────────────────────────────────── */
+@media (prefers-color-scheme: dark) {
+    :root {
+        --bg: #0f1420; --paper: #161d2c; --surface: #1b2435;
+        --accent: #7cb1ff; --accent-2: #c28cff; --accent-3: #ffc36c;
+        --accent-soft: #1a2740; --muted: #a6b4cd; --text: #edf2ff;
+        --ring: rgba(124, 177, 255, 0.55);
+    }
+    body {
+        background:
+            radial-gradient(1200px 420px at -10% -20%, #1a2740, transparent 60%),
+            radial-gradient(760px 300px at 88% -12%, rgba(194, 140, 255, 0.2), transparent 66%),
+            radial-gradient(640px 240px at 30% 0%, rgba(255, 195, 108, 0.14), transparent 70%),
+            var(--bg);
+    }
+    .summary-header, .items article { border-color: rgba(124,177,255,.24); box-shadow: 0 18px 44px rgba(0,0,0,.32); }
+    .toc li { border-color: rgba(124,177,255,.22); background: linear-gradient(170deg, #1b2435, #1f2a3f); }
+    code { background: rgba(124,177,255,.16); }
+    .article-background { background: linear-gradient(170deg, #1b2435, #1f2a3f); }
+}
+
+@media (max-width: 860px) {
+    .container { margin: .7rem auto; padding: .65rem; }
+}
+
+/* ── Editorial article layout ─────────────────────────────────────────── */
+
+.article-lead {
+    font-size: 1.18rem;
+    color: var(--muted);
+    line-height: 1.7;
+    margin: .3rem 0 1.4rem;
+    max-width: 72ch;
+    font-style: italic;
+}
+
+.article-section {
+    margin-top: 1.55rem;
+}
+
+    .article-section {
+    font-family: 'Manrope', 'Segoe UI', sans-serif;
+    font-size: .78rem;
+.article-section h2 {
+.narrow {
+    margin: 0 0 .45rem;
+    padding-bottom: .25rem;
+    border-bottom: 1px solid color-mix(in srgb, var(--accent) 22%, transparent);
+}
+
+.article-section h2 {
+.narrow {
+    font-size: 1.03rem;
+    line-height: 1.85;
+    color: var(--text);
+}
+
+.article-section p {
+    margin: 0.25rem 0;
+}
+
+.article-section .article-section-last {
+    font-size: 1.08rem;
+
+.article-section h3 {
+    margin: .35rem 0 .15rem;
+    font-size: 0.95rem;
+    color: var(--muted);
+}
+    font-weight: 600;
+    margin-top: .45rem;
+}
+
+.article-section p + p {
+    margin-top: .8rem;
+}
+
+.article-background {
+    margin-top: 1.4rem;
+    padding: 1rem 1.1rem;
+    background: linear-gradient(170deg, var(--surface), color-mix(in srgb, var(--accent-soft) 30%, #fff));
+    border-left: 3px solid var(--accent);
+    border-radius: 0 10px 10px 0;
+    font-size: .98rem;
+    line-height: 1.78;
+    color: var(--text);
+}
+
+.article-background strong {
+    display: block;
+    font-family: 'Manrope', 'Segoe UI', sans-serif;
+    font-size: .78rem;
+    text-transform: uppercase;
+    letter-spacing: .1em;
+    color: var(--accent);
+    margin-bottom: .35rem;
+}
+
+.article-discussion {
+    margin-top: 1.2rem;
+    padding: .85rem 1rem;
+    border-left: 3px solid color-mix(in srgb, var(--muted) 40%, transparent);
+    font-style: italic;
+    font-size: .98rem;
+    color: var(--muted);
+    line-height: 1.75;
+}
+
+.article-discussion strong {
+    font-style: normal;
+    font-family: 'Manrope', 'Segoe UI', sans-serif;
+    font-size: .78rem;
+    text-transform: uppercase;
+    letter-spacing: .1em;
+    display: block;
+    margin-bottom: .3rem;
+    color: var(--muted);
+}
+
+.tab-switcher {
+    display: flex; gap: .5rem; margin-bottom: 1.5rem;
+    border-bottom: 2px solid color-mix(in srgb, var(--accent) 20%, transparent);
+}
+.tab-button {
+    background: transparent; border: none; color: var(--muted);
+    font-family: 'Manrope', 'Segoe UI', sans-serif; font-size: 1rem; font-weight: 600;
+    padding: .75rem 1.2rem; cursor: pointer;
+    transition: color .18s ease, border-color .18s ease;
+    border-bottom: 3px solid transparent;
+}
+.tab-button:hover { color: var(--text); }
+.tab-button.active { color: var(--accent); border-bottom-color: var(--accent); }
+.tab-content { display: none; animation: fadeIn .2s ease-in; }
+.tab-content.active { display: block; }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@media (max-width: 860px) { .tab-switcher { flex-wrap: wrap; } }
+</style>
+  <script>
+    function switchTab(button) {
+      const lang = button.getAttribute('data-lang');
+      const allButtons = document.querySelectorAll('.tab-button');
+      const allContents = document.querySelectorAll('.tab-content');
+      allButtons.forEach(b => b.classList.remove('active'));
+      allContents.forEach(c => c.classList.remove('active'));
+      button.classList.add('active');
+      document.querySelector(`.tab-content[data-lang="${lang}"]`).classList.add('active');
+    }
+  </script>
+</head>
+<body>
+  <div class="container">
+    <div class="tab-switcher">
+      <button class="tab-button active" onclick="switchTab(this)" data-lang="fr">Français</button><button class="tab-button " onclick="switchTab(this)" data-lang="en">English</button>
+    </div>
+    <div class="tab-content active" data-lang="fr"><section class="summary-header">
+  <h1>Horizon Quotidien — 2026-06-20</h1>
+  <p class="lead">Parmi 480 contenus collectés, 2 sujets essentiels ont été sélectionnés.</p>
+  <nav class="toc" aria-label="Sommaire">
+    <p class="toc-title">Sommaire</p>
+    <ul><li><a href="#item-1">Géo-ingénierie : Peut-on pirater le climat sans tout détruire ? <span class="toc-score">⭐️ 7.610250000000001/10</span></a></li>
+<li><a href="#item-2">L’Alerte de Trump : Comment Anthropic est Devenu un Enjeu de Sécurité Nationale <span class="toc-score">⭐️ 7.610250000000001/10</span></a></li></ul>
+  </nav>
+</section>
+<main class="items">
+<article id="item-1">
+  <header>
+    <h2 class="item-title"><a href="https://www.technologyreview.com/2026/06/17/1139200/the-download-solar-geoengineering-interoception/">Géo-ingénierie : Peut-on pirater le climat sans tout détruire ?</a>
+      <span class="score">⭐️ 7.610250000000001/10</span>
+    </h2>
+    <div class="meta">rss · MIT Technology Review · Jun 17, 12:10</div>
+  </header>
+  <div class="article-body"><p class="article-lead">La science désespérée de la géo-ingénierie solaire</p><p>Les partisans arguent que la géo-ingénierie pourrait offrir à l&#39;humanité un temps précieux pendant que les émissions de carbone sont réduites. « La géo-ingénierie solaire pourrait ressembler moins à un simple frein qu&#39;à un puzzle complexe et entièrement non résolu », note une récente analyse du *MIT Technology Review*. Pourtant, la technologie reste non prouvée à grande échelle, et son déploiement pourrait déclencher des conséquences imprévues, allant de perturbations des régimes de précipitations à l&#39;appauvrissement de la couche d&#39;ozone. L&#39;Union of Concerned Scientists met en garde : « Les technologies de géo-ingénierie solaire refroidissent la Terre en réfléchissant la lumière du soleil vers l&#39;espace, mais elles posent de nombreux risques, défis et incertitudes. »</p><p></p><p>L&#39;injection d&#39;aérosols stratosphériques : un pari à haut risque</p><p>Cependant, les risques sont considérables. Une étude de la NOAA de 2023 a révélé que toutes les stratégies d&#39;IAS ne se valent pas—certaines pourraient aggraver les sécheresses dans des régions vulnérables ou altérer les régimes de mousson essentiels à l&#39;agriculture.  « En étudiant les observations et en utilisant le volcanisme comme analogue pour l&#39;IAS, les chercheurs ont souligné la possibilité que le déploiement à grande échelle puisse entraîner des perturbations climatiques imprévues », avertit une revue de *ScienceDirect*.  De plus, l&#39;IAS ne fait rien pour lutter contre l&#39;acidification des océans, une conséquence directe des niveaux élevés de CO2. Les critiques soutiennent que le recours à l&#39;IAS pourrait détourner l&#39;attention de l&#39;urgence de réduire les émissions et de passer aux énergies renouvelables.</p><p></p><p>Le cauchemar de la gouvernance : qui contrôle le thermostat ?</p><p>Les traités internationaux, comme la Convention-cadre des Nations unies sur les changements climatiques (CCNUCC), n&#39;ont actuellement aucun cadre clair pour régir la géo-ingénierie. Ce vide réglementaire pourrait conduire à des actions unilatérales de la part de nations ou même d&#39;entreprises, déclenchant des conflits géopolitiques. Par exemple, si un pays déploie l&#39;IAS pour refroidir son propre territoire, cela pourrait involontairement provoquer des sécheresses ou des inondations dans les régions voisines.    Dilemmes éthiques :  Est-il justifiable de modifier le climat pour les générations futures sans leur consentement ?   Problèmes d&#39;équité :  La géo-ingénierie pourrait-elle nuire de manière disproportionnée aux nations en développement qui manquent de ressources pour s&#39;adapter ?   Risque moral :  La promesse de la géo-ingénierie pourrait-elle réduire les incitations à réduire les émissions ?</p><p></p><p>L&#39;intéroception : le sens caché du cerveau et ses implications</p><p>« Une meilleure compréhension de la base neurale de l&#39;intéroception pourrait offrir des cibles thérapeutiques pour les dysfonctionnements intéroceptifs et les troubles associés du système nerveux », suggère une étude publiée dans *Cell*.  Au-delà de la médecine, l&#39;intéroception informe également le développement de l&#39;IA. En étudiant comment le cerveau traite les signaux internes, les chercheurs espèrent créer des modèles d&#39;apprentissage automatique plus sophistiqués, capables de reproduire une conscience et une adaptabilité de type humain.</p><p></p><p>La voie à suivre : prudence, collaboration et innovation</p><p>Pour l&#39;intéroception, l&#39;accent est mis sur la traduction de la recherche en applications cliniques. Les travaux de la Harvard Medical School sur les mécanorécepteurs—des neurones qui perçoivent l&#39;étirement de l&#39;estomac—pourraient conduire à de nouveaux traitements pour l&#39;obésité et les troubles alimentaires. Parallèlement, les chercheurs en IA explorent comment les modèles intéroceptifs pourraient améliorer la robotique et les systèmes autonomes, permettant aux machines de répondre plus intuitivement à leur environnement.</p></div>
+  
+  <footer class="item-footer">
+    <div class="tags"><code>#geoengineering</code>, <code>#climate change</code>, <code>#technology</code>, <code>#sustainability</code></div>
+    
+  </footer>
+</article>
+
+<article id="item-2">
+  <header>
+    <h2 class="item-title"><a href="https://www.axios.com/2026/06/19/trump-anthropic-national-security-the-axios-show">L’Alerte de Trump : Comment Anthropic est Devenu un Enjeu de Sécurité Nationale</a>
+      <span class="score">⭐️ 7.610250000000001/10</span>
+    </h2>
+    <div class="meta">rss · Axios · Jun 19, 18:18</div>
+  </header>
+  <div class="article-body"><p class="article-lead">Anthropic : Le Laboratoire d’IA au Cœur de la Tourmente</p><p>Anthropic, un laboratoire d’IA basé à San Francisco, s’est imposé comme un acteur majeur dans le développement de modèles de langage avancés. Fondée par d’anciens chercheurs d’OpenAI, l’entreprise se distingue par son approche axée sur la sécurité, intégrant des garde-fous éthiques stricts dans son modèle phare, Claude. Contrairement à ses concurrents, Anthropic opère sous le statut de « Public Benefit Corporation », cherchant à concilier viabilité commerciale et mission de réduction des risques catastrophiques, comme les détournements d’IA ou leur utilisation dans des infrastructures critiques.</p><p></p><p>Du Partenariat à l’Ostracisme : Le Virage Brutal de la Maison-Blanche</p><p>Le revirement soudain de l’administration Trump, passant de la collaboration à la confrontation avec Anthropic, illustre une tendance plus large : le durcissement de la surveillance des implications sécuritaires de l’IA. La crise a éclaté après qu’Amazon a signalé une vulnérabilité dans les modèles d’Anthropic, poussant le département du Commerce à imposer des contrôles à l’exportation draconiens, limitant l’accès à ses systèmes les plus avancés pour les étrangers et les entités hors des États-Unis. Le Pentagone a emboîté le pas en désignant Anthropic comme un « risque pour la chaîne d’approvisionnement », une étiquette habituellement réservée à des adversaires étrangers comme Huawei ou Kaspersky Lab.</p><p></p><p>L’Avertissement de Trump : Une Semaine de Menaces Potentielles</p><p>Lors d’un échange franc avec Marc Caputo d’Axios, Trump a reconnu la position intransigeante de son administration, déclarant :  « Eh bien, pas maintenant, mais il y a une semaine, peut-être. »  Ces propos révèlent la volatilité des relations, alimentée par la crainte que la technologie d’Anthropic ne soit exploitée par des adversaires ou ne compromette les opérations militaires américaines. La référence de Trump au Defense Production Act (DPA), une loi de l’ère de la Guerre froide permettant d’exercer un contrôle d’urgence sur l’industrie privée, suggère que l’administration était prête à aller plus loin si la coopération faisait défaut.</p><p></p><p>Le Facteur Amazon : Le Rôle d’un Rival dans la Répression</p><p>Les commentaires de Trump ont mis en lumière l’influence des rivalités corporatives dans cette affaire.  « C’est un concurrent et un copropriétaire qui a dénoncé Anthropic », a-t-il déclaré, faisant allusion aux préoccupations d’Amazon.  Le géant du commerce électronique, qui a investi des milliards dans Anthropic tout en développant ses propres modèles d’IA, aurait alerté les autorités sur une vulnérabilité susceptible d’être exploitée. Cet épisode souligne comment les géants technologiques utilisent de plus en plus la pression réglementaire pour façonner la concurrence, même lorsqu’ils collaborent avec les mêmes entreprises qu’ils cherchent à contraindre.</p><p></p><p>La Géopolitique Prime sur la Politique : La Carte de la Chine</p><p>Malgré les tensions, Trump a clairement indiqué que les impératifs géopolitiques—en particulier la domination américaine en matière d’IA—l’emportaient sur les conflits politiques avec Anthropic.  « Nous battons la Chine de loin », a-t-il affirmé à Caputo, évoquant ses discussions avec le président chinois Xi Jinping.  Le calcul de l’administration reflète une stratégie plus large : bien que les disputes avec les laboratoires d’IA puissent s’intensifier, l’objectif ultime reste de devancer la Chine dans la course à l’intelligence artificielle générale (IAG). Cette dynamique place des entreprises comme Anthropic sur une corde raide, devant concilier les exigences de Washington tout en préservant leurs ambitions mondiales.</p><p></p><p>La Voie à Suivre : Normes, Contrôle et Incertitude</p><p>Le dégel des relations entre Anthropic et la Maison-Blanche dépend de deux fronts : la coopération technique et l’alignement diplomatique. L’entreprise collabore apparemment avec l’administration pour élaborer des normes d’évaluation des détournements d’IA, une étape cruciale pour atténuer les risques. Cependant, la question plus large de la coopération internationale reste sans réponse. Alors que la Commission européenne examine les contrôles à l’exportation américains, le risque de fragmentation plane, pouvant forcer Anthropic et ses pairs à naviguer dans un patchwork de réglementations.</p></div>
+  
+  <footer class="item-footer">
+    <div class="tags"><code>#National Security</code>, <code>#Artificial Intelligence</code>, <code>#Trump Administration</code>, <code>#Tech Policy</code></div>
+    
+  </footer>
+</article>
+</main></div><div class="tab-content " data-lang="en"><section class="summary-header">
+  <h1>Horizon Daily — 2026-06-20</h1>
+  <p class="lead">From 480 items, 2 important content pieces were selected</p>
+  <nav class="toc" aria-label="Contents">
+    <p class="toc-title">Contents</p>
+    <ul><li><a href="#item-1">Geoengineering’s Reality Check: Can We Hack the Climate Without Breaking It? <span class="toc-score">⭐️ 7.610250000000001/10</span></a></li>
+<li><a href="#item-2">Trump’s Warning: How Anthropic Became a National Security Flashpoint <span class="toc-score">⭐️ 7.610250000000001/10</span></a></li></ul>
+  </nav>
+</section>
+<main class="items">
+<article id="item-1">
+  <header>
+    <h2 class="item-title"><a href="https://www.technologyreview.com/2026/06/17/1139200/the-download-solar-geoengineering-interoception/">Geoengineering’s Reality Check: Can We Hack the Climate Without Breaking It?</a>
+      <span class="score">⭐️ 7.610250000000001/10</span>
+    </h2>
+    <div class="meta">rss · MIT Technology Review · Jun 17, 12:10</div>
+  </header>
+  <div class="article-body"><p class="article-lead">The Desperate Science of Solar Geoengineering</p><p>Proponents argue that geoengineering could buy humanity precious time while carbon emissions are reduced. &quot;Solar geoengineering might be less like a simple brake and more like a complicated, entirely unsolved puzzle,&quot; notes a recent analysis in *MIT Technology Review*. Yet, the technology remains unproven at scale, and its deployment could trigger unintended consequences, from disrupted rainfall patterns to ozone depletion. The Union of Concerned Scientists warns that &quot;solar geoengineering technologies cool the earth by reflecting sunlight back into space—but they pose many risks, challenges, and uncertainties.&quot;</p><p></p><p>Stratospheric Aerosol Injection: A High-Stakes Gamble</p><p>However, the risks are substantial. A 2023 NOAA study found that not all SAI strategies are equal—some could exacerbate droughts in vulnerable regions or alter monsoon patterns critical for agriculture.  &quot;By studying observations and using volcanism as an analogue for SAI, researchers have pointed out the possibility that large-scale deployment could lead to unforeseen climatic disruptions,&quot; warns a *ScienceDirect* review.  Moreover, SAI does nothing to address ocean acidification, a direct consequence of elevated CO2 levels. Critics argue that relying on SAI could distract from the urgent need to cut emissions and transition to renewable energy.</p><p></p><p>The Governance Nightmare: Who Controls the Thermostat?</p><p>International treaties, such as the United Nations Framework Convention on Climate Change (UNFCCC), currently have no clear framework for governing geoengineering. This regulatory vacuum could lead to unilateral actions by nations or even corporations, sparking geopolitical conflicts. For example, if one country deploys SAI to cool its own territory, it could inadvertently trigger droughts or floods in neighboring regions.    Ethical dilemmas:  Is it justifiable to alter the climate for future generations without their consent?   Equity concerns:  Could geoengineering disproportionately harm developing nations that lack the resources to adapt?   Moral hazard:  Might the promise of geoengineering reduce incentives to cut emissions?</p><p></p><p>Interoception: The Brain’s Hidden Sense and Its Implications</p><p>&quot;Better understanding of the neural basis of interoception may provide therapeutic targets for interoception dysfunction and related nervous system disorders,&quot; suggests a study in *Cell*.  Beyond medicine, interoception is also informing the development of AI. By studying how the brain processes internal signals, researchers hope to create more sophisticated machine-learning models that can mimic human-like awareness and adaptability.</p><p></p><p>The Path Forward: Caution, Collaboration, and Innovation</p><p>For interoception, the focus is on translating research into clinical applications. Harvard Medical School’s work on mechanoreceptors—neurons that sense stomach stretching—could lead to new treatments for obesity and eating disorders. Meanwhile, AI researchers are exploring how interoceptive models could improve robotics and autonomous systems, enabling machines to respond more intuitively to their environments.</p></div>
+  
+  <footer class="item-footer">
+    <div class="tags"><code>#geoengineering</code>, <code>#climate change</code>, <code>#technology</code>, <code>#sustainability</code></div>
+    
+  </footer>
+</article>
+
+<article id="item-2">
+  <header>
+    <h2 class="item-title"><a href="https://www.axios.com/2026/06/19/trump-anthropic-national-security-the-axios-show">Trump’s Warning: How Anthropic Became a National Security Flashpoint</a>
+      <span class="score">⭐️ 7.610250000000001/10</span>
+    </h2>
+    <div class="meta">rss · Axios · Jun 19, 18:18</div>
+  </header>
+  <div class="article-body"><p class="article-lead">Anthropic: The AI Lab Caught in the Crossfire</p><p>Anthropic, a San Francisco-based AI research lab, has rapidly ascended as a leader in developing advanced large language models (LLMs). Founded by former OpenAI researchers, the company positions itself as a safety-focused alternative, prioritizing ethical constraints and robust guardrails in its flagship model, Claude. Unlike its competitors, Anthropic operates as a Public Benefit Corporation, balancing commercial viability with a mission to mitigate catastrophic risks—such as AI jailbreaks or misuse in critical infrastructure—while remaining financially sustainable.</p><p></p><p>From Partnership to Pariah: The White House’s Hard Turn</p><p>The Trump administration’s sudden pivot from engagement to confrontation with Anthropic reflects a broader pattern of escalating scrutiny over AI’s national security implications. The crisis erupted after Amazon flagged a vulnerability in Anthropic’s models, prompting the Commerce Department to impose sweeping export controls—restricting access to the company’s most advanced systems for foreign nationals and entities outside the U.S. The Pentagon followed suit, designating Anthropic a &quot;supply chain risk,&quot; a label typically reserved for foreign adversaries like Huawei or Kaspersky Lab.</p><p></p><p>Trump’s Warning: A Week of ‘Maybe’ Threats</p><p>In a candid exchange with Axios’ Marc Caputo, Trump acknowledged the administration’s hardened stance, stating,  &quot;Well, not now, but a week ago, maybe.&quot;  The president’s remarks revealed the volatility of the relationship, driven by fears that Anthropic’s technology could be exploited by adversaries or undermine U.S. military operations. Trump’s reference to the Defense Production Act (DPA)—a Cold War-era law granting emergency powers over private industry—hinted at the administration’s willingness to escalate further if cooperation faltered.</p><p></p><p>The Amazon Factor: A Rival’s Role in the Crackdown</p><p>Trump’s comments shed light on the role of corporate rivalry in the saga.  &quot;It was a competitor and a part owner that turned Anthropic in,&quot; he said, alluding to Amazon’s concerns.  The e-commerce giant, which has invested billions in Anthropic while developing its own AI models, reportedly alerted authorities to a vulnerability that raised alarms about potential misuse. The incident underscores how tech giants are increasingly leveraging regulatory pressure to shape competition, even as they collaborate with the same firms they seek to constrain.</p><p></p><p>Geopolitics Overrides Politics: The China Card</p><p>Despite the friction, Trump made clear that geopolitical imperatives—particularly U.S. dominance in AI—trump political clashes with Anthropic.  &quot;We’re beating China by a lot,&quot; he told Caputo, referencing discussions with Chinese President Xi Jinping.  The administration’s calculus reflects a broader strategy: while domestic disputes with AI labs may flare, the overarching goal remains to outpace China in the race for artificial general intelligence (AGI). This dynamic leaves companies like Anthropic walking a tightrope—balancing compliance with Washington’s demands while preserving their global ambitions.</p><p></p><p>The Path Forward: Standards, Scrutiny, and Uncertainty</p><p>The thaw in relations between Anthropic and the White House hinges on two fronts: technical cooperation and diplomatic alignment. The company is reportedly working with the administration to develop standards for evaluating AI jailbreaks, a critical step toward mitigating risks. Yet, the broader question of international cooperation remains unresolved. As the European Commission scrutinizes the U.S. export controls, the risk of fragmentation looms—potentially forcing Anthropic and its peers to navigate a patchwork of regulations.</p></div>
+  
+  <footer class="item-footer">
+    <div class="tags"><code>#National Security</code>, <code>#Artificial Intelligence</code>, <code>#Trump Administration</code>, <code>#Tech Policy</code></div>
+    
+  </footer>
+</article>
+</main></div>
+  </div>
+</body>
+</html>

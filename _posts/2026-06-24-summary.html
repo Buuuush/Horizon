@@ -1,0 +1,471 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Horizon — 2026-06-24</title>
+  <style>
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600&family=Manrope:wght@500;700&display=swap');
+
+:root {
+    --bg: #f8f8fb;
+    --paper: #ffffff;
+    --surface: #fcfbff;
+    --accent: #325c9b;
+    --accent-2: color-mix(in srgb, var(--accent) 55%, #b73fd6);
+    --accent-3: color-mix(in srgb, var(--accent) 40%, #f59e0b);
+    --accent-soft: #e6eefb;
+    --muted: #5c6372;
+    --text: #1d2230;
+    --ring: color-mix(in srgb, var(--accent) 32%, transparent);
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+    color: var(--text);
+    background:
+        radial-gradient(1300px 420px at -10% -20%, var(--accent-soft), transparent 60%),
+        radial-gradient(760px 300px at 88% -12%, color-mix(in srgb, var(--accent-2) 24%, transparent), transparent 66%),
+        radial-gradient(640px 240px at 30% 0%, color-mix(in srgb, var(--accent-3) 18%, transparent), transparent 70%),
+        var(--bg);
+    font-family: 'Source Serif 4', Georgia, serif;
+    line-height: 1.78;
+}
+
+.container { max-width: 1100px; margin: 1.5rem auto; padding: 1rem; }
+
+/* ── Page header ─────────────────────────────────────────────────────── */
+.summary-header {
+    background: var(--paper);
+    border: 1px solid color-mix(in srgb, var(--accent) 16%, transparent);
+    border-radius: 24px;
+    padding: 1.5rem 1.6rem 1.1rem;
+    box-shadow: 0 18px 48px rgba(19, 33, 68, 0.08);
+    margin-bottom: 1rem;
+    position: relative;
+    overflow: hidden;
+}
+.summary-header::after {
+    content: "";
+    position: absolute;
+    inset: auto -60px -80px auto;
+    width: 220px; height: 220px;
+    border-radius: 999px;
+    background: radial-gradient(circle, color-mix(in srgb, var(--accent-2) 28%, transparent), transparent 70%);
+    pointer-events: none;
+}
+.summary-header h1 {
+    margin: 0;
+    font-family: 'Fraunces', 'DM Serif Display', 'Iowan Old Style', 'Palatino Linotype', serif;
+    letter-spacing: .01em;
+    font-size: clamp(1.8rem, 3.6vw, 2.8rem);
+    line-height: 1.15;
+}
+.lead { margin: .55rem 0 1.1rem; color: var(--muted); font-size: 1.04rem; max-width: 78ch; }
+
+/* ── TOC ─────────────────────────────────────────────────────────────── */
+.toc-title {
+    margin: 0 0 .45rem;
+    font-family: 'Manrope', 'Segoe UI', sans-serif;
+    font-size: .85rem;
+    text-transform: uppercase;
+    letter-spacing: .11em;
+    color: var(--muted);
+}
+.toc ul {
+    list-style: none; margin: 0; padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: .55rem;
+}
+.toc li {
+    background: linear-gradient(160deg, var(--surface), color-mix(in srgb, var(--accent-soft) 48%, #ffffff));
+    border: 1px solid color-mix(in srgb, var(--accent) 16%, transparent);
+    border-radius: 10px;
+    padding: .55rem .65rem;
+    transition: transform .18s ease, box-shadow .18s ease;
+}
+.toc li:hover { transform: translateY(-1px); box-shadow: 0 8px 20px color-mix(in srgb, var(--accent) 15%, transparent); }
+.toc a { text-decoration: none; color: var(--text); }
+.toc-score { color: var(--accent); font-family: 'Manrope', 'Segoe UI', sans-serif; font-size: .85rem; font-weight: 600; }
+
+/* ── Article cards ───────────────────────────────────────────────────── */
+.items { display: grid; gap: .95rem; }
+.items article {
+    background: var(--paper);
+    border: 1px solid color-mix(in srgb, var(--accent) 15%, transparent);
+    border-radius: 20px;
+    padding: 1.4rem 1.6rem 1.1rem;
+    box-shadow: 0 10px 32px rgba(0, 0, 0, 0.05);
+}
+.item-title {
+    font-family: 'Fraunces', 'DM Serif Display', 'Iowan Old Style', 'Palatino Linotype', serif;
+    font-size: clamp(1.2rem, 2.2vw, 1.55rem);
+    margin: 0 0 .3rem;
+    line-height: 1.22;
+}
+.item-title a { color: inherit; text-decoration: none; }
+.item-title a:hover { color: var(--accent); }
+.item-title a:focus-visible, .toc a:focus-visible, summary:focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
+    border-radius: 6px;
+}
+.meta { color: var(--muted); font-family: 'Manrope', 'Segoe UI', sans-serif; font-size: .88rem; margin-bottom: .9rem; }
+.score { color: var(--accent); margin-left: .45rem; font-weight: 700; font-family: 'Manrope', 'Segoe UI', sans-serif; font-size: .95rem; }
+
+.article-body { border-top: 1px solid color-mix(in srgb, var(--accent) 10%, transparent); padding-top: 1rem; }
+
+.item-footer {
+    margin-top: 1rem;
+    padding-top: .65rem;
+    border-top: 1px solid color-mix(in srgb, var(--muted) 18%, transparent);
+}
+
+.evidence-note {
+    margin: .8rem 0 0;
+    color: var(--muted);
+    font-size: .92rem;
+    font-style: italic;
+}
+
+.tags { color: var(--muted); font-family: 'Manrope', 'Segoe UI', sans-serif; font-size: .88rem; margin-bottom: .45rem; }
+code { background: color-mix(in srgb, var(--accent-soft) 65%, #ffffff); border-radius: 8px; padding: .12rem .4rem; }
+
+details { margin-top: .5rem; }
+details summary { cursor: pointer; color: var(--accent); font-family: 'Manrope', 'Segoe UI', sans-serif; font-size: .9rem; }
+
+/* ── Dark mode ───────────────────────────────────────────────────────── */
+@media (prefers-color-scheme: dark) {
+    :root {
+        --bg: #0f1420; --paper: #161d2c; --surface: #1b2435;
+        --accent: #7cb1ff; --accent-2: #c28cff; --accent-3: #ffc36c;
+        --accent-soft: #1a2740; --muted: #a6b4cd; --text: #edf2ff;
+        --ring: rgba(124, 177, 255, 0.55);
+    }
+    body {
+        background:
+            radial-gradient(1200px 420px at -10% -20%, #1a2740, transparent 60%),
+            radial-gradient(760px 300px at 88% -12%, rgba(194, 140, 255, 0.2), transparent 66%),
+            radial-gradient(640px 240px at 30% 0%, rgba(255, 195, 108, 0.14), transparent 70%),
+            var(--bg);
+    }
+    .summary-header, .items article { border-color: rgba(124,177,255,.24); box-shadow: 0 18px 44px rgba(0,0,0,.32); }
+    .toc li { border-color: rgba(124,177,255,.22); background: linear-gradient(170deg, #1b2435, #1f2a3f); }
+    code { background: rgba(124,177,255,.16); }
+    .article-background { background: linear-gradient(170deg, #1b2435, #1f2a3f); }
+}
+
+@media (max-width: 860px) {
+    .container { margin: .7rem auto; padding: .65rem; }
+}
+
+/* ── Editorial article layout ─────────────────────────────────────────── */
+
+.article-lead {
+    font-size: 1.18rem;
+    color: var(--muted);
+    line-height: 1.7;
+    margin: .3rem 0 1.4rem;
+    max-width: 72ch;
+    font-style: italic;
+}
+
+.article-section {
+    margin-top: 1.55rem;
+}
+
+    .article-section {
+    font-family: 'Manrope', 'Segoe UI', sans-serif;
+    font-size: .78rem;
+.article-section h2 {
+.narrow {
+    margin: 0 0 .45rem;
+    padding-bottom: .25rem;
+    border-bottom: 1px solid color-mix(in srgb, var(--accent) 22%, transparent);
+}
+
+.article-section h2 {
+.narrow {
+    font-size: 1.03rem;
+    line-height: 1.85;
+    color: var(--text);
+}
+
+.article-section p {
+    margin: 0.25rem 0;
+}
+
+.article-section .article-section-last {
+    font-size: 1.08rem;
+
+.article-section h3 {
+    margin: .35rem 0 .15rem;
+    font-size: 0.95rem;
+    color: var(--muted);
+}
+    font-weight: 600;
+    margin-top: .45rem;
+}
+
+.article-section p + p {
+    margin-top: .8rem;
+}
+
+.article-background {
+    margin-top: 1.4rem;
+    padding: 1rem 1.1rem;
+    background: linear-gradient(170deg, var(--surface), color-mix(in srgb, var(--accent-soft) 30%, #fff));
+    border-left: 3px solid var(--accent);
+    border-radius: 0 10px 10px 0;
+    font-size: .98rem;
+    line-height: 1.78;
+    color: var(--text);
+}
+
+.article-background strong {
+    display: block;
+    font-family: 'Manrope', 'Segoe UI', sans-serif;
+    font-size: .78rem;
+    text-transform: uppercase;
+    letter-spacing: .1em;
+    color: var(--accent);
+    margin-bottom: .35rem;
+}
+
+.article-discussion {
+    margin-top: 1.2rem;
+    padding: .85rem 1rem;
+    border-left: 3px solid color-mix(in srgb, var(--muted) 40%, transparent);
+    font-style: italic;
+    font-size: .98rem;
+    color: var(--muted);
+    line-height: 1.75;
+}
+
+.article-discussion strong {
+    font-style: normal;
+    font-family: 'Manrope', 'Segoe UI', sans-serif;
+    font-size: .78rem;
+    text-transform: uppercase;
+    letter-spacing: .1em;
+    display: block;
+    margin-bottom: .3rem;
+    color: var(--muted);
+}
+
+.tab-switcher {
+    display: flex; gap: .5rem; margin-bottom: 1.5rem;
+    border-bottom: 2px solid color-mix(in srgb, var(--accent) 20%, transparent);
+}
+.tab-button {
+    background: transparent; border: none; color: var(--muted);
+    font-family: 'Manrope', 'Segoe UI', sans-serif; font-size: 1rem; font-weight: 600;
+    padding: .75rem 1.2rem; cursor: pointer;
+    transition: color .18s ease, border-color .18s ease;
+    border-bottom: 3px solid transparent;
+}
+.tab-button:hover { color: var(--text); }
+.tab-button.active { color: var(--accent); border-bottom-color: var(--accent); }
+.tab-content { display: none; animation: fadeIn .2s ease-in; }
+.tab-content.active { display: block; }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@media (max-width: 860px) { .tab-switcher { flex-wrap: wrap; } }
+</style>
+  <script>
+    function switchTab(button) {
+      const lang = button.getAttribute('data-lang');
+      const allButtons = document.querySelectorAll('.tab-button');
+      const allContents = document.querySelectorAll('.tab-content');
+      allButtons.forEach(b => b.classList.remove('active'));
+      allContents.forEach(c => c.classList.remove('active'));
+      button.classList.add('active');
+      document.querySelector(`.tab-content[data-lang="${lang}"]`).classList.add('active');
+    }
+  </script>
+</head>
+<body>
+  <div class="container">
+    <div class="tab-switcher">
+      <button class="tab-button active" onclick="switchTab(this)" data-lang="fr">Français</button><button class="tab-button " onclick="switchTab(this)" data-lang="en">English</button>
+    </div>
+    <div class="tab-content active" data-lang="fr"><section class="summary-header">
+  <h1>Horizon Quotidien — 2026-06-24</h1>
+  <p class="lead">Parmi 487 contenus collectés, 5 sujets essentiels ont été sélectionnés.</p>
+  <nav class="toc" aria-label="Sommaire">
+    <p class="toc-title">Sommaire</p>
+    <ul><li><a href="#item-1">PlasmoSniff de MIT : Diagnostiquer la pneumonie en un souffle, la révolution médicale est en marche <span class="toc-score">⭐️ 7.665375000000001/10</span></a></li>
+<li><a href="#item-2">Maison-Blanche avance l’échéance pour la cryptographie post-quantique : enjeux d’une transition urgente <span class="toc-score">⭐️ 7.610250000000001/10</span></a></li>
+<li><a href="#item-3">Forage par ondes millimétriques : la percée qui pourrait libérer une énergie géothermique illimitée <span class="toc-score">⭐️ 7.5/10</span></a></li>
+<li><a href="#item-4">AMD fait marche arrière : le chiffrement de la mémoire revient sur les processeurs grand public après les critiques <span class="toc-score">⭐️ 7.334624999999999/10</span></a></li>
+<li><a href="#item-5">Crise des « logements bouilloires » : l’angle mort climatique du gouvernement français <span class="toc-score">⭐️ 6.5969999999999995/10</span></a></li></ul>
+  </nav>
+</section>
+<main class="items">
+<article id="item-1">
+  <header>
+    <h2 class="item-title"><a href="https://www.technologyreview.com/2026/06/23/1138291/a-breath-test-could-diagnose-pneumonia-in-minutes/">PlasmoSniff de MIT : Diagnostiquer la pneumonie en un souffle, la révolution médicale est en marche</a>
+      <span class="score">⭐️ 7.665375000000001/10</span>
+    </h2>
+    <div class="meta">rss · MIT Technology Review · Jun 23, 21:00</div>
+  </header>
+  <div class="article-body"><p class="article-lead">La science derrière PlasmoSniff : comment un souffle révèle une maladie</p><p>Le processus commence par l’inhalation de  nanoparticules  conçues pour se lier à ces biomarqueurs. Lorsque le patient expire dans l’appareil PlasmoSniff, les nanoparticules – désormais porteuses de traces de la maladie – sont capturées par un capteur à l’échelle d’une puce. Ce capteur, développé grâce à des technologies avancées de  systèmes sur puce (SoC) , est capable de détecter des concentrations infimes de biomarqueurs avec une grande précision. Comme le souligne imec, un leader en recherche en nanoélectronique, ces capteurs sont particulièrement adaptés aux dispositifs de santé connectés grâce à leur haut niveau d’intégration et leur capacité à relever les défis de qualité du signal en temps réel.</p><p></p><p>Du laboratoire à la clinique : la technologie qui alimente PlasmoSniff</p><p>Cette technologie s’appuie sur des décennies de recherche sur les  laboratoires sur puce (LoC) , qui miniaturisent des processus de laboratoire complexes sur une seule puce jetable. Comme le souligne une revue publiée en 2025 dans  Sensors &amp; Diagnostics , les dispositifs LoC présentent des avantages significatifs par rapport aux méthodes conventionnelles, notamment des échantillons plus petits, des résultats plus rapides et des coûts réduits. Cependant, des défis persistent, notamment en matière de standardisation de la production et d’assurance d’une précision constante pour des populations de patients diverses. Les développeurs de PlasmoSniff au MIT relèvent ces défis en affinant la sensibilité et la spécificité du capteur, garantissant qu’il puisse distinguer de manière fiable la pneumonie d’autres affections pulmonaires, comme la bronchite ou la COVID-19.</p><p></p><p>Pourquoi l’analyse de l’haleine pourrait révolutionner les diagnostics</p><p>PlasmoSniff va plus loin en combinant  nanoparticules  et  apprentissage automatique . Les réseaux de capteurs de l’appareil génèrent d’énormes quantités de données, analysées ensuite par des algorithmes entraînés à reconnaître des schémas associés à la pneumonie et à d’autres maladies pulmonaires. Cette approche s’inspire de recherches publiées dans  Accounts of Chemical Research , où des capteurs recouverts de nanomatériaux ont été utilisés pour l’analyse quantitative des odeurs. Le résultat ? Un outil diagnostique non invasif, capable de fournir des résultats en temps réel, ce qui pourrait sauver des vies dans les services de soins intensifs.</p><p></p><p>L’impact mondial : des diagnostics plus rapides, de meilleurs résultats</p><p>Les implications vont au-delà de la pneumonie. La même technologie pourrait être adaptée pour détecter d’autres infections respiratoires, comme la tuberculose ou la grippe, ainsi que des maladies chroniques comme la bronchopneumopathie chronique obstructive (BPCO).  &quot;La capacité de diagnostiquer des maladies à partir d’un simple souffle pourrait démocratiser les soins de santé, rendant les diagnostics de haute qualité accessibles à des millions de personnes qui en sont actuellement privées,&quot; déclare le Dr Angela Belcher, professeure en ingénierie biologique au MIT et figure clé du projet PlasmoSniff.  De plus, la rapidité du diagnostic pourrait réduire l’utilisation excessive d’antibiotiques, un facteur majeur de résistance aux antimicrobiens.</p><p></p><p>Défis et perspectives d’avenir</p><p>À l’avenir, l’équipe du MIT envisage déjà des applications au-delà de la pneumonie. Parmi les utilisations potentielles futures, on trouve :   La détection précoce du cancer du poumon en identifiant des COV spécifiques au cancer dans l’haleine.  La surveillance en temps réel des crises d’asthme et de BPCO.  Le diagnostic de maladies infectieuses comme la tuberculose dans les régions à forte prévalence.  L’intégration avec des plateformes de télémédecine pour permettre des diagnostics à distance.   À mesure que la technologie mûrit, PlasmoSniff pourrait devenir un pilier de la  médecine personnalisée , adaptant les traitements aux profils individuels de biomarqueurs.</p></div>
+  
+  <footer class="item-footer">
+    <div class="tags"><code>#Medical Technology</code>, <code>#Pneumonia Diagnosis</code>, <code>#MIT Research</code></div>
+    
+  </footer>
+</article>
+
+<article id="item-2">
+  <header>
+    <h2 class="item-title"><a href="https://arstechnica.com/information-technology/2026/06/executive-order-bumps-up-deadline-to-move-off-quantum-vulnerable-crypto/">Maison-Blanche avance l’échéance pour la cryptographie post-quantique : enjeux d’une transition urgente</a>
+      <span class="score">⭐️ 7.610250000000001/10</span>
+    </h2>
+    <div class="meta">rss · Ars Technica · Jun 23, 22:30</div>
+  </header>
+  <div class="article-body"><p class="article-lead">La menace quantique : pourquoi le chiffrement actuel est en danger</p><p>Les implications sont considérables. Les adversaires pourraient intercepter des données chiffrées aujourd’hui et les déchiffrer des années plus tard, une fois que l’informatique quantique aura atteint sa maturité. Ce risque dépasse le cadre des secrets gouvernementaux pour toucher les infrastructures critiques, les systèmes financiers et même la vie privée des individus. Comme le souligne la Réserve fédérale de Philadelphie, les ordinateurs quantiques pourraient saper les protections qui sous-tendent l’économie numérique mondiale, faisant de la transition vers des algorithmes résistants aux quanta non seulement un défi technique, mais aussi une nécessité stratégique.</p><p></p><p>La cryptographie post-quantique : la course vers un chiffrement inviolable</p><p>Cependant, la transition est loin d’être simple. Les algorithmes de PQC nécessitent souvent plus de puissance de calcul et des tailles de clés plus grandes, ce qui pourrait mettre à rude épreuve les systèmes hérités. Cloudflare souligne un autre défi : l’interopérabilité. Alors que les organisations adoptent la PQC, elles doivent garantir la compatibilité avec les protocoles existants, du TLS au SSH, sans perturber les services. Les enjeux sont élevés, comme le met en garde Palo Alto Networks :   **Compromis de performance** : la PQC peut ralentir les processus de chiffrement/déchiffrement.  **Complexité de mise en œuvre** : l’intégration de la PQC dans les infrastructures existantes exige une expertise pointue.  **Sécurité à long terme** : même la PQC n’est pas infaillible ; les algorithmes doivent évoluer avec les avancées de l’informatique quantique.</p><p></p><p>L’ordre exécutif : une nouvelle échéance et ses implications</p><p>Cette mesure souligne la reconnaissance par l’administration du risque imminent que représente l’informatique quantique. Comme le précise l’ordre, tout retard dans l’adoption pourrait laisser des données sensibles—des communications militaires aux dossiers financiers—exposées à des adversaires. L’urgence est partagée par les experts en cybersécurité, qui notent que même les entités non gouvernementales, comme les banques et les prestataires de soins de santé, doivent commencer à se préparer à l’ère post-quantique. Cet ordre signale également un changement plus large dans la politique de cybersécurité des États-Unis, privilégiant les mesures proactives aux solutions réactives.</p><p></p><p>Course mondiale : comment les autres nations réagissent</p><p>Cette compétition mondiale augmente les enjeux pour les États-Unis. Un retard dans l’adoption pourrait céder le leadership technologique à des rivaux, avec des conséquences potentielles pour la sécurité économique et militaire. L’ordre de la Maison-Blanche est donc un mouvement stratégique pour maintenir l’avantage des États-Unis en matière de cybersécurité, garantissant que leurs infrastructures restent résilientes face aux menaces actuelles et futures. Comme le souligne la Réserve fédérale de Philadelphie,  « La mise en œuvre spécifique des technologies résistantes aux quanta peut également être vulnérable aux attaques en raison de défauts matériels, soulignant la nécessité de tests rigoureux et d’une collaboration internationale. »</p><p></p><p>Et ensuite : défis et opportunités dans l’ère post-quantique</p><p>En fin de compte, l’ordre de la Maison-Blanche est un signal d’alarme. La menace quantique n’est plus théorique—elle est une réalité imminente qui exige une action immédiate. Comme le déclare Dustin Moody, responsable du projet PQC au NIST :  « Le moment de se préparer est maintenant. Attendre que les ordinateurs quantiques soient assez puissants pour briser le chiffrement actuel sera trop tard. »</p></div>
+  
+  <footer class="item-footer">
+    <div class="tags"><code>#cryptography</code>, <code>#quantum computing</code>, <code>#national security</code>, <code>#US policy</code></div>
+    
+  </footer>
+</article>
+
+<article id="item-3">
+  <header>
+    <h2 class="item-title"><a href="https://www.thinkgeoenergy.com/quaise-energy-achieves-100-meters-of-drilling-using-millimeter-wave-technology/">Forage par ondes millimétriques : la percée qui pourrait libérer une énergie géothermique illimitée</a>
+      <span class="score">⭐️ 7.5/10</span>
+    </h2>
+    <div class="meta">hackernews · Jimmc414 · Jun 20, 18:24 · <a href="https://news.ycombinator.com/item?id=48611585">Discussion</a></div>
+  </header>
+  <div class="article-body"><p class="article-lead">Une révolution du forage née de la recherche sur la fusion</p><p>L’idée d’utiliser des ondes millimétriques pour forer la roche n’est pas nouvelle : elle découle de décennies de recherche sur la fusion nucléaire. Quaise Energy, une startup issue du MIT, a adapté la technologie des gyrotrons – initialement conçue pour chauffer le plasma dans les réacteurs à fusion – afin de vaporiser le granite à des profondeurs jugées jusqu’ici inaccessibles. Contrairement aux foreuses mécaniques traditionnelles, qui s’usent contre la roche dure, le forage par ondes millimétriques utilise une énergie électromagnétique focalisée pour faire fondre et vaporiser la matière, laissant derrière elle une paroi de forage vitrifiée qui élimine le besoin de tubage dans certaines applications.</p><p></p><p>Comment fonctionne le forage par ondes millimétriques</p><p>Les ondes millimétriques occupent la plage de 30 à 300 GHz du spectre électromagnétique, avec des longueurs d’onde comprises entre 1 et 10 millimètres. À ces fréquences, l’énergie peut être dirigée avec précision et absorbée par certains matériaux, comme le granite, provoquant un échauffement rapide et une sublimation. Le système de Quaise utilise un gyrotron pour générer un faisceau d’ondes millimétriques de haute puissance, guidé par un guide d’ondes métallique rempli d’argon. Ce gaz empêche la dispersion ou la perte d’énergie du faisceau, même sous les pressions extrêmes rencontrées à plusieurs kilomètres sous terre.</p><p></p><p>Pourquoi cette avancée est cruciale pour l’énergie géothermique</p><p>L’énergie géothermique traditionnelle repose sur l’exploitation de réservoirs naturels d’eau chaude ou de vapeur près des limites tectoniques – des ressources géographiquement limitées. La technologie de Quaise vise à accéder à des roches superchaudes (au-dessus de 400°C) à des profondeurs de 20 kilomètres, où les températures sont suffisamment élevées pour générer de la vapeur capable d’alimenter des turbines avec une efficacité proche de la charge de base.  &quot;L’énergie géothermique profonde est au cœur d’un monde énergétiquement indépendant. Notre mission est d’apporter cette source d’énergie inépuisable, renouvelable et propre aux générations futures.&quot; — Quaise Energy  En modernisant les centrales électriques existantes fonctionnant aux combustibles fossiles avec des puits géothermiques profonds, Quaise envisage un avenir où les centrales à charbon et à gaz deviendraient des hubs énergétiques zéro émission, réduisant les coûts de transition et préservant les emplois.</p><p></p><p>Défis et scepticisme</p><p>Malgré ses promesses, le forage par ondes millimétriques se heurte à des obstacles majeurs. Certains critiques, y compris des commentateurs de l’article original, s’interrogent sur l’absence de commercialisation de cette technologie pour des applications à plus petite échelle, comme la découpe de béton ou de roche dans le secteur de la construction.    Échelle et coût :  Les gyrotrons sont complexes et coûteux, soulevant des questions sur la viabilité économique d’un déploiement à grande échelle.   Gestion des matériaux :  L’évacuation efficace de la roche vaporisée des puits profonds reste un défi technique.   Risques réglementaires et sécuritaires :  Forer à 20 kilomètres introduit des inconnues, notamment des risques sismiques et la possibilité de migration non contrôlée de fluides.   Certains observateurs, comme l’utilisateur *Animats* dans le fil de discussion, spéculent que l’accent mis sur le forage ultra-profond pourrait être davantage motivé par l’engouement des investisseurs que par une faisabilité à court terme. D’autres, cependant, soulignent l’urgence de la décarbonisation pour justifier des innovations à haut risque et à haut rendement.</p><p></p><p>Une vision complémentaire : l’approche simplifiée de Deep Fission</p><p>Quaise n’est pas la seule entreprise à repenser l’extraction d’énergie en profondeur. Deep Fission, une autre startup, propose un modèle de fission nucléaire radicalement simple : forer des puits d’un mile de profondeur, descendre du combustible à uranium faiblement enrichi au fond, et utiliser la pression d’une colonne d’eau comme cuve de réacteur naturelle.  &quot;Ils forent des puits d’un mile de profondeur, descendent du combustible nucléaire faiblement enrichi au fond, et les remplissent d’eau. La pression de la colonne d’eau d’un mile est parfaite pour le réacteur. À partir de là, c’est essentiellement un puits géothermique.&quot; — *baron816*, commentaire communautaire  Contrairement à la technologie de forage high-tech de Quaise, l’approche de Deep Fission s’appuie sur des technologies nucléaires et de forage existantes, offrant potentiellement une voie plus rapide vers le déploiement. Les deux entreprises partagent cependant un objectif commun : exploiter la chaleur profonde de la Terre pour fournir une énergie scalable et sans carbone.</p><p></p><p>La voie à suivre : du laboratoire au réseau électrique</p><p>Quaise prévoit de démontrer un système de forage à grande échelle d’ici la fin de la décennie, avec les premiers projets commerciaux ciblant la modernisation de centrales électriques. Si elle réussit, cette technologie pourrait débloquer l’énergie géothermique dans des régions auparavant considérées comme inadaptées, du Midwest américain aux zones industrielles européennes. Les implications vont au-delà de la production d’électricité : la géothermie superchaude pourrait également fournir de la chaleur directe pour les procédés industriels, la production d’hydrogène vert, voire les systèmes de capture du carbone.    2025–2027 :  Tests sur le terrain du forage par ondes millimétriques à des profondeurs intermédiaires.   2028–2030 :  Premiers projets pilotes de modernisation de centrales à charbon/gaz avec des puits géothermiques profonds.   À partir de 2030 :  Déploiement mondial, avec un potentiel pour répondre à 10–20 % des besoins énergétiques mondiaux.   Pour une planète engagée dans une course à la décarbonisation, le forage par ondes millimétriques n’est pas seulement une prouesse technologique – c’est une bouée de sauvetage potentielle.</p></div>
+  
+  <footer class="item-footer">
+    <div class="tags"><code>#millimeter wave technology</code>, <code>#drilling</code>, <code>#geothermal energy</code></div>
+    
+  </footer>
+</article>
+
+<article id="item-4">
+  <header>
+    <h2 class="item-title"><a href="https://arstechnica.com/security/2026/06/following-user-outcry-amd-reinstates-memory-encryption-in-consumer-cpus/">AMD fait marche arrière : le chiffrement de la mémoire revient sur les processeurs grand public après les critiques</a>
+      <span class="score">⭐️ 7.334624999999999/10</span>
+    </h2>
+    <div class="meta">rss · Ars Technica · Jun 22, 19:16</div>
+  </header>
+  <div class="article-body"><p class="article-lead">La suppression controversée : pourquoi les utilisateurs étaient furieux</p><p>&quot;Cela ressemblait à une trahison. AMD a construit sa réputation en offrant des fonctionnalités de sécurité de pointe à tous les utilisateurs, pas seulement aux clients professionnels,&quot; a déclaré un modérateur du subreddit r/AMD, reflétant le sentiment de nombreux passionnés.  La suppression du SME a également soulevé des inquiétudes quant à la tendance croissante du &quot;gating des fonctionnalités&quot; dans l’industrie technologique, où les entreprises réservent les capacités avancées aux produits à plus forte marge. Pour les utilisateurs soucieux de sécurité, l’absence de SME laissait une lacune critique dans la protection, en particulier pour ceux exécutant des charges de travail sensibles sur du matériel grand public.</p><p></p><p>Qu’est-ce que le chiffrement de la mémoire sécurisée (SME) et pourquoi est-il important ?</p><p>Protection contre les attaques Coldboot :  Chiffre les données en RAM, empêchant leur extraction même si le système est redémarré.   Sécurité au niveau matériel :  Les clés sont gérées par le processeur sécurisé AMD, réduisant l’exposition aux vulnérabilités logicielles.   Impact minimal sur les performances :  AMD revendique moins de 1 % de surcharge, ce qui le rend viable pour les charges de travail grand public.   Compatibilité :  Fonctionne avec la plupart des systèmes d’exploitation modernes, y compris Linux et Windows (avec les pilotes appropriés).</p><p></p><p>Le rétablissement : une victoire pour la sécurité des consommateurs</p><p>Le rétablissement du SME représente une victoire significative pour la sécurité des consommateurs, en particulier pour les utilisateurs qui dépendent de leurs systèmes pour des tâches sensibles telles que la gestion de cryptomonnaies, les communications sécurisées ou l’exécution de machines virtuelles. Cela crée également un précédent pour les autres fabricants de matériel, démontrant que la demande des consommateurs peut influencer les décisions des entreprises en matière de fonctionnalités de sécurité. Cependant, cet épisode soulève des questions sur la stratégie à long terme d’AMD : l’entreprise continuera-t-elle à segmenter les fonctionnalités de sécurité, ou adoptera-t-elle une approche plus inclusive ?</p><p></p><p>Performances et compatibilité : ce que les utilisateurs doivent savoir</p><p>Pour ceux qui exécutent des environnements virtualisés, le Secure Encrypted Virtualization (SEV) d’AMD—une extension du SME—offre des protections supplémentaires en chiffrant la mémoire des machines virtuelles individuelles. Le SEV est particulièrement utile pour les fournisseurs de cloud et les entreprises, mais son rétablissement dans les processeurs grand public pourrait ouvrir de nouvelles possibilités pour les passionnés de home lab et les utilisateurs soucieux de leur vie privée.</p><p></p><p>Implications plus larges : la sécurité comme droit des consommateurs</p><p>À l’avenir, cet épisode pourrait servir de signal d’alarme pour les autres fabricants de matériel. À mesure que les consommateurs prennent davantage conscience des risques de sécurité—des attaques physiques aux vulnérabilités de la chaîne d’approvisionnement—ils sont susceptibles de demander plus de transparence et d’inclusivité dans la manière dont les fonctionnalités de sécurité sont mises en œuvre. Pour AMD, le défi sera d’éviter de répéter cette erreur tout en continuant à innover dans un marché de plus en plus compétitif.</p></div>
+  
+  <footer class="item-footer">
+    <div class="tags"><code>#Technology</code>, <code>#AMD</code>, <code>#CPU</code>, <code>#Security</code></div>
+    
+  </footer>
+</article>
+
+<article id="item-5">
+  <header>
+    <h2 class="item-title"><a href="https://www.mediapart.fr/journal/france/240626/logements-bouilloires-le-service-minimum-du-gouvernement">Crise des « logements bouilloires » : l’angle mort climatique du gouvernement français</a>
+      <span class="score">⭐️ 6.5969999999999995/10</span>
+    </h2>
+    <div class="meta">rss · Mediapart · Jun 24, 05:55</div>
+  </header>
+  <div class="article-body"><p class="article-lead">L’urgence silencieuse : les logements bouilloires en France</p><p>Les « logements bouilloires » en France représentent une crise sanitaire grandissante. Ces habitations mal isolées, souvent situées dans des quartiers défavorisés, se transforment en véritables fours l’été, avec des températures intérieures dépassant les 30°C même lorsque la chaleur extérieure diminue. Ce phénomène n’est pas nouveau, mais le changement climatique en a fait une urgence chronique. À Lyon, par exemple, 10 % des 325 000 logements de la ville sont classés comme « passoires thermiques » – des habitations qui laissent s’échapper la chaleur en hiver et la retiennent en été.</p><p></p><p>Un plan de relance défaillant : 700 000 passoires thermiques remises sur le marché</p><p>Le projet de loi de relance du logement présenté par le gouvernement en juin 2024 a suscité l’indignation des associations écologistes et de défense des locataires. Plutôt que d’imposer des rénovations urgentes pour ces logements invivables, le texte se concentre sur la remise sur le marché de 700 000 « passoires thermiques », ces logements classés parmi les pires en termes d’efficacité énergétique. Présentée comme une solution à la pénurie de logements, cette mesure est perçue comme une bombe à retardement climatique.  « C’est une trahison des plus vulnérables. Le gouvernement remet sciemment des familles dans des logements qui deviendront inhabitables avec la hausse des températures », a dénoncé un porte-parole de la Fondation Abbé Pierre.</p><p></p><p>Pourquoi les logements bouilloires sont un enjeu climatique et de justice sociale</p><p>La crise des « logements bouilloires » est le résultat de multiples échecs systémiques. D’abord, une vulnérabilité climatique : ces logements manquent d’isolation, de fenêtres à double vitrage ou de systèmes d’ombrage, les rendant dangereusement sensibles aux canicules. Ensuite, une inégalité économique : les ménages modestes, qui ne peuvent pas se permettre la climatisation ou des rénovations, sont les plus touchés. Enfin, un problème d’urbanisme : beaucoup de ces logements sont situés dans des zones densément peuplées, sans espaces verts, aggravant l’effet d’îlot de chaleur urbain.    Risques sanitaires :  Une exposition prolongée à des températures élevées augmente les risques de coup de chaleur, de déshydratation et de stress cardiovasculaire, notamment pour les personnes âgées et les enfants.   Précarité énergétique :  Ces logements surchauffent l’été mais laissent fuir la chaleur l’hiver, obligeant les locataires à consacrer jusqu’à 15 % de leurs revenus aux factures d’énergie.   Distorsion du marché :  Les propriétaires de passoires thermiques ne sont pas sanctionnés pour louer des logements dangereux, tandis que les locataires disposent de peu de recours juridiques.</p><p></p><p>Occasions manquées : ce que le gouvernement aurait pu faire</p><p>Les experts estiment que le projet de loi sur le logement aurait pu marquer un tournant dans la stratégie d’adaptation climatique de la France. Au lieu de cela, il gaspille une opportunité d’aligner la politique du logement sur les objectifs de neutralité carbone du pays. Parmi les solutions envisageables :    Rénovations obligatoires :  Imposer aux propriétaires d’améliorer l’isolation, d’installer des toitures réfléchissantes ou des systèmes de ventilation avant de relouer les logements.   Subventions ciblées :  Étendre le dispositif « MaPrimeRénov’ » pour financer des adaptations spécifiques à l’été, comme des stores extérieurs ou des revêtements réfléchissants.   Rafraîchissement urbain :  Associer les rénovations de logements à des investissements dans les toits végétalisés, la plantation d’arbres et la création d’espaces publics climatisés dans les quartiers les plus exposés.   Protection des locataires :  Renforcer les lois pour permettre des réductions de loyer ou des résiliations de bail pour les logements ne respectant pas les normes d’habitabilité en période de canicule.   Le gouvernement mise cependant sur des incitations volontaires et des mécanismes de marché, qui ont jusqu’ici échoué à résoudre l’ampleur de la crise.</p><p></p><p>Un avertissement mondial : les leçons de la crise du logement en France</p><p>La lutte de la France contre les « logements bouilloires » illustre un défi mondial : comment adapter un parc immobilier vieillissant à un climat de plus en plus chaud. Des pays comme l’Espagne et l’Italie ont introduit des « clauses canicule » dans les contrats de location, tandis que l’Allemagne montre avec son programme « Energiesprong » comment industrialiser les rénovations grâce à des solutions préfabriquées. En revanche, l’approche fragmentaire de la France risque de laisser des millions de locataires exposés à des risques évitables.  « Le refus du gouvernement d’agir sur les logements surchauffés n’est pas seulement un échec politique, c’est un échec moral. L’adaptation climatique n’est pas un luxe, c’est une nécessité pour survivre », a déclaré un climatologue du Centre national de la recherche scientifique (CNRS).  Alors que les canicules deviennent plus longues et plus intenses, la question n’est plus de savoir si la France agira, mais combien de vies seront perdues avant qu’elle ne le fasse.</p></div>
+  
+  <footer class="item-footer">
+    <div class="tags"><code>#housing</code>, <code>#climate change</code>, <code>#French government</code>, <code>#sustainability</code></div>
+    
+  </footer>
+</article>
+</main></div><div class="tab-content " data-lang="en"><section class="summary-header">
+  <h1>Horizon Daily — 2026-06-24</h1>
+  <p class="lead">From 487 items, 5 important content pieces were selected</p>
+  <nav class="toc" aria-label="Contents">
+    <p class="toc-title">Contents</p>
+    <ul><li><a href="#item-1">MIT’s PlasmoSniff: The Future of Instant Pneumonia Diagnosis with a Single Breath <span class="toc-score">⭐️ 7.665375000000001/10</span></a></li>
+<li><a href="#item-2">White House Accelerates Quantum-Safe Cryptography Shift: Why the New Deadline Matters <span class="toc-score">⭐️ 7.610250000000001/10</span></a></li>
+<li><a href="#item-3">Millimeter Wave Drilling: The Breakthrough That Could Unlock Limitless Geothermal Energy <span class="toc-score">⭐️ 7.5/10</span></a></li>
+<li><a href="#item-4">AMD Reverses Course: Memory Encryption Returns to Consumer CPUs After Backlash <span class="toc-score">⭐️ 7.334624999999999/10</span></a></li>
+<li><a href="#item-5">France’s ‘Oven Homes’ Crisis: A Climate Blind Spot in Government Housing Policy <span class="toc-score">⭐️ 6.5969999999999995/10</span></a></li></ul>
+  </nav>
+</section>
+<main class="items">
+<article id="item-1">
+  <header>
+    <h2 class="item-title"><a href="https://www.technologyreview.com/2026/06/23/1138291/a-breath-test-could-diagnose-pneumonia-in-minutes/">MIT’s PlasmoSniff: The Future of Instant Pneumonia Diagnosis with a Single Breath</a>
+      <span class="score">⭐️ 7.665375000000001/10</span>
+    </h2>
+    <div class="meta">rss · MIT Technology Review · Jun 23, 21:00</div>
+  </header>
+  <div class="article-body"><p class="article-lead">The Science Behind PlasmoSniff: How a Breath Reveals Disease</p><p>The process begins with the patient inhaling  nanoparticles  designed to bind to these biomarkers. When the patient exhales into the PlasmoSniff device, the nanoparticles—now carrying traces of the disease—are trapped by a chip-scale sensor. This sensor, developed using advanced  systems-on-chip (SoC)  technology, is capable of detecting even minute concentrations of biomarkers with high precision. As noted by imec, a leader in nanoelectronics research, such sensors are uniquely suited for connected health devices due to their high integration and ability to address signal quality challenges in real time.</p><p></p><p>From Lab to Clinic: The Technology Powering PlasmoSniff</p><p>This technology builds on decades of research into  lab-on-a-chip (LoC) , which miniaturize complex laboratory processes into single, disposable chips. As highlighted in a 2025 review published in  Sensors &amp; Diagnostics , LoC devices offer significant advantages over conventional methods, including reduced sample sizes, faster results, and lower costs. However, challenges remain, particularly in standardizing production and ensuring consistent accuracy across diverse patient populations. PlasmoSniff’s developers at MIT are addressing these hurdles by refining the sensor’s sensitivity and specificity, ensuring it can reliably distinguish between pneumonia and other lung conditions, such as bronchitis or COVID-19.</p><p></p><p>Why Breath Analysis Could Revolutionize Diagnostics</p><p>PlasmoSniff takes this a step further by combining  nanoparticles  with  machine learning . The device’s sensor arrays generate vast amounts of data, which are then analyzed by algorithms trained to recognize patterns associated with pneumonia and other lung diseases. This approach mirrors research published in  Accounts of Chemical Research , where nanomaterial-coated sensors were used for quantitative odor analysis. The result? A diagnostic tool that is not only non-invasive but also capable of providing results in real time, potentially saving lives in critical care settings.</p><p></p><p>The Global Impact: Faster Diagnoses, Better Outcomes</p><p>The implications extend beyond pneumonia. The same technology could be adapted to detect other respiratory infections, such as tuberculosis or influenza, as well as chronic conditions like chronic obstructive pulmonary disease (COPD).  &quot;The ability to diagnose diseases from a single breath could democratize healthcare, making high-quality diagnostics accessible to millions who currently lack them,&quot; says Dr. Angela Belcher, a professor of biological engineering at MIT and a key figure in the PlasmoSniff project.  Moreover, the speed of diagnosis could reduce the overuse of antibiotics, a major driver of antimicrobial resistance.</p><p></p><p>Challenges and the Road Ahead</p><p>Looking ahead, the team at MIT is already exploring applications beyond pneumonia. Potential future uses include:   Early detection of lung cancer by identifying cancer-specific VOCs in breath.  Monitoring of asthma and COPD flare-ups in real time.  Diagnosis of infectious diseases like tuberculosis in high-burden regions.  Integration with telemedicine platforms to enable remote diagnostics.   As the technology matures, PlasmoSniff could become a cornerstone of  personalized medicine , tailoring treatments to individual biomarker profiles.</p></div>
+  
+  <footer class="item-footer">
+    <div class="tags"><code>#Medical Technology</code>, <code>#Pneumonia Diagnosis</code>, <code>#MIT Research</code></div>
+    
+  </footer>
+</article>
+
+<article id="item-2">
+  <header>
+    <h2 class="item-title"><a href="https://arstechnica.com/information-technology/2026/06/executive-order-bumps-up-deadline-to-move-off-quantum-vulnerable-crypto/">White House Accelerates Quantum-Safe Cryptography Shift: Why the New Deadline Matters</a>
+      <span class="score">⭐️ 7.610250000000001/10</span>
+    </h2>
+    <div class="meta">rss · Ars Technica · Jun 23, 22:30</div>
+  </header>
+  <div class="article-body"><p class="article-lead">The Quantum Threat: Why Current Encryption Is at Risk</p><p>The implications are staggering. Adversaries could intercept encrypted data today and decrypt it years later, once quantum computing matures. This risk extends beyond government secrets to critical infrastructure, financial systems, and even personal privacy. As the Philadelphia Fed notes, quantum computers could undermine protections that underpin the global digital economy, making the transition to quantum-resistant algorithms not just a technical challenge but a strategic imperative.</p><p></p><p>Post-Quantum Cryptography: The Race for Unbreakable Encryption</p><p>The transition, however, is far from trivial. PQC algorithms often require more computational power and larger key sizes, which could strain legacy systems. Cloudflare highlights another challenge: interoperability. As organizations adopt PQC, they must ensure compatibility with existing protocols, from TLS to SSH, without disrupting services. The stakes are high, as Palo Alto Networks warns:   **Performance trade-offs**: PQC can slow down encryption/decryption processes.  **Implementation complexity**: Integrating PQC into existing infrastructure demands expertise.  **Long-term security**: Even PQC is not foolproof; algorithms must evolve as quantum computing advances.</p><p></p><p>The Executive Order: A New Deadline and Its Implications</p><p>This move underscores the administration’s recognition of quantum computing as an imminent threat. As the order warns, delays in adoption could leave sensitive data—from military communications to financial records—exposed to adversaries. The urgency is echoed by cybersecurity experts, who note that even non-government entities, such as banks and healthcare providers, must begin preparing for the post-quantum era. The order also signals a broader shift in U.S. cybersecurity policy, prioritizing proactive measures over reactive fixes.</p><p></p><p>Global Race: How Other Nations Are Responding</p><p>This global competition raises the stakes for the U.S. A lag in adoption could cede technological leadership to rivals, with potential consequences for economic and military security. The White House’s order is thus a strategic move to maintain the U.S.’s edge in cybersecurity, ensuring that its infrastructure remains resilient against both current and future threats. As the Philadelphia Fed points out,  “The specific implementation of quantum-resistant technologies may also be susceptible to attacks due to hardware flaws, underscoring the need for rigorous testing and international collaboration.”</p><p></p><p>What’s Next: Challenges and Opportunities in the Post-Quantum Era</p><p>Ultimately, the White House’s order is a wake-up call. The quantum threat is no longer theoretical—it is a looming reality that demands immediate action. As NIST’s PQC project lead, Dustin Moody, puts it:  “The time to prepare is now. Waiting until quantum computers are powerful enough to break current encryption will be too late.”</p></div>
+  
+  <footer class="item-footer">
+    <div class="tags"><code>#cryptography</code>, <code>#quantum computing</code>, <code>#national security</code>, <code>#US policy</code></div>
+    
+  </footer>
+</article>
+
+<article id="item-3">
+  <header>
+    <h2 class="item-title"><a href="https://www.thinkgeoenergy.com/quaise-energy-achieves-100-meters-of-drilling-using-millimeter-wave-technology/">Millimeter Wave Drilling: The Breakthrough That Could Unlock Limitless Geothermal Energy</a>
+      <span class="score">⭐️ 7.5/10</span>
+    </h2>
+    <div class="meta">hackernews · Jimmc414 · Jun 20, 18:24 · <a href="https://news.ycombinator.com/item?id=48611585">Discussion</a></div>
+  </header>
+  <div class="article-body"><p class="article-lead">A Drilling Revolution Born from Fusion Research</p><p>The idea of using millimeter waves to drill through rock isn’t new—it’s a spin-off from decades of research into nuclear fusion. Quaise Energy, a startup spun out of MIT, has adapted gyrotron technology—originally designed to heat plasma in fusion reactors—to vaporize granite at depths previously thought impossible. Unlike traditional mechanical drills, which wear down against hard rock, millimeter wave drilling uses focused electromagnetic energy to melt and vaporize material, leaving behind a vitrified borehole wall that eliminates the need for casing in some applications.</p><p></p><p>How Millimeter Wave Drilling Works</p><p>Millimeter waves occupy the 30–300 GHz range of the electromagnetic spectrum, with wavelengths between 1 and 10 millimeters. At these frequencies, energy can be precisely directed and absorbed by certain materials—like granite—causing rapid heating and sublimation. Quaise’s system uses a gyrotron to generate a high-power millimeter wave beam, which is guided through a metallic waveguide filled with argon gas. The argon prevents the beam from scattering or losing energy, even under extreme pressures found kilometers underground.</p><p></p><p>Why This Matters for Geothermal Energy</p><p>Traditional geothermal energy relies on tapping into natural reservoirs of hot water or steam near tectonic boundaries—resources that are geographically limited. Quaise’s technology aims to access superhot rock (above 400°C) at depths of 20 kilometers, where temperatures are high enough to generate steam capable of driving turbines with near-baseload efficiency.  &quot;Deep geothermal energy is at the core of an energy-independent world. Our mission is to bring this inexhaustible, renewable, clean energy source to future generations.&quot; — Quaise Energy  By retrofitting existing fossil fuel power plants with deep geothermal wells, Quaise envisions a future where coal and gas plants become zero-emission energy hubs, slashing transition costs and preserving jobs.</p><p></p><p>Challenges and Skepticism</p><p>Despite the promise, millimeter wave drilling faces significant hurdles. Critics, including commenters on the original report, question why the technology hasn’t been commercialized for smaller-scale applications, such as cutting through concrete or rock for construction.    Scale and Cost:  Gyrotrons are complex and expensive, raising concerns about the economic viability of large-scale deployment.   Material Handling:  Efficiently removing vaporized rock from deep boreholes remains a technical challenge.   Regulatory and Safety Risks:  Drilling to 20 kilometers introduces unknowns, including seismic risks and the potential for unintended fluid migration.   Some observers, like user *Animats* in the discussion thread, speculate that the focus on ultra-deep drilling may be driven more by investor hype than near-term practicality. Others, however, point to the urgency of decarbonization as justification for high-risk, high-reward innovation.</p><p></p><p>A Complementary Vision: Deep Fission’s Simpler Approach</p><p>Quaise isn’t the only company reimagining deep energy extraction. Deep Fission, another startup, proposes a radically simple nuclear fission model: drilling mile-deep holes, lowering low-enriched uranium fuel to the bottom, and using the pressure of a water column as a natural reactor vessel.  &quot;They’re digging one-mile holes, dropping low-enriched nuclear fuel to the bottom, and filling them with water. The pressure from the one-mile column of water is perfect for the reactor. From there, it’s basically a geothermal well.&quot; — *baron816*, community comment  Unlike Quaise’s high-tech drilling, Deep Fission’s approach leverages existing nuclear and drilling technologies, potentially offering a faster path to deployment. Both companies, however, share a common goal: tapping into the Earth’s deep heat to provide scalable, carbon-free energy.</p><p></p><p>The Road Ahead: From Lab to Grid</p><p>Quaise plans to demonstrate a full-scale drilling system by the end of the decade, with the first commercial projects targeting retrofitted power plants. If successful, the technology could unlock geothermal energy in regions previously considered unsuitable, from the American Midwest to Europe’s industrial heartlands. The implications extend beyond electricity: superhot geothermal could also provide direct heat for industrial processes, green hydrogen production, and even carbon capture systems.    2025–2027:  Field testing of millimeter wave drilling at intermediate depths.   2028–2030:  First pilot projects retrofitting coal/gas plants with deep geothermal wells.   2030+:  Global scaling, with potential to supply 10–20% of the world’s energy needs.   For a planet racing to decarbonize, millimeter wave drilling isn’t just a technological marvel—it’s a potential lifeline.</p></div>
+  
+  <footer class="item-footer">
+    <div class="tags"><code>#millimeter wave technology</code>, <code>#drilling</code>, <code>#geothermal energy</code></div>
+    
+  </footer>
+</article>
+
+<article id="item-4">
+  <header>
+    <h2 class="item-title"><a href="https://arstechnica.com/security/2026/06/following-user-outcry-amd-reinstates-memory-encryption-in-consumer-cpus/">AMD Reverses Course: Memory Encryption Returns to Consumer CPUs After Backlash</a>
+      <span class="score">⭐️ 7.334624999999999/10</span>
+    </h2>
+    <div class="meta">rss · Ars Technica · Jun 22, 19:16</div>
+  </header>
+  <div class="article-body"><p class="article-lead">The Controversial Removal: Why Users Were Outraged</p><p>&quot;This felt like a betrayal of trust. AMD built its reputation on offering cutting-edge security features to all users, not just enterprise customers,&quot; said a moderator on the r/AMD subreddit, reflecting the sentiment of many enthusiasts.  The removal also raised concerns about the broader trend of &quot;feature gating&quot; in the tech industry, where companies reserve advanced capabilities for higher-margin products. For security-conscious users, the absence of SME left a critical gap in protection, particularly for those running sensitive workloads on consumer hardware.</p><p></p><p>What Is Secure Memory Encryption—and Why Does It Matter?</p><p>Protection against Coldboot attacks:  Encrypts data in RAM, preventing extraction even if the system is rebooted.   Hardware-level security:  Keys are managed by the AMD Secure Processor, reducing exposure to software vulnerabilities.   Minimal performance impact:  AMD claims less than 1% overhead, making it viable for consumer workloads.   Compatibility:  Works with most modern operating systems, including Linux and Windows (with appropriate drivers).</p><p></p><p>The Reinstatement: A Win for Consumer Security</p><p>The reinstatement of SME is a significant victory for consumer security, particularly for users who rely on their systems for sensitive tasks such as cryptocurrency management, secure communications, or running virtual machines. It also sets a precedent for other hardware manufacturers, demonstrating that consumer demand can influence corporate decisions on security features. However, the episode raises questions about AMD’s long-term strategy: will the company continue to segment security features, or will it adopt a more inclusive approach?</p><p></p><p>Performance and Compatibility: What Users Need to Know</p><p>For those running virtualized environments, AMD’s Secure Encrypted Virtualization (SEV)—an extension of SME—provides additional protections by encrypting the memory of individual virtual machines. SEV is particularly useful for cloud providers and enterprises, but its reinstatement in consumer CPUs could open new possibilities for home lab enthusiasts and privacy-conscious users.</p><p></p><p>Broader Implications: Security as a Consumer Right</p><p>Looking ahead, the episode could serve as a wake-up call for other hardware manufacturers. As consumers become more aware of security risks—from physical attacks to supply chain vulnerabilities—they are likely to demand more transparency and inclusivity in how security features are implemented. For AMD, the challenge will be to avoid repeating this misstep while continuing to innovate in an increasingly competitive market.</p></div>
+  
+  <footer class="item-footer">
+    <div class="tags"><code>#Technology</code>, <code>#AMD</code>, <code>#CPU</code>, <code>#Security</code></div>
+    
+  </footer>
+</article>
+
+<article id="item-5">
+  <header>
+    <h2 class="item-title"><a href="https://www.mediapart.fr/journal/france/240626/logements-bouilloires-le-service-minimum-du-gouvernement">France’s ‘Oven Homes’ Crisis: A Climate Blind Spot in Government Housing Policy</a>
+      <span class="score">⭐️ 6.5969999999999995/10</span>
+    </h2>
+    <div class="meta">rss · Mediapart · Jun 24, 05:55</div>
+  </header>
+  <div class="article-body"><p class="article-lead">The Silent Emergency: France’s Overheating Homes</p><p>France’s ‘logements bouilloires’—literally ‘boiler homes’—are a growing public health crisis. These poorly insulated dwellings, often concentrated in low-income neighborhoods, trap heat like ovens during summer months, pushing indoor temperatures above 30°C (86°F) even when outdoor heat subsides. The phenomenon is not new, but climate change has turned it into a chronic emergency. In Lyon alone, municipal data reveals that 10% of the city’s 325,000 homes qualify as ‘passoires thermiques’—thermal sieves that fail to retain heat in winter and repel it in summer.</p><p></p><p>A Flawed Relief Plan: 700,000 ‘Thermal Sieves’ Back on the Market</p><p>The French government’s latest housing relief bill, unveiled in June 2024, has been met with disbelief from climate advocates and tenant associations. Rather than mandating urgent retrofits for these overheated homes, the legislation focuses on reintroducing 700,000 ‘passoires thermiques’—properties with the worst energy efficiency ratings—back into the rental market. The move is framed as a solution to France’s housing shortage, but critics argue it amounts to a climate time bomb.  &quot;This is a betrayal of the most vulnerable. The government is knowingly putting families back into homes that will become uninhabitable as temperatures rise,&quot; said a spokesperson for the Fondation Abbé Pierre, a leading housing charity.</p><p></p><p>Why ‘Oven Homes’ Are a Climate and Social Justice Issue</p><p>The ‘logements bouilloires’ crisis intersects with multiple systemic failures. First, climate vulnerability: these homes lack basic insulation, double-glazed windows, or shading systems, making them dangerously susceptible to heatwaves. Second, economic inequality: low-income households, who cannot afford air conditioning or retrofits, bear the brunt of the crisis. Third, urban planning: many of these properties are located in densely populated areas with little green space, exacerbating the urban heat island effect.    Health risks:  Prolonged exposure to high indoor temperatures increases the risk of heatstroke, dehydration, and cardiovascular stress, particularly for the elderly and children.   Energy poverty:  While these homes overheat in summer, they also bleed heat in winter, forcing tenants to spend up to 15% of their income on energy bills.   Market distortion:  Landlords of ‘passoires thermiques’ face no penalties for renting out hazardous properties, while tenants have limited legal recourse.</p><p></p><p>Missed Opportunities: What the Government Could Have Done</p><p>Experts argue that the housing relief bill could have been a turning point for France’s climate adaptation strategy. Instead, it squandered an opportunity to align housing policy with the country’s carbon neutrality goals. Potential solutions included:    Mandatory retrofits:  Requiring landlords to upgrade insulation, install reflective roofing, or add ventilation systems before re-renting properties.   Targeted subsidies:  Expanding the ‘MaPrimeRénov’ scheme to cover summer-specific adaptations, such as external shutters or heat-reflective coatings.   Urban cooling:  Pairing housing retrofits with investments in green roofs, tree planting, and public cooling centers in heatwave-prone neighborhoods.   Tenant protections:  Strengthening laws to allow rent reductions or lease terminations for properties that fail to meet basic habitability standards during extreme weather.   The government’s approach, however, relies on voluntary incentives and market mechanisms, which have repeatedly failed to address the scale of the crisis.</p><p></p><p>A Global Warning: Lessons from France’s Housing Crisis</p><p>France’s struggle with ‘logements bouilloires’ is a microcosm of a global challenge: how to adapt aging housing stock to a rapidly warming climate. Countries like Spain and Italy have introduced ‘heatwave clauses’ in rental contracts, while Germany’s ‘Energiesprong’ program demonstrates how mass retrofits can be scaled using prefabricated solutions. In contrast, France’s piecemeal approach risks leaving millions of tenants exposed to preventable risks.  &quot;The government’s refusal to act on overheated homes is not just a policy failure—it’s a moral one. Climate adaptation isn’t a luxury; it’s a necessity for survival,&quot; said a climate scientist at the French National Centre for Scientific Research (CNRS).  As heatwaves grow longer and more intense, the question is no longer whether France will act, but how many lives will be lost before it does.</p></div>
+  
+  <footer class="item-footer">
+    <div class="tags"><code>#housing</code>, <code>#climate change</code>, <code>#French government</code>, <code>#sustainability</code></div>
+    
+  </footer>
+</article>
+</main></div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,471 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Horizon — 2026-06-25</title>
+  <style>
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600&family=Manrope:wght@500;700&display=swap');
+
+:root {
+    --bg: #f8f5f3;
+    --paper: #ffffff;
+    --surface: #fffbf8;
+    --accent: #9b3d2a;
+    --accent-2: color-mix(in srgb, var(--accent) 55%, #b73fd6);
+    --accent-3: color-mix(in srgb, var(--accent) 40%, #f59e0b);
+    --accent-soft: #f9e2dc;
+    --muted: #6e5b54;
+    --text: #2f211d;
+    --ring: color-mix(in srgb, var(--accent) 32%, transparent);
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+    color: var(--text);
+    background:
+        radial-gradient(1300px 420px at -10% -20%, var(--accent-soft), transparent 60%),
+        radial-gradient(760px 300px at 88% -12%, color-mix(in srgb, var(--accent-2) 24%, transparent), transparent 66%),
+        radial-gradient(640px 240px at 30% 0%, color-mix(in srgb, var(--accent-3) 18%, transparent), transparent 70%),
+        var(--bg);
+    font-family: 'Source Serif 4', Georgia, serif;
+    line-height: 1.78;
+}
+
+.container { max-width: 1100px; margin: 1.5rem auto; padding: 1rem; }
+
+/* ── Page header ─────────────────────────────────────────────────────── */
+.summary-header {
+    background: var(--paper);
+    border: 1px solid color-mix(in srgb, var(--accent) 16%, transparent);
+    border-radius: 24px;
+    padding: 1.5rem 1.6rem 1.1rem;
+    box-shadow: 0 18px 48px rgba(19, 33, 68, 0.08);
+    margin-bottom: 1rem;
+    position: relative;
+    overflow: hidden;
+}
+.summary-header::after {
+    content: "";
+    position: absolute;
+    inset: auto -60px -80px auto;
+    width: 220px; height: 220px;
+    border-radius: 999px;
+    background: radial-gradient(circle, color-mix(in srgb, var(--accent-2) 28%, transparent), transparent 70%);
+    pointer-events: none;
+}
+.summary-header h1 {
+    margin: 0;
+    font-family: 'Fraunces', 'DM Serif Display', 'Iowan Old Style', 'Palatino Linotype', serif;
+    letter-spacing: .01em;
+    font-size: clamp(1.8rem, 3.6vw, 2.8rem);
+    line-height: 1.15;
+}
+.lead { margin: .55rem 0 1.1rem; color: var(--muted); font-size: 1.04rem; max-width: 78ch; }
+
+/* ── TOC ─────────────────────────────────────────────────────────────── */
+.toc-title {
+    margin: 0 0 .45rem;
+    font-family: 'Manrope', 'Segoe UI', sans-serif;
+    font-size: .85rem;
+    text-transform: uppercase;
+    letter-spacing: .11em;
+    color: var(--muted);
+}
+.toc ul {
+    list-style: none; margin: 0; padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: .55rem;
+}
+.toc li {
+    background: linear-gradient(160deg, var(--surface), color-mix(in srgb, var(--accent-soft) 48%, #ffffff));
+    border: 1px solid color-mix(in srgb, var(--accent) 16%, transparent);
+    border-radius: 10px;
+    padding: .55rem .65rem;
+    transition: transform .18s ease, box-shadow .18s ease;
+}
+.toc li:hover { transform: translateY(-1px); box-shadow: 0 8px 20px color-mix(in srgb, var(--accent) 15%, transparent); }
+.toc a { text-decoration: none; color: var(--text); }
+.toc-score { color: var(--accent); font-family: 'Manrope', 'Segoe UI', sans-serif; font-size: .85rem; font-weight: 600; }
+
+/* ── Article cards ───────────────────────────────────────────────────── */
+.items { display: grid; gap: .95rem; }
+.items article {
+    background: var(--paper);
+    border: 1px solid color-mix(in srgb, var(--accent) 15%, transparent);
+    border-radius: 20px;
+    padding: 1.4rem 1.6rem 1.1rem;
+    box-shadow: 0 10px 32px rgba(0, 0, 0, 0.05);
+}
+.item-title {
+    font-family: 'Fraunces', 'DM Serif Display', 'Iowan Old Style', 'Palatino Linotype', serif;
+    font-size: clamp(1.2rem, 2.2vw, 1.55rem);
+    margin: 0 0 .3rem;
+    line-height: 1.22;
+}
+.item-title a { color: inherit; text-decoration: none; }
+.item-title a:hover { color: var(--accent); }
+.item-title a:focus-visible, .toc a:focus-visible, summary:focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
+    border-radius: 6px;
+}
+.meta { color: var(--muted); font-family: 'Manrope', 'Segoe UI', sans-serif; font-size: .88rem; margin-bottom: .9rem; }
+.score { color: var(--accent); margin-left: .45rem; font-weight: 700; font-family: 'Manrope', 'Segoe UI', sans-serif; font-size: .95rem; }
+
+.article-body { border-top: 1px solid color-mix(in srgb, var(--accent) 10%, transparent); padding-top: 1rem; }
+
+.item-footer {
+    margin-top: 1rem;
+    padding-top: .65rem;
+    border-top: 1px solid color-mix(in srgb, var(--muted) 18%, transparent);
+}
+
+.evidence-note {
+    margin: .8rem 0 0;
+    color: var(--muted);
+    font-size: .92rem;
+    font-style: italic;
+}
+
+.tags { color: var(--muted); font-family: 'Manrope', 'Segoe UI', sans-serif; font-size: .88rem; margin-bottom: .45rem; }
+code { background: color-mix(in srgb, var(--accent-soft) 65%, #ffffff); border-radius: 8px; padding: .12rem .4rem; }
+
+details { margin-top: .5rem; }
+details summary { cursor: pointer; color: var(--accent); font-family: 'Manrope', 'Segoe UI', sans-serif; font-size: .9rem; }
+
+/* ── Dark mode ───────────────────────────────────────────────────────── */
+@media (prefers-color-scheme: dark) {
+    :root {
+        --bg: #0f1420; --paper: #161d2c; --surface: #1b2435;
+        --accent: #7cb1ff; --accent-2: #c28cff; --accent-3: #ffc36c;
+        --accent-soft: #1a2740; --muted: #a6b4cd; --text: #edf2ff;
+        --ring: rgba(124, 177, 255, 0.55);
+    }
+    body {
+        background:
+            radial-gradient(1200px 420px at -10% -20%, #1a2740, transparent 60%),
+            radial-gradient(760px 300px at 88% -12%, rgba(194, 140, 255, 0.2), transparent 66%),
+            radial-gradient(640px 240px at 30% 0%, rgba(255, 195, 108, 0.14), transparent 70%),
+            var(--bg);
+    }
+    .summary-header, .items article { border-color: rgba(124,177,255,.24); box-shadow: 0 18px 44px rgba(0,0,0,.32); }
+    .toc li { border-color: rgba(124,177,255,.22); background: linear-gradient(170deg, #1b2435, #1f2a3f); }
+    code { background: rgba(124,177,255,.16); }
+    .article-background { background: linear-gradient(170deg, #1b2435, #1f2a3f); }
+}
+
+@media (max-width: 860px) {
+    .container { margin: .7rem auto; padding: .65rem; }
+}
+
+/* ── Editorial article layout ─────────────────────────────────────────── */
+
+.article-lead {
+    font-size: 1.18rem;
+    color: var(--muted);
+    line-height: 1.7;
+    margin: .3rem 0 1.4rem;
+    max-width: 72ch;
+    font-style: italic;
+}
+
+.article-section {
+    margin-top: 1.55rem;
+}
+
+    .article-section {
+    font-family: 'Manrope', 'Segoe UI', sans-serif;
+    font-size: .78rem;
+.article-section h2 {
+.narrow {
+    margin: 0 0 .45rem;
+    padding-bottom: .25rem;
+    border-bottom: 1px solid color-mix(in srgb, var(--accent) 22%, transparent);
+}
+
+.article-section h2 {
+.narrow {
+    font-size: 1.03rem;
+    line-height: 1.85;
+    color: var(--text);
+}
+
+.article-section p {
+    margin: 0.25rem 0;
+}
+
+.article-section .article-section-last {
+    font-size: 1.08rem;
+
+.article-section h3 {
+    margin: .35rem 0 .15rem;
+    font-size: 0.95rem;
+    color: var(--muted);
+}
+    font-weight: 600;
+    margin-top: .45rem;
+}
+
+.article-section p + p {
+    margin-top: .8rem;
+}
+
+.article-background {
+    margin-top: 1.4rem;
+    padding: 1rem 1.1rem;
+    background: linear-gradient(170deg, var(--surface), color-mix(in srgb, var(--accent-soft) 30%, #fff));
+    border-left: 3px solid var(--accent);
+    border-radius: 0 10px 10px 0;
+    font-size: .98rem;
+    line-height: 1.78;
+    color: var(--text);
+}
+
+.article-background strong {
+    display: block;
+    font-family: 'Manrope', 'Segoe UI', sans-serif;
+    font-size: .78rem;
+    text-transform: uppercase;
+    letter-spacing: .1em;
+    color: var(--accent);
+    margin-bottom: .35rem;
+}
+
+.article-discussion {
+    margin-top: 1.2rem;
+    padding: .85rem 1rem;
+    border-left: 3px solid color-mix(in srgb, var(--muted) 40%, transparent);
+    font-style: italic;
+    font-size: .98rem;
+    color: var(--muted);
+    line-height: 1.75;
+}
+
+.article-discussion strong {
+    font-style: normal;
+    font-family: 'Manrope', 'Segoe UI', sans-serif;
+    font-size: .78rem;
+    text-transform: uppercase;
+    letter-spacing: .1em;
+    display: block;
+    margin-bottom: .3rem;
+    color: var(--muted);
+}
+
+.tab-switcher {
+    display: flex; gap: .5rem; margin-bottom: 1.5rem;
+    border-bottom: 2px solid color-mix(in srgb, var(--accent) 20%, transparent);
+}
+.tab-button {
+    background: transparent; border: none; color: var(--muted);
+    font-family: 'Manrope', 'Segoe UI', sans-serif; font-size: 1rem; font-weight: 600;
+    padding: .75rem 1.2rem; cursor: pointer;
+    transition: color .18s ease, border-color .18s ease;
+    border-bottom: 3px solid transparent;
+}
+.tab-button:hover { color: var(--text); }
+.tab-button.active { color: var(--accent); border-bottom-color: var(--accent); }
+.tab-content { display: none; animation: fadeIn .2s ease-in; }
+.tab-content.active { display: block; }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@media (max-width: 860px) { .tab-switcher { flex-wrap: wrap; } }
+</style>
+  <script>
+    function switchTab(button) {
+      const lang = button.getAttribute('data-lang');
+      const allButtons = document.querySelectorAll('.tab-button');
+      const allContents = document.querySelectorAll('.tab-content');
+      allButtons.forEach(b => b.classList.remove('active'));
+      allContents.forEach(c => c.classList.remove('active'));
+      button.classList.add('active');
+      document.querySelector(`.tab-content[data-lang="${lang}"]`).classList.add('active');
+    }
+  </script>
+</head>
+<body>
+  <div class="container">
+    <div class="tab-switcher">
+      <button class="tab-button active" onclick="switchTab(this)" data-lang="fr">Français</button><button class="tab-button " onclick="switchTab(this)" data-lang="en">English</button>
+    </div>
+    <div class="tab-content active" data-lang="fr"><section class="summary-header">
+  <h1>Horizon Quotidien — 2026-06-25</h1>
+  <p class="lead">Parmi 490 contenus collectés, 5 sujets essentiels ont été sélectionnés.</p>
+  <nav class="toc" aria-label="Sommaire">
+    <p class="toc-title">Sommaire</p>
+    <ul><li><a href="#item-1">Trump qualifie Anthropic de menace pour la sécurité nationale : la guerre froide de l&#39;IA s&#39;intensifie <span class="toc-score">⭐️ 7.665375000000001/10</span></a></li>
+<li><a href="#item-2">Les géants de la tech misent sur l&#39;ARNm : Stripe, Anthropic et OpenAI s&#39;unissent contre les infections respiratoires <span class="toc-score">⭐️ 7.610250000000001/10</span></a></li>
+<li><a href="#item-3">L’IA face à ses données : comment une nouvelle couche d’infrastructure web révolutionne les entreprises <span class="toc-score">⭐️ 7.518375000000001/10</span></a></li>
+<li><a href="#item-4">La technologie peut-elle imposer l&#39;éthique des entreprises ? Le scandale des émissions refait surface <span class="toc-score">⭐️ 6.743999999999999/10</span></a></li>
+<li><a href="#item-5">Canicule en France : quand la chaleur révèle les fractures politiques <span class="toc-score">⭐️ 6.615374999999999/10</span></a></li></ul>
+  </nav>
+</section>
+<main class="items">
+<article id="item-1">
+  <header>
+    <h2 class="item-title"><a href="https://www.axios.com/2026/06/19/trump-anthropic-national-security-the-axios-show">Trump qualifie Anthropic de menace pour la sécurité nationale : la guerre froide de l&#39;IA s&#39;intensifie</a>
+      <span class="score">⭐️ 7.665375000000001/10</span>
+    </h2>
+    <div class="meta">rss · Axios · Jun 19, 18:18</div>
+  </header>
+  <div class="article-body"><p class="article-lead">Anthropic : de pionnier de la sécurité IA à menace pour la sécurité nationale</p><p>Fondée en 2021 par d’anciens chercheurs d’OpenAI, dont son PDG Dario Amodei, Anthropic se présente comme une entreprise à mission publique, dédiée à la création de systèmes d’IA « fiables, interprétables et contrôlables ». Contrairement à beaucoup de ses concurrents, la startup met l’accent sur la sécurité et l’éthique dans le développement de ses modèles de langage avancés, comme Claude. Son approche de l’« IA constitutionnelle » – un cadre visant à aligner le comportement des IA sur les valeurs humaines – lui a valu des éloges de la part des décideurs politiques et des chercheurs. Pourtant, en quelques mois, Anthropic s’est retrouvée au cœur d’une tempête généralement réservée aux adversaires étrangers, faisant face à des contrôles à l’exportation draconiens et à une désignation par le Pentagone comme « risque pour la chaîne d’approvisionnement ».</p><p></p><p>Le rapport d’Amazon qui a déclenché une réaction gouvernementale</p><p>La désignation d’Anthropic comme « risque pour la chaîne d’approvisionnement » par le Pentagone – une étiquette habituellement réservée à des entités étrangères comme Huawei ou des cyberentreprises russes – a envoyé une onde de choc dans le secteur technologique. Cette mesure interdit effectivement aux sous-traitants gouvernementaux d’utiliser la technologie d’Anthropic dans des projets militaires, bien que ses modèles puissent encore être utilisés pour des applications civiles. Des experts juridiques ont remis en question ce précédent, certains arguant que cette désignation pourrait porter un coup fatal à la capacité d’Anthropic à opérer sur le marché américain.</p><p></p><p>L’évolution de la position de Trump : d’une menace à une trêve temporaire</p><p>Dans son entretien avec Axios, Trump a reconnu l’escalade rapide, déclarant : « Eh bien, pas maintenant, mais il y a une semaine, peut-être » lorsqu’on lui a demandé s’il considérait Anthropic comme une menace pour la sécurité nationale. Son ton s’est adouci après le sommet du G7, où il a décrit Amodei comme « sympathique » et « intelligent », saluant la réactivité du PDG face aux préoccupations du gouvernement. Pourtant, les remarques de Trump comportaient une menace voilée : « J’ai le pouvoir d’utiliser beaucoup de choses », a-t-il déclaré, faisant référence à la loi sur la production de défense (DPA), une législation de l’époque de la guerre froide qui permet au président d’obliger les entreprises privées à donner la priorité aux besoins de sécurité nationale.</p><p></p><p>Le facteur Chine : pourquoi les États-Unis ne peuvent pas se permettre d’affaiblir leurs champions de l’IA</p><p>Les enjeux sont élevés. La Chine a investi massivement dans l’IA, avec des initiatives soutenues par l’État comme le « Plan de développement de la nouvelle génération d’intelligence artificielle », visant à faire du pays un leader mondial d’ici 2030. Les responsables américains craignent qu’une erreur – qu’il s’agisse d’une faille de sécurité ou d’une régulation excessive – ne donne un avantage stratégique à la Chine. Pour l’instant, Trump semble croire que les avantages de la technologie d’Anthropic l’emportent sur les risques, mais cet épisode sert d’avertissement à l’ensemble du secteur de l’IA : la sécurité nationale dictera de plus en plus les règles du jeu.</p><p></p><p>Et maintenant ? La voie incertaine vers des normes de sécurité pour l’IA</p><p>Plusieurs questions clés restent en suspens :   Les États-Unis parviendront-ils à développer une approche unifiée de la supervision de l’IA, ou les agences comme le département du Commerce et le Pentagone continueront-elles à agir de manière indépendante ?  Anthropic et d’autres laboratoires d’IA pourront-ils rétablir la confiance avec Washington, ou de futurs conflits mèneront-ils à des répressions encore plus sévères ?  Comment les États-Unis équilibreront-ils innovation et sécurité sans pousser les talents et les investissements à l’étranger ?   Une chose est certaine : le cas d’Anthropic préfigure les batailles à venir alors que l’IA redéfinit tout, de la guerre à la vie quotidienne. L’ère de l’autorégulation dans le secteur technologique est révolue, et les nouvelles règles du jeu seront écrites dans les couloirs du pouvoir – et pas seulement dans les laboratoires de la Silicon Valley.</p></div>
+  
+  <footer class="item-footer">
+    <div class="tags"><code>#National Security</code>, <code>#Artificial Intelligence</code>, <code>#US Politics</code></div>
+    
+  </footer>
+</article>
+
+<article id="item-2">
+  <header>
+    <h2 class="item-title"><a href="https://www.technologyreview.com/2026/06/24/1139621/stripe-anthropic-and-openai-are-backing-an-effort-to-stop-respiratory-infections/">Les géants de la tech misent sur l&#39;ARNm : Stripe, Anthropic et OpenAI s&#39;unissent contre les infections respiratoires</a>
+      <span class="score">⭐️ 7.610250000000001/10</span>
+    </h2>
+    <div class="meta">rss · MIT Technology Review · Jun 24, 12:00</div>
+  </header>
+  <div class="article-body"><p class="article-lead">Une vision audacieuse : pourquoi les infections respiratoires nécessitent une révolution</p><p>Les infections respiratoires, du simple rhume à la grippe en passant par la COVID-19, restent l’un des fardeaux sanitaires les plus persistants de l’humanité. Malgré les progrès de la médecine, ces maladies coûtent chaque année des centaines de milliards de dollars à l’économie mondiale, en pertes de productivité, en dépenses de santé et en vies humaines. Les vaccins traditionnels ciblent des souches virales spécifiques, mais leur efficacité diminue à mesure que les virus mutent, une limite qui a longtemps frustré les chercheurs en quête d’une solution plus adaptable.  « Le rhume n’est pas qu’un simple désagrément ; c’est une vulnérabilité systémique. Si nous parvenons à le vaincre, nous pourrons appliquer les mêmes principes à d’autres maladies infectieuses », a déclaré un porte-parole du Founders Fund de Stripe.  Cette nouvelle initiative, soutenue par la puissance financière de Stripe et l’expertise en IA d’Anthropic et d’OpenAI, vise à développer un vaccin universel à ARN messager capable de protéger contre plusieurs virus respiratoires simultanément.</p><p></p><p>La technologie ARNm : un changement de paradigme dans le développement des vaccins</p><p>Les vaccins à ARN messager (ARNm), qui ont gagné en notoriété lors de la pandémie de COVID-19, représentent un tournant dans l’immunologie. Contrairement aux vaccins conventionnels qui utilisent des virus affaiblis ou inactivés, les vaccins à ARNm donnent aux cellules du corps l’instruction de produire une protéine virale inoffensive, déclenchant ainsi une réponse immunitaire. Cette approche présente plusieurs avantages :    Rapidité :  Les vaccins à ARNm peuvent être conçus et fabriqués en quelques semaines, et non en plusieurs années.   Flexibilité :  Ils peuvent être rapidement adaptés pour cibler de nouvelles variantes virales.   Évolutivité :  Leur production peut être augmentée rapidement pour répondre à la demande mondiale.   Cependant, des défis subsistent. Les vaccins à ARNm actuels contre la COVID-19, par exemple, ont montré une efficacité limitée dans la prévention de l’infection dans les voies respiratoires supérieures, où des virus comme le rhume et la grippe s’installent en premier. Cette nouvelle initiative cherche à surmonter cet obstacle en exploitant la recherche pilotée par l’IA pour optimiser les séquences d’ARNm et offrir une protection plus large et plus durable.</p><p></p><p>Le rôle de l’IA : comment Anthropic et OpenAI accélèrent la découverte</p><p>Anthropic et OpenAI, deux acteurs majeurs de l’industrie de l’IA, apportent leur expertise en apprentissage automatique et en modèles de langage avancés à ce projet. Anthropic, fondée par d’anciens chercheurs d’OpenAI, s’est positionnée comme un leader en matière de sécurité et d’interprétabilité de l’IA, un facteur critique lorsqu’il s’agit de concevoir des systèmes biologiques aussi complexes que les vaccins.  « L’IA peut simuler des millions de séquences d’ARNm potentielles in silico, identifiant les candidats les plus prometteurs pour les essais cliniques. Cela réduit considérablement le temps et le coût de la découverte traditionnelle de médicaments », a expliqué Daniela Amodei, cofondatrice d’Anthropic.  Les contributions d’OpenAI devraient se concentrer sur la modélisation prédictive, utilisant ses systèmes d’IA avancés pour anticiper les mutations virales et concevoir des vaccins qui restent efficaces même lorsque les pathogènes évoluent. Cette collaboration marque l’une des premières fois où l’IA est déployée à grande échelle pour relever un défi sanitaire mondial, signalant une nouvelle ère en biotechnologie.</p><p></p><p>Le Founders Fund de Stripe : philanthropie et investissement stratégique</p><p>L’implication de Stripe est menée par son Founders Fund, un bras de capital-risque connu pour soutenir des entreprises transformatrices comme SpaceX, Airbnb et Neuralink. Bien que le cœur de métier de Stripe repose sur le traitement des paiements, les frères Collison—Patrick et John—ont depuis longtemps défendu des projets ambitieux et à fort impact au-delà du secteur technologique.    Domaines d’intervention :  Le Founders Fund a historiquement investi dans les technologies profondes, la biotechnologie et l’IA, en phase avec les objectifs de cette initiative.   Dimension philanthropique :  Contrairement au capital-risque traditionnel, cet effort semble privilégier la santé publique plutôt que les retours financiers, reflétant une tendance croissante parmi les milliardaires de la tech à s’attaquer aux défis sociétaux.   Portée mondiale :  L’infrastructure de Stripe pourrait jouer un rôle dans la distribution du vaccin, en particulier dans les régions mal desservies où les systèmes de paiement et de logistique font défaut.   Bien que le montant de l’engagement financier de l’entreprise n’ait pas été divulgué, il devrait être substantiel, fournissant les ressources nécessaires pour faire le lien entre la recherche et le déploiement dans le monde réel.</p><p></p><p>Implications : ce que le succès pourrait signifier pour la santé mondiale</p><p>Si cette initiative aboutit, ses répercussions pourraient être considérables :    Préparation aux pandémies :  Un vaccin universel contre les infections respiratoires pourrait servir de modèle pour une réponse rapide aux futures épidémies, réduisant le besoin de confinements et de mesures d’urgence.   Impact économique :  L’Organisation mondiale de la santé estime que la grippe coûte à elle seule 1 000 milliards de dollars par an à l’économie mondiale. Un vaccin largement efficace pourrait permettre d’économiser des milliards en coûts de santé et en pertes de productivité.   L’IA en médecine :  Ce projet pourrait accélérer l’intégration de l’IA dans la découverte de médicaments, ouvrant la voie à des traitements pour d’autres maladies, du cancer à la maladie d’Alzheimer.   Équité en santé :  Les vaccins à ARNm sont moins chers et plus rapides à produire que les vaccins traditionnels, ce qui les rend idéaux pour les pays à revenu faible et intermédiaire.   Cependant, des défis persistent. Le scepticisme du public à l’égard de la technologie ARNm, les obstacles réglementaires et la nécessité de mener des essais cliniques à grande échelle pourraient retarder le déploiement. De plus, l’initiative devra naviguer dans les complexités éthiques de la recherche médicale pilotée par l’IA, en garantissant transparence et sécurité à chaque étape.</p><p></p><p>La feuille de route : calendrier et prochaines étapes</p><p>Bien que l’initiative en soit encore à ses débuts, des sources internes suggèrent une approche en plusieurs phases :    Phase 1 (2026-2027) :  Conception pilotée par l’IA et tests précliniques de candidats vaccins à ARNm.   Phase 2 (2027-2028) :  Essais cliniques à petite échelle pour évaluer la sécurité et l’efficacité.   Phase 3 (à partir de 2029) :  Essais cliniques à grande échelle et approbation réglementaire.   La collaboration explore également des partenariats avec des institutions académiques, des entreprises pharmaceutiques et des organisations de santé mondiale pour garantir que le vaccin atteigne ceux qui en ont le plus besoin.  « Il ne s’agit pas seulement de créer un produit ; il s’agit de construire une plateforme capable de s’adapter à tout ce que la prochaine pandémie nous réserve », a déclaré une source proche du projet.  Pour l’instant, le monde observe tandis que les esprits les plus brillants de la Silicon Valley s’attaquent à l’un des plus anciens ennemis de la médecine—avec le potentiel de changer à jamais le cours de la santé mondiale.</p></div>
+  
+  <footer class="item-footer">
+    <div class="tags"><code>#Health</code>, <code>#Technology</code>, <code>#Innovation</code></div>
+    
+  </footer>
+</article>
+
+<article id="item-3">
+  <header>
+    <h2 class="item-title"><a href="https://www.technologyreview.com/2026/06/24/1139202/the-emergence-of-the-web-data-infrastructure-layer-for-ai/">L’IA face à ses données : comment une nouvelle couche d’infrastructure web révolutionne les entreprises</a>
+      <span class="score">⭐️ 7.518375000000001/10</span>
+    </h2>
+    <div class="meta">rss · MIT Technology Review · Jun 24, 11:59</div>
+  </header>
+  <div class="article-body"><p class="article-lead">Le goulot d’étranglement des données : pourquoi l’IA peine à évoluer</p><p>L’intelligence artificielle n’est aussi puissante que les données auxquelles elle peut accéder. Pourtant, malgré l’explosion des applications d’IA – de l’analyse prédictive aux agents autonomes – les entreprises se heurtent à un défi fondamental : une grande partie des données les plus précieuses du web reste inaccessible ou inutilisable sous sa forme brute.  &quot;Le web n’a pas été conçu pour l’IA. Il a été construit pour la consommation humaine, pas pour la lisibilité par les machines,&quot; souligne une récente analyse du MIT Technology Review.  Ce décalage est particulièrement marqué pour les données non structurées, qui représentent environ 80 % des informations des entreprises. Contrairement aux données structurées – organisées dans des bases de données ou des tableurs – les données non structurées incluent les e-mails, les PDF, les publications sur les réseaux sociaux, les vidéos et même les journaux de capteurs IoT. Riches en informations, ces données sont notoirement difficiles à analyser, stocker et récupérer à grande échelle. Pour les modèles d’IA, qui prospèrent grâce à de grands ensembles de données propres et contextuellement pertinents, cela représente un obstacle majeur. Sans une infrastructure robuste pour combler ce fossé, les entreprises risquent de déployer des systèmes d’IA sous-alimentés ou, pire, entraînés sur des données incomplètes ou biaisées.</p><p></p><p>La couche d’infrastructure web de données : un changement de paradigme</p><p>Pour relever ce défi, une nouvelle couche d’infrastructure web de données est en train d’émerger. Contrairement aux couches de données traditionnelles – utilisées pour l’analyse ou le suivi des clients – cette infrastructure émergente est spécifiquement conçue pour répondre aux besoins uniques de l’IA. Ses fonctions principales incluent :    La découverte de données :  Identifier et indexer des ensembles de données pertinents sur le web, y compris des sources non structurées.   L’accès en temps réel :  Permettre aux modèles d’IA de récupérer et de traiter les données à la demande, plutôt que de s’appuyer sur des ensembles de données statiques et préchargés.   L’adaptation contextuelle :  Adapter les données à des cas d’usage spécifiques, comme des applications sectorielles ou des exigences de conformité.   La scalabilité :  Supporter des charges de travail à l’échelle du pétaoctet sans dégradation des performances, une caractéristique essentielle pour l’IA en entreprise.   Cette couche d’infrastructure s’appuie sur les architectures web modernes, qui utilisent déjà des modèles hybrides, des applications interopérables et le cloud computing. Cependant, elle va plus loin en intégrant des fonctionnalités natives pour l’IA, comme le traitement automatique du langage naturel (NLP) pour analyser des textes non structurés ou la vision par ordinateur pour traiter des images et des vidéos.  &quot;La couche de données est l’épine dorsale technique que les sites web utilisent pour envoyer et recevoir des informations. Pour l’IA, il s’agit de s’assurer que cette épine dorsale est optimisée pour l’intelligence machine,&quot; explique Foundry, une entreprise spécialisée dans l’infrastructure de données.</p><p></p><p>Les données non structurées : une mine d’or pour l’IA et ses défis</p><p>Les données non structurées recèlent un potentiel immense pour l’IA, offrant la profondeur et la nuance que les ensembles de données structurés n’ont souvent pas. Par exemple, les e-mails des clients peuvent révéler des tendances de sentiment, tandis que les publications sur les réseaux sociaux peuvent fournir des informations en temps réel sur les évolutions du marché. Cependant, exploiter ces données n’est pas une mince affaire.    Variabilité des formats :  Les données non structurées se présentent sous d’innombrables formes – des notes manuscrites aux enregistrements audio – rendant la standardisation presque impossible.   Stockage et récupération :  Les bases de données traditionnelles peinent à gérer efficacement les données non structurées, entraînant des temps de requête lents et des coûts de stockage élevés.   Qualité et biais :  Sans une gouvernance appropriée, les données non structurées peuvent introduire du bruit ou des biais dans les modèles d’IA, faussant les résultats.   Les entreprises se tournent vers des outils alimentés par l’IA pour surmonter ces défis. Par exemple, les grands modèles de langage (LLM) peuvent extraire des informations structurées à partir de textes non structurés, tandis que les bases de données vectorielles permettent des recherches de similarité efficaces dans de vastes ensembles de données. Cependant, ces solutions nécessitent une infrastructure sous-jacente robuste – capable de s’adapter sans faille et de garantir l’intégrité des données.</p><p></p><p>Scaler l’IA : comment les entreprises construisent les fondations</p><p>Pour les entreprises, scaler l’IA ne consiste pas seulement à déployer davantage de modèles – il s’agit de créer une infrastructure capable de les supporter. Cela nécessite une approche multidimensionnelle :    Architectures cloud hybrides :  De nombreuses entreprises adoptent des modèles de cloud hybride pour équilibrer flexibilité et sécurité. IBM, par exemple, prône une architecture ouverte et fiable qui permet aux modèles d’IA de fonctionner dans plusieurs environnements informatiques.   Gouvernance des données :  À mesure que les systèmes d’IA accèdent à davantage de données, la gouvernance devient cruciale. Des solutions comme la plateforme de gouvernance des données d’IA de K2view limitent l’accès aux entités pertinentes, garantissant la conformité et empêchant la récupération non autorisée de données.   Optimisation des performances :  La plateforme AI Data Platform de NVIDIA utilise des technologies comme RDMA Over Converged Ethernet (RoCE) pour accélérer le débit des données, réduisant les goulots d’étranglement et améliorant l’utilisation des systèmes d’IA.   Gestion des données native pour l’IA :  Des outils comme la plateforme de gestion des données alimentée par l’IA d’Informatica utilisent l’apprentissage automatique pour automatiser les contrôles de qualité des données, la gouvernance et la compréhension contextuelle.   Ces stratégies ne sont pas seulement théoriques. Des entreprises comme Salesforce et HPE déploient déjà des plateformes de données d’IA qui intègrent des lacs de données, des entrepôts et des pipelines en temps réel dans une architecture unifiée. L’objectif ? S’assurer que les modèles d’IA ont accès aux bonnes données, au bon moment et dans le bon format.</p><p></p><p>L’avenir : un web optimisé pour l’IA</p><p>L’émergence de la couche d’infrastructure web de données marque un tournant dans l’évolution de l’IA. Tout comme le web lui-même a révolutionné l’accès à l’information pour les humains, cette nouvelle couche est sur le point de faire de même pour les machines.  &quot;Mettre en place une couche de données pérennise votre infrastructure de données en offrant une solution scalable et adaptable,&quot; argue RudderStack, un fournisseur d’infrastructure de données.  À l’avenir, plusieurs tendances sont susceptibles de façonner ce domaine :    IA en temps réel :  À mesure que l’infrastructure mûrit, les modèles d’IA fonctionneront de plus en plus en temps réel, ingérant et traitant les données au fur et à mesure de leur génération.   Accès démocratisé :  Les petites entreprises auront accès à des outils d’IA autrefois réservés aux géants de la tech, grâce à une infrastructure scalable et basée sur le cloud.   IA éthique :  Avec de meilleurs cadres de gouvernance, les entreprises pourront déployer des systèmes d’IA non seulement puissants, mais aussi transparents et équitables.   Innovation intersectorielle :  Des secteurs comme la santé, la finance et la fabrication exploiteront l’IA pour découvrir de nouvelles perspectives à partir de données non structurées, stimulant des percées dans des domaines allant de la découverte de médicaments à la détection des fraudes.   La route à parcourir n’est pas sans défis. Des questions comme la confidentialité des données, la sécurité et l’interopérabilité nécessiteront une attention continue. Pourtant, le potentiel est indéniable. À mesure que la couche d’infrastructure web de données mûrit, elle ouvrira de nouvelles possibilités pour l’IA, transformant la manière dont les entreprises opèrent et rivalisent à l’ère numérique.</p></div>
+  
+  <footer class="item-footer">
+    <div class="tags"><code>#AI</code>, <code>#Web Data Infrastructure</code>, <code>#Technology</code></div>
+    
+  </footer>
+</article>
+
+<article id="item-4">
+  <header>
+    <h2 class="item-title"><a href="https://phys.org/news/2026-06-businesses-row-ethics-tough-technology.html">La technologie peut-elle imposer l&#39;éthique des entreprises ? Le scandale des émissions refait surface</a>
+      <span class="score">⭐️ 6.743999999999999/10</span>
+    </h2>
+    <div class="meta">rss · Phys.org · Jun 24, 22:20</div>
+  </header>
+  <div class="article-body"><p class="article-lead">L’héritage de Dieselgate : un scandale qui persiste</p><p>En septembre 2015, l’industrie automobile a été ébranlée par la révélation que Volkswagen avait installé des « dispositifs de défaite » dans des millions de véhicules diesel pour truquer les tests d’émissions. Ce scandale, surnommé Dieselgate, a coûté plus de 30 milliards de dollars en amendes, rappels et règlements juridiques à Volkswagen seul. Pourtant, dix ans plus tard, le problème n’a pas disparu. Mercedes-Benz, Ford, Peugeot/Citroën, Renault et Nissan sont aujourd’hui accusés de pratiques similaires devant la Haute Cour de Londres, soupçonnés d’avoir privilégié les ventes au détriment du respect de l’environnement en période de ralentissement économique.</p><p></p><p>Pourquoi les entreprises compromettent-elles leur éthique en période difficile ?</p><p>Le schéma est alarmant et récurrent : lorsque les profits diminuent, les normes éthiques sont souvent les premières à en pâtir. Selon une étude de l’Institute of Business Ethics, la pression économique est l’une des principales causes de la mauvaise conduite des entreprises.  « Lorsque les marges se resserrent, les gains à court terme prennent souvent le pas sur les risques réputationnels à long terme », explique Dr. Nicole Darnall, professeure de durabilité à l’Arizona State University.  L’affaire en cours à Londres illustre cette tendance, les plaignants accusant les constructeurs d’avoir sciemment vendu des véhicules émettant jusqu’à dix fois la limite légale d’oxydes d’azote (NOx), un polluant lié à des maladies respiratoires et à des décès prématurés.</p><p></p><p>Le rôle de la Haute Cour : tenir les entreprises pour responsables</p><p>La Haute Cour de justice de Londres, qui fait partie des tribunaux de commerce et de propriété, est un lieu clé pour les litiges corporatifs. Contrairement aux tribunaux pénaux, elle se spécialise dans les litiges civils de grande envergure, y compris ceux impliquant des dommages environnementaux et des fraudes à la consommation.    Compétence :  La cour traite des affaires dont les montants dépassent souvent 100 000 livres sterling et peut imposer des injonctions, des dommages-intérêts et d’autres mesures correctives.   Portée internationale :  De nombreuses multinationales, y compris les cinq constructeurs automobiles impliqués dans cette affaire, relèvent de sa juridiction en raison de leurs opérations ou ventes au Royaume-Uni.   Précédents :  Les décisions rendues ici peuvent influencer le comportement des entreprises à l’échelle mondiale, comme l’a montré l’impact de Dieselgate en Europe et aux États-Unis.   Pour les plaignants – groupes de consommateurs et organisations environnementales – cette affaire dépasse la simple question des compensations. Il s’agit de tester si les tribunaux peuvent dissuader les futures dérives éthiques dans des industries sous pression financière.</p><p></p><p>Comment fonctionnent les tests d’émissions – et pourquoi ils sont faciles à truquer</p><p>Les tests d’émissions visent à mesurer les polluants comme les oxydes d’azote (NOx), le monoxyde de carbone (CO) et les particules fines émis par les véhicules. Ces tests incluent généralement :   Des simulations en laboratoire de conditions de conduite réelles.  Des tests sur route utilisant des systèmes portables de mesure des émissions (PEMS).  Des vérifications logicielles pour garantir le respect des réglementations, comme les normes Euro 6 de l’UE.   Cependant, le système présente des failles.  « Les constructeurs ont exploité les lacunes en optimisant les véhicules pour réussir les tests en laboratoire tout en émettant beaucoup plus sur la route », explique Peter Mock, directeur général du Conseil international pour les transports propres (ICCT), l’organisation qui a révélé Dieselgate.  Les recherches de l’ICCT ont révélé que certains véhicules émettaient des niveaux de NOx jusqu’à 40 fois plus élevés en conditions réelles que lors des tests en laboratoire. Cette disparité souligne la nécessité de protocoles de test plus stricts et inviolables.</p><p></p><p>La technologie comme gardienne de l’éthique des entreprises</p><p>Alors que les entreprises font face à un contrôle accru, la technologie émerge comme un outil pour faire respecter les comportements éthiques. Voici comment :    Surveillance par l’IA :  Les algorithmes d’apprentissage automatique peuvent analyser de vastes ensembles de données pour détecter des anomalies dans les rapports d’émissions, les chaînes d’approvisionnement ou les transactions financières. Par exemple, l’IA pourrait repérer des incohérences entre les résultats des tests en laboratoire et les performances réelles.   Blockchain pour la transparence :  Les registres immuables peuvent suivre le cycle de vie d’un véhicule – de la fabrication aux tests d’émissions – rendant plus difficile la falsification des données. Daimler et BMW ont déjà expérimenté la blockchain pour vérifier la durabilité de leur chaîne d’approvisionnement.   Capteurs en temps réel :  Les systèmes de diagnostic embarqués (OBD) peuvent surveiller en continu les émissions, transmettant les données aux régulateurs ou aux auditeurs tiers. Cela réduit la dépendance aux tests périodiques en laboratoire, plus faciles à manipuler.   Plateformes de signalement :  Des outils sécurisés et anonymes, alimentés par le chiffrement, peuvent permettre aux employés de dénoncer des manquements sans craindre des représailles. Des entreprises comme Volkswagen ont adopté de tels systèmes après Dieselgate.   Bien que la technologie ne puisse pas éliminer à elle seule les comportements contraires à l’éthique, elle augmente les risques pour les entreprises tentées de contourner les règles.  « L’objectif n’est pas seulement de prendre les tricheurs la main dans le sac, mais de créer une culture où tricher est plus difficile que de faire ce qui est juste », déclare Sarah Brooks, chercheuse en éthique technologique à l’Université de Cambridge.</p><p></p><p>La voie à suivre : l’éthique peut-elle être intégrée dans les affaires ?</p><p>L’affaire devant la Haute Cour de Londres est un test décisif pour savoir si les garde-fous juridiques et technologiques peuvent suivre le rythme des manquements corporatifs. Pour l’instant, les constructeurs automobiles nient toute faute, mais l’issue pourrait établir un précédent sur la manière dont les industries équilibrent rentabilité et éthique.    Réformes réglementaires :  Des tests d’émissions plus stricts, incluant davantage d’évaluations en conditions réelles, sont déjà adoptés dans l’UE et aux États-Unis.   Gouvernance d’entreprise :  Les conseils d’administration sont de plus en plus tenus responsables des manquements éthiques, avec des critères ESG (Environnementaux, Sociaux et de Gouvernance) désormais liés à la rémunération des dirigeants.   Pression des consommateurs :  Un segment croissant d’acheteurs privilégie la durabilité, poussant les constructeurs à investir dans des technologies plus propres comme les véhicules électriques.   Le défi consiste à garantir que ces mesures restent robustes en période de ralentissement économique. Comme l’histoire le montre, l’éthique passe souvent au second plan lorsque les résultats financiers sont menacés. Mais avec la technologie offrant de nouveaux outils de surveillance, les entreprises pourraient trouver plus difficile de justifier les raccourcis – même lorsque les temps sont durs.</p></div>
+  
+  <footer class="item-footer">
+    <div class="tags"><code>#Business Ethics</code>, <code>#Environmental Responsibility</code>, <code>#Emissions Scandal</code>, <code>#Corporate Accountability</code></div>
+    
+  </footer>
+</article>
+
+<article id="item-5">
+  <header>
+    <h2 class="item-title"><a href="https://www.mediapart.fr/journal/politique/240626/canicule-la-gauche-se-chauffe-face-un-gouvernement-en-dessous-de-tout">Canicule en France : quand la chaleur révèle les fractures politiques</a>
+      <span class="score">⭐️ 6.615374999999999/10</span>
+    </h2>
+    <div class="meta">rss · Mediapart · Jun 24, 17:41</div>
+  </header>
+  <div class="article-body"><p class="article-lead">Une crise annoncée : les leçons mortelles de 2003</p><p>Pourtant, alors que les températures grimpent à nouveau, les critiques estiment que le PNC reste réactif plutôt que proactif.  &quot;La catastrophe de 2003 a montré que les canicules ne sont pas seulement des phénomènes naturels, mais aussi des échecs sociopolitiques,&quot; souligne un rapport du ministère de la Santé publié en 2025. &quot;Sans investissements structurels dans l’isolation des logements, le rafraîchissement urbain et les réseaux de soutien social, nous risquons de reproduire les mêmes erreurs.&quot;  La canicule actuelle, avec sa durée prolongée et ses records de température, met à l’épreuve les limites de ce système—et la volonté politique de le renforcer.</p><p></p><p>La gauche en embuscade : transformer la chaleur en arme politique</p><p>Le Parti Socialiste (PS) et son dirigeant, Raphaël Glucksmann, adoptent une approche plus discrète, privilégiant des réformes progressives plutôt que des propositions radicales. Si Glucksmann a critiqué la réponse du gouvernement comme &quot;insuffisante&quot;, son parti s’est gardé d’endosser les demandes plus ambitieuses de LFI. Ce clivage reflète des tensions plus larges au sein de la gauche : entre ceux qui voient la canicule comme une opportunité de pousser à des changements structurels et ceux qui préfèrent travailler dans le cadre des dispositifs existants.    Propositions clés de LFI :  Distribution gratuite de ventilateurs et d’eau, extension des transports publics nocturnes, et moratoire sur les expulsions pendant les épisodes de chaleur extrême.   Priorités du PS :  Renforcement du PNC, augmentation des financements pour les initiatives locales de rafraîchissement, et intégration de la préparation aux canicules dans l’urbanisme.</p><p></p><p>La droite en retrait : dépolitiser une urgence de santé publique</p><p>Cette approche reflète un clivage idéologique plus large. Pour la droite, l’adaptation au climat relève souvent de la résilience individuelle, tandis que la gauche y voit une responsabilité collective nécessitant l’intervention de l’État.  &quot;La réponse du gouvernement est ‘en dessous de tout’,&quot; a tweeté la députée LFI Mathilde Panot, dénonçant l’absence de financements d’urgence pour les populations vulnérables. &quot;Nous voyons les conséquences de années d’austérité et de négligence.&quot;  Le silence de l’extrême droite sur des solutions structurelles—comme la rénovation des logements sociaux ou l’extension des espaces verts—souligne sa réticence à aborder l’intersection entre climat et politique sociale.</p><p></p><p>Le coût humain : qui paie le prix de la chaleur extrême ?</p><p>La crise actuelle a relancé les débats sur le filet social français. LFI a proposé une &quot;allocation canicule&quot; pour les familles modestes, tandis que des ONG comme le Secours Populaire réclament des abris d’urgence équipés de systèmes de refroidissement. Cependant, ces mesures se heurtent à l’opposition des conservateurs fiscaux, qui les jugent insoutenables.    Populations à risque :  Personnes âgées (65+), sans-abri, travailleurs en extérieur (BTP, agriculture), et résidents de logements mal isolés.   Risques clés :  Coup de chaleur, déshydratation, aggravation de maladies chroniques (maladies cardiovasculaires), et pression sur la santé mentale.   L’absence de soutien ciblé pour ces groupes pose la question de savoir si la classe politique française est réellement prête à affronter les inégalités face au changement climatique.</p><p></p><p>Au-delà de la canicule : quel avenir pour la politique climatique française ?</p><p>La mobilisation de la gauche—bien que fragmentée—a placé la question à l’ordre du jour national. Les propositions de LFI, bien qu’ambitieuses, soulignent la nécessité de solutions transversales, de l’urbanisme aux droits des travailleurs. Pendant ce temps, la dépendance du gouvernement au PNC, bien que nécessaire, est de plus en plus perçue comme un pansement plutôt qu’un remède.  &quot;La canicule est un test de résistance pour notre démocratie,&quot; analyse la politologue Nonna Mayer. &quot;Elle révèle qui nous privilégions en tant que société—et qui nous abandonnons.&quot;  Alors que la crise se poursuit, une question persiste : les dirigeants français traiteront-ils cet épisode comme un électrochoc, ou comme une nouvelle occasion manquée ?</p></div>
+  
+  <footer class="item-footer">
+    <div class="tags"><code>#French politics</code>, <code>#heatwave</code>, <code>#environmental policy</code>, <code>#social policy</code></div>
+    
+  </footer>
+</article>
+</main></div><div class="tab-content " data-lang="en"><section class="summary-header">
+  <h1>Horizon Daily — 2026-06-25</h1>
+  <p class="lead">From 490 items, 5 important content pieces were selected</p>
+  <nav class="toc" aria-label="Contents">
+    <p class="toc-title">Contents</p>
+    <ul><li><a href="#item-1">Trump Labels Anthropic a National Security Threat: The AI Cold War Heats Up <span class="toc-score">⭐️ 7.665375000000001/10</span></a></li>
+<li><a href="#item-2">Tech Giants Bet Big on mRNA: Stripe, Anthropic, and OpenAI Join Forces to Tackle Respiratory Infections <span class="toc-score">⭐️ 7.610250000000001/10</span></a></li>
+<li><a href="#item-3">AI’s Data Dilemma: How a New Web Infrastructure Layer Is Unlocking Enterprise Potential <span class="toc-score">⭐️ 7.518375000000001/10</span></a></li>
+<li><a href="#item-4">Can Technology Enforce Corporate Ethics? The Emissions Scandal Revisited <span class="toc-score">⭐️ 6.743999999999999/10</span></a></li>
+<li><a href="#item-5">France’s Heatwave: How Extreme Weather Exposes Political Fault Lines <span class="toc-score">⭐️ 6.615374999999999/10</span></a></li></ul>
+  </nav>
+</section>
+<main class="items">
+<article id="item-1">
+  <header>
+    <h2 class="item-title"><a href="https://www.axios.com/2026/06/19/trump-anthropic-national-security-the-axios-show">Trump Labels Anthropic a National Security Threat: The AI Cold War Heats Up</a>
+      <span class="score">⭐️ 7.665375000000001/10</span>
+    </h2>
+    <div class="meta">rss · Axios · Jun 19, 18:18</div>
+  </header>
+  <div class="article-body"><p class="article-lead">Anthropic: From AI Safety Pioneer to National Security Pariah</p><p>Anthropic was founded in 2021 by former OpenAI researchers, including CEO Dario Amodei, with a mission to build &quot;reliable, interpretable, and steerable&quot; AI systems. Unlike many of its peers, the company positions itself as a public benefit corporation, emphasizing safety and ethical considerations in its development of large language models like Claude. Its focus on &quot;constitutional AI&quot;—a framework designed to align AI behavior with human values—has earned it praise from policymakers and researchers alike. Yet, in a matter of months, Anthropic found itself at the center of a storm typically reserved for foreign adversaries, facing sweeping export controls and a Pentagon designation as a &quot;supply chain risk.&quot;</p><p></p><p>The Amazon Report That Sparked a Government Crackdown</p><p>The Pentagon’s designation of Anthropic as a &quot;supply chain risk&quot;—a label historically applied to foreign entities like Huawei or Russian cyber firms—sent shockwaves through the tech industry. The move effectively barred government contractors from using Anthropic’s technology in military projects, though its models could still be used for civilian applications. Legal experts questioned the precedent, with some arguing that the designation could cripple Anthropic’s ability to operate in the U.S. market.</p><p></p><p>Trump’s Shifting Stance: From Threat to Temporary Truce</p><p>The administration’s hardline approach reflects broader anxieties about AI’s dual-use potential—its ability to drive innovation while also enabling cyberattacks, disinformation, or even autonomous weapons. Trump’s comments suggest that while the White House is eager to avoid stifling U.S. leadership in AI, it remains willing to wield emergency powers if tech companies fail to comply with national security directives. For Anthropic, the episode has been a crash course in navigating Washington’s regulatory landscape, where technical disagreements can quickly spiral into existential threats.</p><p></p><p>The China Factor: Why the U.S. Can’t Afford to Shut Down Its AI Champions</p><p>The stakes are high. China has invested heavily in AI, with state-backed initiatives like the &quot;New Generation Artificial Intelligence Development Plan&quot; aiming to make the country a world leader by 2030. U.S. officials fear that any misstep—whether a security breach or a regulatory overreach—could hand China a strategic advantage. For now, Trump appears to believe that the benefits of Anthropic’s technology outweigh the risks, but the episode serves as a warning to the entire AI sector: national security will increasingly dictate the rules of engagement.</p><p></p><p>What’s Next? The Uncertain Road to AI Safety Standards</p><p>Key questions linger:   Will the U.S. develop a unified approach to AI oversight, or will agencies like the Commerce Department and Pentagon continue to act independently?  Can Anthropic and other AI labs rebuild trust with Washington, or will future disputes lead to even harsher crackdowns?  How will the U.S. balance innovation with security without driving talent and investment overseas?   One thing is certain: the Anthropic saga is a preview of the battles to come as AI reshapes everything from warfare to daily life. The era of self-regulation in tech is over, and the new rules of the game will be written in the halls of power—not just the labs of Silicon Valley.</p></div>
+  
+  <footer class="item-footer">
+    <div class="tags"><code>#National Security</code>, <code>#Artificial Intelligence</code>, <code>#US Politics</code></div>
+    
+  </footer>
+</article>
+
+<article id="item-2">
+  <header>
+    <h2 class="item-title"><a href="https://www.technologyreview.com/2026/06/24/1139621/stripe-anthropic-and-openai-are-backing-an-effort-to-stop-respiratory-infections/">Tech Giants Bet Big on mRNA: Stripe, Anthropic, and OpenAI Join Forces to Tackle Respiratory Infections</a>
+      <span class="score">⭐️ 7.610250000000001/10</span>
+    </h2>
+    <div class="meta">rss · MIT Technology Review · Jun 24, 12:00</div>
+  </header>
+  <div class="article-body"><p class="article-lead">A Bold Vision: Why Respiratory Infections Demand Disruption</p><p>Respiratory infections, from the common cold to influenza and COVID-19, remain one of humanity’s most persistent health burdens. Despite advances in medicine, these illnesses cost the global economy hundreds of billions annually in lost productivity, healthcare expenses, and lives. Traditional vaccines target specific viral strains, but their effectiveness wanes as viruses mutate—a limitation that has left researchers scrambling for a more adaptable solution.  &quot;The common cold is not just an inconvenience; it’s a systemic vulnerability. If we can crack this, we can apply the same principles to other infectious diseases,&quot; said a spokesperson for Stripe’s Founders Fund.  The new initiative, backed by Stripe’s financial muscle and the AI expertise of Anthropic and OpenAI, aims to develop a universal mRNA vaccine that could provide broad-spectrum protection against multiple respiratory viruses simultaneously.</p><p></p><p>mRNA Technology: The Game-Changer in Vaccine Development</p><p>Messenger RNA (mRNA) vaccines, which gained prominence during the COVID-19 pandemic, represent a paradigm shift in immunology. Unlike conventional vaccines that use weakened or inactivated viruses, mRNA vaccines instruct the body’s cells to produce a harmless viral protein, triggering an immune response. This approach offers several advantages:    Speed:  mRNA vaccines can be designed and manufactured in weeks, not years.   Flexibility:  They can be rapidly adapted to target new viral variants.   Scalability:  Production can be scaled up quickly to meet global demand.   However, challenges remain. Current mRNA vaccines for COVID-19, for instance, have shown limited effectiveness in preventing infection in the upper respiratory tract, where viruses like the common cold and influenza first take hold. The new initiative seeks to overcome this hurdle by leveraging AI-driven research to optimize mRNA sequences for broader and more durable protection.</p><p></p><p>The Role of AI: How Anthropic and OpenAI Are Accelerating Discovery</p><p>Anthropic and OpenAI, two of the most prominent players in the AI industry, are bringing their expertise in machine learning and large language models to the table. Anthropic, founded by former OpenAI researchers, has positioned itself as a leader in AI safety and interpretability—a critical factor when designing biological systems as complex as vaccines.  &quot;AI can simulate millions of potential mRNA sequences in silico, identifying the most promising candidates for clinical trials. This dramatically reduces the time and cost of traditional drug discovery,&quot; explained Daniela Amodei, co-founder of Anthropic.  OpenAI’s contributions will likely focus on predictive modeling, using its advanced AI systems to forecast viral mutations and design vaccines that remain effective even as pathogens evolve. This collaboration marks one of the first times AI has been deployed at scale to tackle a global health challenge, signaling a new era in biotechnology.</p><p></p><p>Stripe’s Founders Fund: Philanthropy Meets Strategic Investment</p><p>Stripe’s involvement is spearheaded by its Founders Fund, a venture capital arm known for backing transformative companies like SpaceX, Airbnb, and Neuralink. While Stripe’s core business revolves around payment processing, the Collison brothers—Patrick and John—have long championed ambitious, high-impact projects beyond the tech sector.    Focus Areas:  The Founders Fund has historically invested in deep tech, biotechnology, and AI, aligning with the goals of this initiative.   Philanthropic Angle:  Unlike traditional venture capital, this effort appears to prioritize public health over financial returns, reflecting a growing trend among tech billionaires to tackle societal challenges.   Global Reach:  Stripe’s infrastructure could play a role in distributing the vaccine, particularly in underserved regions where payment and logistics systems are lacking.   The company’s financial commitment, though not disclosed, is expected to be substantial, providing the necessary resources to bridge the gap between research and real-world deployment.</p><p></p><p>Implications: What Success Could Mean for Global Health</p><p>If successful, this initiative could have far-reaching implications:    Pandemic Preparedness:  A universal respiratory vaccine could serve as a blueprint for rapid response to future outbreaks, reducing the need for lockdowns and emergency measures.   Economic Impact:  The World Health Organization estimates that influenza alone costs the global economy $1 trillion annually. A broadly effective vaccine could save billions in healthcare costs and lost productivity.   AI in Medicine:  This project could accelerate the integration of AI into drug discovery, paving the way for treatments for other diseases, from cancer to Alzheimer’s.   Health Equity:  mRNA vaccines are cheaper and faster to produce than traditional vaccines, making them ideal for low- and middle-income countries.   However, challenges loom. Public skepticism about mRNA technology, regulatory hurdles, and the need for large-scale clinical trials could delay deployment. Additionally, the initiative will need to navigate the ethical complexities of AI-driven medical research, ensuring transparency and safety at every step.</p><p></p><p>The Road Ahead: Timeline and Next Steps</p><p>While the initiative is still in its early stages, insiders suggest a multi-phase approach:    Phase 1 (2026-2027):  AI-driven design and preclinical testing of mRNA vaccine candidates.   Phase 2 (2027-2028):  Small-scale human trials to assess safety and efficacy.   Phase 3 (2029 and beyond):  Large-scale clinical trials and regulatory approval.   The collaboration is also exploring partnerships with academic institutions, pharmaceutical companies, and global health organizations to ensure the vaccine reaches those who need it most.  &quot;This isn’t just about creating a product; it’s about building a platform that can adapt to whatever the next pandemic throws at us,&quot; said a source close to the project.  For now, the world watches as Silicon Valley’s brightest minds take on one of medicine’s oldest foes—with the potential to change the course of global health forever.</p></div>
+  
+  <footer class="item-footer">
+    <div class="tags"><code>#Health</code>, <code>#Technology</code>, <code>#Innovation</code></div>
+    
+  </footer>
+</article>
+
+<article id="item-3">
+  <header>
+    <h2 class="item-title"><a href="https://www.technologyreview.com/2026/06/24/1139202/the-emergence-of-the-web-data-infrastructure-layer-for-ai/">AI’s Data Dilemma: How a New Web Infrastructure Layer Is Unlocking Enterprise Potential</a>
+      <span class="score">⭐️ 7.518375000000001/10</span>
+    </h2>
+    <div class="meta">rss · MIT Technology Review · Jun 24, 11:59</div>
+  </header>
+  <div class="article-body"><p class="article-lead">The Data Bottleneck: Why AI Is Struggling to Scale</p><p>Artificial intelligence is only as powerful as the data it can access. Yet, despite the explosive growth of AI applications—from predictive analytics to autonomous agents—enterprises are grappling with a fundamental challenge: much of the web’s most valuable data remains locked away or unusable in its raw form.  &quot;The web was not designed with AI in mind. It was built for human consumption, not machine readability,&quot; notes a recent analysis from MIT Technology Review.  This disconnect is particularly acute for unstructured data, which makes up an estimated 80% of enterprise information. Unlike structured data—neatly organized in databases or spreadsheets—unstructured data includes emails, PDFs, social media posts, videos, and even IoT sensor logs. While rich in insights, this data is notoriously difficult to parse, store, and retrieve at scale. For AI models, which thrive on large, clean, and contextually relevant datasets, this presents a major hurdle. Without a robust infrastructure to bridge the gap, enterprises risk deploying AI systems that are either underpowered or, worse, trained on incomplete or biased data.</p><p></p><p>The Web Data Infrastructure Layer: A Paradigm Shift</p><p>To address this challenge, a new web data infrastructure layer is taking shape. Unlike traditional data layers—such as those used for analytics or customer tracking—this emerging infrastructure is specifically designed to serve AI’s unique needs. Its core functions include:    Data discovery:  Identifying and indexing relevant datasets across the web, including unstructured sources.   Real-time access:  Enabling AI models to fetch and process data on demand, rather than relying on static, pre-loaded datasets.   Contextual tailoring:  Adapting data to specific use cases, such as industry-specific applications or compliance requirements.   Scalability:  Supporting petabyte-scale workloads without performance degradation, a critical feature for enterprise AI.   This infrastructure layer builds on modern web architectures, which already employ hybrid models, interoperable applications, and cloud computing. However, it goes further by integrating AI-native features, such as natural language processing (NLP) for parsing unstructured text or computer vision for analyzing images and videos.  &quot;The data layer is the technical backbone that websites tap into to send and receive information. For AI, it’s about ensuring that backbone is optimized for machine intelligence,&quot; explains Foundry, a data infrastructure firm.</p><p></p><p>Unstructured Data: The AI Goldmine and Its Challenges</p><p>Unstructured data holds immense potential for AI, offering the depth and nuance that structured datasets often lack. For example, customer emails can reveal sentiment trends, while social media posts can provide real-time insights into market shifts. However, harnessing this data is no small feat.    Format variability:  Unstructured data comes in countless forms—from handwritten notes to audio recordings—making standardization nearly impossible.   Storage and retrieval:  Traditional databases struggle to handle unstructured data efficiently, leading to slow query times and high storage costs.   Quality and bias:  Without proper governance, unstructured data can introduce noise or bias into AI models, skewing results.   Enterprises are turning to AI-powered tools to overcome these challenges. For instance, large language models (LLMs) can extract structured insights from unstructured text, while vector databases enable efficient similarity searches across vast datasets. Yet, these solutions require a robust underlying infrastructure—one that can scale seamlessly and ensure data integrity.</p><p></p><p>Scaling AI: How Enterprises Are Building the Foundation</p><p>For enterprises, scaling AI isn’t just about deploying more models—it’s about creating an infrastructure that can support them. This requires a multi-faceted approach:    Hybrid cloud architectures:  Many companies are adopting hybrid cloud models to balance flexibility and security. IBM, for example, advocates for an open, trusted architecture that allows AI models to operate across multiple IT environments.   Data governance:  As AI systems access more data, governance becomes critical. Solutions like K2view’s AI data governance platform scope access to relevant entities, ensuring compliance and preventing unauthorized data retrieval.   Performance optimization:  NVIDIA’s AI Data Platform leverages technologies like RDMA Over Converged Ethernet (RoCE) to accelerate data throughput, reducing bottlenecks and improving AI system utilization.   AI-native data management:  Tools like Informatica’s AI-powered data management platform use machine learning to automate data quality checks, governance, and contextual understanding.   These strategies are not just theoretical. Companies like Salesforce and HPE are already deploying AI data platforms that integrate data lakes, warehouses, and real-time pipelines into a unified architecture. The goal? To ensure that AI models have access to the right data, at the right time, and in the right format.</p><p></p><p>The Future: A Web Optimized for AI</p><p>The emergence of the web data infrastructure layer marks a turning point in AI’s evolution. Just as the web itself revolutionized information access for humans, this new layer is poised to do the same for machines.  &quot;Implementing a data layer future-proofs your data infrastructure by providing a scalable and adaptable solution,&quot; argues RudderStack, a data infrastructure provider.  Looking ahead, several trends are likely to shape this space:    Real-time AI:  As the infrastructure matures, AI models will increasingly operate in real time, ingesting and processing data as it’s generated.   Democratized access:  Smaller enterprises will gain access to AI tools previously reserved for tech giants, thanks to scalable, cloud-based infrastructure.   Ethical AI:  With better governance frameworks, enterprises will be able to deploy AI systems that are not only powerful but also transparent and fair.   Cross-industry innovation:  Sectors like healthcare, finance, and manufacturing will leverage AI to unlock new insights from unstructured data, driving breakthroughs in everything from drug discovery to fraud detection.   The road ahead is not without challenges. Issues like data privacy, security, and interoperability will require ongoing attention. Yet, the potential is undeniable. As the web data infrastructure layer matures, it will unlock new possibilities for AI, transforming how enterprises operate and compete in the digital age.</p></div>
+  
+  <footer class="item-footer">
+    <div class="tags"><code>#AI</code>, <code>#Web Data Infrastructure</code>, <code>#Technology</code></div>
+    
+  </footer>
+</article>
+
+<article id="item-4">
+  <header>
+    <h2 class="item-title"><a href="https://phys.org/news/2026-06-businesses-row-ethics-tough-technology.html">Can Technology Enforce Corporate Ethics? The Emissions Scandal Revisited</a>
+      <span class="score">⭐️ 6.743999999999999/10</span>
+    </h2>
+    <div class="meta">rss · Phys.org · Jun 24, 22:20</div>
+  </header>
+  <div class="article-body"><p class="article-lead">The Dieselgate Legacy: A Scandal That Refuses to Fade</p><p>In September 2015, the automotive industry was rocked by revelations that Volkswagen had installed ‘defeat devices’ in millions of diesel vehicles to cheat emissions tests. The scandal, dubbed Dieselgate, resulted in over $30 billion in fines, recalls, and legal settlements for VW alone. Yet, a decade later, the problem persists. Mercedes-Benz, Ford, Peugeot/Citroën, Renault, and Nissan are now facing similar allegations in London’s High Court, accused of prioritizing sales over environmental compliance during economic downturns.</p><p></p><p>Why Do Businesses Compromise on Ethics When Times Get Tough?</p><p>The pattern is alarmingly consistent: when profits shrink, ethical standards often follow. Research from the Institute of Business Ethics suggests that economic pressure is a leading cause of corporate misconduct.  &quot;When margins tighten, short-term gains frequently overshadow long-term reputational risks,&quot; says Dr. Nicole Darnall, a professor of sustainability at Arizona State University.  The current case in London underscores this trend, with plaintiffs arguing that the carmakers knowingly sold vehicles that emitted up to 10 times the legal limit of nitrogen oxides—a pollutant linked to respiratory diseases and premature deaths.</p><p></p><p>The High Court’s Role: Holding Corporations Accountable</p><p>The High Court of Justice in London, part of the Business and Property Courts, is a critical venue for corporate litigation. Unlike criminal courts, it specializes in high-stakes civil disputes, including those involving environmental harm and consumer fraud.    Jurisdiction:  The court handles cases with claims often exceeding £100,000 and has the power to impose injunctions, damages, and other remedies.   International reach:  Many multinational corporations, including the five carmakers in this case, fall under its purview due to their UK operations or sales.   Precedent-setting:  Rulings here can influence global corporate behavior, as seen with Dieselgate’s ripple effects across Europe and the U.S.   For the plaintiffs—consumer groups and environmental organizations—the case is about more than compensation. It’s a test of whether courts can deter future ethical lapses in industries under financial strain.</p><p></p><p>How Emissions Tests Work—and Why They’re Easy to Cheat</p><p>Emissions testing is designed to measure pollutants like nitrogen oxides (NOx), carbon monoxide (CO), and particulate matter released by vehicles. Tests typically involve:   Laboratory simulations of real-world driving conditions.  On-road testing using portable emissions measurement systems (PEMS).  Software checks to ensure compliance with regulations like the EU’s Euro 6 standards.   However, the system has vulnerabilities.  &quot;Manufacturers have exploited loopholes by optimizing vehicles to pass lab tests while emitting far more on the road,&quot; explains Peter Mock, managing director of the International Council on Clean Transportation (ICCT), the organization that uncovered Dieselgate.  The ICCT’s research revealed that some vehicles emitted NOx levels up to 40 times higher during real-world driving than in lab tests. This discrepancy highlights the need for stricter, tamper-proof testing protocols.</p><p></p><p>Technology as a Guardian of Corporate Ethics</p><p>As businesses face increasing scrutiny, technology is emerging as a tool to enforce ethical behavior. Here’s how:    AI-driven monitoring:  Machine learning algorithms can analyze vast datasets to detect anomalies in emissions reports, supply chains, or financial transactions. For example, AI could flag inconsistencies between lab test results and real-world performance.   Blockchain for transparency:  Immutable ledgers can track a vehicle’s lifecycle—from manufacturing to emissions testing—making it harder to falsify data. Daimler and BMW have already experimented with blockchain to verify supply chain sustainability.   Real-time sensors:  Onboard diagnostics (OBD) systems can continuously monitor emissions, transmitting data to regulators or third-party auditors. This reduces reliance on periodic lab tests, which are easier to manipulate.   Whistleblower platforms:  Secure, anonymous reporting tools powered by encryption can empower employees to expose misconduct without fear of retaliation. Companies like Volkswagen have adopted such systems post-Dieselgate.   While technology alone can’t eliminate unethical behavior, it raises the stakes for companies tempted to cut corners.  &quot;The goal isn’t just to catch cheaters—it’s to create a culture where cheating is harder than doing the right thing,&quot; says Sarah Brooks, a tech ethics researcher at the University of Cambridge.</p><p></p><p>The Road Ahead: Can Ethics Be Hardwired into Business?</p><p>The London High Court case is a litmus test for whether legal and technological safeguards can keep pace with corporate misconduct. For now, the carmakers deny wrongdoing, but the outcome could set a precedent for how industries balance profitability and ethics.    Regulatory reforms:  Stricter emissions testing, including more real-world driving assessments, are already being adopted in the EU and U.S.   Corporate governance:  Boards are increasingly held accountable for ethical lapses, with ESG (Environmental, Social, and Governance) metrics now tied to executive compensation.   Consumer pressure:  A growing segment of buyers prioritizes sustainability, forcing automakers to invest in cleaner technologies like electric vehicles.   The challenge lies in ensuring these measures remain robust during economic downturns. As history shows, ethics often take a backseat when the bottom line is at risk. But with technology providing new tools for oversight, businesses may find it harder to justify cutting corners—even when times get tough.</p></div>
+  
+  <footer class="item-footer">
+    <div class="tags"><code>#Business Ethics</code>, <code>#Environmental Responsibility</code>, <code>#Emissions Scandal</code>, <code>#Corporate Accountability</code></div>
+    
+  </footer>
+</article>
+
+<article id="item-5">
+  <header>
+    <h2 class="item-title"><a href="https://www.mediapart.fr/journal/politique/240626/canicule-la-gauche-se-chauffe-face-un-gouvernement-en-dessous-de-tout">France’s Heatwave: How Extreme Weather Exposes Political Fault Lines</a>
+      <span class="score">⭐️ 6.615374999999999/10</span>
+    </h2>
+    <div class="meta">rss · Mediapart · Jun 24, 17:41</div>
+  </header>
+  <div class="article-body"><p class="article-lead">A Crisis Foretold: The Deadly Lessons of 2003</p><p>Yet, as temperatures climb again, critics argue that the PNC remains reactive rather than proactive.  &quot;The 2003 disaster showed how heatwaves are not just natural phenomena but sociopolitical failures,&quot; notes a 2025 report from the Ministry of Health. &quot;Without structural investments in housing insulation, urban cooling, and social support networks, we risk repeating the same mistakes.&quot;  The current heatwave, with its prolonged duration and record-breaking temperatures, is testing the limits of this system—and the political will to strengthen it.</p><p></p><p>The Left’s Gambit: Turning Heat into Political Fuel</p><p>The Socialist Party (PS) and its leader, Raphaël Glucksmann, have taken a more muted approach, focusing on incremental reforms rather than radical proposals. While Glucksmann has criticized the government’s response as &quot;inadequate,&quot; his party has stopped short of endorsing LFI’s more ambitious demands. This divide reflects broader tensions within the left: between those who see the heatwave as a chance to push for systemic change and those who prefer to work within existing frameworks.    LFI’s key proposals:  Free distribution of fans and water, expanded nighttime public transit, and a moratorium on evictions during extreme heat.   PS’s focus:  Strengthening the PNC, increasing funding for local cooling initiatives, and integrating heatwave preparedness into urban planning.</p><p></p><p>The Right’s Retreat: Depoliticizing a Public Health Emergency</p><p>This approach reflects a broader ideological divide. For the right, climate adaptation is often framed as a matter of personal resilience, while the left views it as a collective responsibility requiring state intervention.  &quot;The government’s response is ‘below all expectations,’&quot; tweeted LFI deputy Mathilde Panot, highlighting the lack of emergency funding for vulnerable populations. &quot;We’re seeing the consequences of years of austerity and neglect.&quot;  The far-right’s silence on structural solutions—such as retrofitting social housing or expanding green spaces—underscores its reluctance to engage with the intersection of climate and social policy.</p><p></p><p>The Human Cost: Who Bears the Brunt of Extreme Heat?</p><p>The current crisis has reignited debates over France’s social safety net. LFI has proposed a &quot;heatwave allowance&quot; for low-income families, while NGOs like the Secours Populaire have called for emergency shelters with cooling facilities. However, these measures face opposition from fiscal conservatives, who argue that such spending is unsustainable.    At-risk groups:  Elderly (65+), homeless populations, outdoor workers (construction, agriculture), and residents of poorly insulated housing.   Key risks:  Heatstroke, dehydration, exacerbation of chronic illnesses (e.g., cardiovascular disease), and mental health strain.   The lack of targeted support for these groups raises questions about whether France’s political class is truly prepared to address the inequities of climate change.</p><p></p><p>Beyond the Heatwave: What’s Next for France’s Climate Policy?</p><p>The left’s push for systemic change—while fragmented—has forced the issue onto the national agenda. LFI’s proposals, though ambitious, highlight the need for cross-sectoral solutions, from urban planning to labor rights. Meanwhile, the government’s reliance on the PNC, while necessary, is increasingly seen as a Band-Aid rather than a cure.  &quot;The heatwave is a stress test for our democracy,&quot; argues political scientist Nonna Mayer. &quot;It reveals who we prioritize as a society—and who we leave behind.&quot;  As the crisis unfolds, the question remains: will France’s leaders treat this as a wake-up call, or another missed opportunity?</p></div>
+  
+  <footer class="item-footer">
+    <div class="tags"><code>#French politics</code>, <code>#heatwave</code>, <code>#environmental policy</code>, <code>#social policy</code></div>
+    
+  </footer>
+</article>
+</main></div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,471 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Horizon — 2026-06-26</title>
+  <style>
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600&family=Manrope:wght@500;700&display=swap');
+
+:root {
+    --bg: #f8f5f3;
+    --paper: #ffffff;
+    --surface: #fffbf8;
+    --accent: #9b3d2a;
+    --accent-2: color-mix(in srgb, var(--accent) 55%, #b73fd6);
+    --accent-3: color-mix(in srgb, var(--accent) 40%, #f59e0b);
+    --accent-soft: #f9e2dc;
+    --muted: #6e5b54;
+    --text: #2f211d;
+    --ring: color-mix(in srgb, var(--accent) 32%, transparent);
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+    color: var(--text);
+    background:
+        radial-gradient(1300px 420px at -10% -20%, var(--accent-soft), transparent 60%),
+        radial-gradient(760px 300px at 88% -12%, color-mix(in srgb, var(--accent-2) 24%, transparent), transparent 66%),
+        radial-gradient(640px 240px at 30% 0%, color-mix(in srgb, var(--accent-3) 18%, transparent), transparent 70%),
+        var(--bg);
+    font-family: 'Source Serif 4', Georgia, serif;
+    line-height: 1.78;
+}
+
+.container { max-width: 1100px; margin: 1.5rem auto; padding: 1rem; }
+
+/* ── Page header ─────────────────────────────────────────────────────── */
+.summary-header {
+    background: var(--paper);
+    border: 1px solid color-mix(in srgb, var(--accent) 16%, transparent);
+    border-radius: 24px;
+    padding: 1.5rem 1.6rem 1.1rem;
+    box-shadow: 0 18px 48px rgba(19, 33, 68, 0.08);
+    margin-bottom: 1rem;
+    position: relative;
+    overflow: hidden;
+}
+.summary-header::after {
+    content: "";
+    position: absolute;
+    inset: auto -60px -80px auto;
+    width: 220px; height: 220px;
+    border-radius: 999px;
+    background: radial-gradient(circle, color-mix(in srgb, var(--accent-2) 28%, transparent), transparent 70%);
+    pointer-events: none;
+}
+.summary-header h1 {
+    margin: 0;
+    font-family: 'Fraunces', 'DM Serif Display', 'Iowan Old Style', 'Palatino Linotype', serif;
+    letter-spacing: .01em;
+    font-size: clamp(1.8rem, 3.6vw, 2.8rem);
+    line-height: 1.15;
+}
+.lead { margin: .55rem 0 1.1rem; color: var(--muted); font-size: 1.04rem; max-width: 78ch; }
+
+/* ── TOC ─────────────────────────────────────────────────────────────── */
+.toc-title {
+    margin: 0 0 .45rem;
+    font-family: 'Manrope', 'Segoe UI', sans-serif;
+    font-size: .85rem;
+    text-transform: uppercase;
+    letter-spacing: .11em;
+    color: var(--muted);
+}
+.toc ul {
+    list-style: none; margin: 0; padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: .55rem;
+}
+.toc li {
+    background: linear-gradient(160deg, var(--surface), color-mix(in srgb, var(--accent-soft) 48%, #ffffff));
+    border: 1px solid color-mix(in srgb, var(--accent) 16%, transparent);
+    border-radius: 10px;
+    padding: .55rem .65rem;
+    transition: transform .18s ease, box-shadow .18s ease;
+}
+.toc li:hover { transform: translateY(-1px); box-shadow: 0 8px 20px color-mix(in srgb, var(--accent) 15%, transparent); }
+.toc a { text-decoration: none; color: var(--text); }
+.toc-score { color: var(--accent); font-family: 'Manrope', 'Segoe UI', sans-serif; font-size: .85rem; font-weight: 600; }
+
+/* ── Article cards ───────────────────────────────────────────────────── */
+.items { display: grid; gap: .95rem; }
+.items article {
+    background: var(--paper);
+    border: 1px solid color-mix(in srgb, var(--accent) 15%, transparent);
+    border-radius: 20px;
+    padding: 1.4rem 1.6rem 1.1rem;
+    box-shadow: 0 10px 32px rgba(0, 0, 0, 0.05);
+}
+.item-title {
+    font-family: 'Fraunces', 'DM Serif Display', 'Iowan Old Style', 'Palatino Linotype', serif;
+    font-size: clamp(1.2rem, 2.2vw, 1.55rem);
+    margin: 0 0 .3rem;
+    line-height: 1.22;
+}
+.item-title a { color: inherit; text-decoration: none; }
+.item-title a:hover { color: var(--accent); }
+.item-title a:focus-visible, .toc a:focus-visible, summary:focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
+    border-radius: 6px;
+}
+.meta { color: var(--muted); font-family: 'Manrope', 'Segoe UI', sans-serif; font-size: .88rem; margin-bottom: .9rem; }
+.score { color: var(--accent); margin-left: .45rem; font-weight: 700; font-family: 'Manrope', 'Segoe UI', sans-serif; font-size: .95rem; }
+
+.article-body { border-top: 1px solid color-mix(in srgb, var(--accent) 10%, transparent); padding-top: 1rem; }
+
+.item-footer {
+    margin-top: 1rem;
+    padding-top: .65rem;
+    border-top: 1px solid color-mix(in srgb, var(--muted) 18%, transparent);
+}
+
+.evidence-note {
+    margin: .8rem 0 0;
+    color: var(--muted);
+    font-size: .92rem;
+    font-style: italic;
+}
+
+.tags { color: var(--muted); font-family: 'Manrope', 'Segoe UI', sans-serif; font-size: .88rem; margin-bottom: .45rem; }
+code { background: color-mix(in srgb, var(--accent-soft) 65%, #ffffff); border-radius: 8px; padding: .12rem .4rem; }
+
+details { margin-top: .5rem; }
+details summary { cursor: pointer; color: var(--accent); font-family: 'Manrope', 'Segoe UI', sans-serif; font-size: .9rem; }
+
+/* ── Dark mode ───────────────────────────────────────────────────────── */
+@media (prefers-color-scheme: dark) {
+    :root {
+        --bg: #0f1420; --paper: #161d2c; --surface: #1b2435;
+        --accent: #7cb1ff; --accent-2: #c28cff; --accent-3: #ffc36c;
+        --accent-soft: #1a2740; --muted: #a6b4cd; --text: #edf2ff;
+        --ring: rgba(124, 177, 255, 0.55);
+    }
+    body {
+        background:
+            radial-gradient(1200px 420px at -10% -20%, #1a2740, transparent 60%),
+            radial-gradient(760px 300px at 88% -12%, rgba(194, 140, 255, 0.2), transparent 66%),
+            radial-gradient(640px 240px at 30% 0%, rgba(255, 195, 108, 0.14), transparent 70%),
+            var(--bg);
+    }
+    .summary-header, .items article { border-color: rgba(124,177,255,.24); box-shadow: 0 18px 44px rgba(0,0,0,.32); }
+    .toc li { border-color: rgba(124,177,255,.22); background: linear-gradient(170deg, #1b2435, #1f2a3f); }
+    code { background: rgba(124,177,255,.16); }
+    .article-background { background: linear-gradient(170deg, #1b2435, #1f2a3f); }
+}
+
+@media (max-width: 860px) {
+    .container { margin: .7rem auto; padding: .65rem; }
+}
+
+/* ── Editorial article layout ─────────────────────────────────────────── */
+
+.article-lead {
+    font-size: 1.18rem;
+    color: var(--muted);
+    line-height: 1.7;
+    margin: .3rem 0 1.4rem;
+    max-width: 72ch;
+    font-style: italic;
+}
+
+.article-section {
+    margin-top: 1.55rem;
+}
+
+    .article-section {
+    font-family: 'Manrope', 'Segoe UI', sans-serif;
+    font-size: .78rem;
+.article-section h2 {
+.narrow {
+    margin: 0 0 .45rem;
+    padding-bottom: .25rem;
+    border-bottom: 1px solid color-mix(in srgb, var(--accent) 22%, transparent);
+}
+
+.article-section h2 {
+.narrow {
+    font-size: 1.03rem;
+    line-height: 1.85;
+    color: var(--text);
+}
+
+.article-section p {
+    margin: 0.25rem 0;
+}
+
+.article-section .article-section-last {
+    font-size: 1.08rem;
+
+.article-section h3 {
+    margin: .35rem 0 .15rem;
+    font-size: 0.95rem;
+    color: var(--muted);
+}
+    font-weight: 600;
+    margin-top: .45rem;
+}
+
+.article-section p + p {
+    margin-top: .8rem;
+}
+
+.article-background {
+    margin-top: 1.4rem;
+    padding: 1rem 1.1rem;
+    background: linear-gradient(170deg, var(--surface), color-mix(in srgb, var(--accent-soft) 30%, #fff));
+    border-left: 3px solid var(--accent);
+    border-radius: 0 10px 10px 0;
+    font-size: .98rem;
+    line-height: 1.78;
+    color: var(--text);
+}
+
+.article-background strong {
+    display: block;
+    font-family: 'Manrope', 'Segoe UI', sans-serif;
+    font-size: .78rem;
+    text-transform: uppercase;
+    letter-spacing: .1em;
+    color: var(--accent);
+    margin-bottom: .35rem;
+}
+
+.article-discussion {
+    margin-top: 1.2rem;
+    padding: .85rem 1rem;
+    border-left: 3px solid color-mix(in srgb, var(--muted) 40%, transparent);
+    font-style: italic;
+    font-size: .98rem;
+    color: var(--muted);
+    line-height: 1.75;
+}
+
+.article-discussion strong {
+    font-style: normal;
+    font-family: 'Manrope', 'Segoe UI', sans-serif;
+    font-size: .78rem;
+    text-transform: uppercase;
+    letter-spacing: .1em;
+    display: block;
+    margin-bottom: .3rem;
+    color: var(--muted);
+}
+
+.tab-switcher {
+    display: flex; gap: .5rem; margin-bottom: 1.5rem;
+    border-bottom: 2px solid color-mix(in srgb, var(--accent) 20%, transparent);
+}
+.tab-button {
+    background: transparent; border: none; color: var(--muted);
+    font-family: 'Manrope', 'Segoe UI', sans-serif; font-size: 1rem; font-weight: 600;
+    padding: .75rem 1.2rem; cursor: pointer;
+    transition: color .18s ease, border-color .18s ease;
+    border-bottom: 3px solid transparent;
+}
+.tab-button:hover { color: var(--text); }
+.tab-button.active { color: var(--accent); border-bottom-color: var(--accent); }
+.tab-content { display: none; animation: fadeIn .2s ease-in; }
+.tab-content.active { display: block; }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@media (max-width: 860px) { .tab-switcher { flex-wrap: wrap; } }
+</style>
+  <script>
+    function switchTab(button) {
+      const lang = button.getAttribute('data-lang');
+      const allButtons = document.querySelectorAll('.tab-button');
+      const allContents = document.querySelectorAll('.tab-content');
+      allButtons.forEach(b => b.classList.remove('active'));
+      allContents.forEach(c => c.classList.remove('active'));
+      button.classList.add('active');
+      document.querySelector(`.tab-content[data-lang="${lang}"]`).classList.add('active');
+    }
+  </script>
+</head>
+<body>
+  <div class="container">
+    <div class="tab-switcher">
+      <button class="tab-button active" onclick="switchTab(this)" data-lang="fr">Français</button><button class="tab-button " onclick="switchTab(this)" data-lang="en">English</button>
+    </div>
+    <div class="tab-content active" data-lang="fr"><section class="summary-header">
+  <h1>Horizon Quotidien — 2026-06-26</h1>
+  <p class="lead">Parmi 484 contenus collectés, 5 sujets essentiels ont été sélectionnés.</p>
+  <nav class="toc" aria-label="Sommaire">
+    <p class="toc-title">Sommaire</p>
+    <ul><li><a href="#item-1">Le gouvernement américain exige qu’OpenAI limite la sortie de GPT-5.6 en raison de risques de sécurité <span class="toc-score">⭐️ 7.665375000000001/10</span></a></li>
+<li><a href="#item-2">Géants de la tech unis : Stripe, Anthropic et OpenAI financent une avancée majeure contre les infections respiratoires <span class="toc-score">⭐️ 7.610250000000001/10</span></a></li>
+<li><a href="#item-3">L’épine dorsale invisible de l’IA : Comment la couche d’infrastructure de données web révolutionne l’intelligence artificielle <span class="toc-score">⭐️ 7.610250000000001/10</span></a></li>
+<li><a href="#item-4">Trump qualifie Anthropic de menace pour la sécurité nationale : plongée dans la répression de la Maison-Blanche sur l’IA <span class="toc-score">⭐️ 7.518375000000001/10</span></a></li>
+<li><a href="#item-5">Notion mise tout sur les agents IA : pourquoi l’entreprise abandonne son application de messagerie inspirée de Skiff <span class="toc-score">⭐️ 6.6705/10</span></a></li></ul>
+  </nav>
+</section>
+<main class="items">
+<article id="item-1">
+  <header>
+    <h2 class="item-title"><a href="https://www.axios.com/2026/06/25/trump-administration-openai-gpt-model-release">Le gouvernement américain exige qu’OpenAI limite la sortie de GPT-5.6 en raison de risques de sécurité</a>
+      <span class="score">⭐️ 7.665375000000001/10</span>
+    </h2>
+    <div class="meta">rss · Axios · Jun 25, 22:26</div>
+  </header>
+  <div class="article-body"><p class="article-lead">Une première historique : le gouvernement intervient avant la sortie d’un modèle d’IA</p><p>La demande de l’administration Trump à OpenAI marque un tournant dans la régulation de l’intelligence artificielle. Selon des sources proches du dossier, le Bureau du directeur national de la cybersécurité (ONCD) et le Bureau de la politique scientifique et technologique (OSTP) de la Maison-Blanche ont demandé à l’entreprise de retarder la sortie publique de GPT-5.6, son dernier modèle phare, jusqu’à ce qu’il soit évalué par un cercle restreint de partenaires approuvés par le gouvernement. Il s’agit de la première fois que le gouvernement américain intervient de manière préventive pour restreindre le lancement d’un modèle d’IA commercial avant sa sortie officielle.</p><p></p><p>Pourquoi GPT-5.6 suscite-t-il des inquiétudes à Washington ?</p><p>GPT-5.6, successeur du très répandu GPT-5 d’OpenAI, serait capable de performances comparables à celles des modèles « Mythos » d’Anthropic, dont les versions Fable 5 et Mythos 5 ont été retirées du marché plus tôt ce mois-ci à la suite d’une directive rare du département du Commerce. Des sources ont indiqué à  Axios  que les préoccupations du gouvernement concernent les capacités avancées du modèle, qui pourraient poser des risques significatifs en cas d’utilisation malveillante par des acteurs étatiques, des cybercriminels ou des initiés mal intentionnés.  « C’est ce qui se passe avec les modèles de ce calibre. Ils sont si puissants que l’administration veut s’assurer que les entreprises disposent de garde-fous adéquats. » — Source proche du dossier</p><p></p><p>OpenAI entre innovation et conformité réglementaire</p><p>Sam Altman, PDG d’OpenAI, a reconnu la demande du gouvernement dans un mémo adressé aux employés, obtenu par  The Information , présentant le déploiement limité comme une mesure temporaire. « Nous avons clairement indiqué au gouvernement américain que ce n’est pas notre modèle préféré à long terme, et nous travaillerons avec eux et d’autres acteurs du secteur pour trouver une approche plus durable pour les futures sorties », a écrit Altman. L’entreprise collabore avec les agences fédérales depuis avant le retrait des modèles d’Anthropic, partageant des aperçus des capacités de GPT-5.6 avec la Maison-Blanche. Cependant, cette intervention force OpenAI à naviguer entre la préservation de son avantage concurrentiel et le respect des attentes réglementaires émergentes.</p><p></p><p>Le contexte plus large : la régulation de l’IA prend de l’ampleur</p><p>Cette évolution survient dans un contexte d’intense activité réglementaire à Washington. Plus tôt ce mois-ci, le président Trump a signé un décret exécutif sur la sécurité de l’IA, établissant un protocole volontaire de test pour les entreprises avant la sortie de nouveaux modèles. Ce décret, dont l’adoption a été retardée de plusieurs semaines en raison de luttes politiques sur son champ d’application et son caractère contraignant, reflète l’urgence croissante de l’administration à aborder les risques liés à l’utilisation duale des systèmes d’IA avancés.    Principales dispositions du décret exécutif :   Demande aux agences de développer des cadres pour évaluer les risques de sécurité liés à l’IA.  Encourage la collaboration entre le gouvernement et l’industrie pour établir des bonnes pratiques.  Ne rend pas obligatoire les tests avant la sortie, mais signale de possibles restrictions futures.   La mise en œuvre du décret a été inégale, certains critiques estimant que des mesures volontaires pourraient être insuffisantes pour atténuer les risques posés par les modèles de pointe.</p><p></p><p>La course mondiale à la domination de l’IA ajoute de la pression</p><p>La situation d’OpenAI est encore complexifiée par la compétition mondiale acharnée dans le développement de l’IA. Alors que les régulateurs américains prônent la prudence, les modèles open source chinois, tels que GLM et DeepSeek, progressent rapidement, offrant des alternatives économiques qui pourraient éroder la domination des laboratoires d’IA occidentaux. Les responsables de la sécurité avertissent que, sans garde-fous coordonnés, des modèles très performants pourraient tomber entre de mauvaises mains, permettant des cyberattaques sophistiquées, des campagnes de désinformation ou même le développement d’armes autonomes.  « Les laboratoires d’IA sont dans une position difficile alors qu’ils se précipitent pour sortir de nouveaux modèles, non seulement pour rivaliser entre eux, mais aussi face aux modèles open source chinois de plus en plus performants. » — Analyse d’ Axios   La demande de l’administration à OpenAI pourrait établir un précédent pour les futures interactions entre le gouvernement américain et les développeurs d’IA, conduisant potentiellement à une surveillance plus stricte des sorties de modèles.</p><p></p><p>Prochaines étapes : l’industrie et le gouvernement cherchent un terrain d’entente</p><p>Alors qu’OpenAI se prépare à un déploiement limité de GPT-5.6, l’entreprise et les agences fédérales travaillent à l’élaboration d’un cadre pour évaluer la sécurité des nouveaux modèles. Le secrétaire au Commerce, Howard Lutnick, aurait souligné la nécessité de tests approfondis et d’une approbation par toutes les instances gouvernementales concernées lors d’une récente discussion avec Altman. Pendant ce temps, les leaders de l’industrie appellent à des lignes directrices plus claires pour éviter des interventions ponctuelles qui pourraient étouffer l’innovation.    Questions clés pour l’avenir :   Les États-Unis adopteront-ils des tests obligatoires avant la sortie pour les modèles d’IA de pointe ?  Comment les concurrents d’OpenAI, comme Anthropic et Google DeepMind, réagiront-ils à la surveillance accrue du gouvernement ?  Une coopération internationale peut-elle éviter une course réglementaire vers le bas ?   L’issue de ces négociations pourrait façonner la trajectoire du développement de l’IA pour les années à venir, déterminant si les États-Unis peuvent maintenir leur leadership dans le domaine tout en atténuant les risques d’un progrès technologique non maîtrisé.</p></div>
+  
+  <footer class="item-footer">
+    <div class="tags"><code>#AI</code>, <code>#US Government</code>, <code>#Cybersecurity</code></div>
+    
+  </footer>
+</article>
+
+<article id="item-2">
+  <header>
+    <h2 class="item-title"><a href="https://www.technologyreview.com/2026/06/24/1139621/stripe-anthropic-and-openai-are-backing-an-effort-to-stop-respiratory-infections/">Géants de la tech unis : Stripe, Anthropic et OpenAI financent une avancée majeure contre les infections respiratoires</a>
+      <span class="score">⭐️ 7.610250000000001/10</span>
+    </h2>
+    <div class="meta">rss · MIT Technology Review · Jun 24, 12:00</div>
+  </header>
+  <div class="article-body"><p class="article-lead">Le rhume : un fardeau mondial persistant</p><p>Les infections respiratoires, incluant le rhume, la grippe et même la COVID-19, restent parmi les défis sanitaires les plus répandus et perturbateurs à l’échelle mondiale. Malgré les progrès de la médecine, ces maladies coûtent chaque année des centaines de milliards de dollars à l’économie mondiale en pertes de productivité, dépenses de santé et décès prématurés. Rien qu’aux États-Unis, le rhume commun est responsable d’environ 22 millions de jours d’absence scolaire et 20 millions de jours de travail perdus, selon les Centers for Disease Control and Prevention (CDC).</p><p></p><p>Pourquoi les géants de la tech s’engagent</p><p>Historiquement, la lutte contre les infections respiratoires a été menée par les entreprises pharmaceutiques, les gouvernements et les organisations à but non lucratif. Cependant, l’implication de Stripe, Anthropic et OpenAI marque un changement de paradigme. Ces entreprises apportent non seulement une puissance financière, mais aussi une expertise technologique de pointe—en particulier en intelligence artificielle, analyse de données et infrastructure scalable—qui pourrait accélérer les percées en matière de prévention et de traitement.</p><p></p><p>Le rôle de chaque acteur : une approche multidisciplinaire</p><p>Cette initiative exploite les forces uniques de chaque entreprise participante :    Stripe :  Au-delà de son activité principale de traitement des paiements, Stripe s’est de plus en plus aventuré dans le financement de la recherche scientifique et des initiatives de santé publique. Son infrastructure financière pourrait rationaliser la distribution des fonds, garantissant un déploiement rapide des ressources vers les chercheurs et les startups travaillant sur des solutions contre les infections respiratoires.   Anthropic :  En tant qu’entreprise spécialisée dans la sécurité et la recherche en IA, Anthropic développe des systèmes d’IA fiables et interprétables. Son expertise pourrait être cruciale pour modéliser la transmission virale, prédire les épidémies ou même concevoir des outils pilotés par l’IA pour optimiser la distribution des vaccins et les réponses de santé publique.   OpenAI :  Connu pour ses travaux sur les grands modèles de langage comme GPT, OpenAI pourrait contribuer en analysant de vastes ensembles de données pour identifier des schémas de propagation des infections, développer des outils de diagnostic basés sur l’IA, ou même simuler l’impact d’interventions potentielles.    &quot;Cette collaboration témoigne de la manière dont la technologie peut être exploitée pour résoudre des problèmes qui ont échappé aux approches traditionnelles,&quot; a déclaré un porte-parole de Stripe. &quot;En combinant des ressources financières avec l’IA et la science des données, nous espérons ouvrir de nouvelles voies vers la prévention.&quot;</p><p></p><p>De la prévention à la prédiction : comment l’IA pourrait changer la donne</p><p>L’un des aspects les plus prometteurs de cette initiative est le potentiel d’utiliser l’IA pour prédire et prévenir les infections respiratoires avant qu’elles ne se propagent. Par exemple, des modèles d’IA pourraient analyser des données anonymisées sur la mobilité, les conditions météorologiques et les taux d’infection historiques pour prévoir les épidémies avec une précision sans précédent. Cela permettrait aux responsables de la santé publique de mettre en œuvre des interventions ciblées, comme des confinements localisés ou des campagnes de vaccination, bien avant qu’une épidémie n’atteigne un niveau critique.</p><p></p><p>Défis et considérations éthiques</p><p>Bien que cette initiative soit porteuse d’un immense espoir, elle soulève également des questions importantes sur la protection des données, l’équité et le rôle des entreprises privées dans la santé publique. Par exemple, l’utilisation de l’IA pour prédire les épidémies repose sur l’accès à de vastes quantités de données personnelles, ce qui pourrait susciter des préoccupations concernant la surveillance et le consentement. De plus, il existe un risque que les bénéfices de cette recherche—comme de nouveaux vaccins ou traitements—soient distribués de manière inégale, favorisant les nations riches ou les populations ayant un meilleur accès aux soins de santé.</p><p></p><p>Un modèle pour les futures collaborations public-privé ?</p><p>Si elle réussit, cette collaboration pourrait servir de modèle pour la manière dont les entreprises technologiques peuvent relever d’autres défis mondiaux, du changement climatique à la résistance aux antimicrobiens. En exploitant leurs ressources financières, leur expertise technologique et leur portée mondiale, ces entreprises ont le potentiel de combler les lacunes laissées par les institutions traditionnelles, souvent freinées par une inertie bureaucratique et des financements limités.</p></div>
+  
+  <footer class="item-footer">
+    <div class="tags"><code>#Health</code>, <code>#Technology</code>, <code>#Respiratory Infections</code></div>
+    
+  </footer>
+</article>
+
+<article id="item-3">
+  <header>
+    <h2 class="item-title"><a href="https://www.technologyreview.com/2026/06/24/1139202/the-emergence-of-the-web-data-infrastructure-layer-for-ai/">L’épine dorsale invisible de l’IA : Comment la couche d’infrastructure de données web révolutionne l’intelligence artificielle</a>
+      <span class="score">⭐️ 7.610250000000001/10</span>
+    </h2>
+    <div class="meta">rss · MIT Technology Review · Jun 24, 11:59</div>
+  </header>
+  <div class="article-body"><p class="article-lead">Le Web n’a pas été conçu pour l’IA</p><p>Internet a été créé pour les humains, pas pour l’intelligence artificielle. Les liens hypertextes, le contenu dynamique et les paywalls forment un labyrinthe qui entrave les modèles d’IA cherchant à accéder à des données structurées en temps réel. Comme le souligne le MIT Technology Review, « le web n’a pas été conçu en pensant à l’IA », révélant un décalage fondamental entre l’écosystème numérique d’origine et les besoins des systèmes d’IA modernes. Si les humains peuvent naviguer intuitivement dans des données non structurées—analyser un article de presse ou extraire des insights d’un fil de discussion—les modèles d’IA nécessitent des entrées propres et standardisées pour fonctionner efficacement. Sans cela, leur potentiel reste gravement limité.</p><p></p><p>Le goulot d’étranglement des données : pourquoi l’échelle exige de la structure</p><p>Environ 80 % des données organisationnelles sont non structurées, existant sous des formats comme les e-mails, les PDF ou les publications sur les réseaux sociaux, qui défient toute analyse facile. Pour l’IA, cela pose un défi monumental. Les données structurées—organisées dans des bases de données ou des tableurs—peuvent être interrogées avec SQL et traitées efficacement. Les données non structurées, en revanche, nécessitent des outils avancés comme le traitement automatique du langage naturel (NLP) et l’apprentissage automatique pour en extraire de la valeur.  « Les modèles d’IA ne valent que par les données sur lesquelles ils sont entraînés. Si ces données sont verrouillées derrière des paywalls, enfouies dans des formats non structurés ou bloquées par des mesures anti-scraping, même les algorithmes les plus avancés sous-performeront. » </p><p></p><p>La solution ? Une couche dédiée d’infrastructure de données web qui automatise la découverte, l’extraction et la structuration des données web à grande échelle. Des entreprises comme Apify et Firecrawl pionnent dans ce domaine, offrant des plateformes qui fournissent des flux de données à faible latence et adaptés au contexte pour les applications d’IA.</p><p></p><p>Qu’est-ce qui définit la couche d’infrastructure de données web ?</p><p>Cette couche émergente ne se limite pas au simple scraping de sites web—elle consiste à construire une base robuste et de niveau entreprise pour l’accès aux données de l’IA. Ses propriétés clés incluent :</p><p></p><p> </p><p>    Échelle :  Gérer des pétaoctets de données provenant de millions de sources sans dégradation. </p><p>    Fiabilité :  Garantir un temps de disponibilité de 99,99 % pour soutenir les workflows critiques de l’IA. </p><p>    Fidélité géographique :  Fournir des données localisées pour entraîner des modèles adaptés aux nuances régionales. </p><p>    Adaptabilité :  Contourner les mesures anti-bots et évoluer avec les technologies web. </p><p> </p><p></p><p>Efi Minzer, dans une analyse LinkedIn, décrit cela comme la « couche cachée » des opérations d’IA—un composant critique mais souvent négligé qui détermine si un produit d’IA prospère ou échoue. Sans elle, même les modèles les plus avancés risquent de fonctionner avec des données obsolètes, incomplètes ou biaisées.</p><p></p><p>Des démonstrations à la production : où cette couche est déjà essentielle</p><p>La couche d’infrastructure de données web passe de la nécessité théorique à la réalité pratique dans plusieurs domaines pilotés par l’IA :</p><p></p><p> </p><p>    Intelligence concurrentielle :  Les entreprises utilisent des données web en temps réel pour surveiller les prix, les lancements de produits et le sentiment des clients chez leurs concurrents. </p><p>    Entraînement de l’IA :  Les grands modèles de langage (LLM) dépendent de vastes ensembles de données actualisées pour éviter les hallucinations et améliorer leur précision. </p><p>    Agents autonomes :  Les systèmes d’IA qui interagissent avec les interfaces web—remplissant des formulaires, cliquant sur des boutons ou naviguant dans des workflows multi-étapes—nécessitent des pipelines de données fiables pour fonctionner. </p><p>    Vérification des publicités :  Les marques exploitent le web scraping pour détecter les publicités frauduleuses ou les contenus de marque mal placés. </p><p> </p><p></p><p>Firecrawl, par exemple, insiste sur l’importance d’un « accès équitable » au contenu web, en commençant par des dépôts ouverts comme Wikipédia mais en s’étendant à des sources plus larges. Pendant ce temps, des plateformes comme Decodo et Novada offrent des réseaux de proxys et des technologies anti-blocage pour garantir une collecte de données ininterrompue.</p><p></p><p>Les risques et les dilemmes éthiques</p><p>Bien que les avantages soient évidents, cette couche d’infrastructure soulève également des préoccupations majeures. L’explosion de la collecte de données pilotée par l’IA a conduit à :</p><p></p><p> </p><p>    La pression sur les ressources :  Les centres de données pour l’IA consomment d’énormes quantités d’eau et d’électricité, suscitant des débats sur la durabilité. </p><p>    La vie privée et la conformité :  Le scraping de données personnelles ou protégées par des droits d’auteur sans consentement risque des répercussions juridiques sous des réglementations comme le RGPD. </p><p>    L’amplification des biais :  Si les modèles d’IA s’entraînent sur des ensembles de données biaisés ou incomplets, ils peuvent perpétuer des préjugés nuisibles. </p><p> </p><p></p><p> « La manière dont les données sont sourcées compte. La couche d’infrastructure de données web doit privilégier un accès éthique—respecter le fichier robots.txt, éviter les contenus payants sans autorisation et garantir la transparence sur la provenance des données. » </p><p></p><p>Les entreprises de ce secteur commencent à relever ces défis, certaines adoptant des modèles d’opt-in pour les fournisseurs de données ou se concentrant sur des sources accessibles au public. Cependant, à mesure que la demande augmente, la pression pour prendre des raccourcis pourrait s’intensifier.</p><p></p><p>Et demain : l’avenir de l’épine dorsale des données de l’IA</p><p>La couche d’infrastructure de données web en est encore à ses débuts, mais sa trajectoire suggère un avenir où les modèles d’IA opéreront avec une conscience quasi en temps réel du monde numérique. Les développements clés à surveiller incluent :</p><p></p><p> </p><p>    Marchés de données décentralisés :  Des plateformes où les fournisseurs de données peuvent monétiser leur contenu tout en conservant le contrôle sur l’accès. </p><p>    Normes web natives pour l’IA :  Des propositions pour de nouveaux protocoles ou API conçus spécifiquement pour les données lisibles par machine. </p><p>    Traitement en périphérie (edge) :  Réduire la latence en rapprochant le traitement des données de leur source, par exemple sur des appareils ou des serveurs régionaux. </p><p>    Cadres réglementaires :  Les gouvernements pourraient intervenir pour définir des règles sur le scraping éthique, la propriété des données et les ensembles de données d’entraînement pour l’IA. </p><p> </p><p></p><p>Pour les entreprises, le message est clair : celles qui investissent dès aujourd’hui dans une infrastructure robuste de données web prendront une longueur d’avance dans l’économie pilotée par l’IA de demain. Comme l’a souligné un analyste du secteur, « Il ne s’agit pas seulement de nourrir les modèles d’IA—il s’agit de construire le système nerveux qui leur permet de percevoir et d’interagir avec le monde. »</p></div>
+  
+  <footer class="item-footer">
+    <div class="tags"><code>#AI</code>, <code>#Web Data Infrastructure</code>, <code>#Technology</code></div>
+    
+  </footer>
+</article>
+
+<article id="item-4">
+  <header>
+    <h2 class="item-title"><a href="https://www.axios.com/2026/06/19/trump-anthropic-national-security-the-axios-show">Trump qualifie Anthropic de menace pour la sécurité nationale : plongée dans la répression de la Maison-Blanche sur l’IA</a>
+      <span class="score">⭐️ 7.518375000000001/10</span>
+    </h2>
+    <div class="meta">rss · Axios · Jun 19, 18:18</div>
+  </header>
+  <div class="article-body"><p class="article-lead">Anthropic : d’un pionnier de la sécurité de l’IA à un paria de la sécurité nationale</p><p>Fondée par d’anciens chercheurs d’OpenAI, Anthropic s’est positionnée comme un contrepoids au développement incontrôlé de l’intelligence artificielle, mettant l’accent sur la sécurité, l’interprétabilité et l’alignement éthique. Son produit phare, Claude, un assistant conversationnel doté de garde-fous contre les abus, a été salué, même si des concurrents comme OpenAI et Google DeepMind repoussent les limites des capacités des modèles. Pourtant, malgré sa mission, Anthropic se retrouve au cœur d’une tempête géopolitique, accusée de représenter des risques habituellement réservés à des adversaires étrangers comme Huawei ou ByteDance, la maison mère de TikTok.</p><p></p><p>La ligne rouge de la Maison-Blanche : contrôles à l’exportation et désignations du Pentagone</p><p>La répression de l’administration Trump contre Anthropic s’est intensifiée rapidement, avec deux mesures sans précédent : des contrôles à l’exportation draconiens et une désignation par le Pentagone comme « risque pour la chaîne d’approvisionnement ». Les restrictions du Département du Commerce, annoncées la semaine dernière, ont interdit l’accès aux modèles les plus avancés d’Anthropic pour toute entité en dehors des États-Unis, y compris les ressortissants étrangers résidant dans le pays. De tels contrôles, habituellement appliqués aux technologies des semi-conducteurs ou aux outils de chiffrement, marquent la première fois que des modèles d’IA sont soumis à des limitations aussi strictes.  « Les gens vont en prison immédiatement pour ça. On ne peut pas jouer avec ça. » —Donald Trump, sur l’urgence de traiter les vulnérabilités de l’IA  Pendant ce temps, la désignation du Pentagone—historiquement utilisée contre des entreprises technologiques chinoises—a suscité la surprise. Anthropic est devenue la première entreprise américaine à recevoir cette étiquette, qui pourrait la disqualifier des contrats de défense et déclencher des audits de ses chaînes d’approvisionnement. Cette décision fait suite à des rapports sur une vulnérabilité dans les modèles d’Anthropic, prétendument ignorée par la direction de l’entreprise, ce qui a alarmé Amazon et les responsables américains.</p><p></p><p>Le facteur Amazon : comment un rival corporatif a déclenché la répression</p><p>L’interview de Trump a révélé un catalyseur clé : le rôle d’Amazon dans le signalement des préoccupations concernant Anthropic. Le géant du commerce électronique, qui a investi des milliards dans Anthropic, aurait alerté l’administration sur une vulnérabilité dans les modèles de l’entreprise, la présentant comme un risque potentiel pour la sécurité nationale. Trump a laissé entendre les motivations d’Amazon, suggérant que l’entreprise était « très préoccupée » par la trajectoire d’Anthropic.    L’enjeu d’Amazon :  En tant qu’investisseur minoritaire, Amazon a intégré les modèles d’Anthropic dans ses services cloud, en faisant un acteur clé de l’écosystème de l’IA.   Tensions concurrentielles :  La croissance rapide d’Anthropic—et son éthique axée sur la sécurité—menaçait de perturber les ambitions d’Amazon en matière d’IA, en particulier sur les marchés d’entreprise.   Levier réglementaire :  En escaladant les préoccupations auprès de la Maison-Blanche, Amazon a peut-être cherché à contenir un concurrent tout en se positionnant comme un gardien responsable de l’IA.   Cet épisode illustre comment les rivalités entre entreprises peuvent déborder dans les débats sur la sécurité nationale, les géants technologiques exerçant une influence démesurée sur les politiques.</p><p></p><p>Une trêve fragile : le revirement de Trump et la voie à suivre</p><p>Le ton de Trump s’est adouci après une rencontre avec Dario Amodei, le PDG d’Anthropic, lors du sommet du G7, où le président a décrit le dirigeant comme « sympathique » et « intelligent ». La réponse rapide de l’entreprise aux préoccupations de l’administration—y compris son accord pour développer des normes d’évaluation des jailbreaks d’IA—a semble avoir évité une escalade supplémentaire. Dans un communiqué, Anthropic a exprimé sa gratitude pour le « partenariat en cours » avec l’administration, soulignant leurs objectifs communs de leadership américain dans l’IA.  « Nous restons déterminés à travailler aux côtés de l’administration pour atteindre nos objectifs communs de protection des infrastructures critiques et de garantir que les États-Unis mènent la course à l’IA. » —Déclaration d’Anthropic  Pourtant, la trêve reste précaire. Trump a laissé la porte ouverte à l’invocation du Defense Production Act (DPA), une loi de l’époque de la Guerre froide qui pourrait obliger Anthropic à donner la priorité aux contrats gouvernementaux. Bien qu’il ait minimisé la probabilité d’utiliser le DPA, la menace plane comme un rappel de la volonté de l’administration d’utiliser des pouvoirs d’urgence.</p><p></p><p>Échecs géopolitiques : pourquoi les États-Unis ne peuvent pas se permettre de fermer Anthropic</p><p>Malgré les tensions, Trump a présenté la répression comme une nécessité stratégique dans la course à l’IA entre les États-Unis et la Chine. « Nous battons la Chine de loin », a-t-il affirmé, arguant que les avantages de la technologie d’Anthropic l’emportent sur les risques. Le calcul de l’administration reflète un dilemme plus large : comment atténuer les dangers de l’IA sans céder de terrain à Pékin.    Les ambitions chinoises en matière d’IA :  Pékin a investi des milliards dans le développement de l’IA, avec des entreprises soutenues par l’État comme SenseTime et iFlytek comblant l’écart en matière de performance des modèles.   Les règles mondiales de l’IA :  Les États-Unis poussent pour des normes internationales lors de forums comme le G7, mais les alliés restent méfiants face à des contrôles à l’exportation qui pourraient fragmenter le marché de l’IA.   Les risques pour la chaîne d’approvisionnement :  La désignation d’Anthropic par le Pentagone met en lumière les craintes que même les entreprises américaines d’IA puissent, par inadvertance, permettre à des adversaires étrangers d’exploiter des vulnérabilités ou des partenariats.   Le cas d’Anthropic révèle le pari à haut risque de l’administration Trump : resserrer le contrôle sur l’IA tout en évitant des actions qui pourraient étouffer l’innovation ou pousser les talents à l’étranger. Pour l’instant, l’entreprise a évité le pire scénario, mais le travail technique et diplomatique de définition des normes de sécurité de l’IA ne fait que commencer.</p></div>
+  
+  <footer class="item-footer">
+    <div class="tags"><code>#National Security</code>, <code>#Artificial Intelligence</code>, <code>#US Politics</code></div>
+    
+  </footer>
+</article>
+
+<article id="item-5">
+  <header>
+    <h2 class="item-title"><a href="https://arstechnica.com/gadgets/2026/06/notion-killing-skiff-influenced-email-app-since-most-users-use-ai-agents-instead/">Notion mise tout sur les agents IA : pourquoi l’entreprise abandonne son application de messagerie inspirée de Skiff</a>
+      <span class="score">⭐️ 6.6705/10</span>
+    </h2>
+    <div class="meta">rss · Ars Technica · Jun 25, 19:04</div>
+  </header>
+  <div class="article-body"><p class="article-lead">L’essor et le déclin de la messagerie inspirée de Skiff</p><p>L’application de messagerie de Notion, lancée comme une alternative axée sur la confidentialité et inspirée de Skiff, promettait un chiffrement de bout en bout (E2EE), des domaines personnalisés et 10 Go de stockage gratuit. Skiff s’était taillé une place de choix en tant que fournisseur de messagerie sécurisé et convivial, attirant les particuliers et les entreprises méfiants à l’égard de l’exploitation des données par les géants de la technologie. Ses fonctionnalités – comme les brouillons chiffrés, les pièces jointes sécurisées et une intégration fluide avec les outils de productivité – en faisaient un choix attrayant pour les utilisateurs soucieux de leur vie privée.</p><p></p><p>Pourquoi Notion abandonne son service de messagerie</p><p>Dans une annonce surprenante, Notion a révélé qu’il mettrait fin à son application de messagerie, invoquant un changement de comportement des utilisateurs : la plupart des clients préfèrent désormais confier la gestion de leur boîte de réception à des agents IA.  « Nous misons tout sur l’utilisation d’agents pour gérer votre boîte de réception », a déclaré un porte-parole de Notion à Ars Technica. « L’avenir de la productivité ne consiste pas seulement à envoyer des emails, mais à laisser l’IA prendre en charge le travail fastidieux. »  Ce virage s’inscrit dans la stratégie IA plus large de Notion, qui a intégré des fonctionnalités alimentées par l’IA directement dans son espace de travail. Les utilisateurs peuvent désormais générer des résumés, rédiger des emails et automatiser des flux de travail sans quitter la plateforme.</p><p></p><p>Les agents IA : les nouveaux gardiens de votre boîte de réception</p><p>Les agents IA transforment notre manière d’interagir avec les emails. Contrairement aux clients traditionnels, ces outils ne se contentent pas d’organiser les messages – ils les gèrent de manière proactive. Par exemple :    Lindy  : Agit comme un assistant exécutif, planifie des réunions, gère les conflits d’horaire et rédige des réponses.   Fireflies.ai  : Prend des notes pendant les réunions, extrait les éléments d’action et les synchronise avec les systèmes CRM.   Notion AI  : Résume les fils de discussion, signale les messages urgents et compose même des réponses en fonction du contexte.   Ces agents apprennent du comportement des utilisateurs, s’améliorant avec le temps grâce à des boucles de rétroaction et des interactions humaines (HITL). Le résultat ? Une réduction spectaculaire de la gestion manuelle des emails, libérant les utilisateurs pour se concentrer sur des tâches à plus forte valeur ajoutée.</p><p></p><p>Confidentialité vs. commodité : un équilibre délicat</p><p>L’attrait de Skiff résidait dans ses solides protections de la vie privée, mais la gestion des emails par l’IA soulève de nouvelles préoccupations. Bien que les agents IA de Notion opèrent au sein de son écosystème sécurisé, des questions subsistent quant à l’accès aux données et aux intégrations tierces. Par exemple :   Quelle quantité de vos données de boîte de réception est utilisée pour entraîner les modèles d’IA ?  Les réponses générées par l’IA sont-elles vraiment privées, ou pourraient-elles être exposées en cas de violation ?  Les utilisateurs peuvent-ils désactiver les fonctionnalités pilotées par l’IA sans perdre en fonctionnalité ?   Notion n’a pas encore fourni de réponses détaillées, mais le compromis entre commodité et confidentialité sera un débat crucial à mesure que les agents IA deviennent omniprésents.</p><p></p><p>Ce que cela signifie pour l’avenir des outils de productivité</p><p>La décision de Notion illustre une évolution plus large du secteur : les outils de productivité passent de simples dépôts passifs à des assistants actifs alimentés par l’IA. Cette tendance a des implications pour les utilisateurs comme pour les concurrents :    Pour les utilisateurs  : Attendez-vous à des intégrations plus fluides, mais aussi à une dépendance accrue à l’IA pour la prise de décision.   Pour les concurrents  : Des entreprises comme Google et Microsoft pourraient accélérer le développement de leurs propres agents IA pour rester compétitives.   Pour les défenseurs de la vie privée  : Le déclin des services de messagerie chiffrés autonomes soulève des inquiétudes quant à l’érosion du contrôle des utilisateurs.   Alors que les agents IA prennent le devant de la scène, le défi consistera à garantir qu’ils améliorent – et non compromettent – l’autonomie et la sécurité des utilisateurs.</p></div>
+  
+  <footer class="item-footer">
+    <div class="tags"><code>#Technology</code>, <code>#AI</code>, <code>#Email</code>, <code>#Notion</code></div>
+    
+  </footer>
+</article>
+</main></div><div class="tab-content " data-lang="en"><section class="summary-header">
+  <h1>Horizon Daily — 2026-06-26</h1>
+  <p class="lead">From 484 items, 5 important content pieces were selected</p>
+  <nav class="toc" aria-label="Contents">
+    <p class="toc-title">Contents</p>
+    <ul><li><a href="#item-1">U.S. Government Demands OpenAI Restrict GPT-5.6 Release Over Security Fears <span class="toc-score">⭐️ 7.665375000000001/10</span></a></li>
+<li><a href="#item-2">Tech Titans Unite: Stripe, Anthropic, and OpenAI Fund Groundbreaking Push to End Respiratory Infections <span class="toc-score">⭐️ 7.610250000000001/10</span></a></li>
+<li><a href="#item-3">AI’s Hidden Backbone: How the Web Data Infrastructure Layer Is Unlocking the Future of Machine Intelligence <span class="toc-score">⭐️ 7.610250000000001/10</span></a></li>
+<li><a href="#item-4">Trump Labels Anthropic a National Security Threat: Inside the White House’s AI Crackdown <span class="toc-score">⭐️ 7.518375000000001/10</span></a></li>
+<li><a href="#item-5">Notion Bets Big on AI Agents: Why the Company Is Killing Its Skiff-Inspired Email App <span class="toc-score">⭐️ 6.6705/10</span></a></li></ul>
+  </nav>
+</section>
+<main class="items">
+<article id="item-1">
+  <header>
+    <h2 class="item-title"><a href="https://www.axios.com/2026/06/25/trump-administration-openai-gpt-model-release">U.S. Government Demands OpenAI Restrict GPT-5.6 Release Over Security Fears</a>
+      <span class="score">⭐️ 7.665375000000001/10</span>
+    </h2>
+    <div class="meta">rss · Axios · Jun 25, 22:26</div>
+  </header>
+  <div class="article-body"><p class="article-lead">A Historic First: Government Preempts AI Model Release</p><p>The Trump administration’s request to OpenAI represents a watershed moment in the regulation of artificial intelligence. According to sources familiar with the matter, the White House’s Office of the National Cyber Director (ONCD) and the Office of Science and Technology Policy (OSTP) have asked the company to delay a broad release of GPT-5.6, its latest flagship model, until it has been vetted by a small circle of government-approved partners. This is the first time the U.S. government has preemptively intervened to restrict the launch of an AI model by an American company before its public debut.</p><p></p><p>Why GPT-5.6 Has Raised Alarm Bells in Washington</p><p>GPT-5.6, the successor to OpenAI’s widely deployed GPT-5, is reportedly capable of &quot;Mythos-like&quot; performance—referencing Anthropic’s revoked Fable 5 and Mythos 5 models, which were pulled from circulation earlier this month following a rare Commerce Department directive. Sources told  Axios  that the administration’s concern stems from the model’s advanced capabilities, which could pose significant risks if misused by malicious actors, including nation-state adversaries, cybercriminals, or rogue insiders.  &quot;This is what’s happening with models of that caliber. The models are so powerful that the administration wants to be sure the companies have adequate safeguards in place.&quot; — Source familiar with the matter</p><p></p><p>OpenAI’s Balancing Act: Innovation vs. Compliance</p><p>OpenAI CEO Sam Altman acknowledged the government’s request in a memo to employees, obtained by  The Information , framing the limited rollout as a temporary measure. &quot;We’ve made clear to the U.S. government that this is not our preferred long-term model, and will work with them and others in industry to achieve a more sustainable approach for future releases,&quot; Altman wrote. The company has been collaborating with federal agencies since before Anthropic’s models were revoked, sharing previews of GPT-5.6’s capabilities with the White House. However, the intervention has forced OpenAI to navigate a delicate balance between maintaining its competitive edge and adhering to emerging regulatory expectations.</p><p></p><p>The Broader Context: AI Regulation Takes Center Stage</p><p>This development arrives amid a flurry of regulatory activity in Washington. Earlier this month, President Trump signed an AI security executive order establishing a voluntary testing protocol for AI companies prior to model releases. The order, which faced weeks of political infighting over its scope and enforceability, reflects the administration’s growing urgency to address the dual-use risks of advanced AI systems.    Key provisions of the executive order:  Directs agencies to develop frameworks for evaluating AI security risks.  Encourages collaboration between government and industry to establish best practices.  Stops short of mandating pre-release testing but signals potential future restrictions.   The order’s implementation has been uneven, with critics arguing that voluntary measures may be insufficient to mitigate the risks posed by frontier models.</p><p></p><p>Global Race for AI Dominance Adds Pressure</p><p>OpenAI’s predicament is further complicated by the intensifying global competition in AI development. While U.S. regulators urge caution, Chinese open-source models—such as GLM and DeepSeek—are rapidly advancing, offering cost-effective alternatives that could erode the dominance of Western AI labs. Security officials warn that without coordinated safeguards, highly capable models could fall into the wrong hands, enabling sophisticated cyberattacks, disinformation campaigns, or even the development of autonomous weapons.  &quot;AI labs are caught in a tough position as they race to release new models to compete not only with one another, but with increasingly capable Chinese open-source models.&quot; —  Axios  analysis  The administration’s request to OpenAI may set a precedent for how the U.S. government engages with AI developers moving forward, potentially leading to more stringent oversight of future model releases.</p><p></p><p>What’s Next: Industry and Government Seek Common Ground</p><p>As OpenAI prepares for a limited rollout of GPT-5.6, the company and federal agencies are working to establish a framework for evaluating the security of new models. Commerce Secretary Howard Lutnick reportedly emphasized the need for thorough testing and approval by all relevant government bodies during a recent discussion with Altman. Meanwhile, industry leaders are calling for clearer guidelines to avoid ad-hoc interventions that could stifle innovation.    Key questions moving forward:   Will the U.S. adopt mandatory pre-release testing for frontier AI models?  How will OpenAI’s competitors, such as Anthropic and Google DeepMind, respond to the government’s heightened scrutiny?  Can international cooperation prevent a regulatory race to the bottom?   The outcome of these negotiations could shape the trajectory of AI development for years to come, determining whether the U.S. can maintain its leadership in the field while mitigating the risks of unchecked technological advancement.</p></div>
+  
+  <footer class="item-footer">
+    <div class="tags"><code>#AI</code>, <code>#US Government</code>, <code>#Cybersecurity</code></div>
+    
+  </footer>
+</article>
+
+<article id="item-2">
+  <header>
+    <h2 class="item-title"><a href="https://www.technologyreview.com/2026/06/24/1139621/stripe-anthropic-and-openai-are-backing-an-effort-to-stop-respiratory-infections/">Tech Titans Unite: Stripe, Anthropic, and OpenAI Fund Groundbreaking Push to End Respiratory Infections</a>
+      <span class="score">⭐️ 7.610250000000001/10</span>
+    </h2>
+    <div class="meta">rss · MIT Technology Review · Jun 24, 12:00</div>
+  </header>
+  <div class="article-body"><p class="article-lead">The Common Cold: A Persistent Global Burden</p><p>Respiratory infections, including the common cold, influenza, and even COVID-19, remain among the most widespread and disruptive health challenges worldwide. Despite advances in medicine, these illnesses cost the global economy hundreds of billions annually in lost productivity, healthcare expenses, and premature deaths. The common cold alone accounts for an estimated 22 million missed school days and 20 million lost workdays in the U.S. each year, according to the Centers for Disease Control and Prevention (CDC).</p><p></p><p>Why Tech Giants Are Stepping In</p><p>Traditionally, the fight against respiratory infections has been led by pharmaceutical companies, governments, and non-profits. However, the involvement of Stripe, Anthropic, and OpenAI signals a paradigm shift. These companies bring not only financial firepower but also cutting-edge technological expertise—particularly in artificial intelligence, data analytics, and scalable infrastructure—that could accelerate breakthroughs in prevention and treatment.</p><p></p><p>The Role of Each Player: A Multi-Disciplinary Approach</p><p>This initiative leverages the unique strengths of each participating company:    Stripe:  Beyond its core payment-processing business, Stripe has increasingly ventured into funding scientific research and public health initiatives. The company’s financial infrastructure could streamline funding distribution, ensuring rapid deployment of resources to researchers and startups working on respiratory infection solutions.   Anthropic:  As an AI safety and research company, Anthropic specializes in developing reliable, interpretable AI systems. Its expertise could be pivotal in modeling viral transmission, predicting outbreaks, or even designing AI-driven tools to optimize vaccine distribution and public health responses.   OpenAI:  Known for its work on large language models like GPT, OpenAI’s contributions could include analyzing vast datasets to identify patterns in infection spread, developing AI-powered diagnostic tools, or even simulating the impact of potential interventions.    &quot;This collaboration is a testament to how technology can be harnessed to solve problems that have eluded traditional approaches,&quot; said a spokesperson for Stripe. &quot;By combining financial resources with AI and data science, we hope to unlock new pathways to prevention.&quot;</p><p></p><p>From Prevention to Prediction: How AI Could Change the Game</p><p>One of the most promising aspects of this initiative is the potential to use AI to predict and prevent respiratory infections before they spread. For example, AI models could analyze anonymized mobility data, weather patterns, and historical infection rates to forecast outbreaks with unprecedented accuracy. This would allow public health officials to implement targeted interventions, such as localized lockdowns or vaccine drives, well before an outbreak reaches critical mass.</p><p></p><p>Challenges and Ethical Considerations</p><p>While the initiative holds immense promise, it also raises important questions about data privacy, equity, and the role of private companies in public health. For instance, the use of AI to predict outbreaks relies on access to vast amounts of personal data, which could spark concerns about surveillance and consent. Additionally, there is a risk that the benefits of this research—such as new vaccines or treatments—could be unevenly distributed, favoring wealthy nations or populations with better access to healthcare.</p><p></p><p>A Model for Future Public-Private Partnerships?</p><p>If successful, this collaboration could serve as a blueprint for how tech companies can address other global challenges, from climate change to antimicrobial resistance. By leveraging their financial resources, technological expertise, and global reach, these companies have the potential to fill gaps left by traditional institutions, which often struggle with bureaucratic inertia and limited funding.</p></div>
+  
+  <footer class="item-footer">
+    <div class="tags"><code>#Health</code>, <code>#Technology</code>, <code>#Respiratory Infections</code></div>
+    
+  </footer>
+</article>
+
+<article id="item-3">
+  <header>
+    <h2 class="item-title"><a href="https://www.technologyreview.com/2026/06/24/1139202/the-emergence-of-the-web-data-infrastructure-layer-for-ai/">AI’s Hidden Backbone: How the Web Data Infrastructure Layer Is Unlocking the Future of Machine Intelligence</a>
+      <span class="score">⭐️ 7.610250000000001/10</span>
+    </h2>
+    <div class="meta">rss · MIT Technology Review · Jun 24, 11:59</div>
+  </header>
+  <div class="article-body"><p class="article-lead">The Web Was Never Built for AI</p><p>The internet was designed for human consumption, not machine intelligence. Hyperlinks, dynamic content, and paywalls create a labyrinth that stymies AI models seeking structured, real-time data. &quot;The web was not built with AI in mind,&quot; notes MIT Technology Review, highlighting a fundamental mismatch between the digital ecosystem’s original purpose and the needs of modern AI systems. While humans can intuitively navigate unstructured data—parsing a news article or extracting insights from a social media thread—AI models require clean, standardized inputs to function effectively. Without this, their potential remains severely constrained.</p><p></p><p>The Data Bottleneck: Why Scale Demands Structure</p><p>Approximately 80% of organizational data is unstructured, existing in formats like emails, PDFs, or social media posts that defy easy analysis. For AI, this poses a monumental challenge. Structured data—organized in databases or spreadsheets—can be queried with SQL and processed efficiently. Unstructured data, however, demands advanced tools like natural language processing (NLP) and machine learning to extract value.  &quot;AI models are only as good as the data they’re trained on. If that data is locked behind paywalls, buried in unstructured formats, or blocked by anti-scraping measures, even the most advanced algorithms will underperform.&quot; </p><p></p><p>The solution? A dedicated web data infrastructure layer that automates the discovery, extraction, and structuring of web data at scale. Companies like Apify and Firecrawl are pioneering this space, offering platforms that deliver low-latency, context-aware data feeds tailored for AI applications.</p><p></p><p>What Defines the Web Data Infrastructure Layer?</p><p>This emerging layer isn’t just about scraping websites—it’s about building a robust, enterprise-grade foundation for AI data access. Key properties include:</p><p></p><p> </p><p>    Scale:  Handling petabytes of data across millions of sources without degradation. </p><p>    Reliability:  Ensuring 99.99% uptime to support mission-critical AI workflows. </p><p>    Geographic Fidelity:  Providing localized data to train models for regional nuances. </p><p>    Adaptability:  Bypassing anti-bot measures and evolving alongside web technologies. </p><p> </p><p></p><p>Efi Minzer, in a LinkedIn analysis, describes this as the &quot;hidden layer&quot; of AI operations—a critical but often overlooked component that determines whether an AI product thrives or fails. Without it, even the most advanced models risk operating on stale, incomplete, or biased data.</p><p></p><p>From Demos to Production: Where This Layer Is Already Critical</p><p>The web data infrastructure layer is moving from theoretical necessity to practical reality across multiple AI-driven domains:</p><p></p><p> </p><p>    Competitive Intelligence:  Companies use real-time web data to monitor competitors’ pricing, product launches, and customer sentiment. </p><p>    AI Training:  Large language models (LLMs) rely on vast, up-to-date datasets to avoid hallucinations and improve accuracy. </p><p>    Autonomous Agents:  AI systems that interact with web interfaces—filling forms, clicking buttons, or navigating multi-step workflows—require reliable data pipelines to function. </p><p>    Ad Verification:  Brands leverage web scraping to detect fraudulent ads or misplaced brand content. </p><p> </p><p></p><p>Firecrawl, for example, emphasizes the importance of &quot;fair access&quot; to web content, starting with open repositories like Wikipedia but expanding to broader sources. Meanwhile, platforms like Decodo and Novada offer proxy networks and anti-blocking technologies to ensure uninterrupted data collection.</p><p></p><p>The Risks and Ethical Dilemmas</p><p>While the benefits are clear, this infrastructure layer also raises significant concerns. The explosion of AI-driven data collection has led to:</p><p></p><p> </p><p>    Resource Strain:  AI data centers are consuming vast amounts of water and electricity, sparking debates about sustainability. </p><p>    Privacy and Compliance:  Scraping personal or copyrighted data without consent risks legal repercussions under regulations like GDPR. </p><p>    Bias Amplification:  If AI models train on skewed or incomplete datasets, they may perpetuate harmful biases. </p><p> </p><p></p><p> &quot;How data is sourced matters. The web data infrastructure layer must prioritize ethical access—respecting robots.txt, avoiding paywalled content without permission, and ensuring transparency in data provenance.&quot; </p><p></p><p>Companies in this space are beginning to address these challenges, with some adopting opt-in models for data providers or focusing on publicly available sources. However, as demand grows, the pressure to cut corners could intensify.</p><p></p><p>What’s Next: The Future of AI’s Data Backbone</p><p>The web data infrastructure layer is still in its early stages, but its trajectory suggests a future where AI models operate with near-real-time awareness of the digital world. Key developments to watch include:</p><p></p><p> </p><p>    Decentralized Data Markets:  Platforms where data providers can monetize their content while retaining control over access. </p><p>    AI-Native Web Standards:  Proposals for new protocols or APIs designed specifically for machine-readable data. </p><p>    Edge-Based Processing:  Reducing latency by moving data structuring closer to the source, such as on-device or regional servers. </p><p>    Regulatory Frameworks:  Governments may step in to define rules for ethical scraping, data ownership, and AI training datasets. </p><p> </p><p></p><p>For enterprises, the message is clear: those who invest in robust web data infrastructure today will gain a competitive edge in the AI-driven economy of tomorrow. As one industry analyst put it, &quot;This isn’t just about feeding AI models—it’s about building the nervous system that lets them perceive and interact with the world.&quot;</p></div>
+  
+  <footer class="item-footer">
+    <div class="tags"><code>#AI</code>, <code>#Web Data Infrastructure</code>, <code>#Technology</code></div>
+    
+  </footer>
+</article>
+
+<article id="item-4">
+  <header>
+    <h2 class="item-title"><a href="https://www.axios.com/2026/06/19/trump-anthropic-national-security-the-axios-show">Trump Labels Anthropic a National Security Threat: Inside the White House’s AI Crackdown</a>
+      <span class="score">⭐️ 7.518375000000001/10</span>
+    </h2>
+    <div class="meta">rss · Axios · Jun 19, 18:18</div>
+  </header>
+  <div class="article-body"><p class="article-lead">Anthropic: From AI Safety Pioneer to National Security Pariah</p><p>Anthropic, founded by former OpenAI researchers, has positioned itself as a counterweight to unchecked AI development, emphasizing safety, interpretability, and ethical alignment. The company’s flagship product, Claude—a conversational AI assistant—has been lauded for its guardrails against misuse, even as competitors like OpenAI and Google DeepMind push the boundaries of model capabilities. Yet, despite its mission, Anthropic has found itself at the center of a geopolitical storm, accused of posing risks once reserved for foreign adversaries like Huawei or TikTok’s parent company, ByteDance.</p><p></p><p>The White House’s AI Red Line: Export Controls and Pentagon Designations</p><p>The Trump administration’s crackdown on Anthropic escalated rapidly, with two unprecedented measures: sweeping export controls and a Pentagon designation as a &quot;supply chain risk.&quot; The Commerce Department’s restrictions, announced last week, barred access to Anthropic’s most advanced models for any entity outside the U.S.—including foreign nationals within the country. Such controls, typically applied to semiconductor technology or encryption tools, marked the first time AI models faced such stringent limitations.  &quot;People get put in prison immediately for that. You can’t play games with that.&quot; —President Donald Trump, on the urgency of addressing AI vulnerabilities  Meanwhile, the Pentagon’s designation—historically used against Chinese tech firms—raised eyebrows. Anthropic became the first U.S. company to receive this label, which could disqualify it from defense contracts and trigger audits of its supply chains. The move followed reports of a vulnerability in Anthropic’s models, allegedly dismissed by the company’s leadership, which alarmed Amazon and U.S. officials alike.</p><p></p><p>The Amazon Factor: How a Corporate Rival Triggered the Crackdown</p><p>Trump’s interview shed light on a critical catalyst: Amazon’s role in flagging concerns about Anthropic. The e-commerce giant, which has invested billions in Anthropic, reportedly alerted the administration to a vulnerability in the company’s models, framing it as a potential national security risk. Trump hinted at Amazon’s motives, suggesting the company was &quot;very concerned&quot; about Anthropic’s trajectory.    Amazon’s Stake:  As a minority investor, Amazon has integrated Anthropic’s models into its cloud services, making it a key player in the AI ecosystem.   Competitive Tensions:  Anthropic’s rapid growth—and its safety-first ethos—threatened to disrupt Amazon’s own AI ambitions, particularly in enterprise markets.   Regulatory Leverage:  By escalating concerns to the White House, Amazon may have sought to rein in a competitor while positioning itself as a responsible steward of AI.   The episode underscores how corporate rivalries can spill into national security debates, with tech giants wielding outsized influence over policy.</p><p></p><p>A Fragile Truce: Trump’s Shift and the Path Forward</p><p>Trump’s tone softened after a meeting with Anthropic CEO Dario Amodei at the G7 summit, where the president described the executive as &quot;nice&quot; and &quot;smart.&quot; The company’s swift response to the administration’s concerns—including agreeing to develop AI jailbreak evaluation standards—appears to have averted further escalation. In a statement, Anthropic expressed gratitude for the &quot;ongoing partnership&quot; with the administration, emphasizing shared goals of U.S. leadership in AI.  &quot;We remain committed to working alongside them towards our shared goals of protecting critical infrastructure and making sure the U.S. leads in AI.&quot; —Anthropic statement  Yet, the truce remains tenuous. Trump left the door open to invoking the Defense Production Act (DPA), a Cold War-era law that could compel Anthropic to prioritize government contracts. While he downplayed the likelihood of using the DPA, the threat looms as a reminder of the administration’s willingness to wield emergency powers.</p><p></p><p>Geopolitical Chess: Why the U.S. Can’t Afford to Shut Down Anthropic</p><p>Despite the tensions, Trump framed the crackdown as a strategic necessity in the U.S.-China AI race. &quot;We’re beating China by a lot,&quot; he asserted, arguing that the benefits of Anthropic’s technology outweigh the risks. The administration’s calculus reflects a broader dilemma: how to mitigate AI’s dangers without ceding ground to Beijing.    China’s AI Ambitions:  Beijing has poured billions into AI development, with state-backed firms like SenseTime and iFlytek closing the gap in model performance.   Global AI Rules:  The U.S. is pushing for international standards at forums like the G7, but allies remain wary of export controls that could fragment the AI market.   Supply Chain Risks:  The Pentagon’s designation of Anthropic highlights fears that even U.S.-based AI firms could inadvertently enable foreign adversaries through vulnerabilities or partnerships.   The Anthropic saga reveals the Trump administration’s high-stakes gamble: tightening control over AI while avoiding actions that could stifle innovation or push talent overseas. For now, the company has dodged the worst-case scenario—but the technical and diplomatic work of defining AI safety standards is just beginning.</p></div>
+  
+  <footer class="item-footer">
+    <div class="tags"><code>#National Security</code>, <code>#Artificial Intelligence</code>, <code>#US Politics</code></div>
+    
+  </footer>
+</article>
+
+<article id="item-5">
+  <header>
+    <h2 class="item-title"><a href="https://arstechnica.com/gadgets/2026/06/notion-killing-skiff-influenced-email-app-since-most-users-use-ai-agents-instead/">Notion Bets Big on AI Agents: Why the Company Is Killing Its Skiff-Inspired Email App</a>
+      <span class="score">⭐️ 6.6705/10</span>
+    </h2>
+    <div class="meta">rss · Ars Technica · Jun 25, 19:04</div>
+  </header>
+  <div class="article-body"><p class="article-lead">The Rise and Fall of Skiff-Inspired Email</p><p>Notion’s email app, launched as a privacy-focused alternative inspired by Skiff, promised end-to-end encryption (E2EE), custom domains, and 10 GB of free storage. Skiff itself had carved a niche as a secure, user-friendly email provider, appealing to individuals and businesses wary of data mining by Big Tech. Its features—such as encrypted drafts, secure attachments, and a seamless integration with productivity tools—made it a compelling choice for privacy-conscious users.</p><p></p><p>Why Notion Is Shutting Down Its Email Service</p><p>In a surprising announcement, Notion revealed it would discontinue its email app, citing a shift in user behavior: most customers now prefer AI agents to manage their inboxes.  “We’re going all in on using agents to run your inbox,” a Notion spokesperson told Ars Technica. “The future of productivity isn’t just about sending emails—it’s about letting AI handle the heavy lifting.”  This pivot aligns with Notion’s broader AI strategy, which has seen the company integrate AI-powered features directly into its workspace. Users can now generate summaries, draft emails, and automate workflows without leaving the platform.</p><p></p><p>AI Agents: The New Gatekeepers of Your Inbox</p><p>AI agents are transforming how we interact with email. Unlike traditional clients, these tools don’t just organize messages—they proactively manage them. For example:    Lindy : Acts as an executive assistant, scheduling meetings, rescheduling conflicts, and drafting responses.   Fireflies.ai : Takes notes during meetings, extracts action items, and syncs them with CRM systems.   Notion AI : Summarizes threads, flags urgent messages, and even composes replies based on context.   These agents learn from user behavior, improving over time through feedback loops and human-in-the-loop (HITL) interactions. The result? A dramatic reduction in manual email management, freeing users to focus on higher-value tasks.</p><p></p><p>Privacy vs. Convenience: A Delicate Balance</p><p>Skiff’s appeal lay in its robust privacy protections, but AI-driven email management introduces new concerns. While Notion’s AI agents operate within its secure ecosystem, questions remain about data access and third-party integrations. For instance:   How much of your inbox data is used to train AI models?  Are AI-generated responses truly private, or could they be exposed in breaches?  Can users opt out of AI-driven features without losing functionality?   Notion has not yet provided detailed answers, but the trade-off between convenience and privacy will be a critical discussion as AI agents become ubiquitous.</p><p></p><p>What This Means for the Future of Productivity Tools</p><p>Notion’s decision underscores a broader industry shift: productivity tools are evolving from passive repositories to active, AI-powered assistants. This trend has implications for both users and competitors:    For Users : Expect more seamless integrations, but also more reliance on AI for decision-making.   For Competitors : Companies like Google and Microsoft may accelerate their own AI agent development to stay competitive.   For Privacy Advocates : The decline of standalone encrypted email services raises concerns about the erosion of user control.   As AI agents take center stage, the challenge will be ensuring they enhance—not undermine—user autonomy and security.</p></div>
+  
+  <footer class="item-footer">
+    <div class="tags"><code>#Technology</code>, <code>#AI</code>, <code>#Email</code>, <code>#Notion</code></div>
+    
+  </footer>
+</article>
+</main></div>
+  </div>
+</body>
+</html>

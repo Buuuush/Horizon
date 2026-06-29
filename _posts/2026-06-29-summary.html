@@ -1,0 +1,471 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Horizon — 2026-06-29</title>
+  <style>
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600&family=Manrope:wght@500;700&display=swap');
+
+:root {
+    --bg: #f8f8fb;
+    --paper: #ffffff;
+    --surface: #fcfbff;
+    --accent: #325c9b;
+    --accent-2: color-mix(in srgb, var(--accent) 55%, #b73fd6);
+    --accent-3: color-mix(in srgb, var(--accent) 40%, #f59e0b);
+    --accent-soft: #e6eefb;
+    --muted: #5c6372;
+    --text: #1d2230;
+    --ring: color-mix(in srgb, var(--accent) 32%, transparent);
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+    color: var(--text);
+    background:
+        radial-gradient(1300px 420px at -10% -20%, var(--accent-soft), transparent 60%),
+        radial-gradient(760px 300px at 88% -12%, color-mix(in srgb, var(--accent-2) 24%, transparent), transparent 66%),
+        radial-gradient(640px 240px at 30% 0%, color-mix(in srgb, var(--accent-3) 18%, transparent), transparent 70%),
+        var(--bg);
+    font-family: 'Source Serif 4', Georgia, serif;
+    line-height: 1.78;
+}
+
+.container { max-width: 1100px; margin: 1.5rem auto; padding: 1rem; }
+
+/* ── Page header ─────────────────────────────────────────────────────── */
+.summary-header {
+    background: var(--paper);
+    border: 1px solid color-mix(in srgb, var(--accent) 16%, transparent);
+    border-radius: 24px;
+    padding: 1.5rem 1.6rem 1.1rem;
+    box-shadow: 0 18px 48px rgba(19, 33, 68, 0.08);
+    margin-bottom: 1rem;
+    position: relative;
+    overflow: hidden;
+}
+.summary-header::after {
+    content: "";
+    position: absolute;
+    inset: auto -60px -80px auto;
+    width: 220px; height: 220px;
+    border-radius: 999px;
+    background: radial-gradient(circle, color-mix(in srgb, var(--accent-2) 28%, transparent), transparent 70%);
+    pointer-events: none;
+}
+.summary-header h1 {
+    margin: 0;
+    font-family: 'Fraunces', 'DM Serif Display', 'Iowan Old Style', 'Palatino Linotype', serif;
+    letter-spacing: .01em;
+    font-size: clamp(1.8rem, 3.6vw, 2.8rem);
+    line-height: 1.15;
+}
+.lead { margin: .55rem 0 1.1rem; color: var(--muted); font-size: 1.04rem; max-width: 78ch; }
+
+/* ── TOC ─────────────────────────────────────────────────────────────── */
+.toc-title {
+    margin: 0 0 .45rem;
+    font-family: 'Manrope', 'Segoe UI', sans-serif;
+    font-size: .85rem;
+    text-transform: uppercase;
+    letter-spacing: .11em;
+    color: var(--muted);
+}
+.toc ul {
+    list-style: none; margin: 0; padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: .55rem;
+}
+.toc li {
+    background: linear-gradient(160deg, var(--surface), color-mix(in srgb, var(--accent-soft) 48%, #ffffff));
+    border: 1px solid color-mix(in srgb, var(--accent) 16%, transparent);
+    border-radius: 10px;
+    padding: .55rem .65rem;
+    transition: transform .18s ease, box-shadow .18s ease;
+}
+.toc li:hover { transform: translateY(-1px); box-shadow: 0 8px 20px color-mix(in srgb, var(--accent) 15%, transparent); }
+.toc a { text-decoration: none; color: var(--text); }
+.toc-score { color: var(--accent); font-family: 'Manrope', 'Segoe UI', sans-serif; font-size: .85rem; font-weight: 600; }
+
+/* ── Article cards ───────────────────────────────────────────────────── */
+.items { display: grid; gap: .95rem; }
+.items article {
+    background: var(--paper);
+    border: 1px solid color-mix(in srgb, var(--accent) 15%, transparent);
+    border-radius: 20px;
+    padding: 1.4rem 1.6rem 1.1rem;
+    box-shadow: 0 10px 32px rgba(0, 0, 0, 0.05);
+}
+.item-title {
+    font-family: 'Fraunces', 'DM Serif Display', 'Iowan Old Style', 'Palatino Linotype', serif;
+    font-size: clamp(1.2rem, 2.2vw, 1.55rem);
+    margin: 0 0 .3rem;
+    line-height: 1.22;
+}
+.item-title a { color: inherit; text-decoration: none; }
+.item-title a:hover { color: var(--accent); }
+.item-title a:focus-visible, .toc a:focus-visible, summary:focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
+    border-radius: 6px;
+}
+.meta { color: var(--muted); font-family: 'Manrope', 'Segoe UI', sans-serif; font-size: .88rem; margin-bottom: .9rem; }
+.score { color: var(--accent); margin-left: .45rem; font-weight: 700; font-family: 'Manrope', 'Segoe UI', sans-serif; font-size: .95rem; }
+
+.article-body { border-top: 1px solid color-mix(in srgb, var(--accent) 10%, transparent); padding-top: 1rem; }
+
+.item-footer {
+    margin-top: 1rem;
+    padding-top: .65rem;
+    border-top: 1px solid color-mix(in srgb, var(--muted) 18%, transparent);
+}
+
+.evidence-note {
+    margin: .8rem 0 0;
+    color: var(--muted);
+    font-size: .92rem;
+    font-style: italic;
+}
+
+.tags { color: var(--muted); font-family: 'Manrope', 'Segoe UI', sans-serif; font-size: .88rem; margin-bottom: .45rem; }
+code { background: color-mix(in srgb, var(--accent-soft) 65%, #ffffff); border-radius: 8px; padding: .12rem .4rem; }
+
+details { margin-top: .5rem; }
+details summary { cursor: pointer; color: var(--accent); font-family: 'Manrope', 'Segoe UI', sans-serif; font-size: .9rem; }
+
+/* ── Dark mode ───────────────────────────────────────────────────────── */
+@media (prefers-color-scheme: dark) {
+    :root {
+        --bg: #0f1420; --paper: #161d2c; --surface: #1b2435;
+        --accent: #7cb1ff; --accent-2: #c28cff; --accent-3: #ffc36c;
+        --accent-soft: #1a2740; --muted: #a6b4cd; --text: #edf2ff;
+        --ring: rgba(124, 177, 255, 0.55);
+    }
+    body {
+        background:
+            radial-gradient(1200px 420px at -10% -20%, #1a2740, transparent 60%),
+            radial-gradient(760px 300px at 88% -12%, rgba(194, 140, 255, 0.2), transparent 66%),
+            radial-gradient(640px 240px at 30% 0%, rgba(255, 195, 108, 0.14), transparent 70%),
+            var(--bg);
+    }
+    .summary-header, .items article { border-color: rgba(124,177,255,.24); box-shadow: 0 18px 44px rgba(0,0,0,.32); }
+    .toc li { border-color: rgba(124,177,255,.22); background: linear-gradient(170deg, #1b2435, #1f2a3f); }
+    code { background: rgba(124,177,255,.16); }
+    .article-background { background: linear-gradient(170deg, #1b2435, #1f2a3f); }
+}
+
+@media (max-width: 860px) {
+    .container { margin: .7rem auto; padding: .65rem; }
+}
+
+/* ── Editorial article layout ─────────────────────────────────────────── */
+
+.article-lead {
+    font-size: 1.18rem;
+    color: var(--muted);
+    line-height: 1.7;
+    margin: .3rem 0 1.4rem;
+    max-width: 72ch;
+    font-style: italic;
+}
+
+.article-section {
+    margin-top: 1.55rem;
+}
+
+    .article-section {
+    font-family: 'Manrope', 'Segoe UI', sans-serif;
+    font-size: .78rem;
+.article-section h2 {
+.narrow {
+    margin: 0 0 .45rem;
+    padding-bottom: .25rem;
+    border-bottom: 1px solid color-mix(in srgb, var(--accent) 22%, transparent);
+}
+
+.article-section h2 {
+.narrow {
+    font-size: 1.03rem;
+    line-height: 1.85;
+    color: var(--text);
+}
+
+.article-section p {
+    margin: 0.25rem 0;
+}
+
+.article-section .article-section-last {
+    font-size: 1.08rem;
+
+.article-section h3 {
+    margin: .35rem 0 .15rem;
+    font-size: 0.95rem;
+    color: var(--muted);
+}
+    font-weight: 600;
+    margin-top: .45rem;
+}
+
+.article-section p + p {
+    margin-top: .8rem;
+}
+
+.article-background {
+    margin-top: 1.4rem;
+    padding: 1rem 1.1rem;
+    background: linear-gradient(170deg, var(--surface), color-mix(in srgb, var(--accent-soft) 30%, #fff));
+    border-left: 3px solid var(--accent);
+    border-radius: 0 10px 10px 0;
+    font-size: .98rem;
+    line-height: 1.78;
+    color: var(--text);
+}
+
+.article-background strong {
+    display: block;
+    font-family: 'Manrope', 'Segoe UI', sans-serif;
+    font-size: .78rem;
+    text-transform: uppercase;
+    letter-spacing: .1em;
+    color: var(--accent);
+    margin-bottom: .35rem;
+}
+
+.article-discussion {
+    margin-top: 1.2rem;
+    padding: .85rem 1rem;
+    border-left: 3px solid color-mix(in srgb, var(--muted) 40%, transparent);
+    font-style: italic;
+    font-size: .98rem;
+    color: var(--muted);
+    line-height: 1.75;
+}
+
+.article-discussion strong {
+    font-style: normal;
+    font-family: 'Manrope', 'Segoe UI', sans-serif;
+    font-size: .78rem;
+    text-transform: uppercase;
+    letter-spacing: .1em;
+    display: block;
+    margin-bottom: .3rem;
+    color: var(--muted);
+}
+
+.tab-switcher {
+    display: flex; gap: .5rem; margin-bottom: 1.5rem;
+    border-bottom: 2px solid color-mix(in srgb, var(--accent) 20%, transparent);
+}
+.tab-button {
+    background: transparent; border: none; color: var(--muted);
+    font-family: 'Manrope', 'Segoe UI', sans-serif; font-size: 1rem; font-weight: 600;
+    padding: .75rem 1.2rem; cursor: pointer;
+    transition: color .18s ease, border-color .18s ease;
+    border-bottom: 3px solid transparent;
+}
+.tab-button:hover { color: var(--text); }
+.tab-button.active { color: var(--accent); border-bottom-color: var(--accent); }
+.tab-content { display: none; animation: fadeIn .2s ease-in; }
+.tab-content.active { display: block; }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@media (max-width: 860px) { .tab-switcher { flex-wrap: wrap; } }
+</style>
+  <script>
+    function switchTab(button) {
+      const lang = button.getAttribute('data-lang');
+      const allButtons = document.querySelectorAll('.tab-button');
+      const allContents = document.querySelectorAll('.tab-content');
+      allButtons.forEach(b => b.classList.remove('active'));
+      allContents.forEach(c => c.classList.remove('active'));
+      button.classList.add('active');
+      document.querySelector(`.tab-content[data-lang="${lang}"]`).classList.add('active');
+    }
+  </script>
+</head>
+<body>
+  <div class="container">
+    <div class="tab-switcher">
+      <button class="tab-button active" onclick="switchTab(this)" data-lang="fr">Français</button><button class="tab-button " onclick="switchTab(this)" data-lang="en">English</button>
+    </div>
+    <div class="tab-content active" data-lang="fr"><section class="summary-header">
+  <h1>Horizon Quotidien — 2026-06-29</h1>
+  <p class="lead">Parmi 482 contenus collectés, 5 sujets essentiels ont été sélectionnés.</p>
+  <nav class="toc" aria-label="Sommaire">
+    <p class="toc-title">Sommaire</p>
+    <ul><li><a href="#item-1">Réseau électrique européen sous pression : canicules extrêmes et percée d’IBM dans la loi de Moore <span class="toc-score">⭐️ 9.0336825/10</span></a></li>
+<li><a href="#item-2">États-Unis : L’administration Trump impose à OpenAI de restreindre la sortie de GPT-5.6 pour des raisons de sécurité <span class="toc-score">⭐️ 7.665375000000001/10</span></a></li>
+<li><a href="#item-3">La Chine pulvérise les records avec un supercalculateur sans GPU, défiant les restrictions américaines <span class="toc-score">⭐️ 7.610250000000001/10</span></a></li>
+<li><a href="#item-4">Notion abandonne son application email alors que les agents IA dominent la boîte de réception <span class="toc-score">⭐️ 6.6705/10</span></a></li>
+<li><a href="#item-5">Z.ai réduit l’écart en cybersécurité IA : le modèle GLM-5.2 peut-il rivaliser avec Mythos d’Anthropic ? <span class="toc-score">⭐️ 6.5051250000000005/10</span></a></li></ul>
+  </nav>
+</section>
+<main class="items">
+<article id="item-1">
+  <header>
+    <h2 class="item-title"><a href="https://www.technologyreview.com/2026/06/25/1139738/the-download-europe-heat-wave-ibm-chip-moores-law/">Réseau électrique européen sous pression : canicules extrêmes et percée d’IBM dans la loi de Moore</a>
+      <span class="score">⭐️ 9.0336825/10</span>
+    </h2>
+    <div class="meta">rss · MIT Technology Review · Jun 25, 12:10</div>
+  </header>
+  <div class="article-body"><p class="article-lead">La canicule en Europe : un test de résistance pour le réseau électrique</p><p>L’Europe traverse actuellement l’une des canicules les plus intenses de son histoire, mettant les réseaux électriques à rude épreuve. Alors que les températures atteignent des records, les climatiseurs, ventilateurs et systèmes de refroidissement fonctionnent à plein régime, provoquant une hausse sans précédent de la demande en électricité. Selon les rapports, cette pression ne se limite pas à une simple augmentation de la consommation : elle représente un défi systémique qui menace la stabilité des réseaux énergétiques dans leur ensemble.  &quot;Les canicules ont déjà frappé de nombreux pays cette année, et elles ne sont pas près de s’arrêter. Les réseaux électriques et les marchés subissent une pression accrue en raison des défis posés par la chaleur,&quot; souligne une récente analyse sur LinkedIn.  Les conséquences sont alarmantes. Dans certaines régions, les centrales électriques – en particulier celles dépendant de systèmes de refroidissement – sont contraintes de réduire leur production, voire de s’arrêter, en raison de surchauffes ou de pénuries d’eau. Cela crée un cercle vicieux : une demande accrue se heurte à une offre réduite, augmentant le risque de pannes généralisées. Cette situation met en lumière l’urgence de moderniser les réseaux, notamment par des systèmes intelligents de réponse à la demande et une meilleure intégration des énergies renouvelables pour atténuer les perturbations liées au climat.</p><p></p><p>Pourquoi les canicules mettent-elles les réseaux électriques à genoux ?</p><p>Le lien entre les vagues de chaleur extrême et les défaillances des réseaux électriques est bien documenté, mais souvent sous-estimé. Pendant les canicules, les systèmes de climatisation représentent une part importante de la consommation d’électricité. En Europe, où l’adoption de la climatisation a historiquement été moins répandue qu’aux États-Unis, l’augmentation récente du nombre d’installations aggrave le problème.    Charge accrue :  Les climatiseurs et ventilateurs peuvent doubler, voire tripler, la consommation électrique des ménages, mettant à rude épreuve les réseaux locaux.   Réduction de l’efficacité :  Les températures élevées dégradent les performances des lignes de transmission, augmentant la résistance et les pertes d’énergie.   Besoins en refroidissement :  Les centrales thermiques – notamment nucléaires et au charbon – nécessitent d’énormes quantités d’eau pour leur refroidissement. Les canicules coïncident souvent avec des sécheresses, limitant la disponibilité de l’eau et forçant les centrales à réduire leur production.   Déficits des énergies renouvelables :  Les panneaux solaires perdent en efficacité par forte chaleur, tandis que les régimes de vent peuvent devenir imprévisibles, réduisant la production des éoliennes.   Le résultat est un réseau fonctionnant à la limite de ses capacités, où même des perturbations mineures peuvent déclencher des pannes en cascade. Les experts estiment que sans investissements significatifs dans la résilience des réseaux, de tels scénarios deviendront la norme à mesure que le changement climatique s’intensifie.</p><p></p><p>La percée d’IBM : repousser les limites de la loi de Moore</p><p>Alors que l’Europe lutte contre une crise énergétique liée au climat, IBM a réalisé une avancée majeure dans le domaine des semi-conducteurs. L’entreprise a dévoilé un prototype de puce mesurant seulement quelques millimètres carrés – à peu près la taille d’un ongle – mais contenant pas moins de 100 milliards de transistors. Cette réalisation double la densité de transistors de la puce la plus avancée d’IBM, annoncée en 2021, et marque un bond en avant significatif en termes de puissance de calcul et d’efficacité énergétique.  &quot;Cette conception pourrait ouvrir la voie à des ordinateurs plus rapides et plus économes en énergie pour les années à venir,&quot; a déclaré IBM dans son annonce.  La loi de Moore, qui observe que le nombre de transistors sur une puce double environ tous les deux ans, a guidé l’industrie des semi-conducteurs pendant des décennies. Cependant, ces dernières années, les sceptiques se sont multipliés, arguant que les limites physiques et les défis de fabrication rendent toute miniaturisation supplémentaire de plus en plus difficile. La percée d’IBM suggère que la loi de Moore pourrait encore avoir de beaux jours devant elle, à condition d’adopter des approches innovantes en matière de conception et de science des matériaux.</p><p></p><p>La science derrière la percée : comment les transistors propulsent le progrès</p><p>Les transistors sont les éléments de base de l’électronique moderne, agissant comme des interrupteurs ou des amplificateurs pour les signaux électriques. Plus une puce contient de transistors, plus elle peut effectuer de calculs simultanément, ce qui se traduit par des appareils plus rapides et plus efficaces. La nouvelle puce d’IBM exploite des techniques de fabrication avancées, notamment la lithographie extrême ultraviolet (EUV) et de nouveaux matériaux comme les transistors à nanofeuilles, pour atteindre sa densité record.    Lithographie EUV :  Cette technologie de pointe utilise des longueurs d’onde de lumière extrêmement courtes pour graver des circuits sur des plaquettes de silicium avec une précision inégalée, permettant des transistors plus petits et plus densément regroupés.   Transistors à nanofeuilles :  Contrairement aux transistors traditionnels en forme d’ailettes, les nanofeuilles offrent un meilleur contrôle du flux électrique, réduisant les fuites et améliorant l’efficacité.   Empilement 3D :  La puce d’IBM intègre également un empilement vertical des transistors, permettant une densité accrue sans augmenter l’empreinte de la puce.   Ces innovations ne sont pas seulement des triomphes techniques : elles ont des implications concrètes. Les puces dotées d’un plus grand nombre de transistors peuvent gérer des tâches plus complexes, de l’entraînement de l’IA au traitement de données en temps réel, tout en consommant moins d’énergie. Cela pourrait se traduire par une autonomie prolongée des appareils mobiles, des centres de données plus efficaces, et même des percées dans des domaines comme le diagnostic médical et la modélisation climatique.</p><p></p><p>Quel avenir pour la loi de Moore et l’industrie des semi-conducteurs ?</p><p>La réalisation d’IBM soulève des questions cruciales sur l’avenir de la loi de Moore. Bien que l’entreprise ait démontré que la densité des transistors peut encore doubler, les défis économiques et techniques pour maintenir ce rythme sont considérables. Les experts de l’industrie restent divisés sur la question de savoir si la loi de Moore continuera de s’appliquer ou si elle atteindra progressivement un plateau à mesure que les limites physiques seront atteintes.    Approches alternatives :  Certaines entreprises explorent des alternatives aux puces traditionnelles à base de silicium, comme l’informatique quantique, les puces neuromorphiques ou les transistors à nanotubes de carbone.   Efficacité énergétique :  À mesure que les puces deviennent plus denses, la gestion de la chaleur et de la consommation d’énergie devient de plus en plus difficile. Les innovations en matière de refroidissement et de distribution d’énergie seront essentielles.   Viabilité économique :  Le coût de développement et de fabrication des puces de nouvelle génération explose. Seules quelques entreprises, comme TSMC, Samsung et Intel, peuvent se permettre les investissements nécessaires.   Pour l’instant, la percée d’IBM offre un aperçu de ce qui est possible. Si l’entreprise parvient à commercialiser cette technologie, elle pourrait redéfinir les capacités de tout, des smartphones aux superordinateurs. Cependant, les implications plus larges pour l’industrie des semi-conducteurs – et l’écosystème technologique mondial – dépendront de la capacité des autres acteurs à suivre le rythme.</p><p></p><p>Changement climatique et technologie : un double défi</p><p>La juxtaposition de la crise du réseau électrique en Europe et de la percée d’IBM met en lumière les défis doubles auxquels sont confrontés les secteurs de la technologie et de l’énergie. D’un côté, le changement climatique teste la résilience des infrastructures critiques, exigeant des investissements urgents dans l’adaptation et les énergies renouvelables. De l’autre, l’innovation technologique continue de repousser les limites du possible, offrant des outils pour atténuer, voire inverser, certains des dommages causés par un réchauffement planétaire.  &quot;Ces changements continus dans l’électronique numérique ont été un moteur du changement technologique et social, de la productivité et de la croissance économique,&quot; note l’entrée de Wikipédia sur la loi de Moore.  La question est de savoir si ces deux forces peuvent travailler de concert. Des puces plus efficaces pourraient réduire l’empreinte énergétique des centres de données, qui représentent actuellement environ 1 % de la demande mondiale en électricité. Parallèlement, des réseaux intelligents alimentés par l’IA pourraient optimiser la distribution d’énergie, réduisant les gaspillages et améliorant la résilience. Cependant, atteindre cette synergie nécessitera des efforts coordonnés de la part des décideurs politiques, des leaders industriels et des chercheurs – un défi de taille dans un paysage mondial fragmenté.</p></div>
+  
+  <footer class="item-footer">
+    <div class="tags"><code>#Technology</code>, <code>#Climate Change</code>, <code>#Energy</code>, <code>#Europe</code></div>
+    
+  </footer>
+</article>
+
+<article id="item-2">
+  <header>
+    <h2 class="item-title"><a href="https://www.axios.com/2026/06/25/trump-administration-openai-gpt-model-release">États-Unis : L’administration Trump impose à OpenAI de restreindre la sortie de GPT-5.6 pour des raisons de sécurité</a>
+      <span class="score">⭐️ 7.665375000000001/10</span>
+    </h2>
+    <div class="meta">rss · Axios · Jun 25, 22:26</div>
+  </header>
+  <div class="article-body"><p class="article-lead">Une demande historique : le gouvernement américain intervient avant la sortie du modèle</p><p>La demande de l’administration Trump à OpenAI marque un tournant dans les relations entre le gouvernement américain et les développeurs d’IA. Selon des sources proches du dossier, le Bureau du Directeur national de la cybersécurité (ONCD) et le Bureau de la politique scientifique et technologique (OSTP) de la Maison-Blanche ont demandé à OpenAI de retarder la diffusion plus large de GPT-5.6 jusqu’à ce qu’un cadre d’évaluation de ses implications en matière de sécurité soit établi. Cette intervention préventive souligne les préoccupations croissantes concernant les risques potentiels posés par des modèles d’IA de plus en plus puissants, notamment entre les mains d’acteurs malveillants ou de nations adverses.</p><p></p><p>Pourquoi GPT-5.6 ? Les capacités qui suscitent l’inquiétude</p><p>GPT-5.6, le dernier modèle d’OpenAI, serait comparable en termes de capacités aux modèles Fable 5 et Mythos 5 d’Anthropic, qui ont été retirés suite à une directive rare du Département du Commerce. Des sources ont indiqué à Axios que l’intervention du gouvernement était motivée par les capacités « similaires à Mythos » de GPT-5.6, suggérant qu’il possède des capacités avancées de raisonnement ou d’autonomie qui pourraient poser des risques pour la sécurité nationale en cas d’utilisation abusive.  « C’est ce qui se passe avec les modèles de cette envergure. Ces modèles sont si puissants que l’administration veut s’assurer que les entreprises ont mis en place des garde-fous adéquats. » — Source proche de la situation  Cette demande reflète un changement plus large dans la manière dont les États-Unis envisagent le déploiement de l’IA de pointe, privilégiant la sécurité à la rapidité.</p><p></p><p>La réponse d’OpenAI : coopération malgré la frustration</p><p>Sam Altman, PDG d’OpenAI, a reconnu la demande du gouvernement dans un mémo adressé aux employés, présentant le déploiement limité comme une mesure temporaire tandis que l’entreprise collabore avec les autorités pour développer une approche plus durable pour les futures versions. Dans ce mémo, obtenu par *The Information*, Altman adopte un ton prudent :  « Nous avons clairement indiqué au gouvernement américain que ce n’est pas notre modèle préféré à long terme, et nous travaillerons avec eux et d’autres acteurs du secteur pour parvenir à une approche plus durable pour les futures versions. »  Le mémo révèle également qu’Altman a discuté de GPT-5.6 avec le secrétaire au Commerce, Howard Lutnick, qui a cherché à s’assurer que toutes les agences gouvernementales concernées avaient testé et approuvé le modèle. La coopération d’OpenAI ne masque cependant pas les tensions entre innovation et régulation, un équilibre de plus en plus difficile à maintenir alors que les capacités de l’IA dépassent les mécanismes de surveillance existants.</p><p></p><p>Le contexte plus large : course à l’IA et sécurité nationale</p><p>La demande de l’administration intervient dans un contexte de compétition mondiale acharnée en matière de développement de l’IA, les entreprises américaines cherchant à devancer les modèles open-source chinois comme GLM et DeepSeek. Cependant, les responsables de la sécurité avertissent que les progrès rapides de l’IA posent des risques existentiels, allant de la facilitation des cyberattaques à la propagation de campagnes de désinformation.    Menaces étatiques :  Des gouvernements adverses pourraient exploiter l’IA avancée pour l’espionnage ou le sabotage.   Cybercriminels :  Des outils alimentés par l’IA pourraient abaisser le seuil d’accès aux attaques par ransomware ou à la fraude.   Acteurs internes malveillants :  Des employés ayant accès à des modèles de pointe pourraient les détourner à des fins personnelles.   Ces préoccupations ont poussé la Maison-Blanche à accélérer la mise en place de protocoles de test volontaires pour les entreprises d’IA, comme le prévoit le récent décret exécutif du président Trump sur la sécurité de l’IA. Cependant, les luttes politiques autour de la portée et de l’applicabilité de ce décret ont retardé sa mise en œuvre pendant des semaines, illustrant les défis de la régulation d’un secteur en évolution rapide.</p><p></p><p>Et maintenant ? L’avenir de la régulation de l’IA aux États-Unis</p><p>L’affrontement entre OpenAI et l’administration Trump ouvre la voie à un débat prolongé sur la manière d’équilibrer innovation et sécurité à l’ère de l’IA. Bien que la demande du gouvernement soit présentée comme une mesure temporaire, elle pourrait établir un précédent pour de futures interventions, en particulier à mesure que les modèles deviennent plus puissants.    Volontaire ou obligatoire :  Les entreprises d’IA vont-elles s’autoréguler, ou le Congrès va-t-il adopter des lois contraignantes ?   Implications mondiales :  Comment les restrictions américaines affecteront-elles leur compétitivité face à la Chine et à d’autres nations ?   Résistance du secteur :  Les laboratoires d’IA vont-ils résister à la surveillance gouvernementale, ou collaborer pour façonner les politiques ?   Pour l’instant, la sortie limitée de GPT-5.6 par OpenAI sert de cas d’étude pour déterminer comment le gouvernement américain et les développeurs d’IA peuvent naviguer dans ce paysage complexe. Comme l’a noté Altman dans son mémo, l’objectif est de trouver une « approche durable »—mais avec les préoccupations en matière de sécurité qui s’intensifient, la voie à suivre reste incertaine.</p></div>
+  
+  <footer class="item-footer">
+    <div class="tags"><code>#AI</code>, <code>#US Government</code>, <code>#Cybersecurity</code></div>
+    
+  </footer>
+</article>
+
+<article id="item-3">
+  <header>
+    <h2 class="item-title"><a href="https://www.wired.com/story/china-defies-us-restrictions-and-builds-the-worlds-fastest-supercomputer/">La Chine pulvérise les records avec un supercalculateur sans GPU, défiant les restrictions américaines</a>
+      <span class="score">⭐️ 7.610250000000001/10</span>
+    </h2>
+    <div class="meta">rss · Wired · Jun 28, 09:00</div>
+  </header>
+  <div class="article-body"><p class="article-lead">Un bond historique : LineShine domine le TOP500 sans GPU</p><p>L’édition de juin 2026 du classement TOP500, qui recense les supercalculateurs les plus puissants au monde, a marqué un tournant : LineShine, développé par la Chine, s’est emparé de la première place avec une performance impressionnante de 2,2 exaflops, soit près de 2,2 trillions de calculs par seconde. Ce qui rend cette réalisation encore plus remarquable, c’est que LineShine a atteint ce niveau de performance sans utiliser le moindre processeur graphique (GPU), traditionnellement considéré comme indispensable pour le calcul haute performance (HPC).</p><p></p><p>Pourquoi les GPU sont cruciaux – et pourquoi l’approche sans GPU de la Chine change la donne</p><p>Les GPU ont longtemps été le pilier des supercalculateurs et de l’intelligence artificielle, grâce à leur capacité exceptionnelle à gérer les calculs parallèles. Contrairement aux unités centrales de traitement (CPU), optimisées pour les tâches séquentielles, les GPU sont conçus pour les multiplications de matrices – les opérations qui sous-tendent l’IA moderne, des grands modèles de langage à la génération d’images.  « L’IA moderne se réduit à une opération répétée sans cesse : la multiplication de matrices. Les GPU sont conçus spécifiquement pour cela, ce qui en fait des outils indispensables pour l’entraînement des réseaux de neurones », explique une analyse technique de NVIDIA.  Pourtant, les concepteurs de LineShine ont choisi de se passer totalement des GPU, optant plutôt pour une architecture CPU basée sur des processeurs Arm sur mesure. Cette décision n’est pas une simple curiosité technique ; elle représente une réponse directe aux contrôles américains à l’exportation, qui visent à priver la Chine d’accès aux semiconducteurs avancés, y compris les GPU haut de gamme de NVIDIA et AMD.</p><p></p><p>Les restrictions américaines échouent : comment la Chine a contourné les contrôles à l’exportation</p><p>Depuis 2018, les États-Unis ont progressivement renforcé les contrôles à l’exportation sur les semiconducteurs avancés et les technologies associées à destination de la Chine, culminant avec des mesures draconiennes sous l’administration Biden en 2022. Ces restrictions avaient pour objectif de limiter la capacité de la Chine à développer des supercalculateurs de pointe, l’IA et des applications militaires, en coupant son accès aux GPU conçus aux États-Unis et aux outils de fabrication.    Octobre 2022 :  L’administration Biden impose des contrôles à l’exportation étendus sur les semiconducteurs avancés, ciblant les secteurs chinois de l’IA et du supercalcul.   2023-2025 :  De nouvelles mesures élargissent le champ des technologies restreintes, incluant les machines de lithographie avancée d’ASML et les puces mémoire à large bande passante.   Septembre 2025 :  Les États-Unis ajoutent davantage d’entités chinoises à leur liste d’entités, restreignant encore davantage leur accès à la technologie américaine.   Pourtant, comme le démontre l’arrivée de LineShine dans le classement TOP500, ces restrictions n’ont pas freiné les progrès de la Chine. Au contraire, elles ont accéléré la quête d’autonomie de Pékin, stimulant les investissements dans la conception de puces locales, les architectures alternatives et les capacités de fabrication indigènes.</p><p></p><p>Les enjeux géopolitiques : le supercalcul comme symbole de la suprématie technologique</p><p>L’ascension de LineShine au sommet du classement TOP500 est bien plus qu’une avancée technique – c’est une déclaration géopolitique. Les supercalculateurs sont essentiels pour une multitude d’applications stratégiques, allant de la simulation d’armes nucléaires à la modélisation climatique, en passant par la découverte de médicaments et le développement de l’IA. En reprenant la première place, la Chine a signifié sa capacité à rivaliser – et potentiellement à surpasser – les États-Unis dans un domaine où la domination américaine était jusqu’ici incontestée.  « L’arrivée de LineShine marque la première fois qu’un système chinois domine le classement TOP500 depuis Sunway TaihuLight en 2017 », note le South China Morning Post. « Il ne s’agit pas seulement de prestige ; c’est une démonstration de souveraineté technologique. »  Pendant ce temps, les ambitions américaines en matière de supercalcul ont connu des retards. El Capitan, un système du Département de l’Énergie américain censé dépasser les 2 exaflops, a été confronté à des problèmes d’approvisionnement et à des restrictions sur des composants clés. Avec LineShine en tête, la course à l’informatique exascale prend une nouvelle tournure.</p><p></p><p>Et maintenant ? L’avenir du supercalcul et de l’IA dans un monde fragmenté</p><p>Le succès de LineShine soulève des questions cruciales sur l’avenir de la compétition technologique mondiale. L’approche chinoise sans GPU deviendra-t-elle un modèle pour d’autres nations cherchant à contourner les restrictions américaines ? Et comment les États-Unis réagiront-ils – en renforçant les contrôles à l’exportation ou en accélérant leurs propres efforts d’innovation ?    Développement de l’IA :  Sans GPU, les capacités chinoises en matière d’entraînement de l’IA pourraient être limitées, mais les performances de LineShine suggèrent que les architectures alternatives pourraient bientôt combler cet écart.   Résilience des chaînes d’approvisionnement :  La capacité de la Chine à construire un supercalculateur de classe mondiale sans composants américains souligne les risques d’une dépendance excessive envers un seul pays pour les technologies critiques.   Classements mondiaux :  Le classement TOP500, traditionnellement dominé par les systèmes américains et japonais, pourrait voir une diversification accrue alors que d’autres nations investissent dans le HPC.   Une chose est certaine : l’ère de la domination incontestée des États-Unis dans le domaine du supercalcul est révolue. Alors que la guerre technologique entre Washington et Pékin s’intensifie, le champ de bataille passera des matériels aux logiciels, des puces aux algorithmes – et les enjeux n’ont jamais été aussi élevés.</p></div>
+  
+  <footer class="item-footer">
+    <div class="tags"><code>#Supercomputing</code>, <code>#Technology</code>, <code>#US-China Relations</code>, <code>#Innovation</code></div>
+    
+  </footer>
+</article>
+
+<article id="item-4">
+  <header>
+    <h2 class="item-title"><a href="https://arstechnica.com/gadgets/2026/06/notion-killing-skiff-influenced-email-app-since-most-users-use-ai-agents-instead/">Notion abandonne son application email alors que les agents IA dominent la boîte de réception</a>
+      <span class="score">⭐️ 6.6705/10</span>
+    </h2>
+    <div class="meta">rss · Ars Technica · Jun 25, 19:04</div>
+  </header>
+  <div class="article-body"><p class="article-lead">L’ascension et la chute des ambitions email de Notion</p><p>L’incursion de Notion dans le domaine de la messagerie électronique n’était pas destinée à rester une simple anecdote. Lancée comme un service inspiré de Skiff, l’application promettait un chiffrement de bout en bout, une intégration fluide avec l’espace de travail Notion et une approche axée sur la confidentialité—des fonctionnalités qui ont séduit les utilisateurs méfiants envers les pratiques de collecte de données des géants technologiques. Skiff, acquis par Notion début 2024, s’était taillé une place de choix en tant qu’alternative sécurisée à Gmail et Outlook, offrant une messagerie, un calendrier et un stockage cloud chiffrés sous un même toit.  &quot;Skiff Mail a été un changement de jeu pour les utilisateurs soucieux de leur vie privée, mais le destin de l’email tel que nous le connaissons était déjà scellé,&quot; a déclaré un ancien ingénieur de Skiff dans une récente interview.  Pourtant, malgré ses atouts techniques, le service email de Notion n’a pas réussi à s’imposer. Les données internes ont révélé une réalité frappante : la plupart des utilisateurs contournaient l’application, préférant s’en remettre à des agents IA pour gérer leurs boîtes de réception. Cette tendance reflète des changements plus larges dans l’industrie, où l’automatisation n’est plus un luxe, mais une nécessité pour les professionnels submergés.</p><p></p><p>Pourquoi les agents IA gagnent la bataille de la boîte de réception</p><p>Les agents IA représentent un changement de paradigme dans la gestion des emails. Contrairement aux outils traditionnels qui aident à rédiger ou trier, ces systèmes fonctionnent de manière autonome, gérant des workflows complexes avec un minimum d’intervention humaine. Par exemple, un agent IA peut classer un email entrant, le croiser avec des données CRM, rédiger une réponse et même déclencher des actions de suivi—tout cela avant que l’utilisateur n’ouvre sa boîte de réception.    Compréhension contextuelle :  Les agents IA utilisent le traitement du langage naturel (NLP) pour saisir l’intention derrière les emails, pas seulement les mots-clés.   Prise de décision autonome :  Ils peuvent prioriser, archiver ou escalader des messages en fonction de préférences apprises.   Intégration aux workflows :  Les agents se connectent sans effort aux outils de gestion de projet, calendriers et bases de données.   Ce niveau d’automatisation contraste fortement avec les règles rigides des filtres email traditionnels. Comme l’a souligné un analyste du secteur,  &quot;La boîte de réception du futur n’est pas un endroit que vous visitez—c’est un système qui travaille pour vous, même lorsque vous êtes hors ligne.&quot;  Le virage de Notion reflète cette nouvelle réalité, où la productivité se mesure aux résultats, et non aux efforts manuels.</p><p></p><p>L’héritage de Skiff : la confidentialité dans un monde piloté par l’IA</p><p>L’accent mis par Skiff sur la confidentialité et le chiffrement était en avance sur son temps, mais il a également mis en lumière une tension croissante : comment concilier la sécurité de bout en bout avec le besoin d’accès aux données des agents IA ? Ces derniers prospèrent grâce au contexte, nécessitant une intégration profonde avec le contenu des emails pour fonctionner efficacement. Cela crée un dilemme pour des services comme Skiff, qui privilégient le contrôle utilisateur sur les données.    Chiffrement vs. Intelligence :  Les emails entièrement chiffrés limitent la capacité des IA à analyser et agir sur le contenu.   Confiance des utilisateurs :  Les utilisateurs soucieux de leur vie privée peuvent résister aux agents IA nécessitant l’accès à des communications sensibles.   Modèles hybrides :  Certains services expérimentent le traitement IA sur l’appareil pour équilibrer confidentialité et automatisation.   La décision de Notion d’abandonner son application email suggère que, pour l’instant, le marché privilégie la commodité à la confidentialité absolue. Cependant, le débat sur une communication sécurisée et pilotée par l’IA est loin d’être clos.</p><p></p><p>La stratégie IA de Notion : les agents comme nouvel espace de travail</p><p>Le virage de Notion vers les agents IA s’inscrit dans sa vision plus large d’un « espace de travail IA ». L’entreprise intègre progressivement l’IA dans sa plateforme, de la prise de notes automatisée à la gestion intelligente des bases de données. Avec les agents, Notion vise à créer un écosystème de productivité autosuffisant où les tâches routinières—comme le tri des emails—sont gérées de manière autonome.  &quot;Les agents Notion maintiennent le travail en mouvement 24h/24. Ils capturent les connaissances, répondent aux questions et font avancer les projets—même pendant que vous dormez,&quot; indique le matériel promotionnel de l’entreprise.  Cette approche reflète les tendances observées dans d’autres outils de productivité, comme Copilot de Microsoft et Duet AI de Google, qui intègrent des agents IA dans leurs suites. Pour Notion, le défi sera de s’assurer que ses agents ne soient pas seulement puissants, mais aussi personnalisables, permettant aux utilisateurs d’adapter l’automatisation à leurs besoins spécifiques.</p><p></p><p>Ce que cela signifie pour les utilisateurs et l’avenir de l’email</p><p>Pour les utilisateurs, la décision de Notion marque une transition plus large vers l’abandon des interfaces email traditionnelles. Les agents IA sont appelés à devenir la méthode par défaut pour interagir avec les boîtes de réception, réduisant le besoin de tri, de rédaction et d’organisation manuels. Cependant, ce changement soulève également des questions sur le contrôle, la transparence et le rôle de la supervision humaine dans la communication numérique.    Gains de productivité :  Les agents IA peuvent récupérer des heures consacrées à la gestion des emails, libérant les utilisateurs pour des tâches à plus forte valeur ajoutée.   Risques potentiels :  Une dépendance excessive à l’IA pourrait entraîner des erreurs de communication si les agents interprètent mal le contexte.   Nouvelles compétences :  Les utilisateurs devront apprendre à former et gérer efficacement les agents IA, plutôt que de simplement naviguer dans les clients email.   Alors que Notion retire progressivement son application email, il est clair que la boîte de réception du futur sera très différente. La question n’est plus de savoir si l’IA transformera l’email, mais à quelle vitesse—et avec quelle fluidité—les utilisateurs s’adapteront.</p></div>
+  
+  <footer class="item-footer">
+    <div class="tags"><code>#Technology</code>, <code>#AI</code>, <code>#Email</code>, <code>#Notion</code></div>
+    
+  </footer>
+</article>
+
+<article id="item-5">
+  <header>
+    <h2 class="item-title"><a href="https://www.theverge.com/ai-artificial-intelligence/958804/chinas-z-ai-glm-52-mythos-cybersecurity">Z.ai réduit l’écart en cybersécurité IA : le modèle GLM-5.2 peut-il rivaliser avec Mythos d’Anthropic ?</a>
+      <span class="score">⭐️ 6.5051250000000005/10</span>
+    </h2>
+    <div class="meta">rss · The Verge · Jun 28, 21:42</div>
+  </header>
+  <div class="article-body"><p class="article-lead">L’essor des modèles à poids ouverts : un tournant pour l’accessibilité de l’IA</p><p>Les modèles à poids ouverts comme GLM-5.2 de Z.ai transforment le paysage de l’intelligence artificielle en rendant des technologies de pointe accessibles aux développeurs, entreprises et gouvernements du monde entier. Contrairement à l’IA entièrement open source, qui inclut le code d’entraînement et les jeux de données, les modèles à poids ouverts ne publient que les paramètres du modèle – ses « poids » – permettant aux utilisateurs de l’exécuter, de l’adapter et de le déployer sur leurs propres infrastructures sans restrictions propriétaires. Cette approche démocratise l’IA, permettant à des acteurs plus modestes d’innover sans dépendre des plateformes cloud ou des licences des géants technologiques.</p><p></p><p>GLM-5.2 contre Mythos : où en est Z.ai en cybersécurité ?</p><p>Mythos d’Anthropic, dévoilé en avril 2026, a établi une nouvelle référence en matière de cybersécurité pilotée par l’IA, grâce à sa capacité à découvrir autonomement des vulnérabilités logicielles, à enchaîner des exploits et à effectuer des analyses de sécurité avancées. Aujourd’hui, GLM-5.2 de Z.ai défie cette domination. Selon des chercheurs, le modèle chinois affiche des performances comparables dans la détection de bugs et des scénarios de cybersécurité, bien qu’il reste en retrait sur des tâches de raisonnement plus générales.  « L’écart entre les modèles d’IA chinois et occidentaux se réduit plus vite que prévu dans des domaines spécialisés », a noté un analyste en cybersécurité de l’AI Security Institute (AISI). « GLM-5.2 montre que la Chine ne se contente plus de rattraper son retard – elle concurrence directement les leaders dans des secteurs critiques. »</p><p></p><p>Pourquoi l’IA en cybersécurité compte : les enjeux d’une course aux armements technologiques</p><p>La capacité des modèles d’IA à identifier et exploiter autonomement des vulnérabilités a des implications profondes pour la sécurité mondiale. Mythos, par exemple, a déjà suscité des inquiétudes parmi les gouvernements et les institutions en raison de son potentiel à accélérer les opérations cybernétiques, qu’elles soient défensives ou offensives. L’arrivée de GLM-5.2 de Z.ai dans ce domaine marque un tournant : la Chine n’est plus dépendante de l’IA occidentale pour des applications de sécurité critiques.    Applications défensives :  Correction automatisée, détection des menaces et évaluation des vulnérabilités en temps réel.   Risques offensifs :  Développement d’exploits pilotés par l’IA, outils de piratage autonomes et cyberattaques parrainées par des États.   Impact géopolitique :  Une moindre dépendance aux modèles d’IA américains et européens pourrait modifier l’équilibre des pouvoirs en cybersécurité.</p><p></p><p>La stratégie de Zhipu AI : s’affranchir de la dépendance technologique américaine</p><p>Zhipu AI, rebaptisée Z.ai à l’international, est à l’avant-garde de la volonté chinoise de réduire sa dépendance aux technologies américaines. Plus tôt cette année, l’entreprise a fait les gros titres en entraînant un modèle d’IA majeur entièrement sur des puces produites localement, contournant ainsi les restrictions américaines sur l’exportation de semi-conducteurs avancés. La sortie de GLM-5.2 – un jour seulement après qu’Anthropic ait reporté une mise à jour prévue – suggère une manœuvre calculée pour tirer parti des incertitudes réglementaires et commerciales de l’IA occidentale.  « Z.ai se positionne comme la réponse chinoise à Anthropic et OpenAI », a déclaré un analyste technologique du South China Morning Post. « En misant sur les modèles à poids ouverts, ils offrent une alternative convaincante aux écosystèmes d’IA fermés et dominés par l’Occident. »</p><p></p><p>L’avenir de la cybersécurité par l’IA : collaboration ou confrontation ?</p><p>L’émergence de GLM-5.2 soulève des questions cruciales sur l’avenir de la cybersécurité pilotée par l’IA. Cette compétition va-t-elle stimuler l’innovation et la collaboration, ou approfondir les divisions géopolitiques ? Bien que les modèles à poids ouverts comme GLM-5.2 abaissent les barrières à l’entrée, ils introduisent également de nouveaux risques, comme la possibilité pour des acteurs malveillants de détourner l’IA à des fins de cyberattaques.    Opportunités :  Découverte plus rapide des vulnérabilités, outils de sécurité démocratisés et collaboration transfrontalière sur la sécurité de l’IA.   Défis :  Cyber-guerre pilotée par l’IA, vol de propriété intellectuelle et érosion de la confiance dans les infrastructures numériques.   Alors que la course à la cybersécurité par l’IA s’intensifie, le monde pourrait bientôt être confronté à un choix radical : embrasser une nouvelle ère d’innovation sécuritaire partagée ou se préparer à un paysage technologique fragmenté et antagoniste.</p></div>
+  
+  <footer class="item-footer">
+    <div class="tags"><code>#AI</code>, <code>#Cybersecurity</code>, <code>#China</code>, <code>#Technology</code></div>
+    
+  </footer>
+</article>
+</main></div><div class="tab-content " data-lang="en"><section class="summary-header">
+  <h1>Horizon Daily — 2026-06-29</h1>
+  <p class="lead">From 482 items, 5 important content pieces were selected</p>
+  <nav class="toc" aria-label="Contents">
+    <p class="toc-title">Contents</p>
+    <ul><li><a href="#item-1">Europe’s Grid Under Fire: Heat Waves Test Resilience as IBM Pushes Moore’s Law to the Limit <span class="toc-score">⭐️ 9.0336825/10</span></a></li>
+<li><a href="#item-2">U.S. Government Breaks New Ground: Trump Administration Demands OpenAI Limit GPT-5.6 Release Over Security Risks <span class="toc-score">⭐️ 7.665375000000001/10</span></a></li>
+<li><a href="#item-3">China’s GPU-Free Supercomputer Shatters Records, Defying US Tech Restrictions <span class="toc-score">⭐️ 7.610250000000001/10</span></a></li>
+<li><a href="#item-4">Notion Drops Email App as AI Agents Take Over the Inbox <span class="toc-score">⭐️ 6.6705/10</span></a></li>
+<li><a href="#item-5">China’s Z.ai Narrows the AI Cybersecurity Gap: Can GLM-5.2 Rival Anthropic’s Mythos? <span class="toc-score">⭐️ 6.5051250000000005/10</span></a></li></ul>
+  </nav>
+</section>
+<main class="items">
+<article id="item-1">
+  <header>
+    <h2 class="item-title"><a href="https://www.technologyreview.com/2026/06/25/1139738/the-download-europe-heat-wave-ibm-chip-moores-law/">Europe’s Grid Under Fire: Heat Waves Test Resilience as IBM Pushes Moore’s Law to the Limit</a>
+      <span class="score">⭐️ 9.0336825/10</span>
+    </h2>
+    <div class="meta">rss · MIT Technology Review · Jun 25, 12:10</div>
+  </header>
+  <div class="article-body"><p class="article-lead">Europe’s Heat Wave: A Stress Test for the Grid</p><p>Europe is currently grappling with one of its most intense heat waves on record, pushing power grids to their breaking point. As temperatures soar, air conditioners, fans, and cooling systems are running at full capacity, creating an unprecedented surge in electricity demand. According to reports, this strain is not just a matter of increased consumption—it’s a systemic challenge that threatens the stability of entire energy networks.  &quot;Heat waves have already hit loads of countries this year, and they aren’t set to stop soon. Power grids and markets are facing strain from the challenges heat can bring,&quot; warns a recent analysis on LinkedIn.  The implications are dire. In some regions, power plants—particularly those reliant on cooling systems—are being forced to shut down or reduce output due to overheating or water shortages. This creates a vicious cycle: higher demand meets reduced supply, increasing the risk of blackouts. The situation underscores the urgent need for grid modernization, including smarter demand-response systems and greater integration of renewable energy sources to mitigate climate-driven disruptions.</p><p></p><p>Why Heat Waves Overwhelm Power Infrastructure</p><p>The relationship between extreme heat and power grid failures is well-documented but often underestimated. During heat waves, cooling systems account for a significant portion of electricity consumption. In Europe, where air conditioning adoption has historically been lower than in the U.S., the recent surge in installations is exacerbating the problem.    Increased Load:  Air conditioners and fans can double or triple household electricity use, straining local grids.   Reduced Efficiency:  High temperatures degrade the performance of transmission lines, increasing resistance and energy loss.   Cooling Requirements:  Thermal power plants—especially nuclear and coal—require vast amounts of water for cooling. Heat waves often coincide with droughts, limiting water availability and forcing plants to scale back operations.   Renewable Shortfalls:  Solar panels lose efficiency in extreme heat, while wind patterns can become erratic, reducing output from wind farms.   The result is a grid operating at the edge of its capacity, where even minor disruptions can trigger cascading failures. Experts argue that without significant investment in grid resilience, such scenarios will become the new normal as climate change intensifies.</p><p></p><p>IBM’s Chip Breakthrough: Redefining Moore’s Law</p><p>While Europe battles climate-induced energy crises, IBM has made a landmark advancement in semiconductor technology. The company unveiled a prototype chip measuring just a few square millimeters—roughly the size of a fingernail—yet packing an astonishing 100 billion transistors. This achievement doubles the transistor density of IBM’s previous state-of-the-art chip, announced in 2021, and marks a significant leap forward in computing power and energy efficiency.  &quot;The design could pave the way for faster and more energy-efficient computers for years to come,&quot; IBM stated in its announcement.  Moore’s Law, the observation that the number of transistors on a microchip doubles approximately every two years, has guided the semiconductor industry for decades. However, recent years have seen growing skepticism about its continued viability, as physical limits and manufacturing challenges make further miniaturization increasingly difficult. IBM’s breakthrough suggests that Moore’s Law may still have room to run, albeit with innovative approaches to chip design and materials science.</p><p></p><p>The Science Behind the Breakthrough: How Transistors Drive Progress</p><p>Transistors are the fundamental building blocks of modern electronics, acting as switches or amplifiers for electrical signals. The more transistors a chip contains, the more computations it can perform simultaneously, leading to faster and more efficient devices. IBM’s new chip leverages advanced fabrication techniques, including extreme ultraviolet (EUV) lithography and novel materials like nanosheet transistors, to achieve its record-breaking density.    EUV Lithography:  This cutting-edge technology uses ultra-short wavelengths of light to etch circuits onto silicon wafers with unprecedented precision, enabling smaller and more densely packed transistors.   Nanosheet Transistors:  Unlike traditional fin-shaped transistors, nanosheet designs offer better control over electrical flow, reducing leakage and improving efficiency.   3D Stacking:  IBM’s chip also incorporates vertical stacking of transistors, allowing for greater density without expanding the chip’s footprint.   These innovations are not just technical triumphs—they have real-world implications. Chips with higher transistor counts can handle more complex tasks, from AI training to real-time data processing, while consuming less power. This could lead to longer battery life in mobile devices, more efficient data centers, and even breakthroughs in fields like medical diagnostics and climate modeling.</p><p></p><p>What’s Next for Moore’s Law and the Semiconductor Industry?</p><p>IBM’s achievement raises critical questions about the future of Moore’s Law. While the company has demonstrated that transistor density can still double, the economic and technical challenges of maintaining this pace are formidable. Industry experts remain divided on whether Moore’s Law will continue to hold or if it will gradually plateau as physical limits are reached.    Alternative Approaches:  Some companies are exploring alternatives to traditional silicon-based chips, such as quantum computing, neuromorphic chips, or carbon nanotube transistors.   Energy Efficiency:  As chips become denser, managing heat and power consumption becomes increasingly difficult. Innovations in cooling and power delivery will be essential.   Economic Viability:  The cost of developing and manufacturing next-generation chips is skyrocketing. Only a handful of companies, like TSMC, Samsung, and Intel, can afford the investments required.   For now, IBM’s breakthrough offers a glimpse of what’s possible. If the company can bring this technology to market, it could redefine the capabilities of everything from smartphones to supercomputers. However, the broader implications for the semiconductor industry—and the global tech ecosystem—will depend on whether other players can keep pace.</p><p></p><p>Climate Change and Technology: A Dual Challenge</p><p>The juxtaposition of Europe’s grid crisis and IBM’s chip breakthrough highlights the dual challenges facing the tech and energy sectors. On one hand, climate change is testing the resilience of critical infrastructure, demanding urgent investments in adaptation and renewable energy. On the other, technological innovation continues to push the boundaries of what’s possible, offering tools to mitigate and even reverse some of the damage caused by a warming planet.  &quot;These ongoing changes in digital electronics have been a driving force of technological and social change, productivity, and economic growth,&quot; notes Wikipedia’s entry on Moore’s Law.  The question is whether these two forces can work in tandem. More efficient chips could reduce the energy footprint of data centers, which currently account for about 1% of global electricity demand. Meanwhile, smarter grids powered by AI could optimize energy distribution, reducing waste and improving resilience. However, achieving this synergy will require coordinated efforts from policymakers, industry leaders, and researchers—a tall order in a fragmented global landscape.</p></div>
+  
+  <footer class="item-footer">
+    <div class="tags"><code>#Technology</code>, <code>#Climate Change</code>, <code>#Energy</code>, <code>#Europe</code></div>
+    
+  </footer>
+</article>
+
+<article id="item-2">
+  <header>
+    <h2 class="item-title"><a href="https://www.axios.com/2026/06/25/trump-administration-openai-gpt-model-release">U.S. Government Breaks New Ground: Trump Administration Demands OpenAI Limit GPT-5.6 Release Over Security Risks</a>
+      <span class="score">⭐️ 7.665375000000001/10</span>
+    </h2>
+    <div class="meta">rss · Axios · Jun 25, 22:26</div>
+  </header>
+  <div class="article-body"><p class="article-lead">A Historic Request: U.S. Government Steps In Before Model Release</p><p>The Trump administration’s request to OpenAI represents a watershed moment in the relationship between the U.S. government and AI developers. According to sources familiar with the matter, the White House’s Office of the National Cyber Director (ONCD) and the Office of Science and Technology Policy (OSTP) have asked OpenAI to delay the broader release of GPT-5.6 until a framework for testing and evaluating its security implications is established. This preemptive action underscores growing concerns about the potential risks posed by increasingly powerful AI models, particularly in the hands of malicious actors or adversarial nations.</p><p></p><p>Why GPT-5.6? The Capabilities Raising Alarm Bells</p><p>GPT-5.6, OpenAI’s latest frontier model, is reportedly comparable in capability to Anthropic’s revoked models, Fable 5 and Mythos 5, which were pulled following a rare directive from the Commerce Department. Sources told Axios that the administration’s intervention was triggered by GPT-5.6’s &quot;Mythos-like&quot; capabilities—suggesting it possesses advanced reasoning, autonomy, or other attributes that could pose national security risks if misused.  &quot;This is what&#39;s happening with models of that caliber. The models are so powerful that the administration wants to be sure the companies have adequate safeguards in place.&quot; — Source familiar with the situation  The administration’s request reflects a broader shift in how the U.S. views the deployment of cutting-edge AI, prioritizing security over speed.</p><p></p><p>OpenAI’s Response: Cooperation Amid Frustration</p><p>OpenAI CEO Sam Altman acknowledged the government’s request in a memo to employees, framing the limited rollout as a temporary measure while the company works with officials to develop a more sustainable approach for future releases. Altman’s memo, obtained by *The Information*, struck a cautious tone:  &quot;We&#39;ve made clear to the U.S. government that this is not our preferred long-term model, and will work with them and others in industry to achieve a more sustainable approach for future releases.&quot;  The memo also revealed that Altman discussed GPT-5.6 with Commerce Secretary Howard Lutnick, who sought assurances that all relevant government agencies had tested and approved the model. OpenAI’s cooperation, however, does not mask the tension between innovation and regulation—a dynamic that has intensified as AI capabilities outpace existing oversight mechanisms.</p><p></p><p>The Broader Context: AI Race Meets National Security</p><p>The administration’s request arrives amid a high-stakes global competition in AI development, with U.S. companies racing to outpace Chinese open-source models like GLM and DeepSeek. However, security officials warn that the rapid advancement of AI poses existential risks, from enabling cyberattacks to facilitating disinformation campaigns.    Nation-state threats:  Adversarial governments could exploit advanced AI for espionage or sabotage.   Cybercriminals:  AI-powered tools could lower the barrier for ransomware attacks or fraud.   Rogue insiders:  Employees with access to frontier models could misuse them for personal gain.   These concerns have prompted the White House to accelerate efforts to establish voluntary testing protocols for AI companies, as outlined in President Trump’s recent executive order on AI security. However, political infighting over the order’s scope and enforceability delayed its implementation for weeks, highlighting the challenges of regulating a fast-moving industry.</p><p></p><p>What’s Next? The Future of AI Regulation in the U.S.</p><p>The standoff between OpenAI and the Trump administration sets the stage for a protracted debate over how to balance innovation with security in the AI era. While the administration’s request is framed as a temporary measure, it could set a precedent for future interventions, particularly as models grow more capable.    Voluntary vs. mandatory:  Will AI companies self-regulate, or will Congress pass binding laws?   Global implications:  How will U.S. restrictions affect its competitiveness with China and other nations?   Industry pushback:  Will AI labs resist government oversight, or collaborate to shape policies?   For now, OpenAI’s limited release of GPT-5.6 serves as a test case for how the U.S. government and AI developers can navigate this complex landscape. As Altman noted in his memo, the goal is to find a &quot;sustainable approach&quot;—but with security concerns mounting, the path forward remains uncertain.</p></div>
+  
+  <footer class="item-footer">
+    <div class="tags"><code>#AI</code>, <code>#US Government</code>, <code>#Cybersecurity</code></div>
+    
+  </footer>
+</article>
+
+<article id="item-3">
+  <header>
+    <h2 class="item-title"><a href="https://www.wired.com/story/china-defies-us-restrictions-and-builds-the-worlds-fastest-supercomputer/">China’s GPU-Free Supercomputer Shatters Records, Defying US Tech Restrictions</a>
+      <span class="score">⭐️ 7.610250000000001/10</span>
+    </h2>
+    <div class="meta">rss · Wired · Jun 28, 09:00</div>
+  </header>
+  <div class="article-body"><p class="article-lead">A Historic Leap: LineShine Tops the TOP500 Without GPUs</p><p>The June 2026 edition of the TOP500 list, the definitive ranking of the world’s most powerful supercomputers, delivered a seismic shift: China’s LineShine has claimed the top spot with a staggering 2.2 exaflops of performance—nearly 2.2 quintillion calculations per second. What makes this achievement even more remarkable is that LineShine achieved this feat without relying on a single graphics processing unit (GPU), the traditional workhorse of high-performance computing (HPC).</p><p></p><p>Why GPUs Matter—and Why China’s GPU-Free Design Is a Game-Changer</p><p>GPUs have long been the backbone of supercomputing and artificial intelligence, thanks to their unparalleled ability to handle parallel computations. Unlike central processing units (CPUs), which excel at sequential tasks, GPUs are optimized for matrix multiplications—the very operations that underpin modern AI, from large language models to image generation.  &quot;Modern AI reduces to one operation done over and over: matrix multiplication. GPUs are purpose-built for this, making them indispensable for training neural networks,&quot; explains a technical analysis from NVIDIA.  Yet LineShine’s architects bypassed GPUs entirely, opting instead for a custom-designed Arm-based CPU architecture. This decision is not merely a technical curiosity; it represents a direct response to US export controls, which have sought to cripple China’s access to advanced semiconductor technology, including high-end GPUs from companies like NVIDIA and AMD.</p><p></p><p>US Restrictions Backfire: How China Outmaneuvered Export Controls</p><p>Since 2018, the US has progressively tightened export controls on advanced semiconductors and related technologies to China, culminating in sweeping measures under the Biden administration in 2022. These restrictions aimed to limit China’s ability to develop cutting-edge supercomputers, AI, and military applications by cutting off access to US-designed GPUs and fabrication tools.    October 2022:  The Biden administration imposed broad export controls on advanced semiconductors, targeting China’s AI and supercomputing sectors.   2023-2025:  Additional measures expanded the scope of restricted technologies, including advanced lithography machines from ASML and high-bandwidth memory chips.   September 2025:  The US added more Chinese entities to its Entity List, further restricting their access to US technology.   Yet, as LineShine’s debut on the TOP500 list demonstrates, these restrictions have not stifled China’s progress. Instead, they have accelerated Beijing’s push for self-reliance, spurring investments in domestic chip design, alternative architectures, and indigenous manufacturing capabilities.</p><p></p><p>The Geopolitical Stakes: Supercomputing as a Proxy for Tech Supremacy</p><p>LineShine’s rise to the top of the TOP500 list is more than a technical milestone—it is a geopolitical statement. Supercomputers are critical for a range of strategic applications, including nuclear weapons simulation, climate modeling, drug discovery, and AI development. By reclaiming the top spot, China has signaled its ability to compete—and potentially surpass—the US in a domain where American leadership has been unchallenged for decades.  &quot;The debut of LineShine marks the first time a China-based system has led the TOP500 rankings since Sunway TaihuLight in 2017,&quot; notes the South China Morning Post. &quot;This is not just about bragging rights; it’s about demonstrating technological sovereignty.&quot;  The US, meanwhile, has seen its own supercomputing ambitions delayed. El Capitan, a US Department of Energy system slated to surpass 2 exaflops, has faced setbacks due to supply chain issues and export restrictions on key components. With LineShine now leading the pack, the race for exascale computing has taken on a new urgency.</p><p></p><p>What’s Next? The Future of Supercomputing and AI in a Fragmented World</p><p>LineShine’s success raises critical questions about the future of global tech competition. Will China’s GPU-free approach become a blueprint for other nations seeking to bypass US restrictions? And how will the US respond—by doubling down on export controls, or by accelerating its own innovation efforts?    AI Development:  Without GPUs, China’s AI training capabilities could face limitations, but LineShine’s performance suggests that alternative architectures may soon close the gap.   Supply Chain Resilience:  China’s ability to build a top-ranked supercomputer without US components underscores the risks of over-reliance on a single country for critical technologies.   Global Benchmarks:  The TOP500 list, traditionally dominated by US and Japanese systems, may see increased diversity as other nations invest in HPC.   One thing is clear: the era of unchallenged US dominance in supercomputing is over. As the tech war between Washington and Beijing intensifies, the battleground will shift from hardware to software, from chips to algorithms—and the stakes could not be higher.</p></div>
+  
+  <footer class="item-footer">
+    <div class="tags"><code>#Supercomputing</code>, <code>#Technology</code>, <code>#US-China Relations</code>, <code>#Innovation</code></div>
+    
+  </footer>
+</article>
+
+<article id="item-4">
+  <header>
+    <h2 class="item-title"><a href="https://arstechnica.com/gadgets/2026/06/notion-killing-skiff-influenced-email-app-since-most-users-use-ai-agents-instead/">Notion Drops Email App as AI Agents Take Over the Inbox</a>
+      <span class="score">⭐️ 6.6705/10</span>
+    </h2>
+    <div class="meta">rss · Ars Technica · Jun 25, 19:04</div>
+  </header>
+  <div class="article-body"><p class="article-lead">The Rise and Fall of Notion’s Email Ambitions</p><p>Notion’s foray into email was never meant to be a footnote. Launched as a Skiff-influenced service, the app promised end-to-end encryption, seamless integration with Notion’s workspace, and a privacy-first approach—features that resonated with users wary of Big Tech’s data practices. Skiff, acquired by Notion in early 2024, had carved a niche as a secure alternative to Gmail and Outlook, offering encrypted mail, calendar, and cloud storage under one roof.  &quot;Skiff Mail was a game-changer for privacy-conscious users, but the writing was on the wall: email as we know it is evolving,&quot; said a former Skiff engineer in a recent interview.  Yet, despite its technical merits, Notion’s email service failed to gain traction. Internal data revealed a stark reality: most users were bypassing the app entirely, opting instead for AI-driven agents to manage their inboxes. This trend mirrors broader industry shifts, where automation is no longer a luxury but a necessity for overwhelmed professionals.</p><p></p><p>Why AI Agents Are Winning the Inbox Wars</p><p>AI agents represent a paradigm shift in email management. Unlike traditional tools that assist with drafting or sorting, these systems operate autonomously, handling multi-step workflows with minimal human input. For example, an AI agent might classify an incoming email, cross-reference it with CRM data, draft a response, and even trigger follow-up actions—all before the user opens their inbox.    Contextual Understanding:  AI agents leverage natural language processing (NLP) to grasp the intent behind emails, not just keywords.   Autonomous Decision-Making:  They can prioritize, archive, or escalate messages based on learned preferences.   Integration with Workflows:  Agents seamlessly connect email to project management tools, calendars, and databases.   This level of automation is a far cry from the rigid rules of legacy email filters. As one industry analyst noted,  &quot;The inbox of the future isn’t a place you visit—it’s a system that works for you, even when you’re offline.&quot;  Notion’s pivot reflects this new reality, where productivity is measured by outcomes, not manual effort.</p><p></p><p>The Skiff Legacy: Privacy in an AI-Driven World</p><p>Skiff’s emphasis on privacy and encryption was ahead of its time, but it also highlighted a growing tension: how do you reconcile end-to-end security with AI’s need for data access? AI agents thrive on context, requiring deep integration with email content to function effectively. This creates a dilemma for services like Skiff, which prioritized user control over data.    Encryption vs. Intelligence:  Fully encrypted emails limit AI’s ability to analyze and act on content.   User Trust:  Privacy-focused users may resist AI agents that require access to sensitive communications.   Hybrid Models:  Some services are experimenting with on-device AI processing to balance privacy and automation.   Notion’s decision to sunset its email app suggests that, for now, the market favors convenience over absolute privacy. However, the conversation around secure AI-driven communication is far from over.</p><p></p><p>Notion’s AI Strategy: Agents as the New Workspace</p><p>Notion’s shift toward AI agents aligns with its broader vision of an &quot;AI workspace.&quot; The company has been steadily integrating AI into its platform, from automated note-taking to intelligent database management. With agents, Notion aims to create a self-sustaining productivity ecosystem where routine tasks—like email triage—are handled autonomously.  &quot;Notion agents keep work moving 24/7. They capture knowledge, answer questions, and push projects forward—all while you sleep,&quot; reads the company’s promotional material.  This approach mirrors trends in other productivity tools, such as Microsoft’s Copilot and Google’s Duet AI, which are embedding AI agents into their suites. For Notion, the challenge will be ensuring its agents are not just powerful but also customizable, allowing users to tailor automation to their specific needs.</p><p></p><p>What This Means for Users and the Future of Email</p><p>For users, Notion’s move signals a broader transition away from traditional email interfaces. AI agents are poised to become the default way people interact with their inboxes, reducing the need for manual sorting, drafting, and organizing. However, this shift also raises questions about control, transparency, and the role of human oversight in digital communication.    Productivity Gains:  AI agents can reclaim hours spent on email management, freeing users for higher-value work.   Potential Risks:  Over-reliance on AI could lead to miscommunication or errors if agents misinterpret context.   New Skill Sets:  Users will need to learn how to train and manage AI agents effectively, rather than just navigating email clients.   As Notion phases out its email app, it’s clear that the inbox of the future will look very different. The question is no longer whether AI will transform email, but how quickly—and how seamlessly—users will adapt.</p></div>
+  
+  <footer class="item-footer">
+    <div class="tags"><code>#Technology</code>, <code>#AI</code>, <code>#Email</code>, <code>#Notion</code></div>
+    
+  </footer>
+</article>
+
+<article id="item-5">
+  <header>
+    <h2 class="item-title"><a href="https://www.theverge.com/ai-artificial-intelligence/958804/chinas-z-ai-glm-52-mythos-cybersecurity">China’s Z.ai Narrows the AI Cybersecurity Gap: Can GLM-5.2 Rival Anthropic’s Mythos?</a>
+      <span class="score">⭐️ 6.5051250000000005/10</span>
+    </h2>
+    <div class="meta">rss · The Verge · Jun 28, 21:42</div>
+  </header>
+  <div class="article-body"><p class="article-lead">The Rise of Open-Weight Models: A Game Changer for AI Accessibility</p><p>Open-weight models like Z.ai’s GLM-5.2 are reshaping the AI landscape by making cutting-edge technology accessible to developers, enterprises, and governments worldwide. Unlike fully open-source AI, which includes training code and datasets, open-weight models release only the model’s parameters—its &quot;weights&quot;—allowing users to run, fine-tune, and deploy the AI on their own infrastructure without proprietary restrictions. This approach democratizes AI, enabling smaller players to innovate without relying on Big Tech’s cloud platforms or licensing fees.</p><p></p><p>GLM-5.2 vs. Mythos: How Z.ai Stacks Up in Cybersecurity</p><p>Anthropic’s Mythos, unveiled in April 2026, set a new benchmark for AI-driven cybersecurity with its ability to autonomously discover software vulnerabilities, chain exploits, and perform advanced security analysis. Now, Z.ai’s GLM-5.2 is challenging that dominance. According to researchers, the Chinese model demonstrates comparable performance in bug-finding and cybersecurity scenarios, though it still lags behind in broader reasoning tasks.  &quot;The gap between Chinese and Western AI models is closing faster than expected in specialized domains,&quot; noted a cybersecurity analyst at the AI Security Institute (AISI). &quot;GLM-5.2’s performance suggests that China is no longer playing catch-up—it’s competing head-to-head in critical areas.&quot;</p><p></p><p>Why Cybersecurity AI Matters: The Stakes of the AI Arms Race</p><p>The ability of AI models to autonomously identify and exploit vulnerabilities has profound implications for global security. Mythos, for instance, has already raised alarms among governments and institutions due to its potential to accelerate both defensive and offensive cyber operations. Z.ai’s GLM-5.2 entering this arena signals a shift: China is no longer dependent on Western AI for critical security applications.    Defensive applications:  Automated patching, threat detection, and real-time vulnerability assessment.   Offensive risks:  AI-driven exploit development, autonomous hacking tools, and state-sponsored cyber warfare.   Geopolitical impact:  Reduced reliance on U.S. and European AI models could alter the balance of power in cybersecurity.</p><p></p><p>Zhipu AI’s Strategic Play: Breaking Free from U.S. Tech Dependence</p><p>Zhipu AI, rebranded internationally as Z.ai, has been at the forefront of China’s push to reduce reliance on U.S. technology. Earlier this year, the company made headlines by training a major AI model entirely on domestically produced chips, bypassing U.S. export restrictions on advanced semiconductors. GLM-5.2’s release—just a day after Anthropic shelved a planned update—suggests a calculated move to capitalize on Western AI’s regulatory and commercial uncertainties.  &quot;Z.ai is positioning itself as China’s answer to Anthropic and OpenAI,&quot; said a tech analyst at the South China Morning Post. &quot;By focusing on open-weight models, they’re offering a compelling alternative to closed, Western-dominated AI ecosystems.&quot;</p><p></p><p>The Future of AI Cybersecurity: Collaboration or Confrontation?</p><p>The emergence of GLM-5.2 raises critical questions about the future of AI-driven cybersecurity. Will this competition spur innovation and collaboration, or will it deepen geopolitical divides? While open-weight models like GLM-5.2 lower barriers to entry, they also introduce new risks, such as the potential for malicious actors to repurpose AI for cyberattacks.    Opportunities:  Faster vulnerability discovery, democratized security tools, and cross-border collaboration on AI safety.   Challenges:  AI-powered cyber warfare, intellectual property theft, and the erosion of trust in digital infrastructure.   As the AI cybersecurity race heats up, the world may soon face a stark choice: embrace a new era of shared security innovation or brace for a fragmented, adversarial technological landscape.</p></div>
+  
+  <footer class="item-footer">
+    <div class="tags"><code>#AI</code>, <code>#Cybersecurity</code>, <code>#China</code>, <code>#Technology</code></div>
+    
+  </footer>
+</article>
+</main></div>
+  </div>
+</body>
+</html>

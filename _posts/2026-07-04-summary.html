@@ -1,0 +1,375 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Horizon — 2026-07-04</title>
+  <style>
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600&family=Manrope:wght@500;700&display=swap');
+
+:root {
+    --bg: #f8f5f3;
+    --paper: #ffffff;
+    --surface: #fffbf8;
+    --accent: #9b3d2a;
+    --accent-2: color-mix(in srgb, var(--accent) 55%, #b73fd6);
+    --accent-3: color-mix(in srgb, var(--accent) 40%, #f59e0b);
+    --accent-soft: #f9e2dc;
+    --muted: #6e5b54;
+    --text: #2f211d;
+    --ring: color-mix(in srgb, var(--accent) 32%, transparent);
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+    color: var(--text);
+    background:
+        radial-gradient(1300px 420px at -10% -20%, var(--accent-soft), transparent 60%),
+        radial-gradient(760px 300px at 88% -12%, color-mix(in srgb, var(--accent-2) 24%, transparent), transparent 66%),
+        radial-gradient(640px 240px at 30% 0%, color-mix(in srgb, var(--accent-3) 18%, transparent), transparent 70%),
+        var(--bg);
+    font-family: 'Source Serif 4', Georgia, serif;
+    line-height: 1.78;
+}
+
+.container { max-width: 1100px; margin: 1.5rem auto; padding: 1rem; }
+
+/* ── Page header ─────────────────────────────────────────────────────── */
+.summary-header {
+    background: var(--paper);
+    border: 1px solid color-mix(in srgb, var(--accent) 16%, transparent);
+    border-radius: 24px;
+    padding: 1.5rem 1.6rem 1.1rem;
+    box-shadow: 0 18px 48px rgba(19, 33, 68, 0.08);
+    margin-bottom: 1rem;
+    position: relative;
+    overflow: hidden;
+}
+.summary-header::after {
+    content: "";
+    position: absolute;
+    inset: auto -60px -80px auto;
+    width: 220px; height: 220px;
+    border-radius: 999px;
+    background: radial-gradient(circle, color-mix(in srgb, var(--accent-2) 28%, transparent), transparent 70%);
+    pointer-events: none;
+}
+.summary-header h1 {
+    margin: 0;
+    font-family: 'Fraunces', 'DM Serif Display', 'Iowan Old Style', 'Palatino Linotype', serif;
+    letter-spacing: .01em;
+    font-size: clamp(1.8rem, 3.6vw, 2.8rem);
+    line-height: 1.15;
+}
+.lead { margin: .55rem 0 1.1rem; color: var(--muted); font-size: 1.04rem; max-width: 78ch; }
+
+/* ── TOC ─────────────────────────────────────────────────────────────── */
+.toc-title {
+    margin: 0 0 .45rem;
+    font-family: 'Manrope', 'Segoe UI', sans-serif;
+    font-size: .85rem;
+    text-transform: uppercase;
+    letter-spacing: .11em;
+    color: var(--muted);
+}
+.toc ul {
+    list-style: none; margin: 0; padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: .55rem;
+}
+.toc li {
+    background: linear-gradient(160deg, var(--surface), color-mix(in srgb, var(--accent-soft) 48%, #ffffff));
+    border: 1px solid color-mix(in srgb, var(--accent) 16%, transparent);
+    border-radius: 10px;
+    padding: .55rem .65rem;
+    transition: transform .18s ease, box-shadow .18s ease;
+}
+.toc li:hover { transform: translateY(-1px); box-shadow: 0 8px 20px color-mix(in srgb, var(--accent) 15%, transparent); }
+.toc a { text-decoration: none; color: var(--text); }
+.toc-score { color: var(--accent); font-family: 'Manrope', 'Segoe UI', sans-serif; font-size: .85rem; font-weight: 600; }
+
+/* ── Article cards ───────────────────────────────────────────────────── */
+.items { display: grid; gap: .95rem; }
+.items article {
+    background: var(--paper);
+    border: 1px solid color-mix(in srgb, var(--accent) 15%, transparent);
+    border-radius: 20px;
+    padding: 1.4rem 1.6rem 1.1rem;
+    box-shadow: 0 10px 32px rgba(0, 0, 0, 0.05);
+}
+.item-title {
+    font-family: 'Fraunces', 'DM Serif Display', 'Iowan Old Style', 'Palatino Linotype', serif;
+    font-size: clamp(1.2rem, 2.2vw, 1.55rem);
+    margin: 0 0 .3rem;
+    line-height: 1.22;
+}
+.item-title a { color: inherit; text-decoration: none; }
+.item-title a:hover { color: var(--accent); }
+.item-title a:focus-visible, .toc a:focus-visible, summary:focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
+    border-radius: 6px;
+}
+.meta { color: var(--muted); font-family: 'Manrope', 'Segoe UI', sans-serif; font-size: .88rem; margin-bottom: .9rem; }
+.score { color: var(--accent); margin-left: .45rem; font-weight: 700; font-family: 'Manrope', 'Segoe UI', sans-serif; font-size: .95rem; }
+
+.article-body { border-top: 1px solid color-mix(in srgb, var(--accent) 10%, transparent); padding-top: 1rem; }
+
+.item-footer {
+    margin-top: 1rem;
+    padding-top: .65rem;
+    border-top: 1px solid color-mix(in srgb, var(--muted) 18%, transparent);
+}
+
+.evidence-note {
+    margin: .8rem 0 0;
+    color: var(--muted);
+    font-size: .92rem;
+    font-style: italic;
+}
+
+.tags { color: var(--muted); font-family: 'Manrope', 'Segoe UI', sans-serif; font-size: .88rem; margin-bottom: .45rem; }
+code { background: color-mix(in srgb, var(--accent-soft) 65%, #ffffff); border-radius: 8px; padding: .12rem .4rem; }
+
+details { margin-top: .5rem; }
+details summary { cursor: pointer; color: var(--accent); font-family: 'Manrope', 'Segoe UI', sans-serif; font-size: .9rem; }
+
+/* ── Dark mode ───────────────────────────────────────────────────────── */
+@media (prefers-color-scheme: dark) {
+    :root {
+        --bg: #0f1420; --paper: #161d2c; --surface: #1b2435;
+        --accent: #7cb1ff; --accent-2: #c28cff; --accent-3: #ffc36c;
+        --accent-soft: #1a2740; --muted: #a6b4cd; --text: #edf2ff;
+        --ring: rgba(124, 177, 255, 0.55);
+    }
+    body {
+        background:
+            radial-gradient(1200px 420px at -10% -20%, #1a2740, transparent 60%),
+            radial-gradient(760px 300px at 88% -12%, rgba(194, 140, 255, 0.2), transparent 66%),
+            radial-gradient(640px 240px at 30% 0%, rgba(255, 195, 108, 0.14), transparent 70%),
+            var(--bg);
+    }
+    .summary-header, .items article { border-color: rgba(124,177,255,.24); box-shadow: 0 18px 44px rgba(0,0,0,.32); }
+    .toc li { border-color: rgba(124,177,255,.22); background: linear-gradient(170deg, #1b2435, #1f2a3f); }
+    code { background: rgba(124,177,255,.16); }
+    .article-background { background: linear-gradient(170deg, #1b2435, #1f2a3f); }
+}
+
+@media (max-width: 860px) {
+    .container { margin: .7rem auto; padding: .65rem; }
+}
+
+/* ── Editorial article layout ─────────────────────────────────────────── */
+
+.article-lead {
+    font-size: 1.18rem;
+    color: var(--muted);
+    line-height: 1.7;
+    margin: .3rem 0 1.4rem;
+    max-width: 72ch;
+    font-style: italic;
+}
+
+.article-section {
+    margin-top: 1.55rem;
+}
+
+    .article-section {
+    font-family: 'Manrope', 'Segoe UI', sans-serif;
+    font-size: .78rem;
+.article-section h2 {
+.narrow {
+    margin: 0 0 .45rem;
+    padding-bottom: .25rem;
+    border-bottom: 1px solid color-mix(in srgb, var(--accent) 22%, transparent);
+}
+
+.article-section h2 {
+.narrow {
+    font-size: 1.03rem;
+    line-height: 1.85;
+    color: var(--text);
+}
+
+.article-section p {
+    margin: 0.25rem 0;
+}
+
+.article-section .article-section-last {
+    font-size: 1.08rem;
+
+.article-section h3 {
+    margin: .35rem 0 .15rem;
+    font-size: 0.95rem;
+    color: var(--muted);
+}
+    font-weight: 600;
+    margin-top: .45rem;
+}
+
+.article-section p + p {
+    margin-top: .8rem;
+}
+
+.article-background {
+    margin-top: 1.4rem;
+    padding: 1rem 1.1rem;
+    background: linear-gradient(170deg, var(--surface), color-mix(in srgb, var(--accent-soft) 30%, #fff));
+    border-left: 3px solid var(--accent);
+    border-radius: 0 10px 10px 0;
+    font-size: .98rem;
+    line-height: 1.78;
+    color: var(--text);
+}
+
+.article-background strong {
+    display: block;
+    font-family: 'Manrope', 'Segoe UI', sans-serif;
+    font-size: .78rem;
+    text-transform: uppercase;
+    letter-spacing: .1em;
+    color: var(--accent);
+    margin-bottom: .35rem;
+}
+
+.article-discussion {
+    margin-top: 1.2rem;
+    padding: .85rem 1rem;
+    border-left: 3px solid color-mix(in srgb, var(--muted) 40%, transparent);
+    font-style: italic;
+    font-size: .98rem;
+    color: var(--muted);
+    line-height: 1.75;
+}
+
+.article-discussion strong {
+    font-style: normal;
+    font-family: 'Manrope', 'Segoe UI', sans-serif;
+    font-size: .78rem;
+    text-transform: uppercase;
+    letter-spacing: .1em;
+    display: block;
+    margin-bottom: .3rem;
+    color: var(--muted);
+}
+
+.tab-switcher {
+    display: flex; gap: .5rem; margin-bottom: 1.5rem;
+    border-bottom: 2px solid color-mix(in srgb, var(--accent) 20%, transparent);
+}
+.tab-button {
+    background: transparent; border: none; color: var(--muted);
+    font-family: 'Manrope', 'Segoe UI', sans-serif; font-size: 1rem; font-weight: 600;
+    padding: .75rem 1.2rem; cursor: pointer;
+    transition: color .18s ease, border-color .18s ease;
+    border-bottom: 3px solid transparent;
+}
+.tab-button:hover { color: var(--text); }
+.tab-button.active { color: var(--accent); border-bottom-color: var(--accent); }
+.tab-content { display: none; animation: fadeIn .2s ease-in; }
+.tab-content.active { display: block; }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@media (max-width: 860px) { .tab-switcher { flex-wrap: wrap; } }
+</style>
+  <script>
+    function switchTab(button) {
+      const lang = button.getAttribute('data-lang');
+      const allButtons = document.querySelectorAll('.tab-button');
+      const allContents = document.querySelectorAll('.tab-content');
+      allButtons.forEach(b => b.classList.remove('active'));
+      allContents.forEach(c => c.classList.remove('active'));
+      button.classList.add('active');
+      document.querySelector(`.tab-content[data-lang="${lang}"]`).classList.add('active');
+    }
+  </script>
+</head>
+<body>
+  <div class="container">
+    <div class="tab-switcher">
+      <button class="tab-button active" onclick="switchTab(this)" data-lang="fr">Français</button><button class="tab-button " onclick="switchTab(this)" data-lang="en">English</button>
+    </div>
+    <div class="tab-content active" data-lang="fr"><section class="summary-header">
+  <h1>Horizon Quotidien — 2026-07-04</h1>
+  <p class="lead">Parmi 486 contenus collectés, 2 sujets essentiels ont été sélectionnés.</p>
+  <nav class="toc" aria-label="Sommaire">
+    <p class="toc-title">Sommaire</p>
+    <ul><li><a href="#item-1">États-Unis : L’administration Trump impose à OpenAI de restreindre la sortie de GPT-5.6 pour des raisons de sécurité <span class="toc-score">⭐️ 7.665375000000001/10</span></a></li>
+<li><a href="#item-2">Les Concessions Sécuritaires d’Anthropic : Quand la Sûreté de l’IA Devient un Critère pour l’Administration Trump <span class="toc-score">⭐️ 7.518375000000001/10</span></a></li></ul>
+  </nav>
+</section>
+<main class="items">
+<article id="item-1">
+  <header>
+    <h2 class="item-title"><a href="https://www.axios.com/2026/06/25/trump-administration-openai-gpt-model-release">États-Unis : L’administration Trump impose à OpenAI de restreindre la sortie de GPT-5.6 pour des raisons de sécurité</a>
+      <span class="score">⭐️ 7.665375000000001/10</span>
+    </h2>
+    <div class="meta">rss · Axios · Jun 25, 22:26</div>
+  </header>
+  <div class="article-body"><p class="article-lead">Une première historique : le gouvernement américain intervient dans la sortie d’un modèle d’IA</p><p>La demande de l’administration Trump à OpenAI marque un tournant dans les relations entre la Silicon Valley et Washington. Pour la première fois, des agences fédérales – notamment le Bureau du Directeur national de la cybersécurité (ONCD) et le Bureau de la politique scientifique et technologique (OSTP) de la Maison-Blanche – ont demandé préventivement à une entreprise d’IA de retarder la sortie publique complète d’un nouveau modèle. Selon une source proche du dossier, les préoccupations du gouvernement portent sur les implications sécuritaires de GPT-5.6, dont les capacités seraient comparables à celles des modèles Fable 5 et Mythos 5 d’Anthropic, récemment retirés de la circulation.</p><p></p><p>Pourquoi GPT-5.6 a suscité des inquiétudes à Washington</p><p>L’intervention du gouvernement n’était pas arbitraire. Les sources indiquent que GPT-5.6 présente des capacités « de type Mythos », en référence aux modèles avancés d’Anthropic qui ont été retirés de l’accès public suite à une directive rare du Département du Commerce. La Maison-Blanche a eu un aperçu des capacités de GPT-5.6, ce qui a soulevé des alarmes quant à un éventuel détournement par des acteurs étatiques, des cybercriminels ou des initiés malveillants.  « C’est ce qui se passe avec les modèles de ce calibre », a déclaré une source à Axios. « Ces modèles sont si puissants que l’administration veut s’assurer que les entreprises disposent de garanties adéquates. »  Cette décision reflète une préoccupation croissante au sein du gouvernement américain concernant la nature à double usage des systèmes d’IA avancés – des outils capables de stimuler l’innovation, mais aussi de poser des risques existentiels en cas de mauvaise utilisation.</p><p></p><p>Le dilemme d’OpenAI : concilier innovation et conformité</p><p>Sam Altman, PDG d’OpenAI, a reconnu la demande de l’administration dans un mémo adressé aux employés, présentant la sortie limitée comme une mesure temporaire. « Nous avons clairement indiqué au gouvernement américain que ce n’est pas notre modèle préféré à long terme, et nous travaillerons avec eux et d’autres acteurs du secteur pour parvenir à une approche plus durable pour les futures sorties », a écrit Altman, selon The Information. L’entreprise a été proactive dans ses échanges avec les agences fédérales, notamment lors de discussions entre Altman et le secrétaire au Commerce, Howard Lutnick, pour garantir l’alignement sur les protocoles de test et d’approbation.</p><p></p><p>Le contexte plus large : la régulation de l’IA prend le devant de la scène</p><p>Cette évolution survient peu après le décret présidentiel sur la sécurité de l’IA signé par Donald Trump, qui a établi un cadre de test volontaire pour les entreprises d’IA avant la sortie de nouveaux modèles. Ce décret, retardé pendant des semaines en raison de luttes politiques sur son étendue, reflète la volonté de l’administration d’accroître la supervision des systèmes d’IA de pointe. Les agences clés, dont l’ONCD et l’OSTP, sont désormais chargées de développer une approche standardisée pour évaluer la sécurité et l’impact sociétal des nouveaux modèles.    ONCD :  Conseille le président sur la politique de cybersécurité et coordonne la stratégie nationale en la matière.   OSTP :  Fournit une analyse scientifique et technologique pour éclairer les politiques de l’exécutif.   La mise en œuvre de ce décret marque un passage d’une régulation réactive à une régulation proactive, bien que son caractère volontaire laisse place à des débats sur son efficacité.</p><p></p><p>Implications mondiales : la course à l’IA entre les États-Unis et la Chine</p><p>La demande de l’administration à OpenAI souligne les enjeux géopolitiques du développement de l’IA. Alors que les entreprises américaines font face à une surveillance réglementaire croissante, les modèles open-source chinois – tels que GLM et DeepSeek – progressent rapidement, souvent avec moins de restrictions. Cette dynamique crée une tension pour les laboratoires d’IA américains, qui doivent concilier les pressions concurrentielles avec les exigences de conformité.  « Les laboratoires d’IA sont dans une position difficile alors qu’ils se précipitent pour sortir de nouveaux modèles afin de rivaliser non seulement entre eux, mais aussi avec les modèles open-source chinois de plus en plus performants », note Axios.  Le risque de prendre du retard dans la course mondiale à l’IA a suscité des appels à une approche internationale plus coordonnée de la gouvernance de l’IA, bien que les progrès restent lents.</p><p></p><p>Et ensuite ? Vers un nouveau cadre pour le déploiement de l’IA ?</p><p>La sortie limitée de GPT-5.6 pourrait établir un précédent pour le déploiement des futurs modèles d’IA. Les observateurs du secteur surveillent de près pour voir si cette pratique deviendra la norme ou restera une exception pour les modèles jugés exceptionnellement puissants. Le mémo d’Altman laisse entendre un désir d’« approche plus durable », suggérant qu’OpenAI et d’autres laboratoires pourraient pousser pour des voies réglementaires plus claires et prévisibles. Pendant ce temps, le cadre de test et d’évaluation des nouveaux modèles par l’administration est encore en développement, laissant des questions sur son étendue et son applicabilité sans réponse.</p></div>
+  
+  <footer class="item-footer">
+    <div class="tags"><code>#AI Regulation</code>, <code>#OpenAI</code>, <code>#US Government</code></div>
+    
+  </footer>
+</article>
+
+<article id="item-2">
+  <header>
+    <h2 class="item-title"><a href="https://www.wired.com/story/anthropic-added-a-new-security-measure-to-get-back-into-the-trump-administrations-good-graces/">Les Concessions Sécuritaires d’Anthropic : Quand la Sûreté de l’IA Devient un Critère pour l’Administration Trump</a>
+      <span class="score">⭐️ 7.518375000000001/10</span>
+    </h2>
+    <div class="meta">rss · Wired · Jul 1, 16:00</div>
+  </header>
+  <div class="article-body"><p class="article-lead">Anthropic : Le Champion de la Sûreté de l’IA Sort de l’Ombre d’OpenAI</p><p>Anthropic a été fondée en 2021 par d’anciens chercheurs d’OpenAI, dont les frères et sœurs Dario et Daniela Amodei, qui ont quitté l’entreprise en raison de désaccords sur sa direction commerciale et ses priorités en matière de sécurité. Contrairement à OpenAI, qui a pivoté vers une commercialisation agressive, Anthropic se présente comme une société à but non lucratif dédiée à la construction de systèmes d’IA « fiables, interprétables et dirigeables ». Son modèle phare, Claude, est conçu avec des fonctionnalités de sécurité avancées, notamment l’IA constitutionnelle, un cadre qui aligne les résultats sur des principes éthiques prédéfinis plutôt que de s’appuyer uniquement sur des retours humains.</p><p></p><p>Fable 5 et Mythos 5 : Les Modèles Qui Ont Provoqué un Affrontement Réglementaire</p><p>Les derniers modèles d’Anthropic, Fable 5 et Mythos 5, représentent une avancée majeure en termes de capacités, excelling dans le génie logiciel, la recherche scientifique et même des tâches complexes de jeu. Fable 5, par exemple, peut reconstruire le code source d’une application web à partir de simples captures d’écran, une prouesse qui souligne son potentiel à la fois pour l’innovation et pour des usages malveillants. Mythos 5, quant à lui, est une variante plus permissive, assouplissant certains contrôles en temps réel de Fable 5 pour des opérateurs agréés sous des conditions d’utilisation plus strictes.  « Fable 5 et Mythos 5 ont montré que les modèles d’IA de pointe ne sont plus définis uniquement par leurs capacités. Leur division révèle comment une IA cyber-capable peut être régulée par des garde-fous, un accès de confiance et des workflows défensifs. » — Analyse de Penligent AI  La sortie de ces modèles a coïncidé avec une directive de l’administration Trump exigeant des développeurs d’IA qu’ils restreignent l’accès aux ressortissants étrangers, poussant Anthropic à les retirer temporairement.</p><p></p><p>La Politique de l’IA sous Trump : Préemption, Sécurité et un Cadre National</p><p>Sous la présidence de Donald Trump, le gouvernement américain a adopté une approche musclée de la régulation de l’IA, privilégiant la sécurité nationale et la préemption des lois étatiques. Un décret exécutif de décembre 2025 a ordonné aux agences fédérales de développer un cadre législatif national pour l’IA, arguant qu’un « patchwork de réglementations étatiques » — comme l’interdiction du Colorado contre la « discrimination algorithmique » — crée des obstacles insurmontables pour les entreprises opérant à l’échelle nationale. Le décret a également chargé la Federal Trade Commission (FTC) et la Federal Communications Commission (FCC) d’évaluer si les lois étatiques forçant les entreprises d’IA à intégrer des principes de diversité, d’équité et d’inclusion (DEI) dans leurs modèles violent les réglementations fédérales sur le commerce.</p><p></p><p>La Conformité d’Anthropic : Un Modèle pour les Entreprises d’IA en Quête d’Approbation Gouvernementale</p><p>Pour retrouver l’accès au marché américain, Anthropic a mis en place une série de mesures de sécurité alignées sur les priorités de l’administration Trump. Celles-ci incluent :   Un renforcement de la vérification des utilisateurs accédant à Mythos 5, garantissant le respect des contrôles fédéraux à l’exportation.  Des contrôles en temps réel plus stricts sur Fable 5 pour prévenir les usages abusifs par des acteurs étrangers.  Une surveillance en temps réel des sorties du modèle pour détecter et atténuer les menaces cybernétiques potentielles.  Des accords pour partager des renseignements sur les menaces avec les agences américaines de cybersécurité.   La décision du gouvernement de lever les restrictions sur Fable 5 — tout en maintenant Mythos 5 hors ligne — indique une volonté de collaborer avec les développeurs d’IA qui démontrent des mesures de sécurité proactives. Cependant, cet épisode soulève des questions sur les implications à long terme de la politisation de la sûreté de l’IA.</p><p></p><p>Les Implications Plus Larges : La Sûreté de l’IA Comme Enjeu Politique</p><p>L’expérience d’Anthropic met en lumière la tension croissante entre innovation et régulation dans le secteur de l’IA. Si l’administration Trump présente ses politiques comme nécessaires pour protéger la sécurité nationale, les critiques soutiennent que la préemption des lois étatiques pourrait étouffer l’innovation locale et affaiblir les protections des consommateurs.  « La principale théorie juridique sous-jacente à ces défis sera probablement la Clause de Commerce Dormant, qui interdit aux États d’adopter des législations imposant une charge excessive au commerce interétatique. » — Analyse de Paul Hastings LLP  Pour les entreprises d’IA, le message est clair : s’aligner sur les priorités fédérales — en particulier en matière de sécurité — devient un prérequis pour accéder au marché. Pourtant, comme le montre le cas d’Anthropic, la conformité peut se faire au prix d’une flexibilité réduite, notamment pour des modèles comme Mythos 5, conçus pour des applications critiques nécessitant un haut niveau de confiance.</p><p></p><p>Et Maintenant ? L’Avenir de la Régulation de l’IA sous Trump</p><p>La politique de l’IA sous l’administration Trump devrait évoluer dans deux directions clés :    Préemption fédérale :  On peut s’attendre à de nouvelles tentatives de contourner les lois étatiques sur l’IA, en particulier celles jugées « onéreuses » par les agences fédérales. L’avis politique à venir du Département du Commerce sur l’éligibilité au financement du programme BEAD (Broadband Equity Access and Deployment) pourrait servir de modèle pour conditionner les subventions fédérales au respect des normes nationales en matière d’IA.   Développement d’une IA axée sur la sécurité :  Les entreprises comme Anthropic subiront une pression croissante pour intégrer des mesures de cybersécurité dès la conception de leurs modèles. Cela pourrait conduire à un écosystème d’IA à deux vitesses, où les modèles « sécurisés » bénéficient d’un accès préférentiel aux marchés américains tandis que les autres font face à des restrictions.   Pour l’instant, la victoire partielle d’Anthropic — la restauration de l’accès à Fable 5 — offre un aperçu de l’équilibre délicat que les entreprises d’IA doivent trouver pour naviguer dans le paysage réglementaire changeant de Washington.</p></div>
+  
+  <footer class="item-footer">
+    <div class="tags"><code>#AI Policy</code>, <code>#Trump Administration</code>, <code>#Anthropic</code>, <code>#Artificial Intelligence</code></div>
+    
+  </footer>
+</article>
+</main></div><div class="tab-content " data-lang="en"><section class="summary-header">
+  <h1>Horizon Daily — 2026-07-04</h1>
+  <p class="lead">From 486 items, 2 important content pieces were selected</p>
+  <nav class="toc" aria-label="Contents">
+    <p class="toc-title">Contents</p>
+    <ul><li><a href="#item-1">U.S. Government Breaks New Ground: Trump Administration Demands OpenAI Limit GPT-5.6 Release Over Security Risks <span class="toc-score">⭐️ 7.665375000000001/10</span></a></li>
+<li><a href="#item-2">Anthropic’s Security Concessions: How AI Safety Became a Trump Administration Litmus Test <span class="toc-score">⭐️ 7.518375000000001/10</span></a></li></ul>
+  </nav>
+</section>
+<main class="items">
+<article id="item-1">
+  <header>
+    <h2 class="item-title"><a href="https://www.axios.com/2026/06/25/trump-administration-openai-gpt-model-release">U.S. Government Breaks New Ground: Trump Administration Demands OpenAI Limit GPT-5.6 Release Over Security Risks</a>
+      <span class="score">⭐️ 7.665375000000001/10</span>
+    </h2>
+    <div class="meta">rss · Axios · Jun 25, 22:26</div>
+  </header>
+  <div class="article-body"><p class="article-lead">A Historic First: U.S. Government Steps Into AI Model Releases</p><p>The Trump administration’s request to OpenAI represents a watershed moment in the relationship between Silicon Valley and Washington. For the first time, federal agencies—specifically the White House’s Office of the National Cyber Director (ONCD) and the Office of Science and Technology Policy (OSTP)—have preemptively asked an AI company to delay a full public release of a new model. According to a source familiar with the matter, the administration’s concerns center on the security implications of GPT-5.6, which is reportedly on par with Anthropic’s revoked models, Fable 5 and Mythos 5, in terms of capability.</p><p></p><p>Why GPT-5.6 Raised Red Flags in Washington</p><p>The administration’s intervention was not arbitrary. Sources indicate that GPT-5.6 exhibits &quot;Mythos-like&quot; capabilities, referring to Anthropic’s advanced models that were recently pulled from public access following a rare Commerce Department directive. The White House has been given preview access to GPT-5.6’s abilities, raising alarms about potential misuse by nation-state actors, cybercriminals, or rogue insiders.  &quot;This is what’s happening with models of that caliber,&quot; a source told Axios. &quot;The models are so powerful that the administration wants to be sure the companies have adequate safeguards in place.&quot;  The move reflects growing unease within the U.S. government about the dual-use nature of advanced AI systems—tools that can drive innovation but also pose existential risks if misused.</p><p></p><p>OpenAI’s Dilemma: Balancing Innovation and Compliance</p><p>OpenAI CEO Sam Altman acknowledged the administration’s request in a memo to employees, framing the limited rollout as a temporary measure. &quot;We’ve made clear to the U.S. government that this is not our preferred long-term model, and will work with them and others in industry to achieve a more sustainable approach for future releases,&quot; Altman wrote, according to The Information. The company has been proactive in engaging with federal agencies, including discussions between Altman and Commerce Secretary Howard Lutnick, to ensure alignment on testing and approval protocols.</p><p></p><p>The Broader Context: AI Regulation Takes Center Stage</p><p>This development arrives on the heels of President Trump’s recent AI security executive order, which established a voluntary testing framework for AI companies prior to model releases. The order, delayed for weeks due to political infighting over its scope, reflects the administration’s push for greater oversight of frontier AI systems. Key agencies, including ONCD and OSTP, are now tasked with developing a standardized approach to evaluating the security and societal impact of new models.    ONCD:  Advises the president on cybersecurity policy and coordinates national cyber strategy.   OSTP:  Provides scientific and technological analysis to inform executive branch policies.   The executive order’s implementation signals a shift from reactive to proactive regulation, though its voluntary nature leaves room for debate about its effectiveness.</p><p></p><p>Global Implications: The U.S. vs. China AI Race</p><p>The administration’s request to OpenAI underscores the geopolitical stakes of AI development. While U.S. companies face growing regulatory scrutiny, Chinese open-source models—such as GLM and DeepSeek—are advancing rapidly, often with fewer restrictions. This dynamic creates a tension for American AI labs, which must balance competitive pressures with compliance demands.  &quot;AI labs are caught in a tough position as they race to release new models to compete not only with one another, but with increasingly capable Chinese open-source models,&quot; Axios noted.  The risk of falling behind in the global AI race has prompted calls for a more coordinated international approach to AI governance, though progress remains slow.</p><p></p><p>What’s Next: A New Framework for AI Deployment?</p><p>The limited release of GPT-5.6 may set a precedent for how future AI models are rolled out. Industry observers are watching closely to see whether this becomes a standard practice or remains an exception for models deemed exceptionally powerful. Altman’s memo hinted at a desire for a &quot;more sustainable approach,&quot; suggesting that OpenAI and other labs may push for clearer, more predictable regulatory pathways. Meanwhile, the administration’s framework for testing and evaluating new models is still under development, leaving questions about its scope and enforceability unanswered.</p></div>
+  
+  <footer class="item-footer">
+    <div class="tags"><code>#AI Regulation</code>, <code>#OpenAI</code>, <code>#US Government</code></div>
+    
+  </footer>
+</article>
+
+<article id="item-2">
+  <header>
+    <h2 class="item-title"><a href="https://www.wired.com/story/anthropic-added-a-new-security-measure-to-get-back-into-the-trump-administrations-good-graces/">Anthropic’s Security Concessions: How AI Safety Became a Trump Administration Litmus Test</a>
+      <span class="score">⭐️ 7.518375000000001/10</span>
+    </h2>
+    <div class="meta">rss · Wired · Jul 1, 16:00</div>
+  </header>
+  <div class="article-body"><p class="article-lead">Anthropic: The AI Safety Standard-Bearer Emerges from OpenAI’s Shadow</p><p>Anthropic was founded in 2021 by former OpenAI researchers, including siblings Dario and Daniela Amodei, who left amid disagreements over the company’s commercial direction and safety priorities. Unlike OpenAI, which has pivoted toward aggressive productization, Anthropic positions itself as a public benefit corporation dedicated to building &quot;reliable, interpretable, and steerable&quot; AI systems. Its flagship model, Claude, is designed with advanced safety features, including constitutional AI—a framework that aligns outputs with predefined ethical principles rather than relying solely on human feedback.</p><p></p><p>Fable 5 and Mythos 5: The Models That Forced a Regulatory Showdown</p><p>Anthropic’s latest models, Fable 5 and Mythos 5, represent a leap in capability, excelling in software engineering, scientific research, and even complex gaming tasks. Fable 5, for instance, can reconstruct a web application’s source code from screenshots alone—a feat that underscores its potential for both innovation and misuse. Mythos 5, meanwhile, is a more permissive variant, relaxing some of Fable 5’s inference-time controls for vetted operators under stricter usage terms.  &quot;Fable 5 and Mythos 5 showed that frontier AI models are no longer defined by capability alone. Their split reveals how cyber-capable AI may be governed through safeguards, trusted access, and defensive workflows.&quot; — Penligent AI analysis  The models’ release coincided with a Trump administration directive requiring AI developers to restrict access for foreign nationals, prompting Anthropic to temporarily take them offline.</p><p></p><p>The Trump Administration’s AI Policy: Preemption, Security, and a National Framework</p><p>Under President Trump, the U.S. government has pursued a muscular approach to AI regulation, prioritizing national security and preempting state-level laws. A December 2025 executive order directed federal agencies to develop a national AI legislative framework, arguing that a &quot;patchwork of state regulations&quot;—such as Colorado’s ban on &quot;algorithmic discrimination&quot;—creates insurmountable barriers for companies operating across borders. The order also tasked the Federal Trade Commission (FTC) and Federal Communications Commission (FCC) with evaluating whether state laws forcing AI companies to embed diversity, equity, and inclusion (DEI) principles into their models violate federal trade regulations.</p><p></p><p>Anthropic’s Compliance: A Blueprint for AI Companies Seeking Government Approval</p><p>To regain access to the U.S. market, Anthropic implemented a series of security measures that align with the Trump administration’s priorities. These included:   Enhanced vetting for users accessing Mythos 5, ensuring compliance with federal export controls.  Stricter inference-time controls on Fable 5 to prevent misuse by foreign actors.  Real-time monitoring of model outputs to detect and mitigate potential cyber threats.  Agreements to share threat intelligence with U.S. cybersecurity agencies.   The government’s decision to lift restrictions on Fable 5—while keeping Mythos 5 offline—signals a willingness to engage with AI developers who demonstrate proactive security measures. However, the episode raises questions about the long-term implications of politicizing AI safety.</p><p></p><p>The Broader Implications: AI Safety as a Political Football</p><p>Anthropic’s experience highlights the growing tension between innovation and regulation in the AI sector. While the Trump administration frames its policies as necessary to protect national security, critics argue that preempting state laws could stifle local innovation and weaken consumer protections.  &quot;The primary legal theory underpinning these challenges will likely be the Dormant Commerce Clause, which prohibits states from enacting legislation that places an undue burden on interstate commerce.&quot; — Paul Hastings LLP analysis  For AI companies, the message is clear: aligning with federal priorities—particularly on security—is becoming a prerequisite for market access. Yet, as Anthropic’s case shows, compliance may come at the cost of flexibility, particularly for models like Mythos 5 that are designed for high-stakes, high-trust applications.</p><p></p><p>What’s Next? The Future of AI Regulation Under Trump</p><p>The Trump administration’s AI policy is likely to evolve in two key directions:    Federal Preemption:  Expect further efforts to override state-level AI laws, particularly those deemed &quot;onerous&quot; by federal agencies. The Commerce Department’s upcoming Policy Notice on broadband funding eligibility could serve as a template for conditioning federal grants on compliance with national AI standards.   Security-First AI Development:  Companies like Anthropic will face increasing pressure to integrate cybersecurity measures into their models from the ground up. This could lead to a two-tiered AI ecosystem, where &quot;secure&quot; models gain preferential access to U.S. markets while others face restrictions.   For now, Anthropic’s partial victory—restoring access to Fable 5—offers a glimpse into the delicate balancing act AI companies must perform to navigate Washington’s shifting regulatory landscape.</p></div>
+  
+  <footer class="item-footer">
+    <div class="tags"><code>#AI Policy</code>, <code>#Trump Administration</code>, <code>#Anthropic</code>, <code>#Artificial Intelligence</code></div>
+    
+  </footer>
+</article>
+</main></div>
+  </div>
+</body>
+</html>

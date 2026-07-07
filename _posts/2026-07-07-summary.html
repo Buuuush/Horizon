@@ -1,0 +1,503 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Horizon — 2026-07-07</title>
+  <style>
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600&family=Manrope:wght@500;700&display=swap');
+
+:root {
+    --bg: #f8f8fb;
+    --paper: #ffffff;
+    --surface: #fcfbff;
+    --accent: #325c9b;
+    --accent-2: color-mix(in srgb, var(--accent) 55%, #b73fd6);
+    --accent-3: color-mix(in srgb, var(--accent) 40%, #f59e0b);
+    --accent-soft: #e6eefb;
+    --muted: #5c6372;
+    --text: #1d2230;
+    --ring: color-mix(in srgb, var(--accent) 32%, transparent);
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+    color: var(--text);
+    background:
+        radial-gradient(1300px 420px at -10% -20%, var(--accent-soft), transparent 60%),
+        radial-gradient(760px 300px at 88% -12%, color-mix(in srgb, var(--accent-2) 24%, transparent), transparent 66%),
+        radial-gradient(640px 240px at 30% 0%, color-mix(in srgb, var(--accent-3) 18%, transparent), transparent 70%),
+        var(--bg);
+    font-family: 'Source Serif 4', Georgia, serif;
+    line-height: 1.78;
+}
+
+.container { max-width: 1100px; margin: 1.5rem auto; padding: 1rem; }
+
+/* ── Page header ─────────────────────────────────────────────────────── */
+.summary-header {
+    background: var(--paper);
+    border: 1px solid color-mix(in srgb, var(--accent) 16%, transparent);
+    border-radius: 24px;
+    padding: 1.5rem 1.6rem 1.1rem;
+    box-shadow: 0 18px 48px rgba(19, 33, 68, 0.08);
+    margin-bottom: 1rem;
+    position: relative;
+    overflow: hidden;
+}
+.summary-header::after {
+    content: "";
+    position: absolute;
+    inset: auto -60px -80px auto;
+    width: 220px; height: 220px;
+    border-radius: 999px;
+    background: radial-gradient(circle, color-mix(in srgb, var(--accent-2) 28%, transparent), transparent 70%);
+    pointer-events: none;
+}
+.summary-header h1 {
+    margin: 0;
+    font-family: 'Fraunces', 'DM Serif Display', 'Iowan Old Style', 'Palatino Linotype', serif;
+    letter-spacing: .01em;
+    font-size: clamp(1.8rem, 3.6vw, 2.8rem);
+    line-height: 1.15;
+}
+.lead { margin: .55rem 0 1.1rem; color: var(--muted); font-size: 1.04rem; max-width: 78ch; }
+
+/* ── TOC ─────────────────────────────────────────────────────────────── */
+.toc-title {
+    margin: 0 0 .45rem;
+    font-family: 'Manrope', 'Segoe UI', sans-serif;
+    font-size: .85rem;
+    text-transform: uppercase;
+    letter-spacing: .11em;
+    color: var(--muted);
+}
+.toc ul {
+    list-style: none; margin: 0; padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: .55rem;
+}
+.toc li {
+    background: linear-gradient(160deg, var(--surface), color-mix(in srgb, var(--accent-soft) 48%, #ffffff));
+    border: 1px solid color-mix(in srgb, var(--accent) 16%, transparent);
+    border-radius: 10px;
+    padding: .55rem .65rem;
+    transition: transform .18s ease, box-shadow .18s ease;
+}
+.toc li:hover { transform: translateY(-1px); box-shadow: 0 8px 20px color-mix(in srgb, var(--accent) 15%, transparent); }
+.toc a { text-decoration: none; color: var(--text); }
+.toc-score { color: var(--accent); font-family: 'Manrope', 'Segoe UI', sans-serif; font-size: .85rem; font-weight: 600; }
+
+/* ── Article cards ───────────────────────────────────────────────────── */
+.items { display: grid; gap: .95rem; }
+.items article {
+    background: var(--paper);
+    border: 1px solid color-mix(in srgb, var(--accent) 15%, transparent);
+    border-radius: 20px;
+    padding: 1.4rem 1.6rem 1.1rem;
+    box-shadow: 0 10px 32px rgba(0, 0, 0, 0.05);
+}
+.item-title {
+    font-family: 'Fraunces', 'DM Serif Display', 'Iowan Old Style', 'Palatino Linotype', serif;
+    font-size: clamp(1.2rem, 2.2vw, 1.55rem);
+    margin: 0 0 .3rem;
+    line-height: 1.22;
+}
+.item-title a { color: inherit; text-decoration: none; }
+.item-title a:hover { color: var(--accent); }
+.item-title a:focus-visible, .toc a:focus-visible, summary:focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
+    border-radius: 6px;
+}
+.meta { color: var(--muted); font-family: 'Manrope', 'Segoe UI', sans-serif; font-size: .88rem; margin-bottom: .9rem; }
+.score { color: var(--accent); margin-left: .45rem; font-weight: 700; font-family: 'Manrope', 'Segoe UI', sans-serif; font-size: .95rem; }
+
+.article-body { border-top: 1px solid color-mix(in srgb, var(--accent) 10%, transparent); padding-top: 1rem; }
+
+.item-footer {
+    margin-top: 1rem;
+    padding-top: .65rem;
+    border-top: 1px solid color-mix(in srgb, var(--muted) 18%, transparent);
+}
+
+.evidence-note {
+    margin: .8rem 0 0;
+    color: var(--muted);
+    font-size: .92rem;
+    font-style: italic;
+}
+
+.tags { color: var(--muted); font-family: 'Manrope', 'Segoe UI', sans-serif; font-size: .88rem; margin-bottom: .45rem; }
+code { background: color-mix(in srgb, var(--accent-soft) 65%, #ffffff); border-radius: 8px; padding: .12rem .4rem; }
+
+details { margin-top: .5rem; }
+details summary { cursor: pointer; color: var(--accent); font-family: 'Manrope', 'Segoe UI', sans-serif; font-size: .9rem; }
+
+/* ── Dark mode ───────────────────────────────────────────────────────── */
+@media (prefers-color-scheme: dark) {
+    :root {
+        --bg: #0f1420; --paper: #161d2c; --surface: #1b2435;
+        --accent: #7cb1ff; --accent-2: #c28cff; --accent-3: #ffc36c;
+        --accent-soft: #1a2740; --muted: #a6b4cd; --text: #edf2ff;
+        --ring: rgba(124, 177, 255, 0.55);
+    }
+    body {
+        background:
+            radial-gradient(1200px 420px at -10% -20%, #1a2740, transparent 60%),
+            radial-gradient(760px 300px at 88% -12%, rgba(194, 140, 255, 0.2), transparent 66%),
+            radial-gradient(640px 240px at 30% 0%, rgba(255, 195, 108, 0.14), transparent 70%),
+            var(--bg);
+    }
+    .summary-header, .items article { border-color: rgba(124,177,255,.24); box-shadow: 0 18px 44px rgba(0,0,0,.32); }
+    .toc li { border-color: rgba(124,177,255,.22); background: linear-gradient(170deg, #1b2435, #1f2a3f); }
+    code { background: rgba(124,177,255,.16); }
+    .article-background { background: linear-gradient(170deg, #1b2435, #1f2a3f); }
+}
+
+@media (max-width: 860px) {
+    .container { margin: .7rem auto; padding: .65rem; }
+}
+
+/* ── Editorial article layout ─────────────────────────────────────────── */
+
+.article-lead {
+    font-size: 1.18rem;
+    color: var(--muted);
+    line-height: 1.7;
+    margin: .3rem 0 1.4rem;
+    max-width: 72ch;
+    font-style: italic;
+}
+
+.article-section {
+    margin-top: 1.55rem;
+}
+
+    .article-section {
+    font-family: 'Manrope', 'Segoe UI', sans-serif;
+    font-size: .78rem;
+.article-section h2 {
+.narrow {
+    margin: 0 0 .45rem;
+    padding-bottom: .25rem;
+    border-bottom: 1px solid color-mix(in srgb, var(--accent) 22%, transparent);
+}
+
+.article-section h2 {
+.narrow {
+    font-size: 1.03rem;
+    line-height: 1.85;
+    color: var(--text);
+}
+
+.article-section p {
+    margin: 0.25rem 0;
+}
+
+.article-section .article-section-last {
+    font-size: 1.08rem;
+
+.article-section h3 {
+    margin: .35rem 0 .15rem;
+    font-size: 0.95rem;
+    color: var(--muted);
+}
+    font-weight: 600;
+    margin-top: .45rem;
+}
+
+.article-section p + p {
+    margin-top: .8rem;
+}
+
+.article-background {
+    margin-top: 1.4rem;
+    padding: 1rem 1.1rem;
+    background: linear-gradient(170deg, var(--surface), color-mix(in srgb, var(--accent-soft) 30%, #fff));
+    border-left: 3px solid var(--accent);
+    border-radius: 0 10px 10px 0;
+    font-size: .98rem;
+    line-height: 1.78;
+    color: var(--text);
+}
+
+.article-background strong {
+    display: block;
+    font-family: 'Manrope', 'Segoe UI', sans-serif;
+    font-size: .78rem;
+    text-transform: uppercase;
+    letter-spacing: .1em;
+    color: var(--accent);
+    margin-bottom: .35rem;
+}
+
+.article-discussion {
+    margin-top: 1.2rem;
+    padding: .85rem 1rem;
+    border-left: 3px solid color-mix(in srgb, var(--muted) 40%, transparent);
+    font-style: italic;
+    font-size: .98rem;
+    color: var(--muted);
+    line-height: 1.75;
+}
+
+.article-discussion strong {
+    font-style: normal;
+    font-family: 'Manrope', 'Segoe UI', sans-serif;
+    font-size: .78rem;
+    text-transform: uppercase;
+    letter-spacing: .1em;
+    display: block;
+    margin-bottom: .3rem;
+    color: var(--muted);
+}
+
+.tab-switcher {
+    display: flex; gap: .5rem; margin-bottom: 1.5rem;
+    border-bottom: 2px solid color-mix(in srgb, var(--accent) 20%, transparent);
+}
+.tab-button {
+    background: transparent; border: none; color: var(--muted);
+    font-family: 'Manrope', 'Segoe UI', sans-serif; font-size: 1rem; font-weight: 600;
+    padding: .75rem 1.2rem; cursor: pointer;
+    transition: color .18s ease, border-color .18s ease;
+    border-bottom: 3px solid transparent;
+}
+.tab-button:hover { color: var(--text); }
+.tab-button.active { color: var(--accent); border-bottom-color: var(--accent); }
+.tab-content { display: none; animation: fadeIn .2s ease-in; }
+.tab-content.active { display: block; }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@media (max-width: 860px) { .tab-switcher { flex-wrap: wrap; } }
+</style>
+  <script>
+    function switchTab(button) {
+      const lang = button.getAttribute('data-lang');
+      const allButtons = document.querySelectorAll('.tab-button');
+      const allContents = document.querySelectorAll('.tab-content');
+      allButtons.forEach(b => b.classList.remove('active'));
+      allContents.forEach(c => c.classList.remove('active'));
+      button.classList.add('active');
+      document.querySelector(`.tab-content[data-lang="${lang}"]`).classList.add('active');
+    }
+  </script>
+</head>
+<body>
+  <div class="container">
+    <div class="tab-switcher">
+      <button class="tab-button active" onclick="switchTab(this)" data-lang="fr">Français</button><button class="tab-button " onclick="switchTab(this)" data-lang="en">English</button>
+    </div>
+    <div class="tab-content active" data-lang="fr"><section class="summary-header">
+  <h1>Horizon Quotidien — 2026-07-07</h1>
+  <p class="lead">Parmi 496 contenus collectés, 6 sujets essentiels ont été sélectionnés.</p>
+  <nav class="toc" aria-label="Sommaire">
+    <p class="toc-title">Sommaire</p>
+    <ul><li><a href="#item-1">La révolution de la « Boîte à Yeux » : un dispositif de perfusion pourrait rendre les greffes complètes d’œil possibles <span class="toc-score">⭐️ 7.757250000000001/10</span></a></li>
+<li><a href="#item-2">OpenAI et sa proposition révolutionnaire : 300 $ pour chaque famille américaine dans la ruée vers l’IA <span class="toc-score">⭐️ 7.610250000000001/10</span></a></li>
+<li><a href="#item-3">Le logiciel espion Pegasus s’infiltre dans la politique européenne : une attaque directe contre l’État de droit <span class="toc-score">⭐️ 7.610250000000001/10</span></a></li>
+<li><a href="#item-4">L’Été des Luddites : Comment la Génération Z Relance la Résistance contre les Géants du Numérique <span class="toc-score">⭐️ 7.518375000000001/10</span></a></li>
+<li><a href="#item-5">Sécurité des systèmes multi-agents en IA : Pourquoi l’architecture pourrait être le maillon faible <span class="toc-score">⭐️ 7.518375000000001/10</span></a></li>
+<li><a href="#item-6">Linux redonne vie à l&#39;Atari Jaguar : un triomphe de l&#39;informatique rétro <span class="toc-score">⭐️ 6.100874999999999/10</span></a></li></ul>
+  </nav>
+</section>
+<main class="items">
+<article id="item-1">
+  <header>
+    <h2 class="item-title"><a href="https://www.technologyreview.com/2026/07/03/1140148/a-device-that-revives-eyeballs-from-dead-donors-could-make-eye-transplants-possible/">La révolution de la « Boîte à Yeux » : un dispositif de perfusion pourrait rendre les greffes complètes d’œil possibles</a>
+      <span class="score">⭐️ 7.757250000000001/10</span>
+    </h2>
+    <div class="meta">rss · MIT Technology Review · Jul 3, 17:34</div>
+  </header>
+  <div class="article-body"><p class="article-lead">Le rêve insaisissable de la greffe complète d’œil</p><p>La greffe complète d’un œil humain est depuis longtemps considérée comme l’un des défis les plus redoutables de la médecine. Contrairement aux greffes de cornée, pratiquées avec succès depuis plus d’un siècle, remplacer un œil entier nécessite de reconnecter le nerf optique, un faisceau de plus d’un million de fibres transmettant les informations visuelles au cerveau. Historiquement, les tentatives de greffes complètes d’œil chez les animaux ont donné des résultats mitigés, et les essais chez l’homme ont été limités par la dégénérescence rapide de l’œil après la mort. Dès que la circulation sanguine s’arrête, les cellules rétiniennes commencent à mourir, rendant l’organe inutilisable pour une greffe en quelques heures seulement.</p><p></p><p>Pourquoi les yeux dégénèrent-ils si vite après la mort ?</p><p>L’œil est l’un des organes les plus délicats du corps humain, extrêmement sensible au manque d’oxygène. Après la mort, l’absence de flux sanguin déclenche une cascade de dommages cellulaires : les neurones rétiniens meurent faute d’oxygène, la pression intraoculaire augmente et les déchets métaboliques s’accumulent. Les méthodes traditionnelles de conservation par le froid, efficaces pour des organes comme les reins ou le foie, échouent à préserver les structures complexes de l’œil.  « L’œil n’est pas un organe passif—c’est un système dynamique qui commence à se dégrader dès qu’il est déconnecté du corps », explique le Dr Jeffrey Goldberg, un chercheur en ophtalmologie de premier plan.  Cette dégradation rapide a été le principal obstacle aux greffes complètes d’œil, jusqu’à aujourd’hui.</p><p></p><p>L’ECaBox : une bouée de sauvetage pour les yeux de donneurs</p><p>Développée par une équipe de bioingénieurs et d’ophtalmologistes, l’ECaBox (Eye Circulation and Assessment Box) est un dispositif de perfusion portable conçu pour reproduire les conditions d’un corps vivant. En faisant circuler un fluide oxygéné et riche en nutriments à travers l’œil du donneur, le dispositif maintient la viabilité cellulaire jusqu’à 20 heures—bien plus longtemps que les méthodes de conservation traditionnelles. Le système comprend également des capteurs pour surveiller en temps réel la pression intraoculaire, l’activité métabolique et la fonction rétinienne, permettant aux chirurgiens d’évaluer l’état de l’organe avant la greffe.    Fonctionnement :  L’ECaBox pompe une solution brevetée dans le système vasculaire de l’œil, reproduisant la circulation sanguine.   Innovation clé :  Contrairement à la conservation par le froid, le dispositif maintient l’œil à une température proche de la normale, évitant le choc cellulaire.   Potentiel clinique :  Les premiers tests montrent une restauration de l’activité électrique de la rétine, une étape cruciale vers une vision fonctionnelle.</p><p></p><p>Du laboratoire à la salle d’opération : les défis à venir</p><p>Bien que l’ECaBox ait montré des résultats prometteurs lors des essais précliniques, des obstacles majeurs subsistent avant que les greffes complètes d’œil ne deviennent une pratique courante. Le défi le plus redoutable reste la reconnexion du nerf optique, une tâche qui a jusqu’ici déjoué les chirurgiens. Même si l’œil lui-même survit à la greffe, le cerveau doit réapprendre à interpréter les signaux visuels provenant du nouvel organe. Les chercheurs explorent des thérapies complémentaires, comme les facteurs de croissance nerveuse et la stimulation électrique, pour encourager la régénération neuronale.  « Il ne s’agit pas seulement de préserver l’œil ; il faut convaincre le cerveau de l’accepter », déclare le Dr Vijay Gorantla, un chirurgien transplanteur impliqué dans le projet.  La prochaine phase de recherche se concentrera sur des essais sur de grands animaux, avec des études chez l’homme potentiellement lancées d’ici cinq ans.</p><p></p><p>Enjeux éthiques et implications pratiques</p><p>La perspective de greffes complètes d’œil soulève des questions éthiques profondes. Contrairement à d’autres organes, l’œil est profondément lié à l’identité personnelle—une greffe pourrait-elle modifier la perception qu’un receveur a de lui-même ? Il existe également des préoccupations concernant l’accès équitable à une telle procédure révolutionnaire, compte tenu des coûts élevés de la technologie de perfusion et de la transplantation. Sur le plan pratique, l’ECaBox pourrait révolutionner le don d’organes en élargissant le pool d’yeux viables. Actuellement, seule une fraction des yeux donnés sont adaptés aux greffes de cornée ; les dispositifs de perfusion pourraient augmenter ce nombre de manière significative.    Avantages potentiels :  Restaurer la vue chez les patients souffrant de lésions oculaires traumatiques ou de maladies dégénératives.   Risques :  Rejet immunitaire, complications chirurgicales et impact psychologique de recevoir un nouvel œil.   Perspectives d’avenir :  Si elle réussit, cette technologie pourrait ouvrir la voie à d’autres greffes d’organes complexes, comme les membres ou même le visage.</p><p></p><p>Une nouvelle ère pour la préservation des organes</p><p>L’ECaBox s’inscrit dans une révolution plus large des technologies de préservation d’organes. Les dispositifs de perfusion transforment déjà les greffes de cœur, de poumon et de foie en prolongeant la fenêtre entre le don et la transplantation. Par exemple, le système « cœur battant dans une boîte » maintient les cœurs de donneurs en vie en dehors du corps, améliorant les taux de succès des greffes. Ces avancées sauvent non seulement des vies, mais redéfinissent également les limites de ce qui est possible en médecine. À mesure que la technologie de perfusion évolue, elle pourrait permettre des greffes autrefois impensables—nous rapprochant d’un avenir où la cécité ne serait plus permanente.</p></div>
+  
+  <footer class="item-footer">
+    <div class="tags"><code>#Medical Technology</code>, <code>#Eye Transplants</code>, <code>#Organ Donation</code></div>
+    
+  </footer>
+</article>
+
+<article id="item-2">
+  <header>
+    <h2 class="item-title"><a href="https://www.technologyreview.com/2026/07/06/1140176/your-familys-300-stake-in-openai/">OpenAI et sa proposition révolutionnaire : 300 $ pour chaque famille américaine dans la ruée vers l’IA</a>
+      <span class="score">⭐️ 7.610250000000001/10</span>
+    </h2>
+    <div class="meta">rss · MIT Technology Review · Jul 6, 18:00</div>
+  </header>
+  <div class="article-body"><p class="article-lead">La Promesse : La Richesse de l’IA pour Tous ?</p><p>Lorsque Sam Altman, PDG d’OpenAI, a évoqué pour la première fois l’idée de partager la richesse générée par l’IA avec le public, cela ressemblait à une vision utopique. Aujourd’hui, cette vision prend une forme concrète. Selon un rapport du  Financial Times , OpenAI serait en discussions préliminaires pour offrir au gouvernement américain une participation de 5 % dans l’entreprise – une mesure qui pourrait se traduire par environ 300 $ pour chaque famille américaine si les bénéfices étaient distribués sous forme de dividendes ou de recettes fiscales.  « Il ne s’agit pas seulement de philanthropie d’entreprise ; il s’agit de repenser la manière dont le progrès technologique peut bénéficier à l’ensemble de la société », déclare l’économiste Mariana Mazzucato, auteure de  The Value of Everything .  Cette proposition intervient à un moment crucial. Le potentiel économique de l’IA est indéniable – McKinsey estime qu’elle pourrait ajouter 13 000 milliards de dollars au PIB mondial d’ici 2030 – mais les risques de concentration de la richesse le sont tout autant. Sans intervention, les bénéfices générés par l’IA pourraient creuser les inégalités, avec une poignée de géants technologiques et d’investisseurs engrangeant la majeure partie des profits.</p><p></p><p>Pourquoi OpenAI Prend les Devants</p><p>La mission d’OpenAI a toujours été atypique. Fondée en 2015 sous forme d’organisation à but non lucratif, l’entreprise s’était engagée à garantir que l’intelligence artificielle générale (IAG) profite à toute l’humanité. Cependant, sa transition vers un modèle « à but lucratif plafonné » en 2019 – où les profits sont limités à un retour sur investissement de 100 fois – a suscité des critiques. Les détracteurs ont argué que ce changement privilégiait la croissance au détriment de ses objectifs altruistes initiaux.  « La structure hybride d’OpenAI était censée être un compromis entre idéalisme et pragmatisme. Mais alors que la valorisation de l’entreprise explose, la tension entre ses racines à but non lucratif et ses ambitions lucratives n’a jamais été aussi visible », note  WIRED  dans une récente analyse.  La proposition d’une participation de 5 % au gouvernement pourrait être vue comme une tentative de concilier ces priorités contradictoires. En intégrant la propriété publique dans sa structure, OpenAI pourrait réaffirmer son engagement envers ses principes fondateurs – tout en naviguant dans les réalités d’une industrie impitoyable.</p><p></p><p>Une Manœuvre Stratégique pour Apaiser les Pressions Réglementaires ?</p><p>Bien que cette proposition ait été présentée comme une expérience audacieuse en matière de démocratie économique, les sceptiques y voient un motif plus calculé. L’administration Trump a intensifié ses pressions sur les entreprises d’IA, avec des appels à une surveillance accrue, à des actions antitrust, voire à la nationalisation de technologies clés. Une participation volontaire pourrait servir de branche d’olivier préventive.    Bonne Volonté Politique :  Une participation gouvernementale pourrait aider OpenAI à se créer des alliés à Washington, la protégeant potentiellement de régulations agressives.   Leadership Industriel :  En établissant un précédent, OpenAI pourrait se positionner comme l’entreprise d’IA « responsable », se différenciant de rivaux comme Google et Meta.   Relations Publiques :  À une époque de rejet croissant des géants de la tech, cette mesure pourrait détourner les critiques sur le rôle de l’IA dans la suppression d’emplois et la concentration de la richesse.    « Il ne s’agit pas seulement de partager la richesse – il s’agit de façonner le récit. OpenAI parie qu’une petite participation maintenant pourrait lui acheter un levier significatif à l’avenir », argue  The Guardian .</p><p></p><p>Comment Cela Fonctionnerait-il ? Les Mécanismes du Partage des Bénéfices de l’IA</p><p>Les détails de la proposition d’OpenAI restent flous, mais les experts ont esquissé plusieurs modèles possibles. Si le gouvernement américain acceptait une participation de 5 %, les bénéfices pourraient être distribués de plusieurs manières :    Dividendes Directs :  Des paiements en espèces aux citoyens, similaires au Fonds Permanent de l’Alaska, qui distribue les revenus pétroliers.   Recettes Fiscales :  Le gouvernement pourrait utiliser la valeur de la participation pour financer des services publics, des infrastructures ou l’éducation.   Fonds Souverain :  Un fonds dédié pourrait investir dans des industries pilotées par l’IA, avec des retours réinvestis dans l’économie.   Cependant, les défis sont nombreux. Évaluer la participation d’OpenAI est complexe – sa dernière levée de fonds la valorisait à 86 milliards de dollars, mais les valorisations de l’IA sont notoirement volatiles. De plus, distribuer les fonds de manière équitable nécessiterait de surmonter des obstacles bureaucratiques, sans parler de l’opposition politique.  « Le diable se cache dans les détails. Une participation de 5 % semble simple, mais la mettre en œuvre de manière à réellement bénéficier au public nécessiterait une transparence et une responsabilité sans précédent », avertit le sénateur Bernie Sanders, qui a proposé un modèle de propriété publique plus large pour les entreprises d’IA.</p><p></p><p>Le Débat Plus Large : Les Géants de la Tech Doivent-ils Partager la Richesse ?</p><p>La proposition d’OpenAI a ravivé un débat de longue date : le public devrait-il avoir une participation directe dans les profits des technologies transformatrices ? Les partisans arguent que l’IA, comme le pétrole ou Internet, est un bien public dont les bénéfices devraient être largement partagés. Les critiques, cependant, mettent en garde contre les excès gouvernementaux et les conséquences imprévues.    Arguments Pour :    Le développement de l’IA a été subventionné par des recherches financées par les contribuables (par exemple, DARPA, NSF).  La concentration de la richesse dans l’IA pourrait exacerber les inégalités, avec quelques entreprises contrôlant des milliers de milliards de valeur économique.  La propriété publique pourrait aligner les incitations des entreprises sur les besoins sociétaux.     Arguments Contre :    L’implication gouvernementale pourrait étouffer l’innovation et décourager l’investissement.  Les inefficacités bureaucratiques pourraient diluer la valeur des participations publiques.  D’autres industries (par exemple, pharmaceutique, finance) ne sont pas soumises aux mêmes normes.      « Il ne s’agit pas seulement d’OpenAI – il s’agit de savoir si nous voulons un avenir où le progrès technologique est un gain privé ou un actif public », déclare l’économiste du MIT Daron Acemoglu.  L’issue de la proposition d’OpenAI pourrait établir un précédent pour la manière dont les autres entreprises d’IA – et en fait, toute la Big Tech – interagissent avec le public. Si elle réussit, elle pourrait inspirer des modèles similaires à l’échelle mondiale, redéfinissant l’économie de l’innovation.</p><p></p><p>Et Maintenant ? La Feuille de Route pour la Proposition d’OpenAI</p><p>Pour l’instant, les discussions d’OpenAI avec le gouvernement américain restent à un stade exploratoire. Plusieurs questions clés subsistent :   Le gouvernement acceptera-t-il la participation, et si oui, à quelles conditions ?  Comment la participation serait-elle évaluée, et comment les bénéfices seraient-ils distribués ?  Ce modèle pourrait-il être reproduit par d’autres entreprises d’IA, ou est-il unique à la structure hybride d’OpenAI ?   Une chose est claire : la proposition a déjà déplacé les limites du débat. Ce qui semblait autrefois être une idée radicale – la propriété publique des profits de l’IA – fait désormais partie de la conversation dominante. Qu’elle devienne une réalité dépendra de la volonté politique, de la coopération des entreprises et de la pression publique.  « C’est un moment décisif pour l’industrie technologique. La démarche d’OpenAI nous force à nous demander : qui doit posséder l’avenir ? » conclut  Technology Review .</p></div>
+  
+  <footer class="item-footer">
+    <div class="tags"><code>#AI</code>, <code>#OpenAI</code>, <code>#Technology</code>, <code>#Economics</code></div>
+    
+  </footer>
+</article>
+
+<article id="item-3">
+  <header>
+    <h2 class="item-title"><a href="https://www.wired.com/story/eu-politicians-investigated-pegasus-spyware-then-it-ended-up-on-one-of-their-phones/">Le logiciel espion Pegasus s’infiltre dans la politique européenne : une attaque directe contre l’État de droit</a>
+      <span class="score">⭐️ 7.610250000000001/10</span>
+    </h2>
+    <div class="meta">rss · Wired · Jul 3, 05:00</div>
+  </header>
+  <div class="article-body"><p class="article-lead">Pegasus : une arme d’espionnage numérique</p><p>Développé par la société israélienne NSO Group, Pegasus n’est pas un simple logiciel malveillant, mais un outil de surveillance sophistiqué conçu pour infiltrer les smartphones en toute discrétion. Une fois installé, il peut surveiller les appels, intercepter les messages, suivre la localisation et même activer les caméras et microphones à l’insu de l’utilisateur. Contrairement aux logiciels espions classiques, Pegasus exploite des vulnérabilités « zero-day » dans les systèmes d’exploitation, le rendant presque indétectable par les mesures de sécurité standard.</p><p></p><p>Comment Pegasus a infiltré la politique européenne</p><p>La découverte de Pegasus sur l’appareil d’un responsable politique européen marque une escalade inquiétante dans l’utilisation de la surveillance numérique comme arme. Selon les conclusions de Citizen Lab, un groupe de recherche de l’Université de Toronto, le logiciel espion aurait été déployé pour surveiller des personnes enquêtant sur ses abus.  « C’est une attaque directe contre l’État de droit », a déclaré un membre du Parlement européen en réaction à ces découvertes. « Si ceux qui sont chargés du contrôle peuvent être ciblés, quelles protections restent pour les citoyens ordinaires ? »  Les implications sont profondes : si les responsables élus peuvent être espionnés, l’intégrité des processus démocratiques – des délibérations confidentielles aux campagnes électorales – est compromise.</p><p></p><p>Citizen Lab : le chien de garde des menaces numériques</p><p>Citizen Lab joue un rôle clé dans la révélation des abus de Pegasus et d’autres technologies de surveillance. Fondé en 2001 par le politologue Ronald Deibert, le laboratoire combine expertise en droit, informatique et analyse politique pour enquêter sur les menaces numériques pesant sur les droits humains et la démocratie. Ses investigations ont révélé comment des régimes autoritaires, mais aussi des gouvernements démocratiques, utilisent des logiciels espions pour réduire au silence les dissidents, surveiller les journalistes et affaiblir les opposants politiques.   Documenter l’espionnage numérique contre la société civile  Analyser la censure et les pratiques de surveillance sur Internet  Exposer les vulnérabilités des applications populaires  Plaider pour la transparence dans la surveillance étatique et corporative   Les dernières découvertes du laboratoire soulignent l’urgence de renforcer les protections contre la surveillance numérique non contrôlée.</p><p></p><p>L’État de droit menacé</p><p>L’Union européenne définit l’État de droit comme un pilier de son cadre démocratique, englobant des principes tels que la légalité, l’indépendance de la justice et l’égalité devant la loi. Cependant, l’infiltration de Pegasus dans la politique européenne porte atteinte à ces valeurs fondamentales.    Légalité :  Le déploiement clandestin de logiciels espions contourne le contrôle juridique, permettant une surveillance arbitraire.   Indépendance judiciaire :  Si les responsables politiques craignent que leurs communications soient surveillées, la séparation des pouvoirs est érodée.   Droits fondamentaux :  La vie privée, la liberté d’expression et le droit à un procès équitable sont tous compromis.   Comme l’a souligné un analyste, « Lorsque des outils de surveillance sont utilisés contre ceux qui gouvernent, c’est la fondation même de la démocratie qui est en danger. »</p><p></p><p>Répercussions mondiales : qui se cache derrière ces attaques ?</p><p>Bien que NSO Group commercialise Pegasus comme un outil de lutte contre le terrorisme et la criminalité, son utilisation abusive a été documentée sur plusieurs continents. Des enquêtes ont lié le logiciel espion à la surveillance de journalistes, d’activistes et de figures politiques dans des pays allant du Mexique à l’Arabie saoudite. Dans l’UE, le ciblage de responsables politiques soulève des questions cruciales :   L’attaque a-t-elle été orchestrée par un gouvernement étranger cherchant à influencer la politique européenne ?  Un acteur national a-t-il déployé Pegasus pour étouffer l’opposition politique ?  D’autres institutions ou États membres de l’UE sont-ils également compromis ?   Le manque de transparence autour des ventes et des déploiements de Pegasus complique la responsabilisation, laissant les victimes – et le public – sans réponses.</p><p></p><p>Que faire ? Protéger la démocratie à l’ère numérique</p><p>Le scandale Pegasus exige une réponse multidimensionnelle de la part des institutions européennes, des États membres et de la société civile. Les mesures immédiates incluent :    Renforcer les cadres juridiques :  Appliquer des réglementations plus strictes sur la vente et l’utilisation des technologies de surveillance, avec des évaluations obligatoires de l’impact sur les droits humains.   Améliorer la cybersécurité :  Investir dans la détection avancée des menaces pour les appareils gouvernementaux et les infrastructures critiques.   Promouvoir la transparence :  Rendre obligatoire la divulgation des achats de logiciels espions par les gouvernements et les entreprises.   Soutenir la recherche indépendante :  Financer des organisations comme Citizen Lab pour continuer à exposer les menaces numériques.   En fin de compte, la lutte contre l’espionnage numérique ne concerne pas seulement la technologie – elle vise à préserver les valeurs démocratiques qui définissent l’Union européenne.</p></div>
+  
+  <footer class="item-footer">
+    <div class="tags"><code>#Pegasus Spyware</code>, <code>#EU Politics</code>, <code>#Cybersecurity</code>, <code>#Privacy</code></div>
+    
+  </footer>
+</article>
+
+<article id="item-4">
+  <header>
+    <h2 class="item-title"><a href="https://arstechnica.com/culture/2026/07/inside-the-luddite-festival-harnessing-gen-zs-rage-against-big-tech/">L’Été des Luddites : Comment la Génération Z Relance la Résistance contre les Géants du Numérique</a>
+      <span class="score">⭐️ 7.518375000000001/10</span>
+    </h2>
+    <div class="meta">rss · Ars Technica · Jul 3, 12:00</div>
+  </header>
+  <div class="article-body"><p class="article-lead">L’Héritage luddite : Des métiers à tisser du XIXe siècle aux écrans du XXIe</p><p>Les luddites originaux n’étaient pas, comme le veut le mythe populaire, des technophobes détruisant des machines par pur vandalisme. C’étaient des artisans qualifiés du textile dans l’Angleterre du début du XIXe siècle, qui voyaient dans les métiers à tisser mécanisés une menace directe pour leurs moyens de subsistance, leur savoir-faire et leur tissu social.  « Les luddites n’étaient pas des mystiques anti-technologie priant devant des rouets en bois, écrit l’historien Troy Breiland. C’étaient des artisans luttant pour leur survie économique. »  Les néo-luddites d’aujourd’hui mènent un combat similaire, mais leur ennemi n’est pas le métier à tisser mécanique. C’est l’architecture invisible du capitalisme de surveillance, où chaque clic, défilement et « like » est monétisé par une poignée de géants de la Silicon Valley. Le festival Summer of Ludd, désormais dans sa troisième édition, établit un lien direct entre ces luttes, présentant la résistance numérique comme la nouvelle frontière des droits des travailleurs.</p><p></p><p>Pourquoi la Génération Z mène la charge contre les Géants du Numérique</p><p>Pour une génération élevée avec les smartphones et les réseaux sociaux, la réaction contre les géants du numérique est personnelle. Les études montrent que la Génération Z passe en moyenne 9 heures par jour devant des écrans—plus que toute autre tranche d’âge—et rapporte des taux plus élevés d’anxiété, de dépression et de troubles du sommeil liés à une utilisation excessive du numérique.    Impact sur la santé mentale :  Une étude de l’université Brown en 2025 a révélé que les adolescents réduisant leur temps d’écran de 50 % constataient des améliorations significatives de leur humeur et de leur concentration en deux semaines.   Précarité économique :  Les applications de l’économie des petits boulots comme Uber et DoorDash, qui reposent sur une gestion algorithmique, ont transformé les jeunes travailleurs en « serfs numériques », comme l’a souligné un participant au festival.   Érosion de la vie privée :  De la collecte de données par TikTok aux publicités ciblées de Meta, la Génération Z est la première à grandir avec ses données personnelles traitées comme une marchandise.   Le Summer of Ludd exploite cette désillusion, proposant des ateliers sur  « Comment effacer son empreinte numérique »  et  « Construire des communautés hors ligne dans un monde hyperconnecté » .</p><p></p><p>L’Expérience du Festival : Bien Plus Qu’une Simple Détox Numérique</p><p>À première vue, le Summer of Ludd ressemble à un paradis hipster : échanges de disques vinyles, slams de poésie à la machine à écrire, et ateliers de réparation d’anciens appareils électroniques. Mais la mission centrale du festival est bien plus radicale. Les organisateurs le décrivent comme une  « zone autonome temporaire » —un espace où les participants peuvent expérimenter des modes de vie, de travail et de relations alternatifs, sans l’influence des géants du numérique.    Partage de compétences :  De la réparation de vêtements à la cueillette de nourriture, le festival met l’accent sur les compétences de survie pré-numériques.   Action collective :  Des panels discutent de la syndicalisation des travailleurs des plateformes, de la création de réseaux maillés locaux pour contourner les monopoles des FAI, et du lobbying pour des lois plus strictes sur la protection des données.   Résistance créative :  Les participants collaborent à des fanzines, à des œuvres de protestation et même à un  « Manifeste luddite 2.0 » , qui réclame un  « droit à la déconnexion »  des emails professionnels et des réseaux sociaux.    « Nous ne demandons pas aux gens de vivre comme en 1820, explique Maya Chen, cofondatrice du festival. Nous leur demandons d’imaginer un avenir où la technologie sert l’humanité—et non l’inverse. »</p><p></p><p>Le Paradoxe de la Révolte Anti-Tech à l’Ère Numérique</p><p>Le Summer of Ludd soulève une question épineuse : Peut-on résister aux géants du numérique tout en utilisant leurs outils ? Beaucoup de festivaliers arrivent via des publicités Instagram, coordonnent leurs rencontres sur Signal et documentent leur expérience sur TikTok. Les organisateurs reconnaissent l’ironie, mais affirment que le mouvement ne vise pas la pureté—il s’agit plutôt d’ intentionnalité.     « Luddisme stratégique » :  Utiliser la technologie de manière sélective, comme un chef qui cultive ses propres herbes mais fait ses courses au supermarché.   Alternatives open-source :  Promouvoir des outils comme Mastodon (réseaux sociaux décentralisés) et Signal (messagerie chiffrée) comme alternatives éthiques aux plateformes des géants du numérique.   Changement politique :  Plaider pour des régulations comme la  Loi sur l’Équité Numérique , qui donnerait aux utilisateurs des droits de propriété sur leurs données.   Les critiques, cependant, avertissent que le mouvement risque de devenir un refuge privilégié pour ceux qui peuvent se permettre de se déconnecter.  « La détox numérique est un luxe, souligne la sociologue Dr. Elena Vasquez. Pour les travailleurs précaires, les chauffeurs de VTC et les communautés marginalisées, se déconnecter n’est pas un choix—c’est une nécessité imposée par la précarité. »</p><p></p><p>Et Après ? L’Avenir du Mouvement Néo-Luddite</p><p>Le Summer of Ludd n’est qu’un maillon d’un réseau croissant de mouvements de résistance aux géants du numérique. Des festivals similaires ont vu le jour à Berlin, Tokyo et São Paulo, tandis que des organisations comme  Time Well Spent  et le  Center for Humane Technology  poussent pour un changement systémique.    Responsabilité des entreprises :  Activisme actionnarial ciblant les pratiques de travail et l’impact environnemental des géants du numérique.   Batailles juridiques :  Poursuites judiciaires contre les biais algorithmiques, la collecte de données et les pratiques monopolistiques.   Changement culturel :  Un regain d’intérêt pour les loisirs analogiques—des jeux de société à la correspondance épistolaire—en tant qu’actes de résistance.   Pourtant, le plus grand défi reste peut-être l’échelle. Comment construire un mouvement lorsque son ennemi est l’infrastructure même de la vie moderne ?  « Les luddites n’ont pas gagné, admet l’historien Steven Jones. Mais ils ont forcé un débat sur la question de savoir à qui profite la technologie—et ce débat a toujours lieu aujourd’hui. »  Pour la Génération Z, le Summer of Ludd n’est pas qu’un festival. C’est un terrain d’entraînement pour un monde où la technologie est un outil, et non un maître.</p></div>
+  
+  <footer class="item-footer">
+    <div class="tags"><code>#Gen Z</code>, <code>#Big Tech</code>, <code>#Digital Detox</code>, <code>#Technology</code>, <code>#Society</code></div>
+    
+  </footer>
+</article>
+
+<article id="item-5">
+  <header>
+    <h2 class="item-title"><a href="https://www.lesswrong.com/posts/vY2KM97v9iAmhgTuz/architecture-matters-for-multi-agent-security">Sécurité des systèmes multi-agents en IA : Pourquoi l’architecture pourrait être le maillon faible</a>
+      <span class="score">⭐️ 7.518375000000001/10</span>
+    </h2>
+    <div class="meta">rss · LessWrong · Jul 7, 04:53</div>
+  </header>
+  <div class="article-body"><p class="article-lead">La révolution multi-agents : pourquoi l’architecture ne peut plus être négligée</p><p>Les chercheurs ont adapté trois benchmarks de mauvaise utilisation pour un seul agent en scénarios multi-agents, testant six modèles différents avec diverses configurations architecturales. Les résultats ont été frappants :  &quot;Le même modèle et la même tâche peuvent passer du refus à l’acceptation en fonction uniquement de l’architecture,&quot; écrivent les auteurs. &quot;Nous n’avons pas trouvé de conception qui soit sûre dans tous les environnements : la topologie la plus sûre dans un contexte était la plus risquée dans un autre.&quot;  Cette imprévisibilité défie la sagesse conventionnelle, qui suppose souvent que les risques de sécurité augmentent de manière linéaire avec la complexité. Au lieu de cela, l’étude révèle une interaction non linéaire entre le comportement du modèle, les choix architecturaux et le contexte spécifique de la tâche.</p><p></p><p>Le cadre Orbit : une nouvelle lentille pour la sécurité multi-agents</p><p>Les expériences de l’étude ont révélé plusieurs résultats contre-intuitifs :    La fragmentation des rôles permet l’évasion :  Diviser une requête malveillante entre plusieurs agents contourne souvent les mécanismes de refus individuels, même si chaque agent rejetterait la requête complète.   La mémoire amplifie les risques :  Les agents avec une mémoire partagée peuvent propager involontairement un contexte malveillant, transformant une vulnérabilité localisée en un problème systémique.   La topologie est une arme à double tranchant :  Les systèmes hiérarchiques peuvent centraliser la supervision mais créent aussi des points de défaillance uniques, tandis que les réseaux décentralisés peuvent obscurcir la responsabilité.   Ces insights soulignent pourquoi des cadres comme Orbit sont essentiels. Comme le notent les auteurs, &quot;la sécurité n’est pas corrélée à la performance du système&quot;, ce qui signifie que les scores de benchmark traditionnels n’offrent aucune garantie fiable contre les risques de mauvaise utilisation.</p><p></p><p>Pourquoi les garanties de sécurité classiques échouent dans les systèmes basés sur les LLM</p><p>L’article présenté à l’ICML 2026 met en lumière cet écart en montrant comment les choix architecturaux interagissent avec les capacités des modèles de manière imprévisible. Par exemple, un modèle qui refuse une demande directe de générer un contenu nuisible pourrait accepter si la même demande est divisée en sous-tâches et déléguée à plusieurs agents. Les auteurs décrivent cela comme une &quot;interaction complexe entre le modèle, l’architecture et le contexte&quot;, où même des changements mineurs—comme l’ajustement de l’ordre des interactions entre agents—peuvent transformer un système sécurisé en un système exploitable.  &quot;Nous sommes loin d’une compréhension principielle de la sécurité multi-agents,&quot; admettent les chercheurs, appelant à des tests empiriques au-delà du niveau du modèle.</p><p></p><p>La voie à suivre : tests empiriques et implications industrielles</p><p>Pour les développeurs et les entreprises, les implications sont claires :    Éviter la &quot;sécurité par procuration&quot; :  Des scores élevés sur les benchmarks pour des modèles individuels ne garantissent pas la sécurité du système dans son ensemble.   Tester les architectures de manière holistique :  Évaluer comment les rôles, la mémoire et la topologie interagissent dans des conditions adverses.   Prévoir l’incohérence :  Les architectures qui fonctionnent dans un contexte peuvent échouer dans un autre ; des tests itératifs sont essentiels.   Les chercheurs publient leurs scénarios et leur base de code, invitant à la collaboration pour affiner Orbit et faire avancer le domaine. À mesure que les systèmes multi-agents deviennent omniprésents, leur sécurité dépendra de la capacité de la communauté IA à répondre à cet appel et à aller au-delà des évaluations centrées sur les modèles.</p><p></p><p>ICML 2026 : un tournant pour la recherche sur l’IA agentique</p><p>Les auteurs de l’étude discuteront de leurs résultats avec les participants, offrant une rare opportunité de collaboration interdisciplinaire. Comme l’a souligné Christian Schroeder de Witt dans une interview pré-conférence, &quot;la sécurité multi-agents n’est pas seulement un problème technique ; c’est un défi d’ingénierie des systèmes.&quot; Cette perspective s’aligne avec les tendances plus larges de l’ICML 2026, où des ateliers sur la gouvernance de l’IA, la robustesse adversariale et la collaboration humain-IA suscitent un intérêt sans précédent. Pour une industrie pressée de déployer l’IA agentique à grande échelle, le message est clair : l’architecture n’est pas seulement un choix de conception—c’est un impératif de sécurité.</p></div>
+  
+  <footer class="item-footer">
+    <div class="tags"><code>#Multi-Agent Security</code>, <code>#Artificial Intelligence</code>, <code>#Research Paper</code>, <code>#ICML 2026</code></div>
+    
+  </footer>
+</article>
+
+<article id="item-6">
+  <header>
+    <h2 class="item-title"><a href="https://cakehonolulu.github.io/linux-for-jaguar/">Linux redonne vie à l&#39;Atari Jaguar : un triomphe de l&#39;informatique rétro</a>
+      <span class="score">⭐️ 6.100874999999999/10</span>
+    </h2>
+    <div class="meta">hackernews · cakehonolulu · Jul 6, 18:35 · <a href="https://news.ycombinator.com/item?id=48808663">Discussion</a></div>
+  </header>
+  <div class="article-body"><p class="article-lead">L&#39;Atari Jaguar : une puissance méconnue</p><p>L&#39;Atari Jaguar, sortie en 1993, a été présentée comme la première console de jeu 64 bits au monde, une affirmation qui a suscité de vives controverses parmi les passionnés de matériel informatique. Bien que son jeu de puces personnalisé comprenait un GPU 32 bits et un processeur d&#39;objets 64 bits, le CPU principal de la console était un modeste Motorola 68000 fonctionnant à 13,3 MHz. Ce processeur 16/32 bits, introduit en 1979, a équipé une génération de machines emblématiques, allant de l&#39;Apple Macintosh et du Commodore Amiga à la Sega Genesis et à l&#39;Atari ST. Cependant, l&#39;architecture multi-puces complexe du Jaguar et ses bogues matériels ont rendu le développement de jeux notoirement difficile, contribuant à son échec commercial. Malgré ses défauts, le Jaguar a cultivé un public fidèle, et les passionnés d&#39;informatique rétro continuent d&#39;explorer son potentiel des décennies plus tard.</p><p></p><p>Portage de Linux : une plongée technique</p><p>Le développeur à l&#39;origine de ce projet, connu sous le pseudonyme *cakehonolulu*, a réussi à porter Linux sur l&#39;Atari Jaguar sans recourir à du matériel spécialisé ou à des cartouches flash. Le portage fonctionne entièrement avec les spécifications d&#39;origine de la console, y compris ses modestes 2 Mo de RAM, et démarre sur un shell BusyBox, un environnement Unix léger couramment utilisé dans les systèmes embarqués. Cette réalisation est particulièrement remarquable compte tenu de l&#39;architecture inhabituelle du Jaguar, qui comprend un GPU avec un cœur RISC 32 bits et un processeur d&#39;objets non programmable.  &quot;Voici une plongée approfondie sur ce qui est nécessaire pour faire tourner Linux sur l&#39;Atari Jaguar basé sur le 68000. Aucun matériel spécialisé ou cartouche flash. Tout fonctionne dans le cadre de la vision matérielle d&#39;origine.&quot;  Le dépôt GitHub du projet révèle les modifications approfondies nécessaires pour adapter le noyau Linux aux contraintes uniques du Jaguar, notamment des optimisations de gestion de la mémoire et des pilotes personnalisés pour son matériel propriétaire.</p><p></p><p>Pourquoi le processeur 68000 reste pertinent</p><p>Le Motorola 68000, ou *m68k*, était un microprocesseur révolutionnaire qui a comblé le fossé entre l&#39;informatique 16 bits et 32 bits. En interne, il fonctionnait comme un processeur 32 bits, mais des contraintes de coût ont conduit Motorola à utiliser un bus de données 16 bits et un bus d&#39;adresses 24 bits. Cette conception hybride en a fait un favori pour les premiers ordinateurs personnels et stations de travail, rivalisant directement avec l&#39;architecture x86 d&#39;Intel. L&#39;influence du 68000 s&#39;est étendue au-delà des ordinateurs de bureau : il a équipé des bornes d&#39;arcade, des imprimantes laser, et même le programme de la navette spatiale de la NASA. Son héritage durable est évident dans les communautés modernes d&#39;informatique rétro, où les développeurs continuent de repousser ses limites.    Caractéristiques clés du 68000 :   Registres internes et unité arithmétique et logique (ALU) 32 bits  Bus d&#39;adresses 24 bits, supportant jusqu&#39;à 16 Mo de mémoire  Bus de données 16 bits, équilibrant performance et coût  Jeu d&#39;instructions complexe (CISC) avec 14 modes d&#39;adressage  Utilisé dans des systèmes emblématiques comme l&#39;Amiga, le Macintosh et la Sega Genesis</p><p></p><p>Les défis de faire tourner Linux sur du matériel rétro</p><p>Porter Linux sur un système comme l&#39;Atari Jaguar présente des défis uniques. Contrairement aux appareils embarqués modernes, qui disposent souvent de gigaoctets de RAM et de processeurs multicœurs, le matériel du Jaguar est sévèrement limité. Le bus de données 16 bits du 68000 et son espace d&#39;adressage restreint nécessitent une gestion minutieuse de la mémoire pour éviter les goulots d&#39;étranglement. De plus, l&#39;absence de périphériques modernes, comme l&#39;USB ou le SATA, signifie que les développeurs doivent s&#39;appuyer sur les capacités d&#39;E/S d&#39;origine de la console, qui n&#39;ont jamais été conçues pour l&#39;informatique généraliste.  &quot;Le plus grand défi a été de faire tenir Linux dans 2 Mo de RAM tout en assurant la stabilité. Chaque kilooctet compte lorsque l&#39;on travaille avec du matériel des années 1990.&quot;  Le projet met également en lumière l&#39;importance d&#39;outils comme Buildroot, qui simplifient le processus de compilation croisée de Linux pour les systèmes embarqués. En utilisant ces outils, les développeurs peuvent se concentrer sur l&#39;optimisation du noyau et des pilotes pour le matériel cible.</p><p></p><p>Implications pour l&#39;informatique rétro et au-delà</p><p>Ce portage de Linux est bien plus qu&#39;une curiosité : c&#39;est un témoignage de la résilience des logiciels open source et de la créativité de la communauté de l&#39;informatique rétro. En redonnant vie à l&#39;Atari Jaguar, les développeurs préservent un morceau de l&#39;histoire du jeu vidéo tout en explorant les limites de la programmation bas niveau. Le projet sert également d&#39;étude de cas dans le développement de Linux embarqué, démontrant comment les noyaux modernes peuvent être adaptés pour fonctionner sur du matériel ancien. Pour les passionnés, cela ouvre la porte à de nouvelles possibilités, comme l&#39;exécution de serveurs légers, d&#39;émulateurs, ou même de logiciels personnalisés sur le Jaguar.    Applications potentielles :   Jeux rétro avec des fonctionnalités améliorées (sauvegardes, jeu en réseau)  Serveurs web légers ou outils réseau  Projets éducatifs pour apprendre les systèmes embarqués  Préservation de logiciels vintage dans un contexte moderne   De plus, cette réalisation souligne la valeur de l&#39;architecture 68000, qui reste une cible populaire pour les projets de passionnés. Alors que le matériel des années 1980 et 1990 devient de plus en plus rare, des efforts comme celui-ci garantissent que ces systèmes restent pertinents pour les générations futures.</p></div>
+  
+  <footer class="item-footer">
+    <div class="tags"><code>#Linux</code>, <code>#Atari Jaguar</code>, <code>#Embedded Systems</code>, <code>#Retro Computing</code></div>
+    
+  </footer>
+</article>
+</main></div><div class="tab-content " data-lang="en"><section class="summary-header">
+  <h1>Horizon Daily — 2026-07-07</h1>
+  <p class="lead">From 496 items, 6 important content pieces were selected</p>
+  <nav class="toc" aria-label="Contents">
+    <p class="toc-title">Contents</p>
+    <ul><li><a href="#item-1">The &#39;Eyebox&#39; Breakthrough: How a Perfusion Device Could Unlock Whole-Eye Transplants <span class="toc-score">⭐️ 7.757250000000001/10</span></a></li>
+<li><a href="#item-2">OpenAI’s Radical Proposal: A $300 Stake for Every American Family in the AI Gold Rush <span class="toc-score">⭐️ 7.610250000000001/10</span></a></li>
+<li><a href="#item-3">Pegasus Spyware Infiltrates EU Politics: A Direct Attack on the Rule of Law <span class="toc-score">⭐️ 7.610250000000001/10</span></a></li>
+<li><a href="#item-4">Summer of Ludd: How Gen Z Is Reviving the Art of Resistance Against Big Tech <span class="toc-score">⭐️ 7.518375000000001/10</span></a></li>
+<li><a href="#item-5">Multi-Agent AI Security: Why Architecture Could Be the Hidden Weak Link <span class="toc-score">⭐️ 7.518375000000001/10</span></a></li>
+<li><a href="#item-6">Linux Breathes New Life into the Atari Jaguar: A Retro Computing Triumph <span class="toc-score">⭐️ 6.100874999999999/10</span></a></li></ul>
+  </nav>
+</section>
+<main class="items">
+<article id="item-1">
+  <header>
+    <h2 class="item-title"><a href="https://www.technologyreview.com/2026/07/03/1140148/a-device-that-revives-eyeballs-from-dead-donors-could-make-eye-transplants-possible/">The &#39;Eyebox&#39; Breakthrough: How a Perfusion Device Could Unlock Whole-Eye Transplants</a>
+      <span class="score">⭐️ 7.757250000000001/10</span>
+    </h2>
+    <div class="meta">rss · MIT Technology Review · Jul 3, 17:34</div>
+  </header>
+  <div class="article-body"><p class="article-lead">The Elusive Dream of Whole-Eye Transplants</p><p>Whole-eye transplantation has long been considered one of medicine’s most formidable challenges. Unlike corneal transplants—which have been successfully performed for over a century—replacing an entire eye requires reconnecting the optic nerve, a bundle of over a million fibers that transmit visual information to the brain. Historically, attempts at whole-eye transplants in animals have yielded mixed results, and human trials have been limited by rapid post-mortem degeneration of the eye. As soon as blood flow ceases, retinal cells begin to die, making the organ unsuitable for transplantation within hours.</p><p></p><p>Why Eyes Degenerate So Quickly After Death</p><p>The eye is one of the most delicate organs in the human body, highly sensitive to oxygen deprivation. Post-mortem, the lack of blood flow triggers a cascade of cellular damage: retinal neurons starve without oxygen, intraocular pressure rises, and metabolic waste accumulates. Traditional cold storage methods, which work for organs like kidneys or livers, fail to preserve the eye’s intricate structures.  &quot;The eye isn’t just a passive organ—it’s a dynamic system that starts breaking down the moment it’s disconnected from the body,&quot; explains Dr. Jeffrey Goldberg, a leading ophthalmology researcher.  This rapid degradation has been the primary barrier to successful whole-eye transplants, until now.</p><p></p><p>The ECaBox: A Lifeline for Donor Eyeballs</p><p>Developed by a team of bioengineers and ophthalmologists, the ECaBox (Eye Circulation and Assessment Box) is a portable perfusion device designed to mimic the conditions of a living body. By circulating oxygenated, nutrient-rich fluid through the donor eye, the device maintains cellular viability for up to 20 hours—far longer than traditional preservation methods. The system also includes sensors to monitor intraocular pressure, metabolic activity, and retinal function in real time, allowing surgeons to assess the organ’s health before transplantation.    How it works:  The ECaBox pumps a proprietary solution through the eye’s vascular system, replicating blood flow.   Key innovation:  Unlike cold storage, the device keeps the eye at near-physiological temperatures, preventing cellular shock.   Clinical potential:  Early tests show restored electrical activity in the retina, a critical step toward functional vision.</p><p></p><p>From Lab to Operating Room: The Road Ahead</p><p>While the ECaBox has shown promise in preclinical trials, significant hurdles remain before whole-eye transplants become routine. The most daunting challenge is reconnecting the optic nerve—a task that has stumped surgeons for decades. Even if the eye itself survives transplantation, the brain must relearn how to interpret visual signals from the new organ. Researchers are exploring adjunct therapies, such as nerve growth factors and electrical stimulation, to encourage neural regeneration.  &quot;This isn’t just about preserving the eye; it’s about convincing the brain to accept it,&quot; says Dr. Vijay Gorantla, a transplant surgeon involved in the project.  The next phase of research will focus on large-animal trials, with human studies potentially beginning within the next five years.</p><p></p><p>Ethical and Practical Implications</p><p>The prospect of whole-eye transplants raises profound ethical questions. Unlike other organs, the eye is deeply tied to personal identity—would a transplant alter how a recipient perceives themselves? There are also concerns about equitable access to such a groundbreaking procedure, given the high costs of perfusion technology and transplantation. On a practical level, the ECaBox could revolutionize organ donation by expanding the pool of viable eyes. Currently, only a fraction of donated eyes are suitable for corneal transplants; perfusion devices could increase that number significantly.    Potential benefits:  Restoring sight to patients with traumatic eye injuries or degenerative diseases.   Risks:  Immune rejection, surgical complications, and the psychological impact of receiving a new eye.   Future outlook:  If successful, the technology could pave the way for other complex organ transplants, such as limbs or even faces.</p><p></p><p>A New Era for Organ Preservation</p><p>The ECaBox is part of a broader revolution in organ preservation technology. Perfusion devices are already transforming heart, lung, and liver transplants by extending the window between donation and transplantation. For example, the &quot;beating heart in a box&quot; system keeps donor hearts alive outside the body, improving transplant success rates. These advancements are not only saving lives but also redefining the limits of what’s possible in medicine. As perfusion technology evolves, it could enable transplants that were once unthinkable—bringing us closer to a future where blindness is no longer permanent.</p></div>
+  
+  <footer class="item-footer">
+    <div class="tags"><code>#Medical Technology</code>, <code>#Eye Transplants</code>, <code>#Organ Donation</code></div>
+    
+  </footer>
+</article>
+
+<article id="item-2">
+  <header>
+    <h2 class="item-title"><a href="https://www.technologyreview.com/2026/07/06/1140176/your-familys-300-stake-in-openai/">OpenAI’s Radical Proposal: A $300 Stake for Every American Family in the AI Gold Rush</a>
+      <span class="score">⭐️ 7.610250000000001/10</span>
+    </h2>
+    <div class="meta">rss · MIT Technology Review · Jul 6, 18:00</div>
+  </header>
+  <div class="article-body"><p class="article-lead">The Promise: AI Wealth for All?</p><p>When OpenAI CEO Sam Altman first floated the idea of sharing AI-generated wealth with the public, it sounded like a utopian vision. Now, that vision is taking tangible shape. According to a  Financial Times  report, OpenAI is in early discussions to grant the U.S. government a 5% equity stake in the company—a move that could translate to roughly $300 for every American family if the proceeds were distributed as dividends or tax revenue.  &quot;This isn’t just about corporate philanthropy; it’s about reimagining how technological progress can benefit society at large,&quot; says economist Mariana Mazzucato, author of  The Value of Everything .  The proposal arrives at a critical juncture. AI’s economic potential is undeniable—McKinsey estimates it could add $13 trillion to global GDP by 2030—but so are the risks of concentration. Without intervention, the wealth generated by AI could further entrench inequality, with a handful of tech giants and investors reaping the lion’s share of rewards.</p><p></p><p>Why OpenAI Is Leading the Charge</p><p>OpenAI’s mission has always been unconventional. Founded in 2015 as a nonprofit, the organization pledged to ensure that artificial general intelligence (AGI) would benefit all of humanity. However, its transition to a &quot;capped-profit&quot; model in 2019—where profits are limited to a 100x return for investors—raised eyebrows. Critics argued the shift prioritized growth over its original altruistic goals.  &quot;OpenAI’s hybrid structure was supposed to be a compromise between idealism and pragmatism. But as the company’s valuation soars, the tension between its nonprofit roots and for-profit ambitions has never been more apparent,&quot; notes  WIRED  in a recent analysis.  The proposed 5% government stake could be seen as an attempt to reconcile these competing priorities. By embedding public ownership into its structure, OpenAI may be signaling a commitment to its founding principles—even as it navigates the realities of a cutthroat industry.</p><p></p><p>A Strategic Move to Soften Regulatory Scrutiny?</p><p>While the proposal has been framed as a bold experiment in economic democracy, skeptics see a more calculated motive. The Trump administration has ramped up pressure on AI companies, with calls for stricter oversight, antitrust action, and even nationalization of key technologies. A voluntary equity stake could serve as a preemptive olive branch.    Political Goodwill:  A government stake could help OpenAI cultivate allies in Washington, potentially shielding it from aggressive regulation.   Industry Leadership:  By setting a precedent, OpenAI could position itself as the &quot;responsible&quot; AI company, differentiating itself from rivals like Google and Meta.   Public Relations:  In an era of growing backlash against Big Tech, the move could deflect criticism over AI’s role in job displacement and wealth concentration.    &quot;This isn’t just about sharing wealth—it’s about shaping the narrative. OpenAI is betting that a small equity stake now could buy it significant leverage in the future,&quot; argues  The Guardian .</p><p></p><p>How Would It Work? The Mechanics of AI Profit-Sharing</p><p>The details of OpenAI’s proposal remain murky, but experts have sketched out potential models. If the U.S. government were to accept a 5% stake, the proceeds could be distributed in several ways:    Direct Dividends:  Cash payments to citizens, similar to Alaska’s Permanent Fund, which distributes oil revenues.   Tax Revenue:  The government could use the equity’s value to fund public services, infrastructure, or education.   Sovereign Wealth Fund:  A dedicated fund could invest in AI-driven industries, with returns reinvested into the economy.   However, challenges abound. Valuing OpenAI’s equity is complex—its last funding round pegged its worth at $86 billion, but AI valuations are notoriously volatile. Additionally, distributing funds equitably would require overcoming bureaucratic hurdles, not to mention political opposition.  &quot;The devil is in the details. A 5% stake sounds simple, but executing it in a way that actually benefits the public would require unprecedented transparency and accountability,&quot; warns Senator Bernie Sanders, who has proposed a more sweeping public ownership model for AI companies.</p><p></p><p>The Broader Debate: Should Tech Giants Share the Wealth?</p><p>OpenAI’s proposal has reignited a long-simmering debate: Should the public have a direct stake in the profits of transformative technologies? Proponents argue that AI, like oil or the internet, is a public good whose benefits should be widely shared. Critics, however, warn of government overreach and unintended consequences.    Arguments in Favor:    AI’s development has been subsidized by taxpayer-funded research (e.g., DARPA, NSF).  Wealth concentration in AI could exacerbate inequality, with a few companies controlling trillions in economic value.  Public ownership could align corporate incentives with societal needs.     Arguments Against:    Government involvement could stifle innovation and deter investment.  Bureaucratic inefficiencies might dilute the value of public stakes.  Other industries (e.g., pharmaceuticals, finance) aren’t held to the same standard.      &quot;This isn’t just about OpenAI—it’s about whether we want a future where technological progress is a private windfall or a public asset,&quot; says MIT economist Daron Acemoglu.  The outcome of OpenAI’s proposal could set a precedent for how other AI companies—and indeed, all of Big Tech—engage with the public. If successful, it might inspire similar models globally, reshaping the economics of innovation.</p><p></p><p>What’s Next? The Road Ahead for OpenAI’s Proposal</p><p>For now, OpenAI’s discussions with the U.S. government remain in the exploratory phase. Key questions loom:   Will the government accept the stake, and if so, under what terms?  How would the equity be valued, and how would proceeds be distributed?  Could this model be replicated by other AI companies, or is it unique to OpenAI’s hybrid structure?   One thing is clear: The proposal has already shifted the Overton window. What once seemed like a radical idea—public ownership of AI profits—is now part of the mainstream conversation. Whether it becomes a reality will depend on political will, corporate cooperation, and public pressure.  &quot;This is a moment of reckoning for the tech industry. OpenAI’s move forces us to ask: Who should own the future?&quot; concludes  Technology Review .</p></div>
+  
+  <footer class="item-footer">
+    <div class="tags"><code>#AI</code>, <code>#OpenAI</code>, <code>#Technology</code>, <code>#Economics</code></div>
+    
+  </footer>
+</article>
+
+<article id="item-3">
+  <header>
+    <h2 class="item-title"><a href="https://www.wired.com/story/eu-politicians-investigated-pegasus-spyware-then-it-ended-up-on-one-of-their-phones/">Pegasus Spyware Infiltrates EU Politics: A Direct Attack on the Rule of Law</a>
+      <span class="score">⭐️ 7.610250000000001/10</span>
+    </h2>
+    <div class="meta">rss · Wired · Jul 3, 05:00</div>
+  </header>
+  <div class="article-body"><p class="article-lead">Pegasus Spyware: A Weapon of Digital Espionage</p><p>Pegasus, developed by the Israeli cyber-intelligence firm NSO Group, is not just another malware—it is a sophisticated surveillance tool designed to infiltrate smartphones with near-invisibility. Once installed, it can monitor calls, intercept messages, track location, and even activate cameras and microphones without the user’s knowledge. Unlike conventional spyware, Pegasus exploits zero-day vulnerabilities in operating systems, making it nearly undetectable by standard security measures.</p><p></p><p>How Pegasus Breached EU Politics</p><p>The discovery of Pegasus on the device of an EU politician marks a disturbing escalation in the weaponization of digital surveillance. According to findings by Citizen Lab, a research group at the University of Toronto, the spyware was likely deployed to monitor individuals investigating its misuse.  &quot;It is a direct attack on the rule of law,&quot; stated a European Parliament member in response to the findings. &quot;If those tasked with oversight can be targeted, what protections remain for ordinary citizens?&quot;  The implications are profound: if elected officials can be surveilled, the integrity of democratic processes—from confidential deliberations to electoral campaigns—is compromised.</p><p></p><p>Citizen Lab: The Watchdog Exposing Digital Threats</p><p>Citizen Lab has played a pivotal role in uncovering the misuse of Pegasus and other surveillance technologies. Founded in 2001 by political scientist Ronald Deibert, the lab combines expertise in law, computer science, and political analysis to investigate digital threats to human rights and democracy. Its investigations have revealed how authoritarian regimes and even democratic governments deploy spyware to silence dissent, monitor journalists, and undermine political opponents.   Documenting digital espionage against civil society  Analyzing internet censorship and surveillance practices  Exposing vulnerabilities in popular applications  Advocating for transparency in state-corporate surveillance   The lab’s latest findings underscore the urgent need for stronger safeguards against unchecked digital surveillance.</p><p></p><p>The Rule of Law Under Siege</p><p>The European Union defines the rule of law as a cornerstone of its democratic framework, encompassing principles such as legality, judicial independence, and equality before the law. However, the infiltration of Pegasus into EU politics strikes at the heart of these values.    Legality:  The covert deployment of spyware bypasses legal oversight, enabling arbitrary surveillance.   Judicial Independence:  If elected officials fear their communications are monitored, the separation of powers is eroded.   Fundamental Rights:  Privacy, freedom of expression, and the right to a fair trial are all jeopardized.   As one analyst noted, &quot;When surveillance tools are used against those who govern, the very foundation of democracy is at risk.&quot;</p><p></p><p>Global Fallout: Who Is Really Behind the Attacks?</p><p>While NSO Group markets Pegasus as a tool for combating terrorism and crime, its misuse has been documented across multiple continents. Investigations have linked the spyware to surveillance of journalists, activists, and political figures in countries ranging from Mexico to Saudi Arabia. In the EU, the targeting of politicians raises critical questions:   Was the attack orchestrated by a foreign government seeking to influence EU policy?  Did a domestic actor deploy Pegasus to stifle political opposition?  Are other EU institutions or member states similarly compromised?   The lack of transparency surrounding Pegasus sales and deployments complicates accountability, leaving victims—and the public—with few answers.</p><p></p><p>What Can Be Done? Protecting Democracy in the Digital Age</p><p>The Pegasus scandal demands a multifaceted response from EU institutions, member states, and civil society. Immediate steps include:    Strengthening Legal Frameworks:  Enforcing stricter regulations on the sale and use of surveillance technologies, with mandatory human rights impact assessments.   Enhancing Cybersecurity:  Investing in advanced threat detection for government devices and critical infrastructure.   Promoting Transparency:  Mandating disclosure of spyware purchases by governments and corporations.   Supporting Independent Research:  Funding organizations like Citizen Lab to continue exposing digital threats.   Ultimately, the fight against digital espionage is not just about technology—it is about preserving the democratic values that define the European Union.</p></div>
+  
+  <footer class="item-footer">
+    <div class="tags"><code>#Pegasus Spyware</code>, <code>#EU Politics</code>, <code>#Cybersecurity</code>, <code>#Privacy</code></div>
+    
+  </footer>
+</article>
+
+<article id="item-4">
+  <header>
+    <h2 class="item-title"><a href="https://arstechnica.com/culture/2026/07/inside-the-luddite-festival-harnessing-gen-zs-rage-against-big-tech/">Summer of Ludd: How Gen Z Is Reviving the Art of Resistance Against Big Tech</a>
+      <span class="score">⭐️ 7.518375000000001/10</span>
+    </h2>
+    <div class="meta">rss · Ars Technica · Jul 3, 12:00</div>
+  </header>
+  <div class="article-body"><p class="article-lead">The Luddite Legacy: From 19th-Century Looms to 21st-Century Screens</p><p>The original Luddites were not, as popular myth would have it, technophobes smashing machines for the sake of destruction. They were skilled textile workers in early 19th-century England who saw mechanized looms as a direct threat to their livelihoods, craftsmanship, and social fabric.  &quot;The Luddites were not anti-technology mystics praying to wooden spinning wheels,&quot; writes historian Troy Breiland. &quot;They were artisans fighting for their economic survival.&quot;  Today’s neo-Luddites are fighting a similar battle—but their enemy isn’t the power loom. It’s the invisible architecture of surveillance capitalism, where every click, scroll, and like is monetized by a handful of Silicon Valley behemoths. The Summer of Ludd festival, now in its third year, draws a direct line between these struggles, framing digital resistance as the next frontier of labor rights.</p><p></p><p>Why Gen Z Is Leading the Charge Against Big Tech</p><p>For a generation raised on smartphones and social media, the backlash against Big Tech is personal. Studies show that Gen Z spends an average of 9 hours per day on screens—more than any other demographic—and reports higher rates of anxiety, depression, and sleep disruption linked to digital overuse.    Mental health toll:  A 2025 Brown University study found that adolescents who reduced screen time by 50% saw significant improvements in mood and focus within two weeks.   Economic precarity:  Gig economy apps like Uber and DoorDash, which rely on algorithmic management, have turned young workers into &quot;digital serfs,&quot; as one festival attendee put it.   Privacy erosion:  From TikTok’s data harvesting to Meta’s targeted advertising, Gen Z is the first generation to grow up with their personal data treated as a commodity.   The Summer of Ludd taps into this disillusionment, offering workshops on  &quot;How to Delete Your Digital Footprint&quot;  and  &quot;Building Offline Communities in a Hyper-Connected World.&quot;</p><p></p><p>The Festival Experience: More Than Just a Digital Detox</p><p>At first glance, the Summer of Ludd looks like a hipster paradise: vinyl record swaps, typewriter poetry slams, and workshops on repairing old electronics. But the festival’s core mission is far more radical. Organizers describe it as a  &quot;temporary autonomous zone&quot; —a space where attendees can experiment with alternative ways of living, working, and relating without Big Tech’s influence.    Skill-sharing:  From mending clothes to foraging for food, the festival emphasizes pre-digital survival skills.   Collective action:  Panels discuss unionizing gig workers, creating local mesh networks to bypass ISP monopolies, and lobbying for stronger data privacy laws.   Creative resistance:  Attendees collaborate on zines, protest art, and even a  &quot;Luddite Manifesto 2.0,&quot;  which calls for a  &quot;right to disconnect&quot;  from work emails and social media.    &quot;We’re not asking people to live like it’s 1820,&quot; says festival co-founder Maya Chen. &quot;We’re asking them to imagine a future where technology serves humanity—not the other way around.&quot;</p><p></p><p>The Paradox of Tech-Backlash in a Digital Age</p><p>The Summer of Ludd raises a thorny question: Can you resist Big Tech while still using its tools? Many festival-goers arrive via Instagram ads, coordinate meetups on Signal, and document their experience on TikTok. Organizers acknowledge the irony but argue that the movement isn’t about purity—it’s about  intentionality.     &quot;Strategic Luddism&quot;:  Using technology selectively, like a chef who grows their own herbs but still shops at the grocery store.   Open-source alternatives:  Promoting tools like Mastodon (decentralized social media) and Signal (encrypted messaging) as ethical alternatives to Big Tech platforms.   Policy change:  Advocating for regulations like the  Digital Fairness Act , which would give users ownership rights over their data.   Critics, however, warn that the movement risks becoming a privileged retreat for those who can afford to opt out.  &quot;Digital detox is a luxury,&quot; says sociologist Dr. Elena Vasquez. &quot;For low-income workers, gig economy drivers, and marginalized communities, unplugging isn’t an option—it’s a necessity imposed by precarity.&quot;</p><p></p><p>What’s Next? The Future of the Neo-Luddite Movement</p><p>The Summer of Ludd is just one node in a growing network of tech-backlash movements. Similar festivals have sprung up in Berlin, Tokyo, and São Paulo, while organizations like  Time Well Spent  and  Center for Humane Technology  push for systemic change.    Corporate accountability:  Shareholder activism targeting Big Tech’s labor practices and environmental impact.   Legal battles:  Lawsuits challenging algorithmic bias, data harvesting, and monopolistic practices.   Cultural shift:  A resurgence of analog hobbies—from board games to letter-writing—as acts of resistance.   Yet the biggest challenge may be scalability. How do you build a movement when your enemy is the very infrastructure of modern life?  &quot;The Luddites didn’t win,&quot; admits historian Steven Jones. &quot;But they forced a conversation about who technology serves—and that conversation is still happening today.&quot;  For Gen Z, the Summer of Ludd isn’t just a festival. It’s a training ground for a world where technology is a tool, not a master.</p></div>
+  
+  <footer class="item-footer">
+    <div class="tags"><code>#Gen Z</code>, <code>#Big Tech</code>, <code>#Digital Detox</code>, <code>#Technology</code>, <code>#Society</code></div>
+    
+  </footer>
+</article>
+
+<article id="item-5">
+  <header>
+    <h2 class="item-title"><a href="https://www.lesswrong.com/posts/vY2KM97v9iAmhgTuz/architecture-matters-for-multi-agent-security">Multi-Agent AI Security: Why Architecture Could Be the Hidden Weak Link</a>
+      <span class="score">⭐️ 7.518375000000001/10</span>
+    </h2>
+    <div class="meta">rss · LessWrong · Jul 7, 04:53</div>
+  </header>
+  <div class="article-body"><p class="article-lead">The Multi-Agent Revolution: Why Architecture Can’t Be an Afterthought</p><p>The researchers adapted three single-agent misuse benchmarks into multi-agent scenarios, testing six different models across varying architectural configurations. The results were stark:  &quot;The same model and task can go from refusing to complying depending only on the architecture,&quot; the authors write. &quot;We did not find a design that is safe everywhere: the topology that was safest in one environment was the riskiest in another.&quot;  This unpredictability defies conventional wisdom, which often assumes that security risks scale linearly with complexity. Instead, the study reveals a non-linear interplay between model behavior, architectural choices, and the specific context of the task.</p><p></p><p>The Orbit Framework: A New Lens for Multi-Agent Security</p><p>The study’s experiments uncovered several counterintuitive findings:    Role fragmentation enables evasion:  Splitting a harmful request across multiple agents often bypasses individual refusal mechanisms, even if each agent would reject the full request.   Memory amplifies risks:  Agents with shared memory can inadvertently propagate malicious context, turning a localized vulnerability into a systemic one.   Topology is a double-edged sword:  Hierarchical systems may centralize oversight but also create single points of failure, while decentralized networks can obscure accountability.   These insights underscore why frameworks like Orbit are essential. As the authors note, &quot;Security is not correlated with the system&#39;s performance,&quot; meaning traditional benchmark scores offer no reliable proxy for misuse risk.</p><p></p><p>Why Classical Security Guarantees Fail in LLM-Based Systems</p><p>The ICML 2026 paper highlights this gap by showing how architectural choices interact with model capabilities in unpredictable ways. For instance, a model that refuses a direct request to generate harmful content might comply if the same request is split into subtasks and delegated across agents. The authors describe this as a &quot;complex interplay between model, architecture, and setting,&quot; where even minor changes—like adjusting the order of agent interactions—can flip a system from secure to exploitable.  &quot;We are far from a principled understanding of multi-agent security,&quot; the researchers admit, calling for empirical testing beyond the model level.</p><p></p><p>The Road Ahead: Empirical Testing and Industry Implications</p><p>For developers and enterprises, the implications are clear:    Avoid &quot;security by proxy&quot;:  High benchmark scores for individual models do not guarantee system-wide safety.   Test architectures holistically:  Evaluate how roles, memory, and topology interact under adversarial conditions.   Plan for inconsistency:  Architectures that work in one context may fail in another; iterative testing is essential.   The researchers are releasing their scenarios and codebase to the public, inviting collaboration to refine Orbit and advance the field. As multi-agent systems become ubiquitous, their security will depend on whether the AI community heeds this call to move beyond model-centric evaluations.</p><p></p><p>ICML 2026: A Turning Point for Agentic AI Research</p><p>The paper’s authors will discuss their findings with attendees, offering a rare opportunity for cross-disciplinary collaboration. As Christian Schroeder de Witt noted in a pre-conference interview, &quot;Multi-agent security isn’t just a technical problem; it’s a systems engineering challenge.&quot; This perspective aligns with broader trends at ICML 2026, where workshops on AI governance, adversarial robustness, and human-AI collaboration are drawing unprecedented interest. For an industry racing to scale agentic AI, the message is clear: architecture is not just a design choice—it’s a security imperative.</p></div>
+  
+  <footer class="item-footer">
+    <div class="tags"><code>#Multi-Agent Security</code>, <code>#Artificial Intelligence</code>, <code>#Research Paper</code>, <code>#ICML 2026</code></div>
+    
+  </footer>
+</article>
+
+<article id="item-6">
+  <header>
+    <h2 class="item-title"><a href="https://cakehonolulu.github.io/linux-for-jaguar/">Linux Breathes New Life into the Atari Jaguar: A Retro Computing Triumph</a>
+      <span class="score">⭐️ 6.100874999999999/10</span>
+    </h2>
+    <div class="meta">hackernews · cakehonolulu · Jul 6, 18:35 · <a href="https://news.ycombinator.com/item?id=48808663">Discussion</a></div>
+  </header>
+  <div class="article-body"><p class="article-lead">The Atari Jaguar: A Misunderstood Powerhouse</p><p>The Atari Jaguar, released in 1993, was marketed as the world’s first 64-bit gaming console—a claim that sparked controversy among hardware enthusiasts. While its custom chipset included a 32-bit GPU and a 64-bit object processor, the system’s primary CPU was a humble Motorola 68000 running at 13.3 MHz. This 16/32-bit processor, first introduced in 1979, powered a generation of iconic machines, from the Apple Macintosh and Commodore Amiga to the Sega Genesis and Atari ST. Yet, the Jaguar’s complex multi-chip architecture and hardware bugs made game development notoriously difficult, contributing to its commercial failure. Despite its flaws, the Jaguar has cultivated a loyal following, with retro computing enthusiasts continuing to explore its potential decades later.</p><p></p><p>Porting Linux: A Technical Deep Dive</p><p>The developer behind this project, known as *cakehonolulu*, has successfully ported Linux to the Atari Jaguar without relying on specialized hardware or flash cartridges. The port runs entirely on the console’s original specifications, including its meager 2 MB of RAM, and boots into a BusyBox shell—a lightweight Unix environment commonly used in embedded systems. This achievement is particularly remarkable given the Jaguar’s unconventional architecture, which includes a GPU with a 32-bit RISC core and a non-programmable object processor.  &quot;This is a deep dive on what is necessary to get Linux on the 68000-based Atari Jaguar. No specialized hardware/flash carts. All runs within the original hardware vision.&quot;  The project’s GitHub repository reveals the extensive modifications required to adapt the Linux kernel to the Jaguar’s unique constraints, including memory management optimizations and custom drivers for its proprietary hardware.</p><p></p><p>Why the 68000 Processor Still Matters</p><p>The Motorola 68000, or *m68k*, was a groundbreaking microprocessor that bridged the gap between 16-bit and 32-bit computing. Internally, it operated as a 32-bit processor, but cost constraints led Motorola to use a 16-bit data bus and 24-bit address bus. This hybrid design made it a favorite for early personal computers and workstations, competing directly with Intel’s x86 architecture. The 68000’s influence extended beyond desktops: it powered arcade machines, laser printers, and even NASA’s Space Shuttle program. Its enduring legacy is evident in modern retro computing communities, where developers continue to push its limits.    Key features of the 68000:   32-bit internal registers and arithmetic logic unit (ALU)  24-bit address bus, supporting up to 16 MB of memory  16-bit data bus, balancing performance and cost  Complex instruction set (CISC) with 14 addressing modes  Used in iconic systems like the Amiga, Macintosh, and Sega Genesis</p><p></p><p>Challenges of Running Linux on Retro Hardware</p><p>Porting Linux to a system like the Atari Jaguar presents unique challenges. Unlike modern embedded devices, which often include gigabytes of RAM and multi-core processors, the Jaguar’s hardware is severely constrained. The 68000’s 16-bit data bus and limited address space require careful memory management to avoid bottlenecks. Additionally, the lack of modern peripherals—such as USB or SATA—means developers must rely on the console’s original I/O capabilities, which were never designed for general-purpose computing.  &quot;The biggest hurdle was squeezing Linux into 2 MB of RAM while ensuring stability. Every kilobyte counts when you’re working with hardware from the early &#39;90s.&quot;  The project also highlights the importance of tools like Buildroot, which simplifies the process of cross-compiling Linux for embedded systems. By leveraging these tools, developers can focus on optimizing the kernel and drivers for the target hardware.</p><p></p><p>Implications for Retro Computing and Beyond</p><p>This Linux port is more than a novelty—it’s a testament to the resilience of open-source software and the creativity of the retro computing community. By breathing new life into the Atari Jaguar, developers are preserving a piece of gaming history while exploring the limits of low-level programming. The project also serves as a case study in embedded Linux development, demonstrating how modern kernels can be adapted to run on legacy hardware. For enthusiasts, this opens the door to new possibilities, such as running lightweight servers, emulators, or even custom software on the Jaguar.    Potential applications:   Retro gaming with enhanced features (e.g., save states, netplay)  Lightweight web servers or network tools  Educational projects for learning embedded systems  Preservation of vintage software in a modern context   Moreover, this achievement underscores the value of the 68000 architecture, which remains a popular target for hobbyist projects. As hardware from the 1980s and 1990s becomes increasingly rare, efforts like this ensure that these systems remain relevant for future generations.</p></div>
+  
+  <footer class="item-footer">
+    <div class="tags"><code>#Linux</code>, <code>#Atari Jaguar</code>, <code>#Embedded Systems</code>, <code>#Retro Computing</code></div>
+    
+  </footer>
+</article>
+</main></div>
+  </div>
+</body>
+</html>

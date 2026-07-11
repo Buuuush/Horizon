@@ -46,39 +46,33 @@
     ],
     "rss": [
       {
-        "name": "Reuters World",
-        "url": "https://www.reutersagency.com/feed/?best-topics=world&post_type=best",
-        "enabled": false,
-        "category": "world"
-      },
-      {
         "name": "Al Jazeera",
         "url": "https://www.aljazeera.com/xml/rss/all.xml",
-        "enabled": false,
+        "enabled": true,
         "category": "world"
       },
       {
         "name": "France 24",
         "url": "https://www.france24.com/en/rss",
-        "enabled": false,
+        "enabled": true,
         "category": "world"
       },
       {
         "name": "The Guardian World",
         "url": "https://www.theguardian.com/world/rss",
-        "enabled": false,
+        "enabled": true,
         "category": "world"
       },
       {
         "name": "Le Monde",
         "url": "https://www.lemonde.fr/rss/une.xml",
-        "enabled": false,
+        "enabled": true,
         "category": "news-fr"
       },
       {
         "name": "Courrier International",
-        "url": "https://www.courrierinternational.com/feed/rss",
-        "enabled": false,
+        "url": "https://www.courrierinternational.com/feed/all/rss.xml",
+        "enabled": true,
         "category": "world-fr"
       },
       {
@@ -90,7 +84,7 @@
       {
         "name": "Vox",
         "url": "https://www.vox.com/rss/index.xml",
-        "enabled": false,
+        "enabled": true,
         "category": "explainer"
       },
       {
@@ -106,12 +100,6 @@
         "category": "ideas"
       },
       {
-        "name": "Psyche",
-        "url": "https://psyche.co/feed.rss",
-        "enabled": true,
-        "category": "psychology"
-      },
-      {
         "name": "Quanta Magazine",
         "url": "https://api.quantamagazine.org/feed/",
         "enabled": true,
@@ -120,7 +108,7 @@
       {
         "name": "Scientific American",
         "url": "https://www.scientificamerican.com/rss/",
-        "enabled": false,
+        "enabled": true,
         "category": "science"
       },
       {
@@ -156,19 +144,19 @@
       {
         "name": "Bloomberg Markets",
         "url": "https://feeds.bloomberg.com/markets/news.rss",
-        "enabled": false,
+        "enabled": true,
         "category": "economy"
       },
       {
         "name": "Financial Times",
         "url": "https://www.ft.com/?format=rss",
-        "enabled": false,
+        "enabled": true,
         "category": "economy"
       },
       {
         "name": "Les Echos",
-        "url": "https://www.lesechos.fr/rss/rss_une.xml",
-        "enabled": false,
+        "url": "https://services.lesechos.fr/rss/les-echos-politique.xml",
+        "enabled": true,
         "category": "economy-fr"
       },
       {
@@ -228,7 +216,7 @@
       {
         "name": "History Today",
         "url": "https://www.historytoday.com/feed",
-        "enabled": false,
+        "enabled": true,
         "category": "history"
       },
       {
@@ -239,38 +227,14 @@
       },
       {
         "name": "Works in Progress",
-        "url": "https://worksinprogress.co/feed/",
-        "enabled": false,
+        "url": "https://books.worksinprogress.co/feed.xml",
+        "enabled": true,
         "category": "ideas"
-      },
-      {
-        "name": "Asterisk Magazine",
-        "url": "https://asteriskmag.com/feed.xml",
-        "enabled": false,
-        "category": "science-policy"
-      },
-      {
-        "name": "Stanford Encyclopedia of Philosophy",
-        "url": "https://plato.stanford.edu/feeds/articles.xml",
-        "enabled": false,
-        "category": "philosophy"
-      },
-      {
-        "name": "TED Talks",
-        "url": "https://feeds.ted.com/talks_new.rss",
-        "enabled": false,
-        "category": "ideas"
-      },
-      {
-        "name": "Freakonomics Radio",
-        "url": "https://feeds.freakonomics.com/freakonomics-radio",
-        "enabled": false,
-        "category": "behavioral_economics"
       },
       {
         "name": "a16z Podcast",
-        "url": "https://feeds.simplecast.com/GZSf6J5M",
-        "enabled": false,
+        "url": "https://feeds.simplecast.com/JGE3yC0V",
+        "enabled": true,
         "category": "tech_economy"
       },
       {
@@ -288,7 +252,7 @@
       {
         "name": "Our World in Data",
         "url": "https://ourworldindata.org/feeds/latest.xml",
-        "enabled": false,
+        "enabled": true,
         "category": "data"
       },
       {
@@ -375,6 +339,6 @@
     "sender_name": "Horizon Daily",
     "subscribe_keyword": "SUBSCRIBE",
     "unsubscribe_keyword": "UNSUBSCRIBE",
-    "enabled": false
+    "enabled": true
   }
 }

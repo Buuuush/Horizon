@@ -1,6 +1,5 @@
 """AI client abstraction supporting multiple providers."""
 
-import asyncio
 import os
 from abc import ABC, abstractmethod
 from typing import Optional
@@ -84,15 +83,12 @@ class AnthropicClient(AIClient):
         temperature = self.temperature if temperature is None else temperature
         max_tokens = self.max_tokens if max_tokens is None else max_tokens
 
-        message = await asyncio.wait_for(
-            self.client.messages.create(
-                model=self.model,
-                max_tokens=max_tokens,
-                temperature=temperature,
-                system=system,
-                messages=[{"role": "user", "content": user}]
-            ),
-            timeout=self.config.request_timeout_sec,
+        message = await self.client.messages.create(
+            model=self.model,
+            max_tokens=max_tokens,
+            temperature=temperature,
+            system=system,
+            messages=[{"role": "user", "content": user}]
         )
         usage = getattr(message, "usage", None)
         if usage is not None:
@@ -164,31 +160,25 @@ class OpenAIClient(AIClient):
         temperature = self.temperature if temperature is None else temperature
         max_tokens = self.max_tokens if max_tokens is None else max_tokens
         if self._supports_response_format():
-            response = await asyncio.wait_for(
-                self.client.chat.completions.create(
-                    model=self.model,
-                    messages=[
-                        {"role": "system", "content": system},
-                        {"role": "user", "content": user}
-                    ],
-                    temperature=temperature,
-                    max_tokens=max_tokens,
-                    response_format={"type": "json_object"}
-                ),
-                timeout=self.config.request_timeout_sec,
+            response = await self.client.chat.completions.create(
+                model=self.model,
+                messages=[
+                    {"role": "system", "content": system},
+                    {"role": "user", "content": user}
+                ],
+                temperature=temperature,
+                max_tokens=max_tokens,
+                response_format={"type": "json_object"}
             )
         else:
-            response = await asyncio.wait_for(
-                self.client.chat.completions.create(
-                    model=self.model,
-                    messages=[
-                        {"role": "system", "content": system},
-                        {"role": "user", "content": user}
-                    ],
-                    temperature=temperature,
-                    max_tokens=max_tokens,
-                ),
-                timeout=self.config.request_timeout_sec,
+            response = await self.client.chat.completions.create(
+                model=self.model,
+                messages=[
+                    {"role": "system", "content": system},
+                    {"role": "user", "content": user}
+                ],
+                temperature=temperature,
+                max_tokens=max_tokens,
             )
         usage = getattr(response, "usage", None)
         if usage is not None:
@@ -253,17 +243,14 @@ class MiniMaxClient(AIClient):
         if temperature <= 0:
             temperature = 0.01
 
-        response = await asyncio.wait_for(
-            self.client.chat.completions.create(
-                model=self.model,
-                messages=[
-                    {"role": "system", "content": system},
-                    {"role": "user", "content": user}
-                ],
-                temperature=temperature,
-                max_tokens=max_tokens,
-            ),
-            timeout=self.config.request_timeout_sec,
+        response = await self.client.chat.completions.create(
+            model=self.model,
+            messages=[
+                {"role": "system", "content": system},
+                {"role": "user", "content": user}
+            ],
+            temperature=temperature,
+            max_tokens=max_tokens,
         )
         usage = getattr(response, "usage", None)
         if usage is not None:
@@ -325,31 +312,25 @@ class AliClient(AIClient):
         max_tokens = self.max_tokens if max_tokens is None else max_tokens
 
         if self._supports_response_format():
-            response = await asyncio.wait_for(
-                self.client.chat.completions.create(
-                    model=self.model,
-                    messages=[
-                        {"role": "system", "content": system},
-                        {"role": "user", "content": user}
-                    ],
-                    temperature=temperature,
-                    max_tokens=max_tokens,
-                    response_format={"type": "json_object"}
-                ),
-                timeout=self.config.request_timeout_sec,
+            response = await self.client.chat.completions.create(
+                model=self.model,
+                messages=[
+                    {"role": "system", "content": system},
+                    {"role": "user", "content": user}
+                ],
+                temperature=temperature,
+                max_tokens=max_tokens,
+                response_format={"type": "json_object"}
             )
         else:
-            response = await asyncio.wait_for(
-                self.client.chat.completions.create(
-                    model=self.model,
-                    messages=[
-                        {"role": "system", "content": system},
-                        {"role": "user", "content": user}
-                    ],
-                    temperature=temperature,
-                    max_tokens=max_tokens,
-                ),
-                timeout=self.config.request_timeout_sec,
+            response = await self.client.chat.completions.create(
+                model=self.model,
+                messages=[
+                    {"role": "system", "content": system},
+                    {"role": "user", "content": user}
+                ],
+                temperature=temperature,
+                max_tokens=max_tokens,
             )
         return response.choices[0].message.content
 
@@ -395,18 +376,15 @@ class GeminiClient(AIClient):
         temperature = self.temperature if temperature is None else temperature
         max_tokens = self.max_tokens if max_tokens is None else max_tokens
 
-        response = await asyncio.wait_for(
-            self.client.aio.models.generate_content(
-                model=self.model,
-                contents=user,
-                config=types.GenerateContentConfig(
-                    system_instruction=system,
-                    temperature=temperature,
-                    max_output_tokens=max_tokens,
-                    response_mime_type="application/json"
-                )
-            ),
-            timeout=self.config.request_timeout_sec,
+        response = await self.client.aio.models.generate_content(
+            model=self.model,
+            contents=user,
+            config=types.GenerateContentConfig(
+                system_instruction=system,
+                temperature=temperature,
+                max_output_tokens=max_tokens,
+                response_mime_type="application/json"
+            )
         )
         usage = getattr(response, "usage_metadata", None)
         if usage is not None:

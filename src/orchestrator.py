@@ -41,7 +41,6 @@ class HorizonOrchestrator:
         "culture generale": "culture generale",
         "culture générale": "culture generale",
         "actualite generale": "actualite generale",
-        "actualité générale": "actualite generale",
     }
 
     _THEME_EXPANSIONS: Dict[str, List[str]] = {

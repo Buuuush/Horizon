@@ -38,9 +38,6 @@ class HorizonOrchestrator:
 
     _THEME_ALIASES: Dict[str, str] = {
         "full informatique": "informatique",
-        "culture generale": "culture generale",
-        "culture générale": "culture generale",
-        "actualite generale": "actualite generale",
     }
 
     _THEME_EXPANSIONS: Dict[str, List[str]] = {
@@ -63,44 +60,6 @@ class HorizonOrchestrator:
             "dinum",
             "numerique-gouv",
             "betagouv",
-        ],
-        "culture generale": [
-            "culture",
-            "general culture",
-            "culture generale",
-            "culture générale",
-            "history",
-            "philosophy",
-            "art",
-            "arts",
-            "society",
-            "education",
-            "media",
-            "books",
-            "literature",
-            "cinema",
-            "music",
-            "science",
-            "environment",
-            "economy",
-            "geopolitics",
-            "world",
-        ],
-        "actualite generale": [
-            "actualité",
-            "actualite",
-            "news",
-            "world",
-            "politics",
-            "policy",
-            "society",
-            "culture",
-            "science",
-            "technology",
-            "economy",
-            "environment",
-            "health",
-            "education",
         ],
     }
 
